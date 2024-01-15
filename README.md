@@ -7,9 +7,9 @@
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
 
 ### Requisitos :
-* Servidor Linux [ Testado no ProxMox - Ubuntu 23.04 ]
+* Servidor Linux CT ProxMox ou Direto no MkAuth
   
-### Instalação no Linux via ProxMox
+### Instalação em CT Linux Exclusivo via ProxMox
 
 1 - Atualize seu sistema
 ```sh
@@ -42,6 +42,47 @@ npm install
 ```sh
 npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
 ```
+
+
+### Instalação Integrada Direto no MkAuth 24.01
+
+1 - Atualize o sistema
+```sh
+apt update
+```
+
+2 - Instale as dependencias necessarias
+```sh
+apt install git curl
+```
+```sh
+sudo apt-get install ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+```
+
+3 - Instale o node
+```sh
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
+```
+
+4 - Crie o diretório de instalação do Mwsm
+```sh
+sudo mkdir -p /var/api/Mwsm
+```
+
+5 - Instale o Mwsm
+```sh
+git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+```
+6 - Instale o npm
+```sh
+npm install
+```
+
+7 - Configure a auto-inicialização
+```sh
+npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
+```
+
 
 ### Configurando o Servidor
 1 - Acesse seu servidor web através do IP:8000
