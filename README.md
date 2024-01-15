@@ -50,9 +50,11 @@ npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && p
 2 - Aguarde a geração do QRCode
 
 3 - Faça a leitura do QRCode com o WhatsApp
+
 ** `Menu > Aparelhos Conectados > Conectar um Aparelho`
 
 4 - Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
