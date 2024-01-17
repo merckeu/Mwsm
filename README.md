@@ -103,7 +103,7 @@ OBS: Para enviar mensagem separadas utilize a tag `##` para quebrar a linha
 
 Exemplo : Linha 1##Linha 2##Linha 3
 
-### Caso tenha feito a instalação antes do dia 17/01/2024 utilize o comando abaixo para atualizar sua aplicação
+### Update para instalações antes de 17/01/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
