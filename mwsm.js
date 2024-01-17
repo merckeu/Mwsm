@@ -115,43 +115,20 @@ app.post('/send-message', [
   const numberDDI = number.substr(0, 2);
   const numberDDD = number.substr(2, 2);
   const numberUser = number.substr(-8, 8);
-  const message = req.body.msg;
+  const Message = req.body.msg;
+  const Jumper =  Message.split("##");
+  var WhatsApp = number + "@c.us";
 
-  if (numberDDI !== "55") {
-    const WhatsApp = number + "@c.us";
-    client.sendMessage(WhatsApp, message).then(response => {
-    res.status(200).json({
-      status: true,
-      message: 'Bot-Mwsm : Message Sent',
-      response: response
-    });
-    }).catch(err => {
-    res.status(500).json({
-      status: false,
-      message: 'Bot-Mwsm : Message was not Sent',
-      response: err.text
-    });
-    });
-  }
-  else if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
-    const WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
-    client.sendMessage(WhatsApp, message).then(response => {
-    res.status(200).json({
-      status: true,
-      message: 'Bot-Mwsm : Message Sent',
-      response: response
-    });
-    }).catch(err => {
-    res.status(500).json({
-      status: false,
-      message: 'Bot-Mwsm : Message was not Sent',
-      response: err.text
-    });
-    });
+  if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
+    WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
   }
   else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
-    const WhatsApp = "55" + numberDDD + numberUser + "@c.us";
-    client.sendMessage(WhatsApp, message).then(response => {
+    WhatsApp = "55" + numberDDD + numberUser + "@c.us";
+  }
+
+for (let i=0; i<= Jumper.length -1; i++)  {
+    Mensagem = Jumper[i];
+    client.sendMessage(WhatsApp, Mensagem).then(response => {
     res.status(200).json({
       status: true,
       message: 'Bot-Mwsm : Message Sent',
@@ -164,8 +141,10 @@ app.post('/send-message', [
       response: err.text
     });
     });
-  }
+}
+
 });
+
 
 client.on('message', async msg => {
 
