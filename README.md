@@ -99,9 +99,9 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
-OBS: Para enviar mensagem separadas utilize a tag `##` para quebrar a linha
+OBS: Para enviar mensagem separadas utilize a tag `##` ou `\n` para quebrar a linha
 
-Exemplo : Linha 1##Linha 2##Linha 3
+Exemplo : Linha 1##Linha 2\nLinha 3\nLinha 4
 
 ### Update para instalações antes de 17/01/2024
 ```sh
