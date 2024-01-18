@@ -116,7 +116,7 @@ app.post('/send-message', [
   const numberDDD = number.substr(2, 2);
   const numberUser = number.substr(-8, 8);
   const Message = req.body.msg;
-  const Jumper =  Message.replaceAll("\n","##").split("##");
+  const Jumper =  Message.replaceAll("\\n","##").split("##");
   var WhatsApp = number + "@c.us";
 
   if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
