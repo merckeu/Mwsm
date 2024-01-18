@@ -99,14 +99,25 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
-OBS: Para enviar mensagem separadas utilize a tag `##` ou `\n` para quebrar a linha
+### Comandos
+Quebra de Linha -> `\n`
 
-Exemplo : Linha 1##Linha 2\nLinha 3\nLinha 4
+Quebra de Balão -> `/n` ou `##`
 
-### Update para instalações antes de 17/01/2024
+### Update para instalações após de 17/01/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
 
-### Finalizado
-Se tudo tiver ocorrido como o esperado, seu servidor mkauth ja estara conseguindo disparar mensagens para seus clientes bastando somente configurar as mensagens automaticas e marcar a opção receber SMS na gua financeiro de cada cliente
+### Testando
+Para testar utilize o comando abaixo no Prompt
+
+`DDDNUMERO` : Troque pelo numero com DDD
+
+`MENSAGEM` : Troque pela sua mensagem
+
+`IPDOSERVIDOR` : Troque pelo ip do servidor
+
+```sh
+sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urlencoded" -X POST http://IPDOSERVIDOR:8000/send-message
+```
