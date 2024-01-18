@@ -100,7 +100,7 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
 ### Comandos
-Quebra de Balão -> `/n` ou `##`
+Quebra de Balão -> `\n` ou `##`
 
 Negrito : -> `*` Antes e depois do texto destacado
 
