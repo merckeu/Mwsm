@@ -45,6 +45,7 @@ npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && p
 
 
 ### Instalação Integrada Direto no MkAuth 24.01
+Video : https://www.youtube.com/watch?v=mJ0DGPGd7Ps
 
 1 - Atualize o sistema
 ```sh
