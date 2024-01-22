@@ -91,9 +91,12 @@ io.on('connection', function(socket) {
 
 	client.on('qr', (qr) => {
 		qrcode.toDataURL(qr, (err, url) => {
-			socket.emit('message', '> Bot-Mwsm : QRCode Received, Waiting to Read!');
-			console.log('> Bot-Mwsm : QRCode Received, Waiting to Read!');
-			socket.emit('qr', url);
+			try {
+				socket.emit('qr', url);
+			} finally {
+				socket.emit('message', '> Bot-Mwsm : QRCode Received, Waiting to Read!');
+				console.log('> Bot-Mwsm : QRCode Received, Waiting to Read!');
+			}
 		});
 
 	});
