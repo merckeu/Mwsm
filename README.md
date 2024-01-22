@@ -105,7 +105,7 @@ Quebra de Balão -> `\n` ou `##`
 
 Negrito : -> `*` Antes e depois do texto destacado
 
-### Update para instalações após de 17/01/2024
+### Update para instalações antes de 22/01/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
