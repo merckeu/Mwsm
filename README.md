@@ -105,9 +105,15 @@ Quebra de Balão -> `\n` ou `##`
 
 Negrito : -> `*` Antes e depois do texto destacado
 
-### Update para instalações após de 22/01/2024
+### Update para instalações a partir de 31/01/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+```
+Para editar o tempo de disparo entre as mensagens altere o valor da primeira linha com o comando abaixo:
+
+Padrão é 1000 (1 segundo), CONTROL+X Y ENTER para confirmar a alteração.
+```sh
+sudo nano /var/api/Mwsm/mwsm.js
 ```
 
 ### Testando
