@@ -86,16 +86,24 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 
 
 ### Configurando o Servidor
-1 - Acesse seu servidor web através do IP:8000
+1 - Acesse o arquivo de configuração do servidor via prompt
+```sh
+sudo nano /var/api/Mwsm/mwsm.js
+```
+`interval`: Tempo de disparo entre mensagens condicionadas com a TAG `##` | Default : 1000 (1segundo)
+
+`access`: Porta de acesso do sistema/interface | Default : 8000
+
+2 - Acesse seu servidor web através do IP:PORTA
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/node.png)](#)
 
-2 - Aguarde a geração do QRCode
+3 - Aguarde a geração do QRCode
 
-3 - Faça a leitura do QRCode com o WhatsApp
+4 - Faça a leitura do QRCode com o WhatsApp
 
 ** `Menu > Aparelhos Conectados > Conectar um Aparelho`
 
-4 - Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+5 - Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
@@ -108,12 +116,6 @@ Negrito : -> `*` Antes e depois do texto destacado
 ### Update para instalações a partir de 31/01/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
-```
-Para editar o tempo de disparo entre as mensagens altere o valor da primeira linha com o comando abaixo:
-
-Padrão é 1000 (1 segundo), CONTROL+X Y ENTER para confirmar a alteração.
-```sh
-sudo nano /var/api/Mwsm/mwsm.js
 ```
 
 ### Testando
