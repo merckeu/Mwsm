@@ -1,4 +1,7 @@
-var interval = 1000; // --> 1000 = 1segundo
+//#####################################################
+var interval = 1000; // --> 1000 = 1 segundo
+var access = 8000; // --> 8000 = Porta Padrão
+//#####################################################
 const {
    Client,
    LocalAuth,
@@ -15,7 +18,7 @@ const http = require('http');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const mime = require('mime-types');
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || access;
 const app = express();
 const os = require("os");
 const hostName = os.hostname();
