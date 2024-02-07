@@ -1,6 +1,7 @@
 //#####################################################
-var interval = 1000; // --> 1000 = 1 segundo
-var access = 8000; // --> 8000 = Porta Padrão
+const interval = 1000; // --> 1000 = 1 segundo
+const sendwait = 30000; // --> 30000 = 30 segundos
+const access = 8000; // --> 8000 = Porta Padrão
 //#####################################################
 const {
    Client,
@@ -25,6 +26,7 @@ const hostName = os.hostname();
 const server = http.createServer(app);
 const io = socketIO(server);
 require('events').EventEmitter.defaultMaxListeners = Infinity;
+var TimeDelay, OldWhats;
 
 function delay(t, v) {
    return new Promise(function (resolve) {
@@ -183,6 +185,14 @@ app.post('/send-message', [
       Mensagem.push(Jumper[i]);
    }
 
+
+if(WhatsApp == OldWhats || OldWhats == null){
+TimeDelay = 300;
+}else{
+TimeDelay = sendwait;
+}
+
+setTimeout(function() {
    Mensagem.forEach(function (Send, index) {
       setTimeout(function () {
          client.sendMessage(WhatsApp, Send).then(response => {
@@ -191,7 +201,7 @@ app.post('/send-message', [
                message: 'Bot-Mwsm : Message Sent',
                response: response
             });
-
+         OldWhats = WhatsApp; 
          }).catch(err => {
             res.status(500).json({
                status: false,
@@ -201,6 +211,8 @@ app.post('/send-message', [
          });
       }, index * interval);
    });
+},TimeDelay + Math.floor(Math.random() * 1000));
+
 });
 
 
