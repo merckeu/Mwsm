@@ -92,6 +92,8 @@ sudo nano /var/api/Mwsm/mwsm.js
 ```
 `interval`: Tempo de disparo entre mensagens condicionadas com a TAG `##` | Default : 1000 (1segundo)
 
+`sendwait`: Tempo de disparo entre mensagens de modo geral |  Default : 30000 (30segundo)
+
 `access`: Porta de acesso do sistema/interface | Default : 8000
 
 2 - Acesse seu servidor web através do IP:PORTA
@@ -113,7 +115,7 @@ Quebra de Balão -> `\n` ou `##`
 
 Negrito : -> `*` Antes e depois do texto destacado
 
-### Update para instalações a partir de 31/01/2024
+### Update para instalações a partir de 07/02/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
