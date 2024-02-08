@@ -175,3 +175,19 @@ sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urle
 ```
 </details>
 
+### DOAÇÕES :
+Contribua com a sobrevivência desse projeto estimulando melhorias e atualizações.
+
+![Pix](https://github.com/MKCodec/Mwsm/assets/143403919/24660f85-17d0-4de4-94e7-de85828a9265)
+
+
+```sh
+e9b9d669-4412-4dec-994c-310005904088
+```
+
+```sh
+00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854
+```
+
+
+
