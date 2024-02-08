@@ -120,7 +120,7 @@ Altere o valor conforme suas necessidades.
 | `\n` ou `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                             |
 | `*`            | negrito        | `*`Mensagem`*`                                                  |
 
-### Update para instalações a partir de 07/02/2024
+### Update para instalações a partir de 08/02/2024
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
