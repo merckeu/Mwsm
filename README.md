@@ -8,10 +8,15 @@
 
 ### Requisitos :
 * Servidor Linux CT ProxMox ou Direto no MkAuth
-  
-### Instalação em CT Linux Exclusivo via ProxMox
 
-1 - Atualize seu sistema
+### Instalando o Mwsm :
+<details>
+<summary>Container Individual ProxMox</summary>
+<br>
+<b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
+<br><br>
+  
+<b>1 - </b>Atualize seu sistema
 ```sh
 apt update
 ```
@@ -19,40 +24,44 @@ apt update
 apt upgrade -y
 ```
 
-2 - Instale as dependencias necessarias
+<b>2 - </b>Instale as dependencias necessarias
 ```sh
 apt-get install git curl libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev libasound2 -y
 ```
 
-3 - Instale o node
+<b>3 - </b>Instale o node
 ```sh
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 ```
 
-4 - Instale o Mwsm
+<b>4 - </b>Instale o Mwsm
 ```sh
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
-5 - Instale o npm
+<b>5 - </b>Instale o npm
 ```sh
 npm install
 ```
 
-6 - Configure a auto-inicialização
+<b>6 - </b>Configure a auto-inicialização
 ```sh
 npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
 ```
+</details>
 
 
-### Instalação Integrada Direto no MkAuth 24.01
+<details>
+<summary>Integrado ao MkAuth 24.01</summary>
+<br>
+
 Video : https://www.youtube.com/watch?v=mJ0DGPGd7Ps
 
-1 - Atualize o sistema
+<b>1 - </b>Atualize o sistema
 ```sh
 sudo apt update
 ```
 
-2 - Instale as dependencias necessarias
+<b>2 - </b>Instale as dependencias necessarias
 ```sh
 sudo apt install git curl
 ```
@@ -60,29 +69,31 @@ sudo apt install git curl
 sudo apt-get install ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
 ```
 
-3 - Instale o node
+<b>3 - </b>Instale o node
 ```sh
 sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 ```
 
-4 - Crie o diretório de instalação do Mwsm
+<b>4 - </b>Crie o diretório de instalação do Mwsm
 ```sh
 sudo mkdir -p /var/api/Mwsm
 ```
 
-5 - Instale o Mwsm
+<b>5 - </b>Instale o Mwsm
 ```sh
 sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
-6 - Instale o npm
+<b>6 - </b>Instale o npm
 ```sh
 sudo npm install
 ```
 
-7 - Configure a auto-inicialização
+<b>7 - </b>Configure a auto-inicialização
 ```sh
 sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
 ```
+
+</details>
 
 
 ### Configurando o Servidor
