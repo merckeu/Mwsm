@@ -9,7 +9,7 @@
 ### Requisitos :
 * Servidor Linux CT ProxMox ou Direto no MkAuth
 
-### Instalando o Mwsm :
+### Instalação :
 <details>
 <summary>Container Individual ProxMox</summary>
 <br>
@@ -96,8 +96,13 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 </details>
 
 
-### Configurando o Servidor
-1 - Acesse o arquivo de configuração do servidor via prompt
+### Configuração :
+
+<details>
+<summary>Servidor Web</summary>
+<br>
+  
+<b>1 - </b>Acesse o arquivo de configuração do servidor via prompt
 ```sh
 sudo nano /var/api/Mwsm/mwsm.js
 ```
@@ -110,33 +115,51 @@ Altere o valor conforme suas necessidades.
 | `access`       | `8000`         | Porta de acesso do sistema/interface.                           |
 
 
-2 - Acesse seu servidor web através do IP:PORTA
+<b>2 - </b>Acesse seu servidor web através do IP:PORTA
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/node.png)](#)
 
-3 - Aguarde a geração do QRCode
+<b>3 - </b>Aguarde a geração do QRCode
 
-4 - Faça a leitura do QRCode com o WhatsApp
+<b>4 - </b>Faça a leitura do QRCode com o WhatsApp
 
 ** `Menu > Aparelhos Conectados > Conectar um Aparelho`
 
-5 - Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+</details>
+
+<details>
+<summary>Mkauth</summary>
+<br>
+<b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+</details>
 
-### Comandos Extras
+### Extras :
+
+<details>
+<summary>Tags</summary>
+<br>
 
 | Tag            | Efeito         | Exemplo                                                         |
 | -------------- | -------------- | --------------------------------------------------------------- |
 | `\n` ou `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                             |
 | `*`            | negrito        | `*`Mensagem`*`                                                  |
 
-### Update para instalações a partir de 08/02/2024
+</details>
+
+<details>
+<summary>Update</summary>
+<br>
+  
 ```sh
 sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 ```
+</details>
 
-### Testando
+<details>
+<summary>Utilização</summary>
+<br>
 Para testar utilize o comando abaixo no Prompt
 
 `DDDNUMERO` : Troque pelo numero com DDD
@@ -150,3 +173,5 @@ Para testar utilize o comando abaixo no Prompt
 ```sh
 sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urlencoded" -X POST http://IPDOSERVIDOR:PORTA/send-message
 ```
+</details>
+
