@@ -115,7 +115,7 @@ Altere o valor conforme suas necessidades.
 
 ### Comandos Extras
 
-| Comando        | Efeito         | Exemplo                                                         |
+| Tag            | Efeito         | Exemplo                                                         |
 | -------------- | -------------- | --------------------------------------------------------------- |
 | `\n` ou `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                             |
 | `*`            | negrito        | `*`Mensagem`*`                                                  |
