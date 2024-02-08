@@ -129,6 +129,8 @@ Para testar utilize o comando abaixo no Prompt
 
 `IPDOSERVIDOR` : Troque pelo ip do servidor
 
+`PORTA` : Troque pela porta do servidor
+
 ```sh
 sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urlencoded" -X POST http://IPDOSERVIDOR:PORTA/send-message
 ```
