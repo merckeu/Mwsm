@@ -90,11 +90,14 @@ sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save
 ```sh
 sudo nano /var/api/Mwsm/mwsm.js
 ```
-`interval`: Tempo de disparo entre mensagens condicionadas com a TAG `##` | Default : 1000 (1segundo)
+Altere o valor conforme suas necessidades.
 
-`sendwait`: Tempo de disparo entre mensagens de modo geral |  Default : 30000 (30segundo)
+| Nome           | Valor          | Função                                                          |
+| -------------- | -------------- | --------------------------------------------------------------- |
+| `interval`     | `1000` =  1s   | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
+| `sendwait`     | `30000` = 30s  | Tempo de disparo entre mensagens de modo geral.                 |
+| `access`       | `8000`         | Porta de acesso do sistema/interface.                           |
 
-`access`: Porta de acesso do sistema/interface | Default : 8000
 
 2 - Acesse seu servidor web através do IP:PORTA
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/node.png)](#)
@@ -110,10 +113,12 @@ sudo nano /var/api/Mwsm/mwsm.js
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
-### Comandos
-Quebra de Balão -> `\n` ou `##`
+### Comandos Extras
 
-Negrito : -> `*` Antes e depois do texto destacado
+| Comando        | Efeito         | Exemplo                                                         |
+| -------------- | -------------- | --------------------------------------------------------------- |
+| `\n` ou `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                             |
+| `*`            | negrito        | `*`Mensagem`*`                                                  |
 
 ### Update para instalações a partir de 07/02/2024
 ```sh
