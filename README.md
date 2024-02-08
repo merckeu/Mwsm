@@ -175,7 +175,7 @@ sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urle
 ```
 </details>
 
-### DOAÇÕES :
+### DOAÇÕES PIX :
 Contribua com a sobrevivência desse projeto estimulando melhorias e atualizações.
 
 ![Pix](https://github.com/MKCodec/Mwsm/assets/143403919/24660f85-17d0-4de4-94e7-de85828a9265)
