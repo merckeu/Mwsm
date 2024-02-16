@@ -113,6 +113,7 @@ Altere o valor conforme suas necessidades.
 | `interval`     | `1000` =  1s   | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
 | `sendwait`     | `30000` = 30s  | Tempo de disparo entre mensagens de modo geral.                 |
 | `access`       | `8000`         | Porta de acesso do sistema/interface.                           |
+| `pixfail`      | `XXX` = nulo   | Chave Pix Manual em caso de falha do mkauth                     |
 
 
 <b>2 - </b>Acesse seu servidor web através do IP:PORTA
