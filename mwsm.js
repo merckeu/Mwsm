@@ -1,8 +1,8 @@
 //###############################################################
 const interval = 1000; // --> 1000 = 1 segundo
 const sendwait = 30000; // --> 30000 = 30 segundos
-const access = 8000; // --> 8000 = Porta Padrão
-const pixfail = "XXX"; // Chave Pix --> XXX = Padrão
+const access = 8000; // --> 8000 = Porta Padrao
+const pixfail = "XXX"; // Chave Pix --> XXX = Padrao
 //###############################################################
 
 const {
