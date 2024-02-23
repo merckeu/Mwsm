@@ -114,6 +114,7 @@ Altere o valor conforme suas necessidades.
 | `sendwait`     | `30000` = 30s  | Tempo de disparo entre mensagens de modo geral.                 |
 | `access`       | `8000`         | Porta de acesso do sistema/interface.                           |
 | `pixfail`      | `XXX` = nulo   | Chave Pix Manual em caso de falha do mkauth                     |
+| `response`     |                | Resposta Automatica, Deixe em branco para não responder         |
 
 
 <b>2 - </b>Acesse seu servidor web através do IP:PORTA
