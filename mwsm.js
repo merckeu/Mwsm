@@ -1,9 +1,10 @@
-//###############################################################
+//###########################################################################################
 const interval = 1000; // --> 1000 = 1 segundo
 const sendwait = 30000; // --> 30000 = 30 segundos
 const access = 8000; // --> 8000 = Porta Padrao
 const pixfail = "XXX"; // Chave Pix --> XXX = Padrao
-//###############################################################
+const response = "WhatsApp exclusivo para uso do sistem"; // Resposta Automatica
+//##########################################################################################
 
 const {
    Client,
@@ -225,8 +226,8 @@ client.on('message', async msg => {
    if (msg.body == "") return null;
    if (msg.from.includes("@g.us")) return null;
 
-   if (msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-      msg.reply("WhatsApp exclusivo para uso do sistema");
+   if (response != "" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+      msg.reply(response);
    }
 });
 
