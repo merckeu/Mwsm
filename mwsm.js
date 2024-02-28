@@ -4,6 +4,7 @@ const sendwait = 30000; // --> 30000 = 30 segundos
 const access = 8000; // --> 8000 = Porta Padrao
 const pixfail = "XXX"; // Chave Pix --> XXX = Padrao
 const response = "WhatsApp exclusivo para uso do sistema"; // Resposta Automatica
+const replyes = true; // marcar texto na resposta { true = sim | false = nao }
 //##########################################################################################
 
 const {
@@ -175,7 +176,7 @@ app.post('/send-message', [
    const numberDDI = number.substr(0, 2);
    const numberDDD = number.substr(2, 2);
    const numberUser = number.substr(-8, 8);
-   const Mensagem = req.body.msg.replaceAll("\\n", "##").split("##");
+	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
    var WhatsApp = number + "@c.us";
 
    if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
@@ -226,9 +227,14 @@ client.on('message', async msg => {
    if (msg.body == "") return null;
    if (msg.from.includes("@g.us")) return null;
 
-   if (response != "" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-      msg.reply(response);
-   }
+	if (response != "" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+		if (replyes) {
+			msg.reply(response);
+		} else {
+			client.sendMessage(msg.from, response);
+		}
+	}
+
 });
 
 console.log("\nAPI is Ready!\n")
