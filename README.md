@@ -147,7 +147,7 @@ Altere o valor conforme suas necessidades.
 | Tag            | Efeito         | Exemplo                                                         |
 | -------------- | -------------- | --------------------------------------------------------------- |
 | `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                                     |
-| `\n`   | quebra linha   | Mensagem1`\n`Mensagem2`\n`Mensagem3                                     |
+| `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                     |
 | `*`    | negrito        | `*`Mensagem`*`                                                          |
 
 </details>
