@@ -246,7 +246,6 @@ client.on('message', async msg => {
 			} else {
 				if (register != SQLite.date) {
 					MsgBox = true;
-					console.log("Mensagem Ativada 2");
 					db.run("UPDATE replies SET date=? WHERE whats=?", [register, msg.from.replaceAll('@c.us', '')], (err) => {
 						if (err) throw err;
 					});
