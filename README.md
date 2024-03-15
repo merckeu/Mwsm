@@ -167,9 +167,7 @@ Altere o valor conforme suas necessidades.
    cd /var/api/Mwsm
    pm2 delete all
    pm2 flush
-   if [[ $(npm view sqlite3 version -rs) == "5.1.7" ]]; then
-       echo "SQLite Instaled"
-   else
+   if [[ $(npm view sqlite3 version -rs) != "5.1.7" ]]; then
        npm install sqlite3 -g
    fi
    wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/icon.png -O /var/api/Mwsm/icon.png
