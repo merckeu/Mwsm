@@ -116,6 +116,7 @@ Altere o valor conforme suas necessidades.
 | `pixfail`      | `XXX` = nulo      | Chave Pix Manual em caso de falha do mkauth.                    |
 | `response`     |                   | Resposta Automatica, Deixe em branco para não responder.        |
 | `replyes`      | `true` ou `false` | Marcar conversas em resposta automaticas.                       |
+| `count`        | `1`               | Quantidade de Auto-Respostas por dia (anti-velhinha chata).     |
 
 
 <b>2 - </b>Acesse seu servidor web através do IP:PORTA
@@ -157,7 +158,7 @@ Altere o valor conforme suas necessidades.
 <br>
   
 ```sh
-sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+INDISPONIVEL NO MOMENTO
 ```
 </details>
 
