@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message - V2.0 Beta 1
+# MkAuth WhatsApp Send Message - v2.0 Beta 1
 
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
