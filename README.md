@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message
+# MkAuth WhatsApp Send Message - V2.0 Beta 1
 
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
@@ -45,7 +45,7 @@ npm install sqlite3 pm2
 
 <b>6 - </b>Configure a auto-inicialização
 ```sh
-npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
+pm2 start mwsm.json && pm2 save && pm2 startup
 ```
 </details>
 
@@ -90,7 +90,7 @@ sudo npm install sqlite3 pm2
 
 <b>7 - </b>Configure a auto-inicialização
 ```sh
-sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
+sudo pm2 start mwsm.json && pm2 save && pm2 startup
 ```
 
 </details>
