@@ -4,6 +4,8 @@
 
 ### Novidades v2.0 Beta 1:
 * Integração do Banco de Dados SQLite
+  
+  Utilize o comando Upgrade abaixo para atualizar a versão v1 para v2
 
 ### Funcionalidade:
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
@@ -157,12 +159,13 @@ Altere o valor conforme suas necessidades.
 </details>
 
 <details>
-<summary>Update</summary>
+<summary>Update e/ou Upgrade</summary>
 <br>
   
 ```sh
-INDISPONIVEL NO MOMENTO
+sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/upgrade.sh -O /var/api/Mwsm/upgrade.sh && bash /var/api/Mwsm/upgrade.sh
 ```
+
 </details>
 
 <details>
