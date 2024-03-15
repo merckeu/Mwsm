@@ -103,8 +103,9 @@ sudo pm2 start mwsm.json && pm2 save && pm2 startup
 <br>
   
 <b>1 - </b>Acesse o arquivo de configuração do servidor via prompt
+
 ```sh
-sudo nano /var/api/Mwsm/mwsm.js
+INDISPONIVEL NO MOMENTO
 ```
 Altere o valor conforme suas necessidades.
 
