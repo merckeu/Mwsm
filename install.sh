@@ -1,5 +1,9 @@
 #!/bin/bash
-   echo "--- UPGRADING Mwsm ---"
+
+Mwsm=(Mwsm https://github.com/MKCodec/Mwsm 0)
+
+update() {
+   echo "--- UPGRADING ${repo[0]} ---"
    clear
    cd /var/api/Mwsm
    pm2 delete all
@@ -26,3 +30,7 @@
    pm2 start mwsm.json && pm2 save && pm2 startup
    clear
    pm2 log 0
+}
+
+update Mwsm[@]
+
