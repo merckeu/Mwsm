@@ -1,7 +1,6 @@
 #!/bin/bash
 
    echo "--- UPGRADING Mwsm ---"
-   clear
    cd /var/api/Mwsm
    pm2 delete all
    pm2 flush
