@@ -36,7 +36,7 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get ins
 
 <b>4 - </b>Instale o Mwsm
 ```sh
-git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm && chown www-data:www-data mwsm.db
 ```
 <b>5 - </b>Instale o npm
 ```sh
@@ -81,7 +81,7 @@ sudo mkdir -p /var/api/Mwsm
 
 <b>5 - </b>Instale o Mwsm
 ```sh
-sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm && chown www-data:www-data mwsm.db
 ```
 <b>6 - </b>Instale o npm
 ```sh
