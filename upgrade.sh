@@ -1,18 +1,17 @@
 #!/bin/bash
 
-Mwsm=(Mwsm https://github.com/MKCodec/Mwsm 0)
-
-update() {
-   echo "--- UPGRADING ${repo[0]} ---"
+   echo "--- UPGRADING Mwsm ---"
    clear
    cd /var/api/Mwsm
    pm2 delete all
    pm2 flush
+
    if [[ $(npm view sqlite3 version -rs) == "5.1.7" ]]; then
        echo "SQLite Instaled"
    else
        npm install sqlite3 -g
    fi
+
    wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/icon.png -O /var/api/Mwsm/icon.png
    wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
    wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/jquery.js -O /var/api/Mwsm/jquery.js
@@ -30,7 +29,5 @@ update() {
    pm2 start mwsm.json && pm2 save && pm2 startup
    clear
    pm2 log 0
-}
 
-update Mwsm[@]
-
+exit 0
