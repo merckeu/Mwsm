@@ -239,11 +239,9 @@ client.on('message', async msg => {
 		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", function(err, SQLite) {
 			if (err) throw err;
 			if (SQLite == undefined) {
-				console.log("Mensagem Ativada 0");
 				MsgBox = true;
 				db.run("INSERT INTO replies(whats,date) VALUES(?, ?)", [msg.from.replaceAll('@c.us', ''), register], (err) => {
 					if (err) throw err;
-					console.log("Dados Inseridos");
 				});
 			} else {
 				if (register != SQLite.date) {
@@ -251,11 +249,9 @@ client.on('message', async msg => {
 					console.log("Mensagem Ativada 2");
 					db.run("UPDATE replies SET date=? WHERE whats=?", [register, msg.from.replaceAll('@c.us', '')], (err) => {
 						if (err) throw err;
-						console.log("Dados Atualizados");
 					});
 				} else {
 					MsgBox = false;
-					console.log("Mensagem Desativada 2");
 				}
 			}
 		});
