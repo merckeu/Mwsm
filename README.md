@@ -40,12 +40,12 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 <b>5 - </b>Instale o npm
 ```sh
-npm install sqlite3 pm2 -g
+npm install sqlite3 pm2
 ```
 
 <b>6 - </b>Configure a auto-inicialização
 ```sh
-pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
+npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
 ```
 </details>
 
@@ -85,12 +85,12 @@ sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/
 ```
 <b>6 - </b>Instale o npm
 ```sh
-sudo npm install sqlite3 pm2 -g
+sudo npm install sqlite3 pm2
 ```
 
 <b>7 - </b>Configure a auto-inicialização
 ```sh
-pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
+sudo npm install pm2 -g && pm2 start mwsm.js --name Bot-Mwsm --watch && pm2 save && pm2 startup
 ```
 
 </details>

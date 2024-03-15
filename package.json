@@ -4,9 +4,14 @@
   "description": "Bot-Mwsm: based on Whatsapp API",
   "main": "app.js",
   "scripts": {
-    "start": "node mwsm.js",
-    "start:dev": "nodemon mwsm.js",
+    "start": "nodemon mwsm.js --ignore ./mwsm.db",
+    "start:dev": "nodemon mwsm.js --ignore ./mwsm.db",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "mwsm.db"
+    ]
   },
   "keywords": [
     "whatsapp-api",
@@ -27,8 +32,10 @@
     "mysql2": "^2.3.3",
     "php-express": "^0.0.3",
     "phpcgijs": "^1.2.0",
+    "pm2": "^5.3.1",
     "qrcode": "^1.5.3",
     "socket.io": "2.3.0",
+    "sqlite3": "^5.1.7",
     "util": "^0.12.5",
     "whatsapp-web.js": "https://github.com/Julzk/whatsapp-web.js/tarball/jkr_hotfix_7"
   },
