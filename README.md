@@ -40,7 +40,7 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 <b>5 - </b>Instale o npm
 ```sh
-npm install sqlite3
+npm install sqlite3 pm2
 ```
 
 <b>6 - </b>Configure a auto-inicialização
@@ -85,7 +85,7 @@ sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/
 ```
 <b>6 - </b>Instale o npm
 ```sh
-sudo npm install sqlite3
+sudo npm install sqlite3 pm2
 ```
 
 <b>7 - </b>Configure a auto-inicialização
