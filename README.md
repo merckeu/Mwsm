@@ -163,7 +163,7 @@ Altere o valor conforme suas necessidades.
 <br>
   
 ```sh
-sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/install.sh -O /var/api/Mwsm/install.sh && bash /var/api/Mwsm/install.sh
+sudo wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/upgrade.sh -O /var/api/Mwsm/upgrade.sh && bash /var/api/Mwsm/upgrade.sh
 ```
 
 </details>
