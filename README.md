@@ -3,7 +3,7 @@
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
 ### Novidades v2.0 Beta 1:
-* Integração com Banco de Dados SQLite
+* Integração do Banco de Dados SQLite
 
 ### Funcionalidade:
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
