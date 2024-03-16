@@ -234,40 +234,47 @@ client.on('message', async msg => {
 	if (msg.body == "") return null;
 	if (msg.from.includes("@g.us")) return null;
 
-
-
-		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", function(err, SQLite) {
-			if (err) throw err;
-			if (SQLite == undefined) {
+	db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", function(err, SQLite) {
+		if (err) throw err;
+		if (SQLite == undefined) {
+			MsgBox = true;
+			db.run("INSERT INTO replies(whats,date) VALUES(?, ?)", [msg.from.replaceAll('@c.us', ''), register], (err) => {
+				if (err) throw err;
+				db.get("SELECT * FROM console", function(err, MySQL) {
+					console.log('> Bot-Mwsm : ' + MySQL.inserted);
+				});
+			});
+		} else {
+			if (register != SQLite.date) {
 				MsgBox = true;
-				db.run("INSERT INTO replies(whats,date) VALUES(?, ?)", [msg.from.replaceAll('@c.us', ''), register], (err) => {
+				db.run("UPDATE replies SET date=? WHERE whats=?", [register, msg.from.replaceAll('@c.us', '')], (err) => {
 					if (err) throw err;
+					db.get("SELECT * FROM console", function(err, MySQL) {
+						console.log('> Bot-Mwsm : ' + MySQL.updated);
+					});
+
 				});
 			} else {
-				if (register != SQLite.date) {
-					MsgBox = true;
-					db.run("UPDATE replies SET date=? WHERE whats=?", [register, msg.from.replaceAll('@c.us', '')], (err) => {
-						if (err) throw err;
-					});
-				} else {
-					MsgBox = false;
-				}
+				MsgBox = false;
+				db.get("SELECT * FROM console", function(err, MySQL) {
+					console.log('> Bot-Mwsm : ' + MySQL.found);
+				});
+
 			}
-		});
+		}
+	});
 
-		db.get("SELECT * FROM options", function(err, MySQL) {
-			if (err) throw err;
-			if (MsgBox && MySQL.response != "" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-				if (MySQL.replyes) {
-					msg.reply(MySQL.response);
-				} else {
-					client.sendMessage(msg.from, MySQL.response);
-				}
+	db.get("SELECT * FROM options", function(err, MySQL) {
+		if (err) throw err;
+		if (MsgBox && MySQL.response != "" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+			if (MySQL.replyes) {
+				msg.reply(MySQL.response);
+			} else {
+				client.sendMessage(msg.from, MySQL.response);
 			}
+		}
 
-		});
-
-
+	});
 
 });
 
