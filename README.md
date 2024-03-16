@@ -44,12 +44,12 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 <b>5 - </b>Instale o npm
 ```sh
-npm install
+npm install 
 ```
 
 <b>6 - </b>Configure a auto-inicialização
 ```sh
-pm2 start mwsm.json && pm2 save && pm2 startup
+npm install pm2 -g && pm2 start mwsm.json && pm2 save && pm2 startup
 ```
 </details>
 
@@ -94,7 +94,7 @@ sudo npm install
 
 <b>7 - </b>Configure a auto-inicialização
 ```sh
-sudo pm2 start mwsm.json && pm2 save && pm2 startup
+sudo npm install pm2 -g && pm2 start mwsm.json && pm2 save && pm2 startup
 ```
 
 </details>
