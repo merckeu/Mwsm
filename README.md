@@ -167,11 +167,8 @@ sudo npm install pm2 -g && pm2 start mwsm.json && pm2 save && pm2 startup
 <summary>Servidor Web</summary>
 <br>
   
-<b>1 - </b>Acesse o arquivo de configuração do servidor via prompt
+Para Alterar as configurações é necessario utilizar um editor sqlite no arquivo mwsm.db ou via comandos JS ou Prompt, em breve vamos disponibilizar um painel administrativo.
 
-```sh
-INDISPONIVEL NO MOMENTO
-```
 Altere o valor conforme suas necessidades.
 
 | Nome           | Valor             | Função                                                          |
