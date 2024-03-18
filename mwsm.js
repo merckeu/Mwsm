@@ -1,7 +1,3 @@
-//##########################################################
-var ACCESS = 8000; //Porta de Acesso Padrao
-//##########################################################
-
 const {
 	Client,
 	LocalAuth,
@@ -26,10 +22,9 @@ const hostName = os.hostname();
 const server = http.createServer(app);
 const io = socketIO(server);
 const sqlite3 = require('sqlite3').verbose();
-let db = new sqlite3.Database('mwsm.db');
+const db = new sqlite3.Database('mwsm.db');
 const register = new Date().getDate();
 require('events').EventEmitter.defaultMaxListeners = Infinity;
-const port = process.env.PORT || ACCESS;
 
 function delay(t, v) {
 	return new Promise(function(resolve) {
@@ -292,7 +287,9 @@ client.on('message', async msg => {
 });
 
 console.log("\nAPI is Ready!\n");
-
-server.listen(port, function() {
-	console.log('Server Running on Port *: ' + port);
+db.get("SELECT * FROM options", function(err, OPTIONS) {
+	const Port = process.env.PORT || OPTIONS.access;
+	server.listen(Port, function() {
+		console.log('Server Running on Port *: ' + Port);
+	});
 });
