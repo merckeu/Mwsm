@@ -192,8 +192,9 @@ app.post('/send-message', [
 
 		setTimeout(function() {
 			Mensagem.some(function(Send, index) {
+				const PIXFAIL = [undefined, "XXX", null, ""];
 				setTimeout(function() {
-					if (MySQL.pixfail != "XXX" && Send == "CodigoIndisponivel") {
+					if (!PIXFAIL.includes(MySQL.pixfail) && Send == "CodigoIndisponivel") {
 						Send = Send.replace("CodigoIndisponivel", MySQL.pixfail);
 					}
 					client.sendMessage(WhatsApp, Send).then(response => {
