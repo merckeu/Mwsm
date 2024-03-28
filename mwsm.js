@@ -73,7 +73,7 @@ const client = new Client({
 
 client.initialize();
 io.on('connection', function(socket) {
-	if (link.prepare('SELECT * FROM options').get().auth) {
+	if (link.prepare('SELECT * FROM options').get().auth == "true") {
 		socket.emit('Reset', false);
 		console.log('> Bot-Mwsm : Loading application', '100%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
