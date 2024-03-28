@@ -74,7 +74,6 @@ const client = new Client({
 client.initialize();
 io.on('connection', function(socket) {
 	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
-		socket.emit('Reset', false);
 		console.log('> Bot-Mwsm : Loading application', '100%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
@@ -152,6 +151,9 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('loading_screen', (percent, message) => {
+if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+                socket.emit('Reset', true);
+}
 		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
 			console.log('> Bot-Mwsm : Loading application', percent + '%');
 			socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
@@ -163,7 +165,6 @@ io.on('connection', function(socket) {
 				socket.emit('qr', RESOURCE.connection);
 			}
 		}
-		socket.emit('Reset', true);
 	});
 
 
