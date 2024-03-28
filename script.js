@@ -24,18 +24,17 @@ $(document).ready(function() {
 		$("#qrcode").fadeOut("fast", function() {
 			$('#qrcode').attr('src', src);
 			$("#qrcode").fadeIn("slow", function() {
-if($('#Preload').is(':visible')){
-				$("#Preload").fadeOut("slow", function() {
-                                        $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-                                 });
-}
+				if ($('#Preload').is(':visible')) {
+					$("#Preload").fadeOut("slow", function() {
+
+					});
+				}
 			});
 		});
 	});
 
 	socket.on('ready', function(data) {
-		$("#qrcode").fadeOut("fast", function() {
-		});
+		$("#qrcode").fadeOut("fast", function() {});
 	});
 
 	socket.on('Reset', function(data) {
@@ -286,7 +285,8 @@ $(document).ready(function() {
 
 															}
 
-														 $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);															}
+															$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+														}
 													});
 												}
 											});
