@@ -84,7 +84,7 @@ io.on('connection', function(socket) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
 	} else {
-                socket.emit('Reset', true);
+		socket.emit('Reset', true);
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
@@ -96,8 +96,8 @@ io.on('connection', function(socket) {
 			} catch (err) {
 				console.log('> Bot-Mwsm : ' + err);
 				socket.emit('message', '> Bot-Mwsm : ' + err);
-			} finally { 
-                                socket.emit('Reset', false);
+			} finally {
+				socket.emit('Reset', false);
 				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
 				console.log('> Bot-Mwsm : ' + CONSOLE.received);
 			}
@@ -105,24 +105,24 @@ io.on('connection', function(socket) {
 
 	});
 	client.on('ready', function() {
-                if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
-		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-		socket.emit('qr', RESOURCE.ready);
-		db.run("UPDATE options SET auth=?", [true], (err) => {
-			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
-			}
-		});
-                }
-                socket.emit('Reset', false);
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
+			console.log('> Bot-Mwsm : ' + CONSOLE.ready);
+			socket.emit('qr', RESOURCE.ready);
+			db.run("UPDATE options SET auth=?", [true], (err) => {
+				if (err) {
+					console.log('> Bot-Mwsm : ' + err)
+				}
+			});
+		}
+		socket.emit('Reset', false);
 	});
 
 	client.on('authenticated', function() {
-                if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-                }
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+		}
 	});
 
 	client.on('auth_failure', function() {
@@ -152,17 +152,17 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('loading_screen', (percent, message) => {
-if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
-		console.log('> Bot-Mwsm : Loading application', percent + '%');
-		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
-		if (percent >= "100") {
-			socket.emit('qr', RESOURCE.authenticated);
-		} else {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-			socket.emit('qr', RESOURCE.connection);
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			console.log('> Bot-Mwsm : Loading application', percent + '%');
+			socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
+			if (percent >= "100") {
+				socket.emit('qr', RESOURCE.authenticated);
+			} else {
+				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+				console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+				socket.emit('qr', RESOURCE.connection);
+			}
 		}
-}
 		socket.emit('Reset', true);
 	});
 
