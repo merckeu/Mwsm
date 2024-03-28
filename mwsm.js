@@ -73,6 +73,7 @@ const client = new Client({
 
 client.initialize();
 io.on('connection', function(socket) {
+        socket.emit('Reset', true);
 	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
 		console.log('> Bot-Mwsm : Loading application', '100%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
@@ -83,7 +84,6 @@ io.on('connection', function(socket) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
 	} else {
-		socket.emit('Reset', true);
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
@@ -114,7 +114,6 @@ io.on('connection', function(socket) {
 				}
 			});
 		}
-		socket.emit('Reset', false);
 	});
 
 	client.on('authenticated', function() {
