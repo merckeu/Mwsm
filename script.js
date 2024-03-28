@@ -26,7 +26,20 @@ $(document).ready(function() {
 			$("#qrcode").fadeIn("slow", function() {
 				if ($('#Preload').is(':visible')) {
 					$("#Preload").fadeOut("slow", function() {
-
+						$.ajax({
+							type: "POST",
+							url: '/authenticated',
+							success: function(data) {
+								if (data.Status == "Success") {
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+								} else {
+									$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+								}
+							},
+							error: function(jqXHR, textStatus, errorThrown) {
+								$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+							}
+						});
 					});
 				}
 			});
