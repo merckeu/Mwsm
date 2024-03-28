@@ -31,7 +31,7 @@ $(document).ready(function() {
 
 	socket.on('ready', function(data) {
 		$("#qrcode").fadeOut("fast", function() {
-
+			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 		});
 	});
 
@@ -249,6 +249,9 @@ $(document).ready(function() {
 										onbot: $("#onbot").prop('checked'),
 										count: $("#count").val()
 									},
+									beforeSend: function(data) {
+										$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+									},
 									success: function(data) {
 										if (data.Status == "Success") {
 											var Icon = "fa-check";
@@ -278,6 +281,7 @@ $(document).ready(function() {
 																}, 1000);
 
 															}
+															$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 														}
 													});
 												}
@@ -285,6 +289,7 @@ $(document).ready(function() {
 										});
 									},
 									error: function(request, status, error) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 										Slide = false;
 										$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
 											header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
