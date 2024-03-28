@@ -83,7 +83,6 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
-		socket.emit('Reset', false);
 	} else {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
@@ -113,6 +112,7 @@ io.on('connection', function(socket) {
 				if (err) {
 					console.log('> Bot-Mwsm : ' + err)
 				}
+				socket.emit('Reset', false);
 			});
 		}
 	});
@@ -153,8 +153,6 @@ io.on('connection', function(socket) {
 	client.on('loading_screen', (percent, message) => {
 		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
 			socket.emit('Reset', true);
-		}
-		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
 			console.log('> Bot-Mwsm : Loading application', percent + '%');
 			socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
 			if (percent >= "100") {
@@ -199,6 +197,19 @@ app.post('/reset', (req, res) => {
 	}
 });
 
+// Authenticated
+app.post('/authenticated', (req, res) => {
+	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
+		res.json({
+			Status: "Success"
+		});
+
+	} else {
+		res.json({
+			Status: "Fail"
+		});
+	}
+});
 
 // Update SQLite
 app.post('/sqlite-options', (req, res) => {
