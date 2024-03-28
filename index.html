@@ -1,45 +1,133 @@
 <html>
-<head>
-<title>Mwsm - Terminal</title>
-
-    <link rel="stylesheet" href="style.css" media="screen">
-    <link rel="icon" type="image/x-icon" href="/icon.png">
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="socket.io.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+	<head>
+		<title>Mwsm v2.0</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="icon" type="image/x-icon" href="/icon.png">
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="socket.io.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+		
+		<style>
+		</style>
+	</head>
 	
-</head>
-
-<BODY BGCOLOR="#222222" LINK="#77dd11" TEXT="#33d011" ALINK="#dddddd" VLINK="#77dd11"
-TOPMARGIN="0" BOTTOMMARGIN="0" LEFTMARGIN="0" RIGHTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0">
-
-
-<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="0" STYLE="margin:20px;" HEIGHT="276">
-
-<TR>
-
-<TD VALIGN="top" HEIGHT="276" WIDTH="400" style="background:#000;" id="app">
-<p style="padding: 10px 0px 0px 10px">MkAuth WhatsApp Send Message - Terminal</p>
-<div id="Scroll" style="overflow-y: auto;background:#000;width: 100%;height: 88%;"><p class="logs" style="padding-left:20px;color:#FFF;"></p></div>
-
-</TD>
-<TD VALIGN="top" WIDTH="276" style="padding-left:20px;">
-<img src="" alt="QR Code" id="qrcode">
-</TD>
-</TR>
-<TR>
-<TD CLASS="grey" style="padding:10px;" colspan="2">
-	MkAuth > Options > Server<BR><BR>
-	&nbsp;&nbsp;&nbsp;&nbsp;APP : <i>PlaySMS POST</i><BR>
-	&nbsp;&nbsp;&nbsp;&nbsp;SERVER : <i class="host"></i><BR>
-	&nbsp;&nbsp;&nbsp;&nbsp;USER : <i>admin</i><BR>
-	&nbsp;&nbsp;&nbsp;&nbsp;PASS : <i>admin</i><BR>
-</TD>
-</TR>
-
-</TABLE>
-
-</BODY>
+	<body>
+		<div id="tabs" style="margin:10px;width:690px;height:326;">
+			<ul>
+				<li><a href="#tabs-1">Terminal</a></li>
+				<li><a href="#tabs-2">Settings</a></li>
+				<div style="position:absolute;right:0px;padding:0px 10px;" id="Reset">
+					<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh change Reset" aria-hidden="true"></i>
+					</button>
+				</div>
+			</ul>
+			<div id="Waiting">
+				<div class="loader"></div>
+			</div>
+			<div id="Preload">
+				<div class="loader"></div>
+			</div>
+			<div id="tabs-1" style="margin-left:0px;padding-left:6px;padding-top:2px;z-index:1;">
+				<div class="row">
+					<div class="col-75">
+						<div class="row" style="padding-top:10px;">
+							<div class="col-50">
+								<div id="Scroll" style="overflow-y: auto;background:#000;width: 100%;border-radius:5px;height:266px;">
+									<p class="logs" style="padding-left:20px;color:#FFF;"></p>
+								</div>
+							</div>
+							
+							<div class="col-25">
+								<div class="row">
+									<div id="background" style='margin-top:-10px;position:absolute;width: 276px;height: 276px;background-image: url("");'>
+										<img id="qrcode">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="tabs-2" style="z-index:1;">
+				<div class="row">
+					<div class="col-75">
+						<div class="container">
+							<form>
+								<div class="row" style="padding-top:10px;">
+									<div class="col-50">
+										<label for="pixfail"> PixFail</label>
+										<input type="text" id="pixfail" placeholder="Chave Pix">
+										<div class="row">
+											<div class="col-50">
+												<label for="response">Response</label>
+												<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema">
+											</div>
+										</div>
+										
+										<div class="row" style="margin-top:-10px;margin-bottom:-10px;padding-left:20px;">
+											<div class="col-20">
+												<label><input type="checkbox" checked="checked" id="onbot"> Habilitar Resposta</label>
+											</div>
+										</div>
+										
+										
+									</div>
+									
+									<div class="col-50">
+										<div class="row">
+											<div class="col-25">
+												<label for="interval">Interval</label>
+												<input type="tel" id="interval" placeholder="1000">
+											</div>
+											<div class="col-25">
+												<label for="sendwait">SendWait</label>
+												<input type="tel" id="sendwait" placeholder="30000">
+											</div>
+											<div class="col-25">
+												<label for="access">Access</label>
+												<input type="tel" id="access" placeholder="8000">
+												<input type="tel" id="port" placeholder="8000" hidden>
+											</div>
+											<div class="col-20">
+												<label for="replyes">Replies</label>
+												<label><input type="checkbox" checked="checked" id="replyes"> Destacar Resposta</label>
+											</div>
+											<div class="col-25">
+												<label for="count">Count</label>
+												<input type="tel" id="count" placeholder="1">
+											</div>
+											
+										</div>
+									</div>
+									
+								</div>
+								<div style="width:100%;height:35px;padding:0px;">
+									<button type="button" class="btn btn-success" id="Save_Options" style="height:35px;width:100px;float:right;margin:0px;">Reload</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+						
+		</div>
+		
+		<div id="tabs-8" style="margin:10px;width:696px;height:326;color:#222;">
+			<div class="row">
+				<div class="col-50">
+					<div class="container">
+						MkAuth > Options > Server<BR><BR>
+						&nbsp;&nbsp;&nbsp;&nbsp;APP : <i>PlaySMS POST</i><BR>
+						&nbsp;&nbsp;&nbsp;&nbsp;SERVER : <i class="host"></i><BR>
+						&nbsp;&nbsp;&nbsp;&nbsp;USER : <i>admin</i><BR>
+						&nbsp;&nbsp;&nbsp;&nbsp;PASS : <i>admin</i><BR>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+	
 </HTML>
-
-
