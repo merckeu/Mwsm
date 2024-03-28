@@ -2,11 +2,12 @@
 
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
+ >>>> Utilize o comando Upgrade para atualizar/corrigir versões (v1/v2) ja instaladas <<<<
+
 ### Novidades v2.0 Beta 2:
 * Integração do Banco de Dados SQLite
 * Interface Web com Controle de Funções
   
-  Utilize o comando Upgrade abaixo para atualizar a versão v1 para v2
 
 ### Funcionalidade:
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
