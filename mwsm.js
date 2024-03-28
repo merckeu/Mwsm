@@ -73,7 +73,7 @@ const client = new Client({
 
 client.initialize();
 io.on('connection', function(socket) {
-	if (link.prepare('SELECT * FROM options').get().auth == "true") {
+	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
 		socket.emit('Reset', false);
 		console.log('> Bot-Mwsm : Loading application', '100%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
@@ -103,22 +103,24 @@ io.on('connection', function(socket) {
 
 	});
 	client.on('ready', function() {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
+			console.log('> Bot-Mwsm : ' + CONSOLE.ready);
+			socket.emit('qr', RESOURCE.ready);
+			db.run("UPDATE options SET auth=?", [true], (err) => {
+				if (err) {
+					console.log('> Bot-Mwsm : ' + err)
+				}
+			});
+		}
 		socket.emit('Reset', false);
-		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-		socket.emit('qr', RESOURCE.ready);
-		db.run("UPDATE options SET auth=?", [true], (err) => {
-			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
-			}
-		});
-
-
 	});
 
 	client.on('authenticated', function() {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+		}
 	});
 
 	client.on('auth_failure', function() {
@@ -148,14 +150,16 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('loading_screen', (percent, message) => {
-		console.log('> Bot-Mwsm : Loading application', percent + '%');
-		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
-		if (percent >= "100") {
-			socket.emit('qr', RESOURCE.authenticated);
-		} else {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-			socket.emit('qr', RESOURCE.connection);
+		if ((link.prepare('SELECT * FROM options').get().auth == 0)) {
+			console.log('> Bot-Mwsm : Loading application', percent + '%');
+			socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
+			if (percent >= "100") {
+				socket.emit('qr', RESOURCE.authenticated);
+			} else {
+				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+				console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+				socket.emit('qr', RESOURCE.connection);
+			}
 		}
 		socket.emit('Reset', true);
 	});
@@ -350,8 +354,8 @@ client.on('message', async msg => {
 		}
 	});
 
-	if (MsgBox && OPTIONS.onbot === "true" && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-		if (OPTIONS.replyes === "true") {
+	if (MsgBox && (OPTIONS.onbot == 1) && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+		if ((OPTIONS.replyes == 1)) {
 			msg.reply(OPTIONS.response);
 		} else {
 			client.sendMessage(msg.from, OPTIONS.response);
