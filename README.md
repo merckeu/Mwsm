@@ -75,7 +75,7 @@ Altere o valor conforme suas necessidades.
 | `pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
 | `response`     |                   | Resposta Automatica.                                            |
 | `replyes`      |                   | Marcar conversas em resposta automaticas.                       |
-| `count`        | `1`               | Quantidade de Auto-Respostas por dia (anti-velhinha chata).     |
+| `count`        | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
 
 <br>
