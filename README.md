@@ -115,7 +115,7 @@ npm install && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 </details>
 
 <details>
-<summary>Utilização</summary>
+<summary>Teste</summary>
 <br>
 Para testar utilize o comando abaixo no Prompt
 
