@@ -96,7 +96,6 @@ io.on('connection', function(socket) {
 				console.log('> Bot-Mwsm : ' + err);
 				socket.emit('message', '> Bot-Mwsm : ' + err);
 			} finally {
-				socket.emit('Reset', false);
 				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
 				console.log('> Bot-Mwsm : ' + CONSOLE.received);
 			}
@@ -132,6 +131,7 @@ io.on('connection', function(socket) {
 			if (err) {
 				console.log('> Bot-Mwsm : ' + err)
 			}
+			socket.emit('Reset', true);
 		});
 
 	});
@@ -144,6 +144,7 @@ io.on('connection', function(socket) {
 			if (err) {
 				console.log('> Bot-Mwsm : ' + err)
 			}
+			socket.emit('Reset', true);
 		});
 		delay(5000).then(async function() {
 			client.initialize();
