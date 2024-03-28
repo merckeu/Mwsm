@@ -37,7 +37,7 @@ $(document).ready(function() {
 								}
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
-								$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+								        $(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 							}
 						});
 					});
