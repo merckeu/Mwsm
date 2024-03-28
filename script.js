@@ -24,14 +24,17 @@ $(document).ready(function() {
 		$("#qrcode").fadeOut("fast", function() {
 			$('#qrcode').attr('src', src);
 			$("#qrcode").fadeIn("slow", function() {
-				$("#Preload").fadeOut("slow", function() {});
+if($('#Preload').is(':visible')){
+				$("#Preload").fadeOut("slow", function() {
+                                        $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+                                 });
+}
 			});
 		});
 	});
 
 	socket.on('ready', function(data) {
 		$("#qrcode").fadeOut("fast", function() {
-			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 		});
 	});
 
@@ -270,6 +273,7 @@ $(document).ready(function() {
 												close: function(e, m, o) {
 													$('#tabs a[href="#tabs-1"]')[0].click();
 													$("#Waiting").fadeOut("slow", function() {
+
 														if (data.Status == "Success") {
 															$("#Scroll").animate({
 																scrollTop: $("#Scroll")[0].scrollHeight
@@ -281,8 +285,8 @@ $(document).ready(function() {
 																}, 1000);
 
 															}
-															$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-														}
+
+														 $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);															}
 													});
 												}
 											});
