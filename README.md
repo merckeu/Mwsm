@@ -104,13 +104,23 @@ Altere o valor conforme suas necessidades.
 <br>
   
 ```sh
-clear
-cd ~ && rm -r /var/api/Mwsm
-pm2 delete all
-sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
-git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
-npm install && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+cd ~ && sudo rm -r /var/api/Mwsm
+```
 
+```sh
+sudo pm2 delete all
+```
+
+```sh
+sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | -E bash - && apt-get install -y nodejs
+```
+
+```sh
+sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+```
+
+```sh
+sudo npm install && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 ```
 
 </details>
