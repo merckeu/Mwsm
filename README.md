@@ -101,7 +101,6 @@ Altere o valor conforme suas necessidades.
 
 <details>
 <summary>Upgrade (v1 para v2)</summary>
-<br>
   
 ```sh
 cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
@@ -113,17 +112,16 @@ npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json &&
 
 <details>
 <summary>Update v2 Beta 3</summary>
-<br>
  
 > ### Após rodar o comando reconfigure as opções no menu settings ###
 
-  
 ```sh
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.db -O /var/api/Mwsm/mwsm.db
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
 ```
 
 </details>
