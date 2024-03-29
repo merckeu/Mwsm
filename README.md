@@ -116,7 +116,6 @@ npm install && npm run start:mwsm
 
 <details>
 <summary>Mkauth</summary>
-  <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
 <br><br>
   
 <b>1 - </b>Atualize seu sistema
