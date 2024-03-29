@@ -58,7 +58,7 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mws
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
-cd ~ && cd /var/api/Mwsm && sudo pm2 restart Bot-Mwsm --update-env
+cd /var/api/Mwsm && sudo pm2 restart Bot-Mwsm --update-env
 
 ```
 
