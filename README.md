@@ -122,6 +122,7 @@ npm install && npm run start:mwsm
 ```sh
 cd ~ && rm -r /var/api/Mwsm
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+npm install && npm run start:mwsm
 ```
 
 </details>
