@@ -1,24 +1,24 @@
-# MkAuth WhatsApp Send Message - v2.0 Beta 3
+# MkAuth WhatsApp Send Message - v2.0 Beta 3 (29/03/2024)
 
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
- > ### Utilize o comando Upgrade para atualizar/corrigir versões (v1/v2) ja instaladas ###
+ > ### Mantenha sua aplicação sempre atualizada ###
 
-### Novidades v2.0 Beta 1:
-* Integração do Banco de Dados SQLite
-  
-### Novidades v2.0 Beta 2:  
-* Interface Web com Controle de Funções
+### Novidades V2
 
-### Novidades v2.0 Beta 3:  
-* Correção de Bugs
+| Versão     | Recurso                                                                              |
+| ---------- | ------------------------------------------------------------------------------------ |
+|  beta 1    |  Integração do Banco de Dados SQLite |
+|  beta 2    |  Interface Web com Controle de Funções |
+|  beta 3    |  Correção da função Reply que não estava funcionando |
+
   
 
 ### Funcionalidade:
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
 
 ### Requisitos :
-* Servidor Linux
+* Servidor Linux Proxmox
 
 ### Instalação :
 <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
@@ -105,7 +105,6 @@ Altere o valor conforme suas necessidades.
   
 ```sh
 cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
-sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 ```
