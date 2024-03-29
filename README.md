@@ -104,13 +104,10 @@ Altere o valor conforme suas necessidades.
 <br>
   
 ```sh
-pm2 delete all
-pm2 kill
-npm remove pm2 -g
-cd ~ && rm -r /var/api/Mwsm
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
 sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
-npm install && npm run start:mwsm
+npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 ```
 
 </details>
@@ -118,11 +115,15 @@ npm install && npm run start:mwsm
 <details>
 <summary>Update v2 Beta 3</summary>
 <br>
+ > ### Após rodar o comando reconfigure as opções no menu settings ###
   
 ```sh
-cd ~ && rm -r /var/api/Mwsm
-git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
-npm install && npm run start:mwsm
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.db -O /var/api/Mwsm/mwsm.db
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package-lock.json -O /var/api/Mwsm/package-lock.json
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 ```
 
 </details>
