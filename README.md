@@ -1,12 +1,17 @@
-# MkAuth WhatsApp Send Message - v2.0 Beta 2
+# MkAuth WhatsApp Send Message - v2.0 Beta 3
 
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
  > ### Utilize o comando Upgrade para atualizar/corrigir versões (v1/v2) ja instaladas ###
 
-### Novidades v2.0 Beta 2:
+### Novidades v2.0 Beta 1:
 * Integração do Banco de Dados SQLite
+  
+### Novidades v2.0 Beta 2:  
 * Interface Web com Controle de Funções
+
+### Novidades v2.0 Beta 3:  
+* Correção de Bugs
   
 
 ### Funcionalidade:
@@ -95,7 +100,7 @@ Altere o valor conforme suas necessidades.
 </details>
 
 <details>
-<summary>Update e/ou Upgrade</summary>
+<summary>Upgrade (v1 para v2)</summary>
 <br>
   
 ```sh
@@ -106,6 +111,17 @@ cd ~ && rm -r /var/api/Mwsm
 sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 npm install && npm run start:mwsm
+```
+
+</details>
+
+<details>
+<summary>Update v2 Beta 3</summary>
+<br>
+  
+```sh
+cd ~ && rm -r /var/api/Mwsm
+git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 
 </details>
