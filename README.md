@@ -44,8 +44,8 @@ sudo npm install
 sudo npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 ```
 </details>
-</details>
 <br>
+</details>
 <details>
 <summary>Update v2 => v2 Beta++</summary>
  
