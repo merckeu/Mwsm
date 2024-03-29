@@ -5,6 +5,9 @@
  > ### Mantenha sua aplicação sempre atualizada ###
 <details>
 <summary>Upgrade v1 => v2</summary>
+ <br> 
+<details>
+<summary>ProxMox</summary>
   
 ```sh
 sudo cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
@@ -13,7 +16,36 @@ npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json &&
 ```
 
 </details>
-
+<details>
+<summary>MkAuth</summary>
+  
+```sh
+sudo apt-get install build-essential
+```
+```sh
+cd ~ && cd /var/api/Mwsm
+```
+```sh
+sudo pm2 delete all && pm2 kill && npm remove pm2 -g
+```
+```sh
+sudo mkdir -p ~/.pm2/node_modules/
+```
+```sh
+cd ~ && rm -r /var/api/Mwsm
+```
+```sh
+sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+```
+```sh
+sudo npm install
+```
+```sh
+sudo npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+```
+</details>
+</details>
+<br>
 <details>
 <summary>Update v2 => v2 Beta++</summary>
  
@@ -26,6 +58,7 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mws
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
+
 ```
 
 </details>
