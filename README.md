@@ -44,10 +44,12 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/ap
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
 
 ### Requisitos :
-* Servidor Linux Proxmox 
+* Servidor Linux ( Container ubuntu ) Proxmox ou Mkauth
 
 ### Instalação :
-<b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
+<details>
+<summary>Proxmox</summary>
+  <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
 <br><br>
   
 <b>1 - </b>Atualize seu sistema
@@ -76,6 +78,52 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```sh
 npm install && npm run start:mwsm
 ```
+
+</details>
+
+<details>
+<summary>Mkauth</summary>
+  <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
+<br><br>
+  
+<b>1 - </b>Atualize seu sistema
+```sh
+sudo apt update
+```
+
+<b>2 - </b>Instale as dependencias necessarias
+```sh
+sudo apt install git curl
+```
+```sh
+sudo apt-get install ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
+```
+
+<b>3 - </b>Instale o node
+```sh
+sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
+```
+<b>4 - </b>Crie o diretório de instalação do Mwsm
+```sh
+sudo mkdir -p /var/api/Mwsm
+```
+
+<b>5 - </b>Instale o Mwsm
+```sh
+sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+```
+
+<b>6 - </b>Instale as dependencias do Mwsn
+```sh
+sudo npm install 
+```
+
+<b>7 - </b>Inicialize o Mwsn
+```sh
+sudo npm run start:mwsm
+```
+
+</details>
 
 
 ### Utilização & Configuração :
