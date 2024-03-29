@@ -43,12 +43,7 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 <b>5 - </b>Instale as dependencias do Mwsn
 ```sh
-npm install 
-```
-
-<b>6 - </b>Configure a auto-inicialização
-```sh
-npm install pm2 -g && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+npm install && npm run start:mwsm
 ```
 
 
@@ -110,8 +105,7 @@ npm remove pm2 -g
 cd ~ && rm -r /var/api/Mwsm
 sudo apt-get remove nodejs -y && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
-npm install
-npm install pm2 -g && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+npm install && npm run start:mwsm
 ```
 
 </details>
