@@ -3,6 +3,32 @@
 [![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
 
  > ### Mantenha sua aplicação sempre atualizada ###
+<details>
+<summary>Upgrade v1 => v2</summary>
+  
+```sh
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
+git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
+npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+```
+
+</details>
+
+<details>
+<summary>Update v2 => v2 Beta++</summary>
+ 
+> ### Após rodar o comando reconfigure as opções no menu settings ###
+
+```sh
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.db -O /var/api/Mwsm/mwsm.db
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
+```
+
+</details>
 
 ### Novidades V2
 
@@ -18,7 +44,7 @@
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
 
 ### Requisitos :
-* Servidor Linux Proxmox
+* Servidor Linux Proxmox 
 
 ### Instalação :
 <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
@@ -96,33 +122,6 @@ Altere o valor conforme suas necessidades.
 | `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                                     |
 | `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                     |
 | `*`    | negrito        | `*`Mensagem`*`                                                          |
-
-</details>
-
-<details>
-<summary>Upgrade (v1 para v2)</summary>
-  
-```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm
-git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
-npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
-```
-
-</details>
-
-<details>
-<summary>Update v2 Beta 3</summary>
- 
-> ### Após rodar o comando reconfigure as opções no menu settings ###
-
-```sh
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.db -O /var/api/Mwsm/mwsm.db
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
-```
 
 </details>
 
