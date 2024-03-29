@@ -74,7 +74,7 @@ const client = new Client({
 client.initialize();
 io.on('connection', function(socket) {
 	socket.emit('Reset', true);
-	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
+	if ((OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
 		console.log('> Bot-Mwsm : Loading application', '100%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
@@ -368,9 +368,8 @@ client.on('message', async msg => {
 			}
 		}
 	});
-
-	if (MsgBox && (OPTIONS.onbot == 1) && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-		if ((OPTIONS.replyes == 1)) {
+	if (MsgBox && (OPTIONS.onbot === 1 || OPTIONS.onbot === "true") && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+		if ((OPTIONS.replyes === 1 || OPTIONS.replyes === "true")) {
 			msg.reply(OPTIONS.response);
 		} else {
 			client.sendMessage(msg.from, OPTIONS.response);
