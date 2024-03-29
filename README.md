@@ -115,7 +115,9 @@ npm install && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json &&
 <details>
 <summary>Update v2 Beta 3</summary>
 <br>
- > ### Após rodar o comando reconfigure as opções no menu settings ###
+ 
+> ### Após rodar o comando reconfigure as opções no menu settings ###
+
   
 ```sh
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
