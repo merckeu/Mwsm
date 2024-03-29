@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node mwsm.js",
     "start:dev": "nodemon mwsm.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:mwsm": "npm i -g pm2 && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0"
   },
   "keywords": [
     "whatsapp-api",
