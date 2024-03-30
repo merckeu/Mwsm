@@ -185,7 +185,7 @@ Altere o valor conforme suas necessidades.
 | `access`       | `8000`            | Porta de acesso do sistema/interface.                           |
 | `pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
 | `response`     |                   | Resposta Automatica.                                            |
-| `replyes`      |                   | Marcar conversas em resposta automaticas.                       |
+| `replies`      |                   | Marcar conversas em resposta automaticas.                       |
 | `count`        | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
 
