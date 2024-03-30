@@ -71,7 +71,7 @@ cd /var/api/Mwsm && sudo pm2 restart Bot-Mwsm --update-env
 |  beta 1    |  Integração do Banco de Dados SQLite |
 |  beta 2    |  Interface Web com Controle de Funções |
 |  beta 3    |  Correção da função Reply que não estava funcionando |
-|  beta 4    |  Adcionado proteção por token para alteração das funções do menu settings |
+|  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
 
 > ### OBS:  O token será enviado para o mesmo whatsapp utilizado na leitura do qrcode da api
   
