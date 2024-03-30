@@ -8,8 +8,9 @@ const {
 	body,
 	validationResult
 } = require('express-validator');
-var Delay, Wait;
-var MsgBox = false;
+var Delay, Wait, Permission = false,
+	MsgBox = false,
+	Session = false;
 const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
@@ -31,6 +32,9 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 const CONSOLE = link.prepare('SELECT * FROM console').get();
 const RESOURCE = link.prepare('SELECT * FROM resources').get();
 const OPTIONS = link.prepare('SELECT * FROM options').get();
+const crypto = require('crypto');
+const Keygen = (length = 6, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
+var Password = Keygen();
 global.io = io;
 
 function delay(t, v) {
@@ -73,114 +77,166 @@ const client = new Client({
 
 client.initialize();
 io.on('connection', function(socket) {
+
+	var Session = false;
 	socket.emit('Reset', true);
-	if ((OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
-		console.log('> Bot-Mwsm : Loading application', '100%');
-		socket.emit('message', '> Bot-Mwsm : Connecting Application 100%');
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+	if (Session || (link.prepare('SELECT * FROM options').get().auth === 1 || link.prepare('SELECT * FROM options').get().auth === "true")) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-		socket.emit('qr', RESOURCE.authenticated);
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
+		socket.emit('qr', RESOURCE.authenticated);
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
+		Session = true;
 	} else {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
+		socket.emit('Reset', true);
 	}
-	client.on('qr', (qr) => {
-		qrcode.toDataURL(qr, (err, url) => {
-			try {
-				socket.emit('qr', url);
-			} catch (err) {
-				console.log('> Bot-Mwsm : ' + err);
-				socket.emit('message', '> Bot-Mwsm : ' + err);
-			} finally {
-				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
-				console.log('> Bot-Mwsm : ' + CONSOLE.received);
-			}
-		});
 
-	});
-	client.on('ready', function() {
-		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
-			console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-			socket.emit('qr', RESOURCE.ready);
-			db.run("UPDATE options SET auth=?", [true], (err) => {
-				if (err) {
-					console.log('> Bot-Mwsm : ' + err)
-				}
-				socket.emit('Reset', false);
+	db.serialize(() => {
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			client.on('qr', (qr) => {
+				qrcode.toDataURL(qr, (err, url) => {
+					try {
+						socket.emit('qr', url);
+					} catch (err) {
+						console.log('> Bot-Mwsm : ' + err);
+						socket.emit('message', '> Bot-Mwsm : ' + err);
+					} finally {
+						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
+						console.log('> Bot-Mwsm : ' + CONSOLE.received);
+					}
+				});
 			});
-		}
-	});
+		});
 
-	client.on('authenticated', function() {
-		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-		}
-	});
 
-	client.on('auth_failure', function() {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.auth_failure);
-		console.log('> Bot-Mwsm : ' + CONSOLE.auth_failure);
-		socket.emit('qr', RESOURCE.auth_failure);
-		db.run("UPDATE options SET auth=?", [false], (err) => {
-			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			db.get("SELECT * FROM resources", (err, RESOURCE) => {
+				client.on('ready', function() {
+					if ((link.prepare('SELECT * FROM options').get().auth === 0 || link.prepare('SELECT * FROM options').get().auth === "false")) {
+						db.run("UPDATE options SET auth=?", [true], (err) => {
+							if (err) {
+								console.log('> Bot-Mwsm : ' + err)
+							}
+						});
+					}
+					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
+					console.log('> Bot-Mwsm : ' + CONSOLE.ready);
+					socket.emit('qr', RESOURCE.ready);
+					socket.emit('Reset', false);
+					Session = true;
+					if (!Permission) {
+						Permission = true;
+						client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password);
+					}
+				});
+			});
+		});
+
+
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			db.get("SELECT * FROM resources", (err, RESOURCE) => {
+				client.on('authenticated', function() {
+					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+					console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+					socket.emit('qr', RESOURCE.authenticated);
+				});
+			});
+		});
+
+
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			db.get("SELECT * FROM resources", (err, RESOURCE) => {
+				client.on('auth_failure', function() {
+					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.auth_failure);
+					console.log('> Bot-Mwsm : ' + CONSOLE.auth_failure);
+					socket.emit('qr', RESOURCE.auth_failure);
+					db.run("UPDATE options SET auth=?", [false], (err) => {
+						if (err) {
+							console.log('> Bot-Mwsm : ' + err)
+						}
+						socket.emit('Reset', true);
+						Session = false;
+					});
+
+				});
+			});
+		});
+
+
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			db.get("SELECT * FROM resources", (err, RESOURCE) => {
+				client.on('disconnected', (reason) => {
+					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
+					console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
+					socket.emit('qr', RESOURCE.disconnected);
+					db.run("UPDATE options SET auth=?", [false], (err) => {
+						if (err) {
+							console.log('> Bot-Mwsm : ' + err)
+						}
+						socket.emit('Reset', true);
+						Session = false;
+					});
+					delay(3000).then(async function() {
+						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+						console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+						socket.emit('qr', RESOURCE.connection);
+						socket.emit('Reset', true);
+						delay(2000).then(async function() {
+							client.initialize();
+						});
+
+					});
+				});
+			});
+		});
+
+
+		db.get("SELECT * FROM console", (err, CONSOLE) => {
+			db.get("SELECT * FROM resources", (err, RESOURCE) => {
+				client.on('loading_screen', (percent, message) => {
+					console.log('> Bot-Mwsm : Loading application', percent + '%');
+					socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
+					if (percent >= "100") {
+						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+						console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+						socket.emit('qr', RESOURCE.authenticated);
+					} else {
+						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+						console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+						socket.emit('qr', RESOURCE.connection);
+						socket.emit('Reset', true);
+
+					}
+
+				});
+			});
+		});
+
+
+		db.get("SELECT * FROM resources", (err, RESOURCE) => {
+			socket.emit('interval', OPTIONS.interval);
+			socket.emit('sendwait', OPTIONS.sendwait);
+			socket.emit('response', OPTIONS.response);
+			socket.emit('access', OPTIONS.access);
+			socket.emit('port', OPTIONS.access);
+			socket.emit('pixfail', OPTIONS.pixfail);
+			socket.emit('replyes', OPTIONS.replyes);
+			socket.emit('count', OPTIONS.count);
+			socket.emit('onbot', OPTIONS.onbot);
+			socket.emit('background', RESOURCE.background);
+			socket.emit('pix', RESOURCE.about);
+			if (Session) {
+				socket.emit('Reset', false);
 			}
-			socket.emit('Reset', true);
+
 		});
 
 	});
-
-	client.on('disconnected', (reason) => {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
-		console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
-		socket.emit('qr', RESOURCE.disconnected);
-		db.run("UPDATE options SET auth=?", [false], (err) => {
-			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
-			}
-			socket.emit('Reset', true);
-		});
-		delay(5000).then(async function() {
-			client.initialize();
-		});
-	});
-
-	client.on('loading_screen', (percent, message) => {
-		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
-			socket.emit('Reset', true);
-			console.log('> Bot-Mwsm : Loading application', percent + '%');
-			socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
-			if (percent >= "100") {
-				socket.emit('qr', RESOURCE.authenticated);
-			} else {
-				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-				console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-				socket.emit('qr', RESOURCE.connection);
-			}
-		}
-	});
-
-
-	socket.emit('interval', OPTIONS.interval);
-	socket.emit('sendwait', OPTIONS.sendwait);
-	socket.emit('response', OPTIONS.response);
-	socket.emit('access', OPTIONS.access);
-	socket.emit('port', OPTIONS.access);
-	socket.emit('pixfail', OPTIONS.pixfail);
-	socket.emit('replyes', OPTIONS.replyes);
-	socket.emit('count', OPTIONS.count);
-	socket.emit('onbot', OPTIONS.onbot);
-
-	socket.emit('background', RESOURCE.background);
-	socket.emit('pix', RESOURCE.about);
 });
-
 // Reset
 app.post('/reset', (req, res) => {
 	db.run("UPDATE options SET auth=?", [false], (err) => {
@@ -200,7 +256,7 @@ app.post('/reset', (req, res) => {
 
 // Authenticated
 app.post('/authenticated', (req, res) => {
-	if ((link.prepare('SELECT * FROM options').get().auth == 1)) {
+	if ((OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
 		res.json({
 			Status: "Success"
 		});
@@ -210,6 +266,33 @@ app.post('/authenticated', (req, res) => {
 			Status: "Fail"
 		});
 	}
+});
+
+// Get Data
+app.post('/getdata', (req, res) => {
+	db.get("SELECT * FROM options", (err, GET) => {
+		if (err) {
+			res.json({
+				Status: "Fail"
+			});
+		} else {
+			res.json({
+				Status: "Success",
+				interval: OPTIONS.interval,
+				sendwait: OPTIONS.sendwait,
+				response: OPTIONS.response,
+				access: OPTIONS.access,
+				port: OPTIONS.access,
+				pixfail: OPTIONS.pixfail,
+				replyes: OPTIONS.replyes,
+				count: OPTIONS.count,
+				onbot: OPTIONS.onbot,
+				background: RESOURCE.background,
+				pix: RESOURCE.about
+			});
+
+		}
+	});
 });
 
 // Update SQLite
@@ -222,34 +305,45 @@ app.post('/sqlite-options', (req, res) => {
 	const Replyes = req.body.replyes;
 	const Onbot = req.body.onbot;
 	const Count = req.body.count;
+	const Token = req.body.token;
 	if (Response == "") {
 		Response = OPTIONS.response;
 	}
-	if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "") {
-		db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count], (err) => {
-			if (err) {
+
+	if (Token == Password) {
+		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "") {
+			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count], (err) => {
+				if (err) {
+					res.json({
+						Status: "Fail",
+						Return: "Failed to Insert Data"
+					});
+				}
+				console.log('> Bot-Mwsm : ' + CONSOLE.settings);
+				global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.settings);
 				res.json({
-					Status: "Fail",
-					Return: "Failed to Insert Data"
+					Status: "Success",
+					Return: CONSOLE.settings,
+					Port: Access
 				});
-			}
-			console.log('> Bot-Mwsm : ' + CONSOLE.settings);
-			global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.settings);
-			res.json({
-				Status: "Success",
-				Return: CONSOLE.settings,
-				Port: Access
+				session = false;
+				exec('pm2 restart Bot-Mwsm --update-env');
 			});
-			exec('pm2 restart Bot-Mwsm --update-env');
-		});
+
+		} else {
+			res.json({
+				Status: "Fail",
+				Return: "Enter all Data"
+			});
+		}
 
 	} else {
 		res.json({
 			Status: "Fail",
-			Return: "Enter all Data"
+			Return: "Incorrect Credentials"
 		});
-
 	}
+
 });
 
 
@@ -270,7 +364,6 @@ app.post('/send-message', [
 			message: errors.mapped()
 		});
 	}
-
 	const number = req.body.to;
 	const numberDDI = number.substr(0, 2);
 	const numberDDD = number.substr(2, 2);
@@ -318,7 +411,6 @@ app.post('/send-message', [
 });
 
 client.on('message', async msg => {
-
 	const nomeContato = msg._data.notifyName;
 	let groupChat = await msg.getChat();
 
@@ -326,55 +418,65 @@ client.on('message', async msg => {
 	if (msg.body == "") return null;
 	if (msg.from.includes("@g.us")) return null;
 
-	db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
-		if (err) {
-			console.log('> Bot-Mwsm : ' + err)
-		}
-		if (REPLIES == undefined) {
-			db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
-				if (err) {
-					console.log('> Bot-Mwsm : ' + err)
-				}
-				console.log('> Bot-Mwsm : ' + CONSOLE.inserted);
-				global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.inserted);
-				MsgBox = true;
-			});
-		} else {
-			if (register.toString() > REPLIES.date) {
-				db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
+	db.serialize(() => {
+		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
+			if (REPLIES == undefined) {
+				db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
 					if (err) {
 						console.log('> Bot-Mwsm : ' + err)
 					}
-					console.log('> Bot-Mwsm : ' + CONSOLE.updated);
-					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+					console.log('> Bot-Mwsm : ' + CONSOLE.inserted);
+					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.inserted);
 					MsgBox = true;
 				});
+
 			} else {
-				if (OPTIONS.count > REPLIES.count) {
-					COUNT = REPLIES.count + 1;
-					db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
-						if (err) throw err;
+
+				if (register.toString() > REPLIES.date) {
+					db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
+						if (err) {
+							console.log('> Bot-Mwsm : ' + err)
+						}
 						console.log('> Bot-Mwsm : ' + CONSOLE.updated);
 						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
 						MsgBox = true;
 					});
 				} else {
-					console.log('> Bot-Mwsm : ' + CONSOLE.found);
-					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.found);
-					MsgBox = false;
+					if (OPTIONS.count > REPLIES.count) {
+						COUNT = REPLIES.count + 1;
+						db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
+							if (err) throw err;
+							console.log('> Bot-Mwsm : ' + CONSOLE.updated);
+							global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+							MsgBox = true;
+						});
+					} else {
+						console.log('> Bot-Mwsm : ' + CONSOLE.found);
+						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.found);
+						MsgBox = false;
 
+					}
 				}
-
 			}
-		}
+		});
+
+		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
+			if (err) {
+				console.log('> Bot-Mwsm : ' + err)
+			}
+			if (REPLIES != undefined) {
+				if (MsgBox && (OPTIONS.onbot === 1 || OPTIONS.onbot === "true") && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
+					if ((OPTIONS.replyes === 1 || OPTIONS.replyes === "true")) {
+						msg.reply(OPTIONS.response);
+					} else {
+						client.sendMessage(msg.from, OPTIONS.response);
+					}
+				}
+			}
+		});
+
 	});
-	if (MsgBox && (OPTIONS.onbot === 1 || OPTIONS.onbot === "true") && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-		if ((OPTIONS.replyes === 1 || OPTIONS.replyes === "true")) {
-			msg.reply(OPTIONS.response);
-		} else {
-			client.sendMessage(msg.from, OPTIONS.response);
-		}
-	}
+
 });
 
 console.log("\nAPI is Ready!\n");
