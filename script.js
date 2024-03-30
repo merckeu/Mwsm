@@ -37,7 +37,7 @@ $(document).ready(function() {
 								}
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
-								        $(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+								$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 							}
 						});
 					});
@@ -47,12 +47,16 @@ $(document).ready(function() {
 	});
 
 	socket.on('ready', function(data) {
-		$("#qrcode").fadeOut("fast", function() {});
+		$("#qrcode").fadeOut("fast", function() {
+			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+		});
 	});
 
 	socket.on('Reset', function(data) {
 		if (!data) {
-			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			setTimeout(() => {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}, "1000");
 		} else {
 			if (!Slide) {
 				$('#tabs a[href="#tabs-1"]')[0].click();
@@ -251,77 +255,85 @@ $(document).ready(function() {
 							if ($("#response").val() == "" && $("#onbot").prop('checked')) {
 								$("#response").val("").focus();
 							} else {
-								$.ajax({
-									type: "POST",
-									url: "/sqlite-options",
-									data: {
-										interval: $("#interval").val(),
-										sendwait: $("#sendwait").val(),
-										access: $("#access").val(),
-										pixfail: $("#pixfail").val(),
-										response: $("#response").val(),
-										replyes: $("#replyes").prop('checked'),
-										onbot: $("#onbot").prop('checked'),
-										count: $("#count").val()
-									},
-									beforeSend: function(data) {
-										$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-									},
-									success: function(data) {
-										if (data.Status == "Success") {
-											var Icon = "fa-check";
-											Slide = true;
-										}
 
-										if (data.Status == "Fail") {
-											var Icon = "fa-exclamation";
-										}
-										$("#Waiting").fadeIn("slow", function() {
-											$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+								if ($("#token").val() == "") {
+									$("#token").val("").focus();
+								} else {
+
+									$.ajax({
+										type: "POST",
+										url: "/sqlite-options",
+										data: {
+											interval: $("#interval").val(),
+											sendwait: $("#sendwait").val(),
+											access: $("#access").val(),
+											pixfail: $("#pixfail").val(),
+											response: $("#response").val(),
+											replyes: $("#replyes").prop('checked'),
+											onbot: $("#onbot").prop('checked'),
+											count: $("#count").val(),
+											token: $("#token").val(),
+										},
+										beforeSend: function(data) {
+											$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+										},
+										success: function(data) {
+											if (data.Status == "Success") {
+												var Icon = "fa-check";
+												Slide = true;
+											}
+
+											if (data.Status == "Fail") {
+												var Icon = "fa-exclamation";
+											}
+											$("#Waiting").fadeIn("slow", function() {
+												$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+													header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+													life: 2000,
+													theme: 'Mwsm',
+													speed: 'slow',
+													close: function(e, m, o) {
+														if (data.Status == "Success") {
+															$('#tabs a[href="#tabs-1"]')[0].click();
+														}
+														$("#Waiting").fadeOut("slow", function() {
+															$("#token").val("").focus();
+															if (data.Status == "Success") {
+																$("#Scroll").animate({
+																	scrollTop: $("#Scroll")[0].scrollHeight
+																}, 1000);
+																var Host = window.location.href.split(':');
+																if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
+																	setTimeout(function() {
+																		$(location).prop('href', Host[0] + ':' + Host[1] + ':' + data.Port);
+																	}, 1000);
+
+																}
+															}
+														});
+													}
+												});
+											});
+										},
+										error: function(request, status, error) {
+											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+											Slide = false;
+											$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
 												header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
 												life: 2000,
-												theme: 'Mwsm',
+												theme: 'PMaquinetas',
 												speed: 'slow',
 												close: function(e, m, o) {
-													$('#tabs a[href="#tabs-1"]')[0].click();
 													$("#Waiting").fadeOut("slow", function() {
 
-														if (data.Status == "Success") {
-															$("#Scroll").animate({
-																scrollTop: $("#Scroll")[0].scrollHeight
-															}, 1000);
-															var Host = window.location.href.split(':');
-															if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
-																setTimeout(function() {
-																	$(location).prop('href', Host[0] + ':' + Host[1] + ':' + data.Port);
-																}, 1000);
-
-															}
-
-															$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-														}
 													});
 												}
 											});
-										});
-									},
-									error: function(request, status, error) {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-										Slide = false;
-										$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
-											header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-											life: 2000,
-											theme: 'PMaquinetas',
-											speed: 'slow',
-											close: function(e, m, o) {
-												$("#Waiting").fadeOut("slow", function() {
 
-												});
-											}
-										});
+										}
+									});
 
-									}
-								});
+								}
 
 							}
 						}
