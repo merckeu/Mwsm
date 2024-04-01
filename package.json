@@ -1,6 +1,6 @@
 {
   "name": "Bot-Mwsm",
-  "version": "2.0.4",
+  "version": "2.0.3",
   "description": "Bot-Mwsm: based on Whatsapp API",
   "main": "app.js",
   "scripts": {
@@ -22,9 +22,9 @@
     "http": "0.0.1-security",
     "mime-types": "^2.1.35",
     "qrcode": "^1.5.3",
-    "socket.io": "^2.5.0",
+    "socket.io": "^4.7.5",
     "util": "^0.12.5",
-    "whatsapp-web.js": "github:MKCodec/WhatsApp-API"
+    "whatsapp-web.js": "^1.23.0"
   },
   "devDependencies": {
     "better-sqlite3": "^9.4.3",
