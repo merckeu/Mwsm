@@ -18,13 +18,13 @@
     "axios": "^1.6.8",
     "express": "^4.19.2",
     "express-fileupload": "^1.5.0",
-    "express-validator": "^7.0.1",
+    "express-validator": "^6.15.0",
     "http": "0.0.1-security",
     "mime-types": "^2.1.35",
     "qrcode": "^1.5.3",
-    "socket.io": "^4.7.5",
+    "socket.io": "^2.5.0",
     "util": "^0.12.5",
-    "whatsapp-web.js": "github:MKCodec/WhatsApp-API#v1.23.1"
+    "whatsapp-web.js": "github:MKCodec/WhatsApp-API#v1.0.0"
   },
   "devDependencies": {
     "better-sqlite3": "^9.4.3",
