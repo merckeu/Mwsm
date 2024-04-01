@@ -38,7 +38,7 @@ cd ~ && rm -r /var/api/Mwsm
 sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 ```sh
-sudo npm install
+sudo npm install --silent
 ```
 ```sh
 sudo npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
@@ -151,7 +151,7 @@ sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/
 
 <b>6 - </b>Instale as dependencias do Mwsn
 ```sh
-sudo npm install 
+sudo npm install --silent
 ```
 
 <b>7 - </b>Inicialize o Mwsn
