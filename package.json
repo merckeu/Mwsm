@@ -24,7 +24,6 @@
     "qrcode": "^1.5.3",
     "socket.io": "^2.5.0",
     "util": "^0.12.5",
-    "uuid": "^7.0.3",
     "whatsapp-web.js": "github:MKCodec/WhatsApp-API"
   },
   "devDependencies": {
