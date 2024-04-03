@@ -99,7 +99,7 @@ apt upgrade -y
 
 <b>2 - </b>Instale as dependencias necessarias
 ```sh
-apt-get install git curl libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev libasound2 -y
+apt-get install git curl libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-dev libasound2 build-essential -y
 ```
 
 <b>3 - </b>Instale o node
