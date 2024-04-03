@@ -1,4 +1,5 @@
 <html>
+	
 	<head>
 		<title>Mwsm v2.0</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -51,25 +52,51 @@
 			</div>
 			
 			<div id="tabs-2" style="z-index:1;">
-				<div class="row">
+				<div id="Locked">
+					<div class="Protect"></div>
+					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:40px;margin-top:117px;background:#FFF;">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
+						</div>
+						<span class='Password'><i class="fa fa-refresh fa-spin Token"></i></span>
+						<input type="text" id="token" class="form-control" placeholder="Token" style="height:40px;">
+					</div>
+				</div>
+				<div class="row" style="height:100px;">
 					<div class="col-75">
 						<div class="container">
 							<form>
 								<div class="row" style="padding-top:10px;">
 									<div class="col-50">
 										<label for="pixfail"> PixFail</label>
-										<input type="text" id="pixfail" placeholder="Chave Pix">
-										<div class="row">
+										
+										<div class="input-group mb-3" style="height:40px;width:300px;">
+											<div class="input-group-prepend">
+												<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-money" aria-hidden="true"></i></span>
+											</div>
+											<input type="text" id="pixfail" placeholder="Chave Pix" style="width:256px;">
+										</div>
+										
+										
+										
+										<div class="row" style="margin-top:10px;">
 											<div class="col-50">
 												<label for="response">Response</label>
-												<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema">
+												<div class="input-group mb-3" style="height:40px;width:300px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
+												</div>
+												
 											</div>
 										</div>
 										
-										<div class="row" style="margin-top:-10px;margin-bottom:-10px;padding-left:20px;">
+										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
 											<div class="col-20">
-												<label><input type="checkbox" checked="checked" id="onbot"> Habilitar Resposta</label>
+												<label><input type="checkbox" checked="checked" id="onbot" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Auto-Response</b></label>
 											</div>
+											
 										</div>
 										
 										
@@ -77,47 +104,94 @@
 									
 									<div class="col-50">
 										<div class="row">
-											<div class="col-25">
+											<div class="col-15">
 												<label for="interval">Interval</label>
-												<input type="tel" id="interval" placeholder="1000">
+												<div class="input-group mb-3" style="height:40px;width:95px;margin-left:-7px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="interval" placeholder="1000" style="width:55px;">
+												</div>
+												
+												
+												
+												
 											</div>
-											<div class="col-25">
-												<label for="sendwait">SendWait</label>
-												<input type="tel" id="sendwait" placeholder="30000">
+											<div class="col-15">
+												<label for="sendwait">Sendwait</label>
+												<div class="input-group mb-3" style="height:40px;width:105px;margin-left:-7px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:26px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="sendwait" placeholder="30000" style="width:60px;">
+												</div>
+												
 											</div>
-											<div class="col-25">
+											<div class="col-15">
 												<label for="access">Access</label>
-												<input type="tel" id="access" placeholder="8000">
 												<input type="tel" id="port" placeholder="8000" hidden>
+												
+												<div class="input-group mb-3" style="height:40px;width:95px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="access" placeholder="8000" style="width:55px;">
+												</div>
+												
+												
 											</div>
-											<div class="col-20">
-												<label for="replyes">Replies</label>
-												<label><input type="checkbox" checked="checked" id="replyes"> Destacar Resposta</label>
+											
+											<div class="col-15" style="margin-top:10px;">
+												<label for="count">Reply</label>
+												<div class="input-group mb-3" style="height:40px;width:90px;">
+													<label><input type="checkbox" checked="checked" id="replyes"></label>
+													
+												</div>
+												
+												
 											</div>
-											<div class="col-25">
+											
+											
+											<div class="col-15" style="margin-top:10px;">
 												<label for="count">Count</label>
-												<input type="tel" id="count" placeholder="1">
+												<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-7px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;"><i class="fa fa-calculator" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="count" placeholder="1" style="width:55px;">
+												</div>
+												
+												
 											</div>
+											
+											
+											<div class="col-15" style="margin-top:10px;">
+												<label for="count">Limiter</label>
+												<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+													</div>
+													<input type="text" id="limiter" placeholder="100" style="width:60px;">
+												</div>
+												
+												
+											</div>
+											
 											
 										</div>
 									</div>
 									
 								</div>
 								<div style="width:100%;height:35px;padding:0px;">
-
-<div class="input-group mb-3" style="height:35px;width:166px;float:right;margin:0px;">
-  <input type="text" id="token" class="form-control" placeholder="Token" style="height:35px;-webkit-appearance: none;-moz-appearance: none;appearance: none;border: solid 1px #5cb85c;box-shadow: none;">
-  <div class="input-group-append">
-<button type="button" class="btn btn-success" id="Save_Options" style="height:35px;width:70px;float:right;margin:0px;">Reload</button>
-  </div>
-</div>
+									
+									<button type="button" class="btn btn-primary" id="Save_Options" style="height:35px;width:100px;float:right;margin:0px;">Reload</button>
 								</div>
 							</form>
 						</div>
 					</div>
 				</div>
 			</div>
-						
+			
 		</div>
 		
 		<div id="tabs-8" style="margin:10px;width:696px;height:326;color:#222;">
