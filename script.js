@@ -1,6 +1,75 @@
 var Slide = false;
 
 $(document).ready(function() {
+	$("#sendwait").mask('99999');
+	$("#interval, #access").mask('9999');
+	$("#limiter, #count").mask('999');
+	$("#token").mask('ZZZZZZ', {
+		translation: {
+			'Z': {
+				pattern: /[A-Za-z0-9]/,
+				optional: true
+			}
+		}
+	});
+	$("#Locked").on("keyup", function() {
+		var Keygen = $("#token").val();
+		if (Keygen.length >= 6) {
+			$.ajax({
+				type: "POST",
+				url: "/token",
+				data: {
+					token: $("#token").val(),
+				},
+				beforeSend: function(data) {
+					$("#token").prop('disabled', true);
+
+				},
+				success: function(data) {
+					if (data.Status == "Success") {
+						var Icon = "fa-check";
+					}
+
+					if (data.Status == "Fail") {
+						var Icon = "fa-exclamation";
+					}
+					setTimeout(() => {
+
+						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+							life: 2000,
+							theme: 'Mwsm',
+							speed: 'slow',
+							close: function(e, m, o) {
+								if (data.Status == "Success") {
+									$("#Locked").fadeOut("slow", function() {
+										$("#token").prop('disabled', false);
+
+									});
+
+								}
+
+								if (data.Status == "Fail") {
+									$("#token").prop('disabled', false).val("").focus();
+								}
+
+							}
+						});
+
+					}, "2000");
+
+				},
+				error: function(request, status, error) {
+					$("#token").prop('disabled', false).val("").focus();
+
+				}
+			});
+		} else {
+
+		}
+
+	});
+
 	$('.host').text($(location).attr('host') + "/send-message");
 
 	var socket = io();
@@ -81,6 +150,10 @@ $(document).ready(function() {
 	socket.on('access', function(data) {
 		$('#access').val(data);
 	});
+	socket.on('limiter', function(data) {
+		$('#limiter').val(data);
+	});
+
 	socket.on('onbot', function(data) {
 		switch (data) {
 			case 'true':
@@ -255,83 +328,101 @@ $(document).ready(function() {
 							if ($("#response").val() == "" && $("#onbot").prop('checked')) {
 								$("#response").val("").focus();
 							} else {
-
-								if ($("#token").val() == "") {
-									$("#token").val("").focus();
+								if ($("#limiter").val().length < 1 || $("#limiter").val() == "") {
+									$("#limiter").val("").focus();
 								} else {
+									if ($("#token").val() == "") {
+										$("#Locked").fadeIn("slow", function() {
+											$("#token").val("").focus();
+										});
 
-									$.ajax({
-										type: "POST",
-										url: "/sqlite-options",
-										data: {
-											interval: $("#interval").val(),
-											sendwait: $("#sendwait").val(),
-											access: $("#access").val(),
-											pixfail: $("#pixfail").val(),
-											response: $("#response").val(),
-											replyes: $("#replyes").prop('checked'),
-											onbot: $("#onbot").prop('checked'),
-											count: $("#count").val(),
-											token: $("#token").val(),
-										},
-										beforeSend: function(data) {
-											$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-										},
-										success: function(data) {
-											if (data.Status == "Success") {
-												var Icon = "fa-check";
-												Slide = true;
-											}
+									} else {
 
-											if (data.Status == "Fail") {
-												var Icon = "fa-exclamation";
-											}
-											$("#Waiting").fadeIn("slow", function() {
-												$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+										$.ajax({
+											type: "POST",
+											url: "/sqlite-options",
+											data: {
+												interval: $("#interval").val(),
+												sendwait: $("#sendwait").val(),
+												access: $("#access").val(),
+												pixfail: $("#pixfail").val(),
+												response: $("#response").val(),
+												replyes: $("#replyes").prop('checked'),
+												onbot: $("#onbot").prop('checked'),
+												count: $("#count").val(),
+												token: $("#token").val(),
+												limiter: $("#limiter").val()
+											},
+											beforeSend: function(data) {
+												$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+											},
+											success: function(data) {
+												if (data.Status == "Success") {
+													var Icon = "fa-check";
+													Slide = true;
+												}
+
+												if (data.Status == "Fail") {
+													var Icon = "fa-exclamation";
+												}
+												$("#Waiting").fadeIn("slow", function() {
+													$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+														header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+														life: 2000,
+														theme: 'Mwsm',
+														speed: 'slow',
+														close: function(e, m, o) {
+															if (data.Status == "Fail") {
+																$("#Locked").fadeIn("slow", function() {
+																	$("#token").val("").focus();
+																});
+
+															}
+
+															if (data.Status == "Success") {
+																$('#tabs a[href="#tabs-1"]')[0].click();
+															}
+															$("#Waiting").fadeOut("slow", function() {
+
+																$("#token").val("").focus();
+																if (data.Status == "Success") {
+																	$("#Locked").show();
+																	$("#Scroll").animate({
+																		scrollTop: $("#Scroll")[0].scrollHeight
+																	}, 1000);
+																	var Host = window.location.href.split(':');
+																	if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
+																		setTimeout(function() {
+																			$(location).prop('href', Host[0] + ':' + Host[1] + ':' + data.Port);
+																		}, 1000);
+
+																	}
+																}
+															});
+														}
+													});
+												});
+											},
+											error: function(request, status, error) {
+												$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+												Slide = false;
+												$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
 													header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
 													life: 2000,
-													theme: 'Mwsm',
+													theme: 'PMaquinetas',
 													speed: 'slow',
 													close: function(e, m, o) {
-														if (data.Status == "Success") {
-															$('#tabs a[href="#tabs-1"]')[0].click();
-														}
 														$("#Waiting").fadeOut("slow", function() {
-															$("#token").val("").focus();
-															if (data.Status == "Success") {
-																$("#Scroll").animate({
-																	scrollTop: $("#Scroll")[0].scrollHeight
-																}, 1000);
-																var Host = window.location.href.split(':');
-																if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
-																	setTimeout(function() {
-																		$(location).prop('href', Host[0] + ':' + Host[1] + ':' + data.Port);
-																	}, 1000);
 
-																}
-															}
 														});
 													}
 												});
-											});
-										},
-										error: function(request, status, error) {
-											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-											Slide = false;
-											$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
-												header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-												life: 2000,
-												theme: 'PMaquinetas',
-												speed: 'slow',
-												close: function(e, m, o) {
-													$("#Waiting").fadeOut("slow", function() {
 
-													});
-												}
-											});
+											}
+										});
 
-										}
-									});
+									}
+
 
 								}
 
