@@ -11,6 +11,7 @@ const {
 var Delay, Wait, Permission = false,
 	MsgBox = false,
 	Session = false;
+const wwebVersion = '2.2402.2-beta';
 const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
@@ -60,6 +61,7 @@ const client = new Client({
 	authStrategy: new LocalAuth({
 		clientId: 'Bot-Mwsm'
 	}),
+
 	puppeteer: {
 		headless: true,
 		args: [
@@ -72,7 +74,11 @@ const client = new Client({
 			'--single-process',
 			'--disable-gpu'
 		]
-	}
+	},
+	webVersionCache: {
+		type: 'remote',
+		remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
+	},
 });
 
 client.initialize();
@@ -80,7 +86,7 @@ io.on('connection', function(socket) {
 
 	var Session = false;
 	socket.emit('Reset', true);
-	if (Session || (link.prepare('SELECT * FROM options').get().auth === 1 || link.prepare('SELECT * FROM options').get().auth === "true")) {
+	if (Session || (OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.authenticated);
@@ -95,147 +101,114 @@ io.on('connection', function(socket) {
 		socket.emit('Reset', true);
 	}
 
-	db.serialize(() => {
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			client.on('qr', (qr) => {
-				qrcode.toDataURL(qr, (err, url) => {
-					try {
-						socket.emit('qr', url);
-					} catch (err) {
-						console.log('> Bot-Mwsm : ' + err);
-						socket.emit('message', '> Bot-Mwsm : ' + err);
-					} finally {
-						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
-						console.log('> Bot-Mwsm : ' + CONSOLE.received);
-					}
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			db.get("SELECT * FROM resources", (err, RESOURCE) => {
-				client.on('ready', function() {
-					if ((link.prepare('SELECT * FROM options').get().auth === 0 || link.prepare('SELECT * FROM options').get().auth === "false")) {
-						db.run("UPDATE options SET auth=?", [true], (err) => {
-							if (err) {
-								console.log('> Bot-Mwsm : ' + err)
-							}
-						});
-					}
-					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
-					console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-					socket.emit('qr', RESOURCE.ready);
-					socket.emit('Reset', false);
-					Session = true;
-					if (!Permission) {
-						Permission = true;
-						client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password);
-					}
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			db.get("SELECT * FROM resources", (err, RESOURCE) => {
-				client.on('authenticated', function() {
-					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-					console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-					socket.emit('qr', RESOURCE.authenticated);
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			db.get("SELECT * FROM resources", (err, RESOURCE) => {
-				client.on('auth_failure', function() {
-					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.auth_failure);
-					console.log('> Bot-Mwsm : ' + CONSOLE.auth_failure);
-					socket.emit('qr', RESOURCE.auth_failure);
-					db.run("UPDATE options SET auth=?", [false], (err) => {
-						if (err) {
-							console.log('> Bot-Mwsm : ' + err)
-						}
-						socket.emit('Reset', true);
-						Session = false;
-					});
-
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			db.get("SELECT * FROM resources", (err, RESOURCE) => {
-				client.on('disconnected', (reason) => {
-					socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
-					console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
-					socket.emit('qr', RESOURCE.disconnected);
-					db.run("UPDATE options SET auth=?", [false], (err) => {
-						if (err) {
-							console.log('> Bot-Mwsm : ' + err)
-						}
-						socket.emit('Reset', true);
-						Session = false;
-					});
-					delay(3000).then(async function() {
-						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-						console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-						socket.emit('qr', RESOURCE.connection);
-						socket.emit('Reset', true);
-						delay(2000).then(async function() {
-							client.initialize();
-						});
-
-					});
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM console", (err, CONSOLE) => {
-			db.get("SELECT * FROM resources", (err, RESOURCE) => {
-				client.on('loading_screen', (percent, message) => {
-					console.log('> Bot-Mwsm : Loading application', percent + '%');
-					socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
-					if (percent >= "100") {
-						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-						console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-						socket.emit('qr', RESOURCE.authenticated);
-					} else {
-						socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-						console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-						socket.emit('qr', RESOURCE.connection);
-						socket.emit('Reset', true);
-
-					}
-
-				});
-			});
-		});
-
-
-		db.get("SELECT * FROM resources", (err, RESOURCE) => {
-			socket.emit('interval', OPTIONS.interval);
-			socket.emit('sendwait', OPTIONS.sendwait);
-			socket.emit('response', OPTIONS.response);
-			socket.emit('access', OPTIONS.access);
-			socket.emit('port', OPTIONS.access);
-			socket.emit('pixfail', OPTIONS.pixfail);
-			socket.emit('replyes', OPTIONS.replyes);
-			socket.emit('count', OPTIONS.count);
-			socket.emit('onbot', OPTIONS.onbot);
-			socket.emit('background', RESOURCE.background);
-			socket.emit('pix', RESOURCE.about);
-			if (Session) {
-				socket.emit('Reset', false);
+	client.on('qr', (qr) => {
+		qrcode.toDataURL(qr, (err, url) => {
+			try {
+				socket.emit('qr', url);
+			} catch (err) {
+				console.log('> Bot-Mwsm : ' + err);
+				socket.emit('message', '> Bot-Mwsm : ' + err);
+			} finally {
+				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
+				console.log('> Bot-Mwsm : ' + CONSOLE.received);
 			}
+		});
+	});
 
+
+
+	client.on('ready', async () => {
+		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
+			db.run("UPDATE options SET auth=?", [true], (err) => {
+				if (err) {
+					console.log('> Bot-Mwsm : ' + err)
+				}
+			});
+		}
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
+		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
+		socket.emit('qr', RESOURCE.ready);
+		socket.emit('Reset', false);
+		Session = true;
+		if (!Permission) {
+			Permission = true;
+			client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password);
+		}
+	});
+
+
+	client.on('authenticated', (data) => {
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+		socket.emit('qr', RESOURCE.authenticated);
+	});
+
+
+	client.on('auth_failure', () => {
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.auth_failure);
+		console.log('> Bot-Mwsm : ' + CONSOLE.auth_failure);
+		socket.emit('qr', RESOURCE.auth_failure);
+		db.run("UPDATE options SET auth=?", [false], (err) => {
+			if (err) {
+				console.log('> Bot-Mwsm : ' + err)
+			}
+			socket.emit('Reset', true);
+			Session = false;
 		});
 
 	});
+
+
+	client.on('disconnected', (reason) => {
+		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
+		console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
+		socket.emit('qr', RESOURCE.disconnected);
+		db.run("UPDATE options SET auth=?", [false], (err) => {
+			if (err) {
+				console.log('> Bot-Mwsm : ' + err)
+			}
+			socket.emit('Reset', true);
+			Session = false;
+		});
+		delay(3000).then(async function() {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+			socket.emit('qr', RESOURCE.connection);
+			socket.emit('Reset', true);
+			delay(2000).then(async function() {
+				client.initialize();
+			});
+
+		});
+	});
+
+
+	client.on('loading_screen', (percent, message) => {
+		console.log('> Bot-Mwsm : Loading application', percent + '%');
+		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
+		if (percent >= "100") {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
+			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
+			socket.emit('qr', RESOURCE.authenticated);
+		} else {
+			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+			socket.emit('qr', RESOURCE.connection);
+			socket.emit('Reset', true);
+
+		}
+
+	});
+
+	global.io.emit('background', RESOURCE.background);
+	global.io.emit('pix', RESOURCE.about);
+
+	if (Session) {
+		socket.emit('Reset', false);
+	}
+
+
+
 });
 // Reset
 app.post('/reset', (req, res) => {
@@ -268,6 +241,34 @@ app.post('/authenticated', (req, res) => {
 	}
 });
 
+// Token
+app.post('/token', (req, res) => {
+	const Token = req.body.token;
+	if (Token == Password) {
+		global.io.emit('interval', OPTIONS.interval);
+		global.io.emit('sendwait', OPTIONS.sendwait);
+		global.io.emit('response', OPTIONS.response);
+		global.io.emit('access', OPTIONS.access);
+		global.io.emit('port', OPTIONS.access);
+		global.io.emit('pixfail', OPTIONS.pixfail);
+		global.io.emit('replyes', OPTIONS.replyes);
+		global.io.emit('count', OPTIONS.count);
+		global.io.emit('onbot', OPTIONS.onbot);
+		global.io.emit('limiter', OPTIONS.limiter);
+		res.json({
+			Status: "Success",
+			Return: CONSOLE.right
+		});
+
+	} else {
+		res.json({
+			Status: "Fail",
+			Return: CONSOLE.wrong
+		});
+	}
+});
+
+
 // Get Data
 app.post('/getdata', (req, res) => {
 	db.get("SELECT * FROM options", (err, GET) => {
@@ -287,8 +288,7 @@ app.post('/getdata', (req, res) => {
 				replyes: OPTIONS.replyes,
 				count: OPTIONS.count,
 				onbot: OPTIONS.onbot,
-				background: RESOURCE.background,
-				pix: RESOURCE.about
+				limiter: OPTIONS.limiter
 			});
 
 		}
@@ -306,13 +306,15 @@ app.post('/sqlite-options', (req, res) => {
 	const Onbot = req.body.onbot;
 	const Count = req.body.count;
 	const Token = req.body.token;
+	const Limiter = req.body.limiter;
+
 	if (Response == "") {
 		Response = OPTIONS.response;
 	}
 
 	if (Token == Password) {
-		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "") {
-			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count], (err) => {
+		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
+			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
 				if (err) {
 					res.json({
 						Status: "Fail",
@@ -383,31 +385,36 @@ app.post('/send-message', [
 		Delay = OPTIONS.sendwait;
 	}
 
-	setTimeout(function() {
-		Mensagem.some(function(Send, index) {
-			const PIXFAIL = [undefined, "XXX", null, ""];
-			setTimeout(function() {
-				if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
-					Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
-				}
-				client.sendMessage(WhatsApp, Send).then(response => {
-					Wait = WhatsApp;
-					res.status(200).json({
-						status: true,
-						message: 'Bot-Mwsm : Message Sent',
-						response: response
+	if (OPTIONS.schedule <= OPTIONS.limiter) {
+		setTimeout(function() {
+			Mensagem.some(function(Send, index) {
+				const PIXFAIL = [undefined, "XXX", null, ""];
+				setTimeout(function() {
+					if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
+						Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
+					}
+					client.sendMessage(WhatsApp, Send).then(response => {
+						Wait = WhatsApp;
+						res.status(200).json({
+							status: true,
+							message: 'Bot-Mwsm : Message Sent',
+							response: response
+						});
+					}).catch(err => {
+						return true;
+						res.status(500).json({
+							status: false,
+							message: 'Bot-Mwsm : Message was not Sent',
+							response: err.text
+						});
 					});
-				}).catch(err => {
-					return true;
-					res.status(500).json({
-						status: false,
-						message: 'Bot-Mwsm : Message was not Sent',
-						response: err.text
-					});
-				});
-			}, index * OPTIONS.interval);
-		});
-	}, Delay + Math.floor(Math.random() * 1000));
+				}, index * OPTIONS.interval);
+			});
+		}, Delay + Math.floor(Math.random() * 1000));
+
+	} else {
+		console.log("Mensagem Agendada");
+	}
 });
 
 client.on('message', async msg => {
