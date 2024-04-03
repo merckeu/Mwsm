@@ -81,7 +81,6 @@ const client = new Client({
 	},
 });
 
-client.initialize();
 io.on('connection', function(socket) {
 
 	var Session = false;
@@ -207,9 +206,10 @@ io.on('connection', function(socket) {
 		socket.emit('Reset', false);
 	}
 
-
-
 });
+
+client.initialize();
+
 // Reset
 app.post('/reset', (req, res) => {
 	db.run("UPDATE options SET auth=?", [false], (err) => {
