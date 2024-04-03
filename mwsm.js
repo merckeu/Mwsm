@@ -85,7 +85,7 @@ io.on('connection', function(socket) {
 
 	var Session = false;
 	socket.emit('Reset', true);
-	if (Session || (OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
+	if (Session || (OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.authenticated);
@@ -117,7 +117,7 @@ io.on('connection', function(socket) {
 
 
 	client.on('ready', async () => {
-		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
+		if ((OPTIONS.auth == 0 || OPTIONS.auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
 					console.log('> Bot-Mwsm : ' + err)
@@ -229,7 +229,7 @@ app.post('/reset', (req, res) => {
 
 // Authenticated
 app.post('/authenticated', (req, res) => {
-	if ((OPTIONS.auth === 1 || OPTIONS.auth === "true")) {
+	if ((OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
 		res.json({
 			Status: "Success"
 		});
@@ -472,8 +472,8 @@ client.on('message', async msg => {
 				console.log('> Bot-Mwsm : ' + err)
 			}
 			if (REPLIES != undefined) {
-				if (MsgBox && (OPTIONS.onbot === 1 || OPTIONS.onbot === "true") && msg.body !== null || msg.body === "0" || msg.type === 'ptt' || msg.hasMedia) {
-					if ((OPTIONS.replyes === 1 || OPTIONS.replyes === "true")) {
+				if (MsgBox && (OPTIONS.onbot == 1 || OPTIONS.onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
+					if ((OPTIONS.replyes == 1 || OPTIONS.replyes == "true")) {
 						msg.reply(OPTIONS.response);
 					} else {
 						client.sendMessage(msg.from, OPTIONS.response);
