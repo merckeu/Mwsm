@@ -1,6 +1,6 @@
 # MkAuth WhatsApp Send Message - v2.0 Beta 4 (30/03/2024)
 
-[![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)](https://mikrotik.com/)
+[![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)])
 
  > ### Mantenha sua aplicação sempre atualizada ###
 <details>
