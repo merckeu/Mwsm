@@ -117,16 +117,18 @@ io.on('connection', function(socket) {
 
 
 	client.on('ready', async () => {
-		if ((OPTIONS.auth == 0 || OPTIONS.auth == "false")) {
+		if ((OPTIONS.auth === 0 || OPTIONS.auth === "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
 					console.log('> Bot-Mwsm : ' + err)
 				}
 			});
 		}
+	if (!Session) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
+         }
 		socket.emit('Reset', false);
 		Session = true;
 		if (!Permission) {
@@ -183,6 +185,7 @@ io.on('connection', function(socket) {
 
 
 	client.on('loading_screen', (percent, message) => {
+if (!Session) {
 		console.log('> Bot-Mwsm : Loading application', percent + '%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
 		if (percent >= "100") {
@@ -190,12 +193,14 @@ io.on('connection', function(socket) {
 			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
 			socket.emit('qr', RESOURCE.authenticated);
 		} else {
+
 			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 			socket.emit('qr', RESOURCE.connection);
 			socket.emit('Reset', true);
 
 		}
+}
 
 	});
 
@@ -206,9 +211,11 @@ io.on('connection', function(socket) {
 		socket.emit('Reset', false);
 	}
 
-});
 
+
+});
 client.initialize();
+
 
 // Reset
 app.post('/reset', (req, res) => {
@@ -373,9 +380,9 @@ app.post('/send-message', [
 	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
 	var WhatsApp = number + "@c.us";
 
-	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
+	if (numberDDI == "55" && parseInt(numberDDD) <= 30) {
 		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
-	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
+	} else if (numberDDI == "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
 

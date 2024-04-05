@@ -100,10 +100,7 @@ $(document).ready(function() {
 							url: '/authenticated',
 							success: function(data) {
 								if (data.Status == "Success") {
-									setTimeout(() => {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-									}, "1000");
-
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 								} else {
 									$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 								}
@@ -120,9 +117,7 @@ $(document).ready(function() {
 
 	socket.on('ready', function(data) {
 		$("#qrcode").fadeOut("fast", function() {
-			setTimeout(() => {
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-			}, "1000");
+			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 		});
 	});
 
@@ -299,10 +294,7 @@ $(document).ready(function() {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 			},
 			error: function(request, status, error) {
-				setTimeout(() => {
-					$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-				}, "1000");
-
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 			}
 		});
 	});
