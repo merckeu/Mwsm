@@ -193,6 +193,15 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#tabs2").tabs({
+		active: tabs - 1,
+		show: {
+			effect: "fade",
+			duration: 500
+		}
+	});
+
+
 });
 
 

@@ -1,8 +1,8 @@
-<html>
+﻿<html>
 	
 	<head>
 		<title>Mwsm v2.0</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="style.css" media="screen">
 		<link rel="icon" type="image/x-icon" href="/icon.png">
 		<script type="text/javascript" src="jquery.js"></script>
@@ -18,6 +18,8 @@
 			<ul>
 				<li><a href="#tabs-1">Terminal</a></li>
 				<li><a href="#tabs-2">Settings</a></li>
+				<li><a href="#tabs-6">Log</a></li>
+				<li><a href="#tabs-7">About</a></li>
 				<div style="position:absolute;right:0px;padding:0px 10px;" id="Reset">
 					<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i>
 					</button>
@@ -54,7 +56,7 @@
 			<div id="tabs-2" style="z-index:1;">
 				<div id="Locked">
 					<div class="Protect"></div>
-					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:40px;margin-top:117px;background:#FFF;">
+					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:40px;margin-top:122px;background:#FFF;">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
 						</div>
@@ -62,131 +64,249 @@
 						<input type="text" id="token" class="form-control" placeholder="Token" style="height:40px;">
 					</div>
 				</div>
-				<div class="row" style="height:100px;">
-					<div class="col-75">
-						<div class="container">
-							<form>
-								<div class="row" style="padding-top:10px;">
-									<div class="col-50">
-										<label for="pixfail"> PixFail</label>
-										
-										<div class="input-group mb-3" style="height:40px;width:300px;">
-											<div class="input-group-prepend">
-												<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-money" aria-hidden="true"></i></span>
-											</div>
-											<input type="text" id="pixfail" placeholder="Chave Pix" style="width:256px;">
-										</div>
-										
-										
-										
-										<div class="row" style="margin-top:10px;">
+				
+				<div id="tabs2" style="position:absolute;margin-left:-20px;margin-top:-12px;padding:0px 0px 0px 0px;width:690px;height:296px;border:none;">
+					
+					<div class="container" style="margin: 20px;padding:0">
+						<div id="tabs-2A">
+							<div class="row">
+								<div class="col-75">
+									<form>
+										<div class="row" style="padding-top:0px;">
 											<div class="col-50">
-												<label for="response">Response</label>
+												<label for="pixfail"> PixFail</label>
+												
 												<div class="input-group mb-3" style="height:40px;width:300px;">
 													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
+														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-money" aria-hidden="true"></i></span>
 													</div>
-													<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
-												</div>
-												
-											</div>
-										</div>
-										
-										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
-											<div class="col-20">
-												<label><input type="checkbox" checked="checked" id="onbot" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Auto-Response</b></label>
-											</div>
-											
-										</div>
-										
-										
-									</div>
-									
-									<div class="col-50">
-										<div class="row">
-											<div class="col-15">
-												<label for="interval">Interval</label>
-												<div class="input-group mb-3" style="height:40px;width:95px;margin-left:-7px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-													</div>
-													<input type="text" id="interval" placeholder="1000" style="width:55px;">
+													<input type="text" id="pixfail" placeholder="Chave Pix" style="width:256px;">
 												</div>
 												
 												
 												
-												
-											</div>
-											<div class="col-15">
-												<label for="sendwait">Sendwait</label>
-												<div class="input-group mb-3" style="height:40px;width:105px;margin-left:-7px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:26px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+												<div class="row" style="margin-top:10px;">
+													<div class="col-50">
+														<label for="response">Response</label>
+														<div class="input-group mb-3" style="height:40px;width:300px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
+														</div>
+														
 													</div>
-													<input type="text" id="sendwait" placeholder="30000" style="width:60px;">
 												</div>
 												
-											</div>
-											<div class="col-15">
-												<label for="access">Access</label>
-												<input type="tel" id="port" placeholder="8000" hidden>
-												
-												<div class="input-group mb-3" style="height:40px;width:95px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
+												<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+													<div class="col-20">
+														<label><input type="checkbox" checked="checked" id="onbot" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Auto-Response</b></label>
 													</div>
-													<input type="text" id="access" placeholder="8000" style="width:55px;">
-												</div>
-												
-												
-											</div>
-											
-											<div class="col-15" style="margin-top:10px;">
-												<label for="count">Reply</label>
-												<div class="input-group mb-3" style="height:40px;width:90px;">
-													<label><input type="checkbox" checked="checked" id="replyes"></label>
 													
 												</div>
 												
 												
 											</div>
 											
-											
-											<div class="col-15" style="margin-top:10px;">
-												<label for="count">Count</label>
-												<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-7px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;"><i class="fa fa-calculator" aria-hidden="true"></i></span>
+											<div class="col-50">
+												<div class="row">
+													<div class="col-15">
+														<label for="interval">Interval</label>
+														<div class="input-group mb-3" style="height:40px;width:95px;margin-left:-7px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="interval" placeholder="1000" style="width:55px;">
+														</div>
+														
+														
+														
+														
 													</div>
-													<input type="text" id="count" placeholder="1" style="width:55px;">
-												</div>
-												
-												
-											</div>
-											
-											
-											<div class="col-15" style="margin-top:10px;">
-												<label for="count">Limiter</label>
-												<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+													<div class="col-15">
+														<label for="sendwait">Sendwait</label>
+														<div class="input-group mb-3" style="height:40px;width:105px;margin-left:-7px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:26px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="sendwait" placeholder="30000" style="width:60px;">
+														</div>
+														
 													</div>
-													<input type="text" id="limiter" placeholder="100" style="width:60px;" disabled>
+													<div class="col-15">
+														<label for="access">Access</label>
+														<input type="tel" id="port" placeholder="8000" hidden>
+														
+														<div class="input-group mb-3" style="height:40px;width:95px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="access" placeholder="8000" style="width:55px;">
+														</div>
+														
+														
+													</div>
+													
+													<div class="col-15" style="margin-top:10px;">
+														<label for="count">Reply</label>
+														<div class="input-group mb-3" style="height:40px;width:90px;">
+															<label><input type="checkbox" checked="checked" id="replyes"></label>
+															
+														</div>
+														
+														
+													</div>
+													
+													
+													<div class="col-15" style="margin-top:10px;">
+														<label for="count">Count</label>
+														<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-7px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;"><i class="fa fa-calculator" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="count" placeholder="1" style="width:55px;">
+														</div>
+														
+														
+													</div>
+													
+													
+													<div class="col-15" style="margin-top:10px;">
+														<label for="count">Limiter</label>
+														<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+															</div>
+															<input type="text" id="limiter" placeholder="100" style="width:60px;" disabled>
+														</div>
+														
+														
+													</div>
+													
+													
 												</div>
-												
-												
 											</div>
-											
 											
 										</div>
+										<div style="width:100%;height:35px;padding:0px;">
+											
+											<button type="button" class="btn btn-primary" id="Save_Options" style="height:35px;width:100px;float:right;margin:0px;">Reload</button>
+										</div>
+									</form>
+								</div>
+							</div>
+							
+							
+						</div>
+						<div id="tabs-2B" style="z-index:1;">
+							<div class="row">
+								<div class="col-75">
+									<div class="row" style="padding:0px 10px;height:220px;">
+										
+										
+										under construction
+										
+										
 									</div>
-									
 								</div>
-								<div style="width:100%;height:35px;padding:0px;">
-									
-									<button type="button" class="btn btn-primary" id="Save_Options" style="height:35px;width:100px;float:right;margin:0px;">Reload</button>
+							</div>
+						</div>
+						
+						<div id="tabs-2C" style="z-index:1;">
+							<div class="row">
+								<div class="col-75">
+									<div class="row" style="padding:0px 10px;height:220px;">
+										
+										
+										under construction
+										
+										
+									</div>
 								</div>
-							</form>
+							</div>
+						</div>
+						
+						<div id="tabs-2D" style="z-index:1;">
+							<div class="row">
+								<div class="col-75">
+									<div class="row" style="padding:0px 10px;height:220px;">
+										
+										
+										under construction
+										
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<ul>
+						<li><a href="#tabs-2A">Options</a></li>
+						<li><a href="#tabs-2B">Extras</a></li>
+						<li><a href="#tabs-2C">Hotkeys</a></li>
+						<li><a href="#tabs-2D">Run</a></li>
+					</ul>
+					
+				</div>
+				
+			</div>
+			
+			
+			
+			<div id="tabs-6" style="z-index:1;">
+				<div class="row" style="height:100px;">
+					<div class="col-75">
+						<div class="container">
+							<div class="row" style="padding-top:10px;">
+								
+								
+								under construction
+								
+								
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="tabs-7" style="z-index:1;">
+				<div class="container" style="padding:0px;">
+					<div class="col-75">
+						<div style="width: 100%;height: 256px;border-radius:5px;max-height:256px;">
+							<p style="padding-left:20px;color:#000;">Mwsm é um projeto desenvolvido e mantido por voluntarios, sua principal função é manipular notificações via whatsapp integrado ao mkauth e/ou mikrotik.</p>
+							<p style="padding-left:20px;color:#000;"><b>Distribuição e utilização 100% gratuita.</b></p>
+							<p style="padding-left:20px;color:#000;">Contribua com ideias e/ou sugestões:</b></i><br><a href="https://github.com/MKCodec/Mwsm/discussions" target="_blank" style="color:blue;">https://github.com/MKCodec/Mwsm/discussions</a></p>
+							<p style="padding-left:20px;color:#000;">Ajude a manter o projeto vivo:</p>
+							<p style="padding-left:20px;color:#000;">
+							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Chave Aleatoria:</div>
+							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;z-index:2;">
+								<input type="text" id="PixKey" class="form-control" value="e9b9d669-4412-4dec-994c-310005904088" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+								<div class="input-group-append" style="margin:0px;padding:0px;">
+									<button class="btn btn-light Copy" type="button" id="ButtonKey"><i class="fa fa-clone PixKey" aria-hidden="true"></i></button>
+								</div>
+							</div>
+							</p>
+							
+							<p style="padding-left:20px;color:#000;">
+							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Copia & Cola:</div>
+							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;">
+								<input type="text" id="PixCode" type="text" class="form-control" value="00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+								<div class="input-group-append" style="margin:0px;padding:0px;">
+									<button class="btn btn-light Copy" type="button" id="ButtonCode"><i class="fa fa-clone PixCode" aria-hidden="true"></i></button>
+								</div>
+							</div>
+							</p>
+							
+						</div>
+						
+						
+						
+					</div>
+					<div class="col-25" style="position: absolute;top:100px;left:430px;">
+						<div class="row">
+							<img src="" alt="QR Code" id="pix" style="max-width:200px;max-height:200px;width: auto;height: auto;">
 						</div>
 					</div>
 				</div>
