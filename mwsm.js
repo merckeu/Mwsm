@@ -207,12 +207,9 @@ if (!Session) {
 	global.io.emit('background', RESOURCE.background);
 	global.io.emit('pix', RESOURCE.about);
 
-	if (Session) {
+	if (Session || Permission) {
 		socket.emit('Reset', false);
 	}
-
-
-
 });
 client.initialize();
 
