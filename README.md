@@ -161,7 +161,7 @@ sudo npm run start:mwsm
 <br>
 
 <b>1 - </b>Acesse seu servidor web através do IP:PORTA
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/node.png)](#)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/terminal.png)](#)
 
 <b>2 - </b>Aguarde a geração do QRCode
 
@@ -169,7 +169,7 @@ sudo npm run start:mwsm
 
 ** `Menu > Aparelhos Conectados > Conectar um Aparelho`
 
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/Options.png)](#)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
 
 Altere o valor conforme suas necessidades.
 
