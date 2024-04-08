@@ -67,7 +67,7 @@ const client = new Client({
 		args: [
 			'--no-sandbox',
 			'--disable-setuid-sandbox',
-                        '--disable-extensions',
+			'--disable-extensions',
 			'--disable-dev-shm-usage',
 			'--disable-accelerated-2d-canvas',
 			'--no-first-run',
@@ -179,7 +179,7 @@ io.on('connection', function(socket) {
 				socket.emit('qr', RESOURCE.connection);
 				socket.emit('Reset', true);
 				delay(2000).then(async function() {
-                                process.exit(1);
+					process.exit(1);
 				});
 			}
 		});
@@ -207,7 +207,9 @@ io.on('connection', function(socket) {
 	global.io.emit('pix', RESOURCE.about);
 
 	if (Session || Permission) {
-		socket.emit('Reset', false);
+		delay(500).then(async function() {
+			await socket.emit('Reset', false);
+		});
 	}
 });
 
