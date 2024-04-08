@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message - v2.0 Beta 4 (30/03/2024)
+# MkAuth WhatsApp Send Message - v2.0 Beta 5 (08/04/2024)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -58,7 +58,7 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mws
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
-cd /var/api/Mwsm && sudo pm2 restart Bot-Mwsm --update-env
+cd /var/api/Mwsm && sudo npm install && pm2 flush && pm2 restart Bot-Mwsm --update-env && pm2 log 0
 
 ```
 
@@ -72,6 +72,7 @@ cd /var/api/Mwsm && sudo pm2 restart Bot-Mwsm --update-env
 |  beta 2    |  Interface Web com Controle de Funções |
 |  beta 3    |  Correção da função Reply que não estava funcionando |
 |  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
+|  beta 5    |  Adcionado botão de logout do whatsapp no admin web + correção de bugs              |
 
 > ### ATENÇÃO:
 > O token será enviado para o mesmo whatsapp utilizado na leitura do qrcode da api
