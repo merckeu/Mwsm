@@ -83,6 +83,7 @@ const client = new Client({
 });
 
 io.on('connection', function(socket) {
+	socket.emit('Reset', true);
 	if (Session || (OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
@@ -95,7 +96,6 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
-		socket.emit('Reset', true);
 	}
 
 	client.on('qr', (qr) => {
@@ -112,8 +112,6 @@ io.on('connection', function(socket) {
 		});
 	});
 
-
-
 	client.on('ready', async () => {
 		if ((OPTIONS.auth == 0 || OPTIONS.auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
@@ -125,14 +123,13 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
 		socket.emit('qr', RESOURCE.ready);
-		socket.emit('Reset', false);
 		Session = true;
 		if (!Permission) {
 			Permission = true;
 			client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password);
+			socket.emit('Reset', false);
 		}
 	});
-
 
 	client.on('authenticated', (data) => {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
@@ -207,9 +204,7 @@ io.on('connection', function(socket) {
 	global.io.emit('pix', RESOURCE.about);
 
 	if (Session || Permission) {
-		delay(500).then(async function() {
-			await socket.emit('Reset', false);
-		});
+		socket.emit('Reset', false);
 	}
 });
 
@@ -235,11 +230,17 @@ app.post('/reset', (req, res) => {
 // Shutdown
 app.post('/shutdown', (req, res) => {
 	const Shutdown = req.body.shutdown;
-	if (Shutdown == "true") {
+	const Token = req.body.token;
+	if (Shutdown == "true" && Token == Password) {
 		res.json({
 			Status: "Success"
 		});
 		client.logout();
+	} else {
+		res.json({
+			Status: "Fail",
+			Return: CONSOLE.wrong
+		});
 	}
 });
 
@@ -324,11 +325,9 @@ app.post('/sqlite-options', (req, res) => {
 	const Count = req.body.count;
 	const Token = req.body.token;
 	const Limiter = req.body.limiter;
-
 	if (Response == "") {
 		Response = OPTIONS.response;
 	}
-
 	if (Token == Password) {
 		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
 			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
@@ -346,6 +345,7 @@ app.post('/sqlite-options', (req, res) => {
 					Port: Access
 				});
 				session = false;
+				global.io.emit('Reset', true);
 				exec('pm2 restart Bot-Mwsm --update-env');
 			});
 
