@@ -7015,14 +7015,12 @@ fieldset[disabled] .btn-link:focus {
 	border-color: #2e6da4;
 }
 
-/*Adiciona border-box para o input e para os pseudo-elementos*/
 input[type=checkbox],
 input[type=checkbox]::after,
 input[type=checkbox]::before {
 	box-sizing: border-box;
 }
 
-/*Estiliza e remove a aparencia padrão do elemento*/
 input[type=checkbox] {
 	outline: none;
 	position: relative;
@@ -7038,7 +7036,6 @@ input[type=checkbox] {
 	appearance: none;
 }
 
-/*cria os elementos before e after*/
 input[type=checkbox]::before,
 input[type=checkbox]::after {
 	content: "";
@@ -7052,7 +7049,6 @@ input[type=checkbox]::after {
 		transform .15s ease-in;
 }
 
-/*Cor padrão de quando o elemento não esta selecionado*/
 input[type=checkbox]::before {
 	background-color: #ccc;
 	width: 100%;
@@ -7060,7 +7056,6 @@ input[type=checkbox]::before {
 	border-radius: 28px;
 }
 
-/*estiliza para parecer um botão toggle*/
 input[type=checkbox]::after {
 	margin: 2px 0 0 2px;
 	background: #fff;
@@ -7070,27 +7065,22 @@ input[type=checkbox]::after {
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-/*troca a cor se estiver com a propriedade checked no html ou o usuário "checar"*/
 input[type=checkbox]:checked::before {
 	background-color: #75a940;
 }
 
-/*muda a posição do botão toggle se estiver checado*/
 input[type=checkbox]:checked::after {
 	left: 24px;
 }
 
-/*Efeito opcional de quando pressiona o botão*/
 input[type=checkbox]:not([disabled]):active::after {
 	transform: scale(1.15, 0.85);
 }
 
-/*Se o input tiver com o atributo disabled a cor é alterada*/
 input[type=checkbox]:disabled::before {
 	background-color: #b1b4b7 !important;
 }
 
-/*Se o input tiver com o atributo disabled a cor é alterada*/
 input[type=checkbox]:disabled::after {
 	background-color: #dcd8d8 !important;
 }
@@ -7148,4 +7138,125 @@ input[type=checkbox].purple:checked::before {
 #tabs2 .ui-tabs-nav li.ui-tabs-selected,
 #tabs2 .ui-tabs-nav li.ui-state-active {
 	top: -1px;
+}
+
+.form-floating {
+	position: relative
+}
+
+.form-floating>.form-control,
+.form-floating>.form-select {
+	height: calc(3.5rem + 2px);
+	line-height: 1.25
+}
+
+.form-floating>label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	padding: 1rem .75rem;
+	pointer-events: none;
+	border: 1px solid transparent;
+	transform-origin: 0 0;
+	transition: opacity .1s ease-in-out, transform .1s ease-in-out
+}
+
+@media (prefers-reduced-motion:reduce) {
+	.form-floating>label {
+		transition: none
+	}
+}
+
+.form-floating>.form-control {
+	padding: 1rem .75rem
+}
+
+.form-floating>.form-control::-moz-placeholder {
+	color: transparent
+}
+
+.form-floating>.form-control::placeholder {
+	color: transparent
+}
+
+.form-floating>.form-control:not(:-moz-placeholder-shown) {
+	padding-top: 1.625rem;
+	padding-bottom: .625rem
+}
+
+.form-floating>.form-control:focus,
+.form-floating>.form-control:not(:placeholder-shown) {
+	padding-top: 1.625rem;
+	padding-bottom: .625rem
+}
+
+.form-floating>.form-control:-webkit-autofill {
+	padding-top: 1.625rem;
+	padding-bottom: .625rem
+}
+
+.form-floating>.form-select {
+	padding-top: 1.625rem;
+	padding-bottom: .625rem
+}
+
+.form-floating>.form-control:not(:-moz-placeholder-shown)~label {
+	opacity: .65;
+	transform: scale(.85) translateY(-.5rem) translateX(.15rem)
+}
+
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-select~label {
+	opacity: .65;
+	transform: scale(.85) translateY(-.5rem) translateX(.15rem)
+}
+
+.form-floating>.form-control:-webkit-autofill~label {
+	opacity: .65;
+	transform: scale(.85) translateY(-.5rem) translateX(.15rem)
+}
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+.form-control::-moz-placeholder {
+  color: #999;
+  opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+  color: #999;
+}
+.form-control::-webkit-input-placeholder {
+  color: #999;
+}
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+  cursor: not-allowed;
+  background-color: #eee;
+  opacity: 1;
+}
+textarea.form-control {
+  height: auto;
 }
