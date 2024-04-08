@@ -52,13 +52,7 @@ sudo npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save 
 > ### Após rodar o comando reconfigure as opções no menu settings ###
 
 ```sh
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.db -O /var/api/Mwsm/mwsm.db
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/package.json -O /var/api/Mwsm/package.json
-cd /var/api/Mwsm && sudo npm install && pm2 flush && pm2 restart Bot-Mwsm --update-env && pm2 log 0
+cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install && pm2 flush && pm2 restart Bot-Mwsm --update-env && pm2 log 0
 
 ```
 
