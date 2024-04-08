@@ -292,39 +292,73 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	$("#ShutDown").on("click", function() {
-		$.ajax({
-			type: "POST",
-			url: "/shutdown",
-			data: {
-				shutdown: 'true'
-			},
-			beforeSend: function(data) {
-				$("#Waiting").fadeIn("slow", function() {
-					$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-				});
-			},
-			success: function(data) {
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-				setTimeout(function() {
-					$('#tabs a[href="#tabs-1"]')[0].click();
-					$("#Waiting").fadeOut("slow", function() {
-						if (data.Status == "Success") {
-							$("#Locked").show();
-                                                        $("#token").prop('disabled', false).val("");
-							$("#Scroll").animate({
-								scrollTop: $("#Scroll")[0].scrollHeight
-							}, 1000);
-						}
-					});
-				}, 2000);
 
-			},
-			error: function(request, status, error) {
-				$("#Waiting").fadeOut("slow", function() {
-					$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-				});
-			}
-		});
+		if ($("#token").val() == "") {
+			$("#Locked").fadeIn("slow", function() {
+				$("#token").val("").focus();
+			});
+		} else {
+			$.ajax({
+				type: "POST",
+				url: "/shutdown",
+				data: {
+					shutdown: 'true',
+					token: $("#token").val()
+				},
+				beforeSend: function(data) {
+					$("#Waiting").fadeIn("slow", function() {
+						$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+					});
+				},
+				success: function(data) {
+					if (data.Status == "Success") {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+						setTimeout(function() {
+							$('#tabs a[href="#tabs-1"]')[0].click();
+							$("#Waiting").fadeOut("slow", function() {
+								if (data.Status == "Success") {
+									$("#Locked").show();
+									$("#token").prop('disabled', false).val("");
+									$("#Scroll").animate({
+										scrollTop: $("#Scroll")[0].scrollHeight
+									}, 1000);
+								}
+							});
+						}, 2000);
+
+					}
+
+					if (data.Status == "Fail") {
+						var Icon = "fa-exclamation";
+						$("#Waiting").fadeIn("slow", function() {
+							$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+								header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+								life: 2000,
+								theme: 'Mwsm',
+								speed: 'slow',
+								close: function(e, m, o) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+										$("#Locked").fadeIn("slow", function() {
+											$("#token").val("").focus();
+										});
+									$("#Waiting").fadeOut("slow", function() {
+										$("#token").val("").focus();
+									});
+								}
+							});
+						});
+
+					}
+
+				},
+				error: function(request, status, error) {
+					$("#Waiting").fadeOut("slow", function() {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+					});
+				}
+			});
+
+		}
 	});
 
 	$("#Reset").on("click", function() {
