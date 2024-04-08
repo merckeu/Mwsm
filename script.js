@@ -286,11 +286,15 @@ $(document).ready(function() {
 		}
 	});
 
-
 });
 
 
 $(document).ready(function() {
+$("#WhatsApp, #Message").prop('disabled', true);
+$("#Clear, #Send").on("click", function() {
+alert("under construction");
+});
+
 	$("#ShutDown").on("click", function() {
 
 		if ($("#token").val() == "") {
