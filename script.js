@@ -291,13 +291,49 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
+	$("#ShutDown").on("click", function() {
+		$.ajax({
+			type: "POST",
+			url: "/shutdown",
+			data: {
+				shutdown: 'true'
+			},
+			beforeSend: function(data) {
+				$("#Waiting").fadeIn("slow", function() {
+					$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+				});
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				setTimeout(function() {
+					$('#tabs a[href="#tabs-1"]')[0].click();
+					$("#Waiting").fadeOut("slow", function() {
+						if (data.Status == "Success") {
+							$("#Locked").show();
+                                                        $("#token").prop('disabled', false).val("");
+							$("#Scroll").animate({
+								scrollTop: $("#Scroll")[0].scrollHeight
+							}, 1000);
+						}
+					});
+				}, 2000);
+
+			},
+			error: function(request, status, error) {
+				$("#Waiting").fadeOut("slow", function() {
+					$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				});
+			}
+		});
+	});
+
 	$("#Reset").on("click", function() {
 		Slide = false;
 		$.ajax({
 			type: "POST",
 			url: "/reset",
 			data: {
-				reset: 'true',
+				reset: 'true'
 			},
 			beforeSend: function(data) {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);

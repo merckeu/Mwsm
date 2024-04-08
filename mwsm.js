@@ -67,6 +67,7 @@ const client = new Client({
 		args: [
 			'--no-sandbox',
 			'--disable-setuid-sandbox',
+                        '--disable-extensions',
 			'--disable-dev-shm-usage',
 			'--disable-accelerated-2d-canvas',
 			'--no-first-run',
@@ -167,14 +168,20 @@ io.on('connection', function(socket) {
 			Session = false;
 		});
 		delay(3000).then(async function() {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-			socket.emit('qr', RESOURCE.connection);
-			socket.emit('Reset', true);
-			delay(2000).then(async function() {
-				client.initialize();
-			});
-
+			try {
+				await client.destroy();
+			} catch (err) {
+				console.log('> Bot-Mwsm : ' + err);
+				socket.emit('message', '> Bot-Mwsm : ' + err);
+			} finally {
+				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
+				console.log('> Bot-Mwsm : ' + CONSOLE.connection);
+				socket.emit('qr', RESOURCE.connection);
+				socket.emit('Reset', true);
+				delay(2000).then(async function() {
+                                process.exit(1);
+				});
+			}
 		});
 	});
 
@@ -222,6 +229,18 @@ app.post('/reset', (req, res) => {
 		exec('pm2 restart Bot-Mwsm --update-env');
 	}
 });
+
+// Shutdown
+app.post('/shutdown', (req, res) => {
+	const Shutdown = req.body.shutdown;
+	if (Shutdown == "true") {
+		res.json({
+			Status: "Success"
+		});
+		client.logout();
+	}
+});
+
 
 // Authenticated
 app.post('/authenticated', (req, res) => {

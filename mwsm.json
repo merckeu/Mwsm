@@ -1,7 +1,7 @@
 {
     "apps": [{
         "name": "Bot-Mwsm",
-        "script": "mwsm.js",
+        "script": "start:dev",
         "cwd": "/var/api/Mwsm/",
         "watch": ["mwsm.js"],
         "ignore_watch": ["mwsm.db"],
