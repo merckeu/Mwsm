@@ -72,7 +72,7 @@ cd /var/api/Mwsm && sudo npm install && pm2 flush && pm2 restart Bot-Mwsm --upda
 |  beta 2    |  Interface Web com Controle de Funções |
 |  beta 3    |  Correção da função Reply que não estava funcionando |
 |  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
-|  beta 5    |  Adcionado botão de logout do whatsapp no admin web + correção de bugs              |
+|  beta 5    |  Adcionado função logout no webadmin + correção de bugs no whatsapp-web.js          |
 
 > ### ATENÇÃO:
 > O token será enviado para o mesmo whatsapp utilizado na leitura do qrcode da api
