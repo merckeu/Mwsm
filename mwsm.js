@@ -1,3 +1,6 @@
+//############################################################
+const TOKEN = "123456"; // no maximo 6 caracteres
+//############################################################
 const {
 	Client,
 	LocalAuth,
@@ -231,7 +234,7 @@ app.post('/reset', (req, res) => {
 app.post('/shutdown', (req, res) => {
 	const Shutdown = req.body.shutdown;
 	const Token = req.body.token;
-	if (Shutdown == "true" && Token == Password) {
+	if (Shutdown == "true" && Token == Password || Token == TOKEN) {
 		res.json({
 			Status: "Success"
 		});
@@ -262,7 +265,7 @@ app.post('/authenticated', (req, res) => {
 // Token
 app.post('/token', (req, res) => {
 	const Token = req.body.token;
-	if (Token == Password) {
+	if (Token == Password || Token == TOKEN) {
 		global.io.emit('interval', OPTIONS.interval);
 		global.io.emit('sendwait', OPTIONS.sendwait);
 		global.io.emit('response', OPTIONS.response);
@@ -328,7 +331,7 @@ app.post('/sqlite-options', (req, res) => {
 	if (Response == "") {
 		Response = OPTIONS.response;
 	}
-	if (Token == Password) {
+	if (Token == Password || Token == TOKEN) {
 		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
 			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
 				if (err) {
