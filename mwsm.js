@@ -179,7 +179,7 @@ io.on('connection', function(socket) {
 				socket.emit('qr', RESOURCE.connection);
 				socket.emit('Reset', true);
 				delay(2000).then(async function() {
-					process.exit(1);
+					exec('pm2 restart Bot-Mwsm --update-env');
 				});
 			}
 		});
