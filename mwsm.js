@@ -83,7 +83,7 @@ const client = new Client({
 });
 
 io.on('connection', function(socket) {
-	socket.emit('Reset', true);
+socket.emit('Reset', true);
 	if (Session || (OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
 		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
 		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
@@ -96,7 +96,6 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
-                Session = false;
 	}
 
 	client.on('qr', (qr) => {
@@ -127,8 +126,8 @@ io.on('connection', function(socket) {
 		Session = true;
 		if (!Permission) {
 			Permission = true;
+                        socket.emit('Reset', false);
 			client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
-			socket.emit('Reset', false);
 		}
 	});
 
@@ -195,7 +194,7 @@ io.on('connection', function(socket) {
 			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 			socket.emit('qr', RESOURCE.connection);
-			socket.emit('Reset', true);
+                        socket.emit('Reset', true);
 
 		}
 
@@ -204,9 +203,11 @@ io.on('connection', function(socket) {
 	global.io.emit('background', RESOURCE.background);
 	global.io.emit('pix', RESOURCE.about);
 
-	if (Session || Permission) {
-		socket.emit('Reset', false);
+	delay(2000).then(async function() {
+	if (Session && Permission) {
+		await socket.emit('Reset', false);
 	}
+        });
 });
 
 client.initialize();
