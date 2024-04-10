@@ -1,6 +1,3 @@
-//############################################################
-const TOKEN = "123456"; // no maximo 6 caracteres
-//############################################################
 const {
 	Client,
 	LocalAuth,
@@ -37,8 +34,8 @@ const CONSOLE = link.prepare('SELECT * FROM console').get();
 const RESOURCE = link.prepare('SELECT * FROM resources').get();
 const OPTIONS = link.prepare('SELECT * FROM options').get();
 const crypto = require('crypto');
-const Keygen = (length = 6, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
-var Password = Keygen();
+const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
+var Password = [OPTIONS.token, Keygen()];
 global.io = io;
 
 function delay(t, v) {
@@ -99,6 +96,7 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
 		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
 		socket.emit('qr', RESOURCE.connection);
+                Session = false;
 	}
 
 	client.on('qr', (qr) => {
@@ -129,7 +127,7 @@ io.on('connection', function(socket) {
 		Session = true;
 		if (!Permission) {
 			Permission = true;
-			client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password);
+			client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
 			socket.emit('Reset', false);
 		}
 	});
@@ -160,7 +158,7 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
 		console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
 		socket.emit('qr', RESOURCE.disconnected);
-		db.run("UPDATE options SET auth=?", [false], (err) => {
+		db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
 			if (err) {
 				console.log('> Bot-Mwsm : ' + err)
 			}
@@ -234,7 +232,7 @@ app.post('/reset', (req, res) => {
 app.post('/shutdown', (req, res) => {
 	const Shutdown = req.body.shutdown;
 	const Token = req.body.token;
-	if (Shutdown == "true" && Token == Password || Token == TOKEN) {
+	if (Shutdown == "true" && [link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
 		res.json({
 			Status: "Success"
 		});
@@ -265,7 +263,7 @@ app.post('/authenticated', (req, res) => {
 // Token
 app.post('/token', (req, res) => {
 	const Token = req.body.token;
-	if (Token == Password || Token == TOKEN) {
+	if ([link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
 		global.io.emit('interval', OPTIONS.interval);
 		global.io.emit('sendwait', OPTIONS.sendwait);
 		global.io.emit('response', OPTIONS.response);
@@ -331,7 +329,7 @@ app.post('/sqlite-options', (req, res) => {
 	if (Response == "") {
 		Response = OPTIONS.response;
 	}
-	if (Token == Password || Token == TOKEN) {
+	if ([link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
 		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
 			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
 				if (err) {
@@ -444,65 +442,81 @@ client.on('message', async msg => {
 	if (msg.type.toLowerCase() == "e2e_notification") return null;
 	if (msg.body == "") return null;
 	if (msg.from.includes("@g.us")) return null;
+        const NULLED = [undefined, "XXX", null, ""];
 
-	db.serialize(() => {
-		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
-			if (REPLIES == undefined) {
-				db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
-					if (err) {
-						console.log('> Bot-Mwsm : ' + err)
+	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(link.prepare('SELECT * FROM options').get().token)) {
+		if (msg.body.includes(":") && msg.body.replace(/[^a-z0-9]/gi, '').length == 12) {
+				db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
+					if (err) throw err;
+					console.log('> Bot-Mwsm : ' + CONSOLE.saved);
+					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.saved);
+                                        msg.reply(CONSOLE.saved);
+				});
+		} else {
+			console.log('> Bot-Mwsm : ' + CONSOLE.wrong);
+			global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.wrong);
+			msg.reply(CONSOLE.wrong);
+		}
+	} else {
+		db.serialize(() => {
+				db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
+					if (REPLIES == undefined) {
+						db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
+							if (err) {
+								console.log('> Bot-Mwsm : ' + err)
+							}
+							console.log('> Bot-Mwsm : ' + CONSOLE.inserted);
+							global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.inserted);
+							MsgBox = true;
+						});
+
+					} else {
+
+						if (register.toString() > REPLIES.date) {
+							db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
+								if (err) {
+									console.log('> Bot-Mwsm : ' + err)
+								}
+								console.log('> Bot-Mwsm : ' + CONSOLE.updated);
+								global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+								MsgBox = true;
+							});
+						} else {
+							if (OPTIONS.count > REPLIES.count) {
+								COUNT = REPLIES.count + 1;
+								db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
+									if (err) throw err;
+									console.log('> Bot-Mwsm : ' + CONSOLE.updated);
+									global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+									MsgBox = true;
+								});
+							} else {
+								console.log('> Bot-Mwsm : ' + CONSOLE.found);
+								global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.found);
+								MsgBox = false;
+
+							}
+						}
 					}
-					console.log('> Bot-Mwsm : ' + CONSOLE.inserted);
-					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.inserted);
-					MsgBox = true;
 				});
 
-			} else {
-
-				if (register.toString() > REPLIES.date) {
-					db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
+				db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
 						if (err) {
 							console.log('> Bot-Mwsm : ' + err)
 						}
-						console.log('> Bot-Mwsm : ' + CONSOLE.updated);
-						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
-						MsgBox = true;
-					});
-				} else {
-					if (OPTIONS.count > REPLIES.count) {
-						COUNT = REPLIES.count + 1;
-						db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
-							if (err) throw err;
-							console.log('> Bot-Mwsm : ' + CONSOLE.updated);
-							global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
-							MsgBox = true;
-						});
-					} else {
-						console.log('> Bot-Mwsm : ' + CONSOLE.found);
-						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.found);
-						MsgBox = false;
-
+						if (REPLIES != undefined) {
+						if (MsgBox && (OPTIONS.onbot == 1 || OPTIONS.onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
+							if ((OPTIONS.replyes == 1 || OPTIONS.replyes == "true")) {
+								msg.reply(OPTIONS.response);
+							} else {
+								client.sendMessage(msg.from, OPTIONS.response);
+							}
+						}
 					}
-				}
-			}
-		});
+				});
 
-		db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
-			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
-			}
-			if (REPLIES != undefined) {
-				if (MsgBox && (OPTIONS.onbot == 1 || OPTIONS.onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
-					if ((OPTIONS.replyes == 1 || OPTIONS.replyes == "true")) {
-						msg.reply(OPTIONS.response);
-					} else {
-						client.sendMessage(msg.from, OPTIONS.response);
-					}
-				}
-			}
 		});
-
-	});
+}
 
 });
 
