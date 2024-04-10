@@ -67,11 +67,16 @@ cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.
 |  beta 3    |  Correção da função Reply que não estava funcionando |
 |  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
 |  beta 5    |  Adcionado função logout no webadmin + correção de bugs no whatsapp-web.js          |
-|  beta 6    |  correção de bugs no whatsapp-web.js                                                |
+|  beta 6    |  sistema de login refeito + correção de bugs no whatsapp-web.js                     |
 
 > ### ATENÇÃO:
-> O token será enviado para o mesmo whatsapp utilizado na leitura do qrcode da api
-  
+> Utilize o token temporario recebido no whatsapp usado na leitura do qrcode ou envie uma mensagem de outro zap para o zap utilizado na leitura com o seguinte comando:
+  ```sh
+Token:SENHA
+```
+> * Token ( comando da api ) : ( dois pontos é o divisor ) SENHA ( é o seu token fixo ).
+> * OBS: o token temporario muda a cada recarregamento e o token fixo é resetado deslogando o whatsapp da api pelo proprio whatsapp ou atraves do botão desligar ao lado do reload no menu settings
+
 
 ### Funcionalidade:
 * Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
