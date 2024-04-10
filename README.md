@@ -1,4 +1,4 @@
-# APP em Manutenção
+# MkAuth WhatsApp Send Message v2 beta 6 (10/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -67,6 +67,7 @@ cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.
 |  beta 3    |  Correção da função Reply que não estava funcionando |
 |  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
 |  beta 5    |  Adcionado função logout no webadmin + correção de bugs no whatsapp-web.js          |
+|  beta 6    |  correção de bugs no whatsapp-web.js                                                |
 
 > ### ATENÇÃO:
 > O token será enviado para o mesmo whatsapp utilizado na leitura do qrcode da api
