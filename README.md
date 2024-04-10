@@ -29,7 +29,7 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
 > ### Após rodar o comando reconfigure as opções no menu settings ###
 
 ```sh
-cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install && pm2 flush && pm2 restart Bot-Mwsm --update-env && pm2 log 0
+cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
 
 ```
 
