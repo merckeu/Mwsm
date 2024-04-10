@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$("#sendwait").mask('99999');
 	$("#interval, #access").mask('9999');
 	$("#limiter, #count").mask('999');
-	$("#token").mask('ZZZZZZ', {
+	$("#token").mask('ZZZZZZZ', {
 		translation: {
 			'Z': {
 				pattern: /[A-Za-z0-9]/,
@@ -14,7 +14,7 @@ $(document).ready(function() {
 	});
 	$("#Locked").on("keyup", function() {
 		var Keygen = $("#token").val();
-		if (Keygen.length >= 6) {
+		if (Keygen.length >= 7) {
 			$.ajax({
 				type: "POST",
 				url: "/token",
