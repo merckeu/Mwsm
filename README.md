@@ -92,7 +92,7 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 <b>5 - </b>Instale as dependencias do Mwsn
 ```sh
-npm install && npm run start:mwsm
+npm install --silent && npm run start:mwsm
 ```
 
 </details>
