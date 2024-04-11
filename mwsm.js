@@ -416,24 +416,23 @@ app.post('/send-message', [
 						Wait = WhatsApp;
 						res.status(200).json({
 							status: true,
-							message: 'Bot-Mwsm : Message Sent',
-							response: response
+							message: 'Bot-Mwsm : Message Sent'
 						});
+
 					}).catch(err => {
-						return true;
 						res.status(500).json({
 							status: false,
-							message: 'Bot-Mwsm : Message was not Sent',
-							response: err.text
+							message: 'Bot-Mwsm : Message was not Sent'
 						});
+                                        return true;
 					});
 				}, index * OPTIONS.interval);
 			});
-		}, Delay + Math.floor(Math.random() * 1000));
-
+		}, Math.floor(Delay + Math.random() * 1000));
 	} else {
 		console.log("Mensagem Agendada");
 	}
+
 });
 
 client.on('message', async msg => {
