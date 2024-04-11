@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 7 (11/04/24)
+# MkAuth WhatsApp Send Message v2 beta 8 (11/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -46,6 +46,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 |  beta 5    |  Adcionado função logout no webadmin + correção de bugs no whatsapp-web.js          |
 |  beta 6    |  sistema de login refeito + correção de bugs no whatsapp-web.js                     |
 |  beta 7    |  Atualização do codigo para funcionamento na nova versão do whatsapp                |
+|  beta 8    |  Melhoria do temporizador de disparos                                               |
 
 > ### ATENÇÃO:
 > Utilize o token temporario recebido no whatsapp usado na leitura do qrcode ou envie uma mensagem de outro zap para o zap utilizado na leitura com o seguinte comando:
