@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 6 (10/04/24)
+# MkAuth WhatsApp Send Message v2 beta 6 (11/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -29,7 +29,7 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
 > ### Após rodar o comando reconfigure as opções no menu settings ###
 
 ```sh
-cd ~ && cd /var/api/Mwsm && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
+cd ~ && cd /var/api/Mwsm && pm2 stop Bot-Mwsm && pm2 flush && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
 
 ```
 
