@@ -1,6 +1,73 @@
 var Slide = false;
 
 $(document).ready(function() {
+var behavior = function (val) {
+    return val.replace(/\D/g, '').length === 11 ? '(00) 9 0000-0000' : '(00) 0000-00009';
+},
+options = {
+    onKeyPress: function (val, e, field, options) {
+        field.mask(behavior.apply({}, arguments), options);
+    }
+};
+
+$('#WhatsApp').mask(behavior, options);
+
+$("#WhatsApp").on('input, focusin', function() {
+$("#WhatsApp").val("");
+});
+
+$("#Clear").on("click", function() {
+$("#Message").prop('disabled', true);
+$("#WhatsApp").prop('disabled', false).val("").focus();
+});
+$("#Send").on("click", function() {
+alert("under construction");
+});
+
+$("#SendClear").on("click", function() {
+var Message = $("#Message").val();
+if(Message != ""){
+$("#Message").val("").focus();
+}
+});
+
+
+$("#Message").on('focusin', function(){
+$("#SendClear").fadeIn("slow", function() {
+
+});
+});
+
+$("#Message").on('focusout', function(){
+if ($("#Message").val() == ""){
+$("#SendClear").fadeOut("slow", function() {
+
+});
+}
+});
+
+
+$("#WhatsApp").on('input, keyup', function() {
+var Whats = $(this).val().replace(/\D/g,'');
+if (Whats.length >= 11 ){
+$("#Message").val("").focus().prop('disabled', false);
+$('#WhatsApp').mask("(99) 9 9999-9999");
+$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
+}else{
+$('#WhatsApp').mask(behavior, options);
+}
+});
+
+$("#WhatsApp").on('input, focusout', function(){
+var Whats = $(this).val().replace(/\D/g,'');
+if (Whats.length >= 10 ){
+$("#Message").prop('disabled', false).val("").focus();
+Whats = Whats.substr(0,2)+"9"+Whats.substr(2,8);
+$('#WhatsApp').mask("(99) 9 9999-9999");
+$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
+}
+});
+
 	$("#sendwait").mask('99999');
 	$("#interval, #access").mask('9999');
 	$("#limiter, #count").mask('999');
@@ -290,11 +357,6 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-$("#WhatsApp, #Message").prop('disabled', true);
-$("#Clear, #Send").on("click", function() {
-alert("under construction");
-});
-
 	$("#ShutDown").on("click", function() {
 
 		if ($("#token").val() == "") {
