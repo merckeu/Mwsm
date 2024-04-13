@@ -398,26 +398,50 @@ app.post('/force-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-			Mensagem.some(function(Send, index) {
-				setTimeout(function() {
-					client.sendMessage(WhatsApp, Send).then(response => {
-						Wait = WhatsApp;
+
+	Mensagem.some(function(Send, index) {
+		const HOTKEY = ["http"];
+		setTimeout(function() {
+			if (Send.includes(HOTKEY)) {
+				delay(0).then(async function() {
+					let mimetype;
+					const attachment = await axios.get(Send, {
+						responseType: 'arraybuffer'
+					}).then(response => {
+						mimetype = response.headers['content-type'];
+						return response.data.toString('base64');
+					});
+					const media = new MessageMedia(mimetype, attachment, 'Media');
+					client.sendMessage(WhatsApp, media).then(response => {
 						res.status(200).json({
 							Status: "Success",
 							message: 'Bot-Mwsm : Message Sent'
 						});
-
 					}).catch(err => {
 						res.status(500).json({
 							Status: "Fail",
 							message: 'Bot-Mwsm : Message was not Sent'
 						});
-                                        return true;
 					});
-				}, index * OPTIONS.interval);
-			});
 
-
+				});
+			} else {
+				client.sendMessage(WhatsApp, Send).then(response => {
+					Wait = WhatsApp;
+					res.status(200).json({
+						Status: "Success",
+						message: 'Bot-Mwsm : Message Sent'
+					});
+				}).catch(err => {
+					res.status(500).json({
+						Status: "Fail",
+						message: 'Bot-Mwsm : Message was not Sent'
+					});
+					return true;
+				});
+			}
+		}, index * OPTIONS.interval);
+	});
 });
 
 
@@ -425,6 +449,7 @@ app.post('/force-message', [
 app.post('/send-message', [
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
+
 ], async (req, res) => {
 	const errors = validationResult(req).formatWith(({
 		msg
@@ -450,7 +475,7 @@ app.post('/send-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-        
+
 
 	if (WhatsApp == Wait || Wait == undefined) {
 		Delay = 300;
@@ -466,20 +491,45 @@ app.post('/send-message', [
 					if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
 						Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
 					}
-					client.sendMessage(WhatsApp, Send).then(response => {
-						Wait = WhatsApp;
-						res.status(200).json({
-                                                        Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
+					const HOTKEY = ["http"];
+					if (Send.includes(HOTKEY)) {
+						delay(0).then(async function() {
+							let mimetype;
+							const attachment = await axios.get(Send, {
+								responseType: 'arraybuffer'
+							}).then(response => {
+								mimetype = response.headers['content-type'];
+								return response.data.toString('base64');
+							});
+							const media = new MessageMedia(mimetype, attachment, 'Media');
+							client.sendMessage(WhatsApp, media).then(response => {
+								res.status(200).json({
+									Status: "Success",
+									message: 'Bot-Mwsm : Message Sent'
+								});
+							}).catch(err => {
+								res.status(500).json({
+									Status: "Fail",
+									message: 'Bot-Mwsm : Message was not Sent'
+								});
+							});
 
-					}).catch(err => {
-						res.status(500).json({
-                                                        Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
 						});
-                                        return true;
-					});
+					} else {
+						client.sendMessage(WhatsApp, Send).then(response => {
+							Wait = WhatsApp;
+							res.status(200).json({
+								Status: "Success",
+								message: 'Bot-Mwsm : Message Sent'
+							});
+						}).catch(err => {
+							res.status(500).json({
+								Status: "Fail",
+								message: 'Bot-Mwsm : Message was not Sent'
+							});
+							return true;
+						});
+					}
 				}, index * OPTIONS.interval);
 			});
 		}, Math.floor(Delay + Math.random() * 1000));
