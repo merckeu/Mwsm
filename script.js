@@ -48,11 +48,16 @@ $(document).ready(function() {
 					if (data.Status == "Success") {
 						$.ajax({
 							type: "POST",
+							dataType: 'json',
+							contentType: 'application/x-www-form-urlencoded',
+							headers: {
+								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
+								msg: $("#Message").val()
+							},
 							url: Simulator,
 							data: {
 								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
-								msg: $("#Message").val(),
-								token: $("#token").val()
+								msg: $("#Message").val()
 							},
 							success: function(data) {
 								if (data.Status == "Success") {
