@@ -1,72 +1,212 @@
 var Slide = false;
 
 $(document).ready(function() {
-var behavior = function (val) {
-    return val.replace(/\D/g, '').length === 11 ? '(00) 9 0000-0000' : '(00) 0000-00009';
-},
-options = {
-    onKeyPress: function (val, e, field, options) {
-        field.mask(behavior.apply({}, arguments), options);
-    }
-};
+	var behavior = function(val) {
+			return val.replace(/\D/g, '').length === 11 ? '(00) 9 0000-0000' : '(00) 0000-00009';
+		},
+		options = {
+			onKeyPress: function(val, e, field, options) {
+				field.mask(behavior.apply({}, arguments), options);
+			}
+		};
 
-$('#WhatsApp').mask(behavior, options);
+	$('#WhatsApp').mask(behavior, options);
 
-$("#WhatsApp").on('input, focusin', function() {
-$("#WhatsApp").val("");
-});
+	$("#WhatsApp").on('input, focusin', function() {
+		$("#WhatsApp").val("");
+	});
 
-$("#Clear").on("click", function() {
-$("#Message").prop('disabled', true);
-$("#WhatsApp").prop('disabled', false).val("").focus();
-});
-$("#Send").on("click", function() {
-alert("under construction");
-});
-
-$("#SendClear").on("click", function() {
-var Message = $("#Message").val();
-if(Message != ""){
-$("#Message").val("").focus();
-}
-});
-
-
-$("#Message").on('focusin', function(){
-$("#SendClear").fadeIn("slow", function() {
-
-});
-});
-
-$("#Message").on('focusout', function(){
-if ($("#Message").val() == ""){
-$("#SendClear").fadeOut("slow", function() {
-
-});
-}
-});
+	$("#Clear").on("click", function() {
+		$("#Message").prop('disabled', true);
+		$(over).show();
+		$("#WhatsApp").prop('disabled', false).val("").focus();
+	});
+	var Simulator = "/force-message";
+	$("#Simulator").on('change', function() {
+		if ($(this).is(":checked")) {
+			Simulator = "/send-message";
+		} else {
+			Simulator = "/force-message";
+		}
+	});
 
 
-$("#WhatsApp").on('input, keyup', function() {
-var Whats = $(this).val().replace(/\D/g,'');
-if (Whats.length >= 11 ){
-$("#Message").val("").focus().prop('disabled', false);
-$('#WhatsApp').mask("(99) 9 9999-9999");
-$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
-}else{
-$('#WhatsApp').mask(behavior, options);
-}
-});
+	$("#Send").on("click", function() {
+		if ($("#token").val() != "" && $("#Message").val() != "" && $("#WhatsApp").val().replace(/\D/g, '').length >= 11) {
+			$.ajax({
+				type: "POST",
+				url: "/token",
+				data: {
+					token: $("#token").val()
+				},
+				beforeSend: function(data) {
+					$("#Waiting").fadeIn("slow", function() {
+						$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+					});
+				},
+				success: function(data) {
+					if (data.Status == "Success") {
+						$.ajax({
+							type: "POST",
+							url: Simulator,
+							data: {
+								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
+								msg: $("#Message").val(),
+								token: $("#token").val()
+							},
+							success: function(data) {
+								if (data.Status == "Success") {
+									var Icon = "fa-check";
+								}
 
-$("#WhatsApp").on('input, focusout', function(){
-var Whats = $(this).val().replace(/\D/g,'');
-if (Whats.length >= 10 ){
-$("#Message").prop('disabled', false).val("").focus();
-Whats = Whats.substr(0,2)+"9"+Whats.substr(2,8);
-$('#WhatsApp').mask("(99) 9 9999-9999");
-$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
-}
-});
+								if (data.Status == "Fail") {
+									var Icon = "fa-exclamation";
+								}
+								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.message, {
+									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+									life: 2000,
+									theme: 'Mwsm',
+									speed: 'slow',
+									close: function(e, m, o) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+										$("#Waiting").fadeOut("slow", function() {
+
+										});
+									}
+								});
+							},
+							error: function(request, status, error) {
+								var Icon = "fa-exclamation";
+								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+									life: 2000,
+									theme: 'Mwsm',
+									speed: 'slow',
+									close: function(e, m, o) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+										$("#Waiting").fadeOut("slow", function() {
+
+										});
+									}
+								});
+							}
+						});
+
+					}
+				},
+				error: function(request, status, error) {
+					var Icon = "fa-exclamation";
+					$("#Waiting").fadeIn("slow", function() {
+						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+							life: 2000,
+							theme: 'Mwsm',
+							speed: 'slow',
+							close: function(e, m, o) {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+								$("#Locked").fadeIn("slow", function() {
+									$("#token").val("").focus();
+								});
+								$("#Waiting").fadeOut("slow", function() {
+									$("#token").val("").focus();
+								});
+							}
+						});
+					});
+				}
+			});
+		} else {
+			if ($("#WhatsApp").val().replace(/\D/g, '').length < 11) {
+				$("#WhatsApp").val("").focus();
+			} else {
+				if ($("#Message").val() == "") {
+					$("#Message").val("").focus();
+				} else {
+					if ($("#token").val() == "") {
+
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+						$("#Locked").fadeIn("slow", function() {
+							$("#token").val("").focus();
+						});
+						$("#Waiting").fadeOut("slow", function() {
+							$("#token").val("").focus();
+						});
+
+					}
+				}
+			}
+		}
+	});
+
+	$("#SendClear").on("click", function() {
+		$("#Message").val("").focus();
+	});
+
+	var t = $("#Message"),
+		over = $('<div</div>');
+	over.css({
+		position: "absolute",
+		top: t.position().top,
+		left: t.position().left,
+		width: t.outerWidth(),
+		height: t.outerHeight(),
+		zIndex: 1000,
+		backgroundColor: "#fff",
+		cursor: "not-allowed",
+		opacity: 0
+	});
+	t.after(over);
+	$(over).on('click', function() {
+		var Whats = $("#WhatsApp").val().replace(/\D/g, '');
+		if (Whats.length >= 11) {
+			$(over).hide();
+			$("#Message").prop('disabled', false).focus();
+		} else {
+			$(over).show();
+			$("#WhatsApp").val("").prop('disabled', false).focus();
+		}
+	});
+
+	$("#Message").on('focusin', function() {
+		$("#SendClear").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#Message").on('focusout', function() {
+		if ($("#Message").val() == "") {
+			$("#SendClear").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+
+	$("#WhatsApp").on('input, keyup', function() {
+		var Whats = $(this).val().replace(/\D/g, '');
+		if (Whats.length >= 11) {
+			if ($("#Message").val() == "") {
+				$("#Message").prop('disabled', false).val("").focus();
+			}
+
+			$('#WhatsApp').mask("(99) 9 9999-9999");
+			$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
+		} else {
+			$('#WhatsApp').mask(behavior, options);
+		}
+	});
+
+	$("#WhatsApp").on('input, focusout', function() {
+		var Whats = $(this).val().replace(/\D/g, '');
+		if (Whats.length >= 10) {
+			if ($("#Message").val() == "") {
+				$("#Message").prop('disabled', false).val("").focus();
+			}
+			Whats = Whats.substr(0, 2) + "9" + Whats.substr(2, 8);
+			$('#WhatsApp').mask("(99) 9 9999-9999");
+			$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
+		}
+	});
 
 	$("#sendwait").mask('99999');
 	$("#interval, #access").mask('9999');
@@ -79,7 +219,7 @@ $("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
 			}
 		}
 	});
-	$("#Locked").on("keyup", function() {
+	$("#token").on("keyup", function() {
 		var Keygen = $("#token").val();
 		if (Keygen.length >= 7) {
 			$.ajax({
@@ -403,10 +543,10 @@ $(document).ready(function() {
 								theme: 'Mwsm',
 								speed: 'slow',
 								close: function(e, m, o) {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-										$("#Locked").fadeIn("slow", function() {
-											$("#token").val("").focus();
-										});
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+									$("#Locked").fadeIn("slow", function() {
+										$("#token").val("").focus();
+									});
 									$("#Waiting").fadeOut("slow", function() {
 										$("#token").val("").focus();
 									});

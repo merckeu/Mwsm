@@ -368,6 +368,59 @@ app.post('/sqlite-options', (req, res) => {
 });
 
 
+
+// Force message
+app.post('/force-message', [
+	body('to').notEmpty(),
+	body('msg').notEmpty(),
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		msg
+	}) => {
+		return msg;
+	});
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			Status: "Fail",
+			message: errors.mapped()
+		});
+	}
+	const number = req.body.to;
+	const numberDDI = number.substr(0, 2);
+	const numberDDD = number.substr(2, 2);
+	const numberUser = number.substr(-8, 8);
+	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
+	var WhatsApp = number + "@c.us";
+
+	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
+		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
+	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
+		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
+	}
+			Mensagem.some(function(Send, index) {
+				setTimeout(function() {
+					client.sendMessage(WhatsApp, Send).then(response => {
+						Wait = WhatsApp;
+						res.status(200).json({
+							Status: "Success",
+							message: 'Bot-Mwsm : Message Sent'
+						});
+
+					}).catch(err => {
+						res.status(500).json({
+							Status: "Fail",
+							message: 'Bot-Mwsm : Message was not Sent'
+						});
+                                        return true;
+					});
+				}, index * OPTIONS.interval);
+			});
+
+
+});
+
+
 // Send message
 app.post('/send-message', [
 	body('to').notEmpty(),
@@ -397,6 +450,7 @@ app.post('/send-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
+        
 
 	if (WhatsApp == Wait || Wait == undefined) {
 		Delay = 300;
@@ -432,7 +486,6 @@ app.post('/send-message', [
 	} else {
 		console.log("Mensagem Agendada");
 	}
-
 });
 
 client.on('message', async msg => {
