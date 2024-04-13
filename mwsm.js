@@ -469,13 +469,15 @@ app.post('/send-message', [
 					client.sendMessage(WhatsApp, Send).then(response => {
 						Wait = WhatsApp;
 						res.status(200).json({
-							Status: "Success",
+							status: true,
+                                                        Status: "Success",
 							message: 'Bot-Mwsm : Message Sent'
 						});
 
 					}).catch(err => {
 						res.status(500).json({
-							Status: "Fail",
+							status: false,
+                                                        Status: "Fail",
 							message: 'Bot-Mwsm : Message was not Sent'
 						});
                                         return true;
