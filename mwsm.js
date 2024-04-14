@@ -8,7 +8,7 @@ const {
 	body,
 	validationResult
 } = require('express-validator');
-var Delay, Wait, Permission = false,
+var Delay, Wait, Sendding, Permission = false,
 	MsgBox = false,
 	Session = false;
 const wwebVersion = '2.2403.2-beta';
@@ -398,26 +398,34 @@ app.post('/force-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-			Mensagem.some(function(Send, index) {
-				setTimeout(function() {
-					client.sendMessage(WhatsApp, Send).then(response => {
-						Wait = WhatsApp;
-						res.status(200).json({
-							Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
-
-					}).catch(err => {
-						res.status(500).json({
-							Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
-						});
-                                        return true;
+	Sendding = 1;
+	Mensagem.some(function(Send, index) {
+		const MEDIA = ["{link}"];
+		if (MEDIA.includes(Send)) {
+			console.log("Media");
+		} else {
+			setTimeout(function() {
+				client.sendMessage(WhatsApp, Send).then(response => {
+					Wait = WhatsApp;
+					Sendding = (Sendding + 1);
+				}).catch(err => {
+					res.status(500).json({
+						Status: "Fail",
+						message: 'Bot-Mwsm : Message was not Sent'
 					});
-				}, index * OPTIONS.interval);
-			});
+					return true;
+				});
+				if (Sendding == Mensagem.length) {
+					res.json({
+						Status: "Success",
+						message: 'Bot-Mwsm : Message Sent'
+					});
 
+				}
 
+			}, index * OPTIONS.interval);
+		}
+	});
 });
 
 
@@ -425,6 +433,7 @@ app.post('/force-message', [
 app.post('/send-message', [
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
+
 ], async (req, res) => {
 	const errors = validationResult(req).formatWith(({
 		msg
@@ -450,7 +459,7 @@ app.post('/send-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-        
+
 
 	if (WhatsApp == Wait || Wait == undefined) {
 		Delay = 300;
@@ -460,6 +469,7 @@ app.post('/send-message', [
 
 	if (OPTIONS.schedule <= OPTIONS.limiter) {
 		setTimeout(function() {
+	                Sendding = 1;
 			Mensagem.some(function(Send, index) {
 				const PIXFAIL = [undefined, "XXX", null, ""];
 				setTimeout(function() {
@@ -468,18 +478,22 @@ app.post('/send-message', [
 					}
 					client.sendMessage(WhatsApp, Send).then(response => {
 						Wait = WhatsApp;
-						res.status(200).json({
-                                                        Status: "Success",
+						Sendding = (Sendding + 1);
+					}).catch(err => {
+					res.status(500).json({
+						Status: "Fail",
+						message: 'Bot-Mwsm : Message was not Sent'
+					});
+					return true;
+					});
+					if (Sendding == Mensagem.length) {
+						res.json({
+							Status: "Success",
 							message: 'Bot-Mwsm : Message Sent'
 						});
 
-					}).catch(err => {
-						res.status(500).json({
-                                                        Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
-						});
-                                        return true;
-					});
+					}
+
 				}, index * OPTIONS.interval);
 			});
 		}, Math.floor(Delay + Math.random() * 1000));
