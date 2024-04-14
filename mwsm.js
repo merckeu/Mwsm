@@ -400,32 +400,11 @@ app.post('/force-message', [
 	}
 
 	Mensagem.some(function(Send, index) {
-		const HOTKEY = ["http"];
-		setTimeout(function() {
-			if (Send.includes(HOTKEY)) {
-				delay(0).then(async function() {
-					let mimetype;
-					const attachment = await axios.get(Send, {
-						responseType: 'arraybuffer'
-					}).then(response => {
-						mimetype = response.headers['content-type'];
-						return response.data.toString('base64');
-					});
-					const media = new MessageMedia(mimetype, attachment, 'Media');
-					client.sendMessage(WhatsApp, media).then(response => {
-						res.status(200).json({
-							Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
-					}).catch(err => {
-						res.status(500).json({
-							Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
-						});
-					});
-
-				});
-			} else {
+		const MEDIA = ["{link}"];
+		if (MEDIA.includes(Send)) {
+			console.log("Media");
+		} else {
+			setTimeout(function() {
 				client.sendMessage(WhatsApp, Send).then(response => {
 					Wait = WhatsApp;
 					res.status(200).json({
@@ -439,8 +418,8 @@ app.post('/force-message', [
 					});
 					return true;
 				});
-			}
-		}, index * OPTIONS.interval);
+			}, Math.floor(OPTIONS.interval + Math.random() * (1000 * index)));
+		}
 	});
 });
 
@@ -486,36 +465,16 @@ app.post('/send-message', [
 	if (OPTIONS.schedule <= OPTIONS.limiter) {
 		setTimeout(function() {
 			Mensagem.some(function(Send, index) {
-				const PIXFAIL = [undefined, "XXX", null, ""];
-				setTimeout(function() {
-					if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
-						Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
-					}
-					const HOTKEY = ["http"];
-					if (Send.includes(HOTKEY)) {
-						delay(0).then(async function() {
-							let mimetype;
-							const attachment = await axios.get(Send, {
-								responseType: 'arraybuffer'
-							}).then(response => {
-								mimetype = response.headers['content-type'];
-								return response.data.toString('base64');
-							});
-							const media = new MessageMedia(mimetype, attachment, 'Media');
-							client.sendMessage(WhatsApp, media).then(response => {
-								res.status(200).json({
-									Status: "Success",
-									message: 'Bot-Mwsm : Message Sent'
-								});
-							}).catch(err => {
-								res.status(500).json({
-									Status: "Fail",
-									message: 'Bot-Mwsm : Message was not Sent'
-								});
-							});
+				const MEDIA = ["{link}"];
+				if (MEDIA.includes(Send)) {
+					console.log("Media");
+				} else {
 
-						});
-					} else {
+					const PIXFAIL = [undefined, "XXX", null, ""];
+					setTimeout(function() {
+						if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
+							Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
+						}
 						client.sendMessage(WhatsApp, Send).then(response => {
 							Wait = WhatsApp;
 							res.status(200).json({
@@ -529,8 +488,8 @@ app.post('/send-message', [
 							});
 							return true;
 						});
-					}
-				}, index * OPTIONS.interval);
+					}, Math.floor(OPTIONS.interval + Math.random() * (1000 * index)));
+				}
 			});
 		}, Math.floor(Delay + Math.random() * 1000));
 	} else {
