@@ -33,6 +33,7 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 const CONSOLE = link.prepare('SELECT * FROM console').get();
 const RESOURCE = link.prepare('SELECT * FROM resources').get();
 const OPTIONS = link.prepare('SELECT * FROM options').get();
+const ATTACHMENTS = link.prepare('SELECT suffixes FROM attachments').pluck().all();
 const crypto = require('crypto');
 const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
 var Password = [OPTIONS.token, Keygen()];
@@ -398,33 +399,41 @@ app.post('/force-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-	Sendding = 1;
+        Sendding = 1;
 	Mensagem.some(function(Send, index) {
-		const MEDIA = ["{link}"];
-		if (MEDIA.includes(Send)) {
-			console.log("Media");
-		} else {
-			setTimeout(function() {
-				client.sendMessage(WhatsApp, Send).then(response => {
-					Wait = WhatsApp;
-					Sendding = (Sendding + 1);
-				}).catch(err => {
-					res.status(500).json({
-						Status: "Fail",
-						message: 'Bot-Mwsm : Message was not Sent'
+		delay(index * OPTIONS.interval).then(async function() {
+			if (ATTACHMENTS.some(Row => Send.includes(Row))) {
+				const Cloud = async (Url) => {
+					let mimetype;
+					const attachment = await axios.get(Url, {
+						responseType: 'arraybuffer'
+					}).then(response => {
+						mimetype = response.headers['content-type'];
+						return response.data.toString('base64');
 					});
-					return true;
+					return new MessageMedia(mimetype, attachment, 'Media');
+				};
+				Send = await Cloud(Send);
+			}
+			client.sendMessage(WhatsApp, Send).then(response => {
+				Wait = WhatsApp;
+				Sendding = (Sendding + 1);
+			}).catch(err => {
+				res.status(500).json({
+					Status: "Fail",
+					message: 'Bot-Mwsm : Message was not Sent'
 				});
-				if (Sendding == Mensagem.length) {
-					res.json({
-						Status: "Success",
-						message: 'Bot-Mwsm : Message Sent'
-					});
+				return true;
+			});
+			if (Sendding == Mensagem.length) {
+				res.json({
+					Status: "Success",
+					message: 'Bot-Mwsm : Message Sent'
+				});
 
-				}
+			}
+		});
 
-			}, index * OPTIONS.interval);
-		}
 	});
 });
 
@@ -469,22 +478,35 @@ app.post('/send-message', [
 
 	if (OPTIONS.schedule <= OPTIONS.limiter) {
 		setTimeout(function() {
-	                Sendding = 1;
+                        Sendding = 1;
 			Mensagem.some(function(Send, index) {
-				const PIXFAIL = [undefined, "XXX", null, ""];
-				setTimeout(function() {
+				delay(index * OPTIONS.interval).then(async function() {
+					const PIXFAIL = [undefined, "XXX", null, ""];
 					if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
 						Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
+					}
+					if (ATTACHMENTS.some(Row => Send.includes(Row))) {
+						const Cloud = async (Url) => {
+							let mimetype;
+							const attachment = await axios.get(Url, {
+								responseType: 'arraybuffer'
+							}).then(response => {
+								mimetype = response.headers['content-type'];
+								return response.data.toString('base64');
+							});
+							return new MessageMedia(mimetype, attachment, 'Media');
+						};
+						Send = await Cloud(Send);
 					}
 					client.sendMessage(WhatsApp, Send).then(response => {
 						Wait = WhatsApp;
 						Sendding = (Sendding + 1);
 					}).catch(err => {
-					res.status(500).json({
-						Status: "Fail",
-						message: 'Bot-Mwsm : Message was not Sent'
-					});
-					return true;
+						res.status(500).json({
+							Status: "Fail",
+							message: 'Bot-Mwsm : Message was not Sent'
+						});
+						return true;
 					});
 					if (Sendding == Mensagem.length) {
 						res.json({
@@ -493,8 +515,8 @@ app.post('/send-message', [
 						});
 
 					}
+				});
 
-				}, index * OPTIONS.interval);
 			});
 		}, Math.floor(Delay + Math.random() * 1000));
 	} else {
