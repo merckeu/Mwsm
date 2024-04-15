@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 9 (13/04/24)
+# MkAuth WhatsApp Send Message v2 beta 10 (15/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -48,6 +48,13 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 |  beta 7    |  Atualização do codigo para funcionamento na nova versão do whatsapp                |
 |  beta 8    |  Melhoria do temporizador de disparos                                               |
 |  beta 9    |  Envio de mensagens via webadmin (settings > run )                                  |
+|  beta 10   |  Adicionado suporte a envio de midias ( png e pdf )                                 |
+
+> ### OBS: beta 10:
+> Insira o URL do arquivo utilizando o separador ## para separar texto da midia seguindo o exemplo abaixo
+```sh
+Mensagem1##Mensagem2##https://via.placeholder.com/350x150.png##Mensagem4
+``` 
 
 > ### OBS: beta 9:
 > A opção Mkauth simulator se habilitada seguira o mesmo percurso quando disparada via mkauth
