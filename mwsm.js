@@ -155,6 +155,7 @@ io.on('connection', function(socket) {
 	}
 
 	client.on('qr', (qr) => {
+                WwbUpgrade();
 		qrcode.toDataURL(qr, (err, url) => {
 			try {
 				socket.emit('qr', url);
