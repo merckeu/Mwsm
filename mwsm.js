@@ -11,7 +11,6 @@ const {
 var Delay, Wait, Sendding, Permission = false,
 	MsgBox = false,
 	Session = false;
-const wwebVersion = '2.2403.4-beta';
 const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
@@ -79,9 +78,63 @@ const client = new Client({
 	},
 	webVersionCache: {
 		type: 'remote',
-		remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
+		remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/'+link.prepare('SELECT * FROM release').get().webjs+'.html',
 	},
 });
+
+delay(0).then(async function() {
+	const Upgrade = async (GET) => {
+		const Update = await fetch(GET).then(response => {
+			return response.json();
+		}).catch(err => {
+			return {
+				'currentVersion': '0.0.0.0'
+			}
+		});
+		return Update;
+	};
+	Update = await Upgrade('https://raw.githubusercontent.com/wppconnect-team/wa-version/main/versions.json');
+	if (Update.currentVersion == '0.0.0.0') {
+		console.log('> Bot-Mwsm : ' + CONSOLE.fail);
+		global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.fail);
+	} else {
+		if (Update.currentVersion.replace(/\D/g, "") == link.prepare('SELECT * FROM release').get().webjs.replace(/\D/g, "")) {
+			console.log('> Bot-Mwsm : ' + CONSOLE.lastet);
+			global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.lastet);
+		} else {
+			if (Update.currentBeta == null) {
+				Update.versions.forEach(function(Return) {
+					if (Return.version.includes(Update.currentVersion)) {
+						if ((Return.version != link.prepare('SELECT * FROM release').get().webjs)) {
+							db.run("UPDATE release SET webjs=?", [Return.version], (err) => {
+								if (err) {
+									console.log('> Bot-Mwsm : ' + err)
+								}
+								console.log('> Bot-Mwsm : ' + CONSOLE.updating);
+								global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updating);
+                                                                exec('pm2 restart Bot-Mwsm --update-env');
+							});
+						}
+
+					}
+				});
+			} else {
+				if (Return.version != link.prepare('SELECT * FROM release').get().webjs) {
+					db.run("UPDATE release SET webjs=?", [Update.currentBeta], (err) => {
+						if (err) {
+							console.log('> Bot-Mwsm : ' + err)
+						}
+						console.log('> Bot-Mwsm : ' + CONSOLE.updating);
+						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updating);
+                                                exec('pm2 restart Bot-Mwsm --update-env');
+					});
+				}
+			}
+		}
+
+	}
+});
+
 
 io.on('connection', function(socket) {
 	socket.emit('Reset', true);
