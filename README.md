@@ -40,6 +40,15 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 11   |  Adicionado suporte a envio de midias ( png e pdf ) + Atualização wwjs               |
 
+> ### ATENÇÃO!: envio de midia
+> Insira o URL do arquivo utilizando o separador ## para separar texto da midia seguindo o exemplo abaixo
+```sh
+Mensagem1##Mensagem2##https://via.placeholder.com/350x150.png##Mensagem4
+``` 
+
+
+
+
 ### Funcionalidade:
 * Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
 
