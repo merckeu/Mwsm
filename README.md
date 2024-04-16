@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 10 (15/04/24)
+# MkAuth WhatsApp Send Message v2 beta 11 (16/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -35,41 +35,13 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 
 </details>
 
-### Novidades V2
-
+### Novidades V2.0.11++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 1    |  Integração do Banco de Dados SQLite |
-|  beta 2    |  Interface Web com Controle de Funções |
-|  beta 3    |  Correção da função Reply que não estava funcionando |
-|  beta 4    |  Adcionado proteção por token randomico para alteração das funções do menu settings |
-|  beta 5    |  Adcionado função logout no webadmin + correção de bugs no whatsapp-web.js          |
-|  beta 6    |  sistema de login refeito + correção de bugs no whatsapp-web.js                     |
-|  beta 7    |  Atualização do codigo para funcionamento na nova versão do whatsapp                |
-|  beta 8    |  Melhoria do temporizador de disparos                                               |
-|  beta 9    |  Envio de mensagens via webadmin (settings > run )                                  |
-|  beta 10   |  Adicionado suporte a envio de midias ( png e pdf )                                 |
-
-> ### OBS: beta 10:
-> Insira o URL do arquivo utilizando o separador ## para separar texto da midia seguindo o exemplo abaixo
-```sh
-Mensagem1##Mensagem2##https://via.placeholder.com/350x150.png##Mensagem4
-``` 
-
-> ### OBS: beta 9:
-> A opção Mkauth simulator se habilitada seguira o mesmo percurso quando disparada via mkauth
-
-> ### ATENÇÃO:
-> Utilize o token temporario recebido no whatsapp usado na leitura do qrcode ou envie uma mensagem de outro zap para o zap utilizado na leitura com o seguinte comando:
-  ```sh
-Token:SENHA
-```
-> * Token ( comando da api ) : ( dois pontos é o divisor ) SENHA ( é o seu token fixo ).
-> * OBS: o token temporario muda a cada recarregamento e o token fixo é resetado deslogando o whatsapp da api pelo proprio whatsapp ou atraves do botão desligar ao lado do reload no menu settings
-
+|  beta 11   |  Adicionado suporte a envio de midias ( png e pdf ) + Atualização wwjs               |
 
 ### Funcionalidade:
-* Enviar mensagens de texto via whatsapp para clientes cadastrados no mkauth
+* Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
 
 ### Requisitos :
 * Servidor Linux ( Container ubuntu ) Proxmox ou Mkauth
@@ -164,6 +136,16 @@ sudo npm run start:mwsm
 <b>3 - </b>Faça a leitura do QRCode com o WhatsApp
 
 ** `Menu > Aparelhos Conectados > Conectar um Aparelho`
+
+<b>4 - </b>Entre no whatsapp que acabou de conectar e pegue o token temporario para acessar as configurações
+
+<b>OBS:</b> para criar um token fixo envie o comando como mensagem de outro celular para o numero conectado a API
+
+  ```sh
+Token:SENHA
+```
+<b>TOKEN</b> = *Comando* | <b>:</b> = *Divisor* | <b>SENHA</b> { altere para sua senha de 7 digitos }
+
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
 
