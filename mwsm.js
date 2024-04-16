@@ -11,7 +11,7 @@ const {
 var Delay, Wait, Sendding, Permission = false,
 	MsgBox = false,
 	Session = false;
-const wwebVersion = '2.2403.2-beta';
+const wwebVersion = '2.2403.3-beta';
 const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
