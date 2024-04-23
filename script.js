@@ -1,6 +1,80 @@
 var Slide = false;
 
 $(document).ready(function() {
+	$("input[type=password]").prop('type', 'text');
+
+	$("#bar").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		MkAuth("#bar", Enable);
+	});
+
+	$("#pix").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		MkAuth("#pix", Enable);
+	});
+
+	$("#qrpix").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		MkAuth("#qrpix", Enable);
+	});
+
+	$("#pdf").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		MkAuth("#pdf", Enable);
+	});
+
+	function MkAuth(OPTION, SET) {
+		$.ajax({
+			type: "POST",
+			url: "/options_mkauth",
+			data: {
+				define: OPTION.replace(/[^a-zA-Z]+/g, ''),
+				enable: SET
+			},
+
+			success: function(data) {
+				if (data.Status == "Fail") {
+					$(OPTION).prop("checked", data.Return);
+				}
+			},
+			error: function(request, status, error) {
+				var Icon = "fa-exclamation";
+				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+					life: 2000,
+					theme: 'Mwsm',
+					speed: 'slow',
+					close: function(e, m, o) {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+						$("#Waiting").fadeOut("slow", function() {
+							if (SET) {
+								$(OPTION).prop("checked", false);
+							} else {
+								$(OPTION).prop("checked", true);
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+
 	var behavior = function(val) {
 			return val.replace(/\D/g, '').length === 11 ? '(00) 9 0000-0000' : '(00) 0000-00009';
 		},
@@ -30,6 +104,123 @@ $(document).ready(function() {
 		}
 	});
 
+	function ModuleOff() {
+		$.ajax({
+			type: "POST",
+			url: "/options_mkauth",
+			data: {
+				define: 'module',
+				enable: 'false'
+			},
+			success: function(data) {
+				if (data.Status == "Success") {
+					$("#module").prop("checked", false);
+					$("#domain, #username, #password").prop('disabled', false);
+				}
+				if (data.Status == "Fail") {
+					setTimeout(() => {
+						$("#module").prop("checked", true);
+						$("#domain, #username, #password").prop('disabled', true);
+					}, "500");
+				}
+			},
+			error: function(request, status, error) {
+				setTimeout(() => {
+					$("#module").prop("checked", true);
+					$("#domain, #username, #password").prop('disabled', true);
+				}, "500");
+			}
+		});
+	}
+
+	$("#module").on('change', function() {
+		var User = $("#username").val();
+		var Pass = $("#password").val();
+		var Domain = $("#domain").val();
+		if ($(this).is(":checked")) {
+			if (User == "" || !User.includes("Client_Id_")) {
+				setTimeout(() => {
+					$("#module").prop("checked", false);
+					$("#username").focus().val("");
+				}, "500");
+			} else {
+				if (Pass == "" || !Pass.includes("Client_Secret_")) {
+					setTimeout(() => {
+						$("#module").prop("checked", false);
+						$("#password").focus().val("");
+					}, "500");
+
+				} else {
+					if (Domain == "") {
+						setTimeout(() => {
+							$("#module").prop("checked", false);
+							$("#domain").focus().val("");
+						}, "500");
+
+					} else {
+						$.ajax({
+							type: "POST",
+							url: "/link_mkauth",
+							data: {
+								username: $("#username").val(),
+								password: $("#password").val(),
+								module: $("#module").prop('checked'),
+								domain: $("#domain").val(),
+								token: $("#token").val()
+							},
+							beforeSend: function(data) {
+								$("#Waiting").fadeIn("slow", function() {
+									$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+									$("#domain, #username, #password").prop('disabled', true);
+								});
+							},
+							success: function(data) {
+								if (data.Status == "Success") {
+									var Icon = "fa-check";
+								}
+								if (data.Status == "Fail") {
+									var Icon = "fa-exclamation";
+								}
+								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+									life: 2000,
+									theme: 'Mwsm',
+									speed: 'slow',
+									close: function(e, m, o) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+										$("#Waiting").fadeOut("slow", function() {
+											if (data.Status == "Fail") {
+												$("#module").prop("checked", false);
+												$("#domain, #username, #password").prop('disabled', false);
+											}
+										});
+									}
+								});
+							},
+							error: function(request, status, error) {
+								var Icon = "fa-exclamation";
+								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+									life: 2000,
+									theme: 'Mwsm',
+									speed: 'slow',
+									close: function(e, m, o) {
+										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+										$("#Waiting").fadeOut("slow", function() {
+											$("#module").prop("checked", false);
+											$("#domain, #username, #password").prop('disabled', false);
+										});
+									}
+								});
+							}
+						});
+					}
+				}
+			}
+		} else {
+			ModuleOff();
+		}
+	});
 
 	$("#Send").on("click", function() {
 		if ($("#token").val() != "" && $("#Message").val() != "" && $("#WhatsApp").val().replace(/\D/g, '').length >= 11) {
@@ -186,7 +377,6 @@ $(document).ready(function() {
 		}
 	});
 
-
 	$("#WhatsApp").on('input, keyup', function() {
 		var Whats = $(this).val().replace(/\D/g, '');
 		if (Whats.length >= 11) {
@@ -245,30 +435,27 @@ $(document).ready(function() {
 					if (data.Status == "Fail") {
 						var Icon = "fa-exclamation";
 					}
-					setTimeout(() => {
 
-						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
-							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-							life: 2000,
-							theme: 'Mwsm',
-							speed: 'slow',
-							close: function(e, m, o) {
-								if (data.Status == "Success") {
-									$("#Locked").fadeOut("slow", function() {
-										$("#token").prop('disabled', false);
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							if (data.Status == "Success") {
+								$("#Locked").fadeOut("slow", function() {
+									$("#token").prop('disabled', false);
 
-									});
-
-								}
-
-								if (data.Status == "Fail") {
-									$("#token").prop('disabled', false).val("").focus();
-								}
+								});
 
 							}
-						});
 
-					}, "2000");
+							if (data.Status == "Fail") {
+								$("#token").prop('disabled', false).val("").focus();
+							}
+
+						}
+					});
 
 				},
 				error: function(request, status, error) {
@@ -346,6 +533,26 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('domain', function(data) {
+		$('#domain').val(data);
+		if (data != "") {
+			$('#domain').prop('disabled', true);
+		}
+	});
+	socket.on('username', function(data) {
+		$('#username').val(data);
+		if (data != "") {
+			$('#username').prop('disabled', true);
+		}
+	});
+	socket.on('password', function(data) {
+		$('#password').val(data);
+		if (data != "") {
+			$('#password').prop('disabled', true);
+		}
+	});
+
+
 	socket.on('interval', function(data) {
 		$('#interval').val(data);
 	});
@@ -379,6 +586,67 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('module', function(data) {
+		switch (data) {
+			case 'true':
+				$("#module").prop("checked", true);
+				$("#domain, #username, #password").prop('disabled', true);
+				break;
+			case 'false':
+				$("#module").prop("checked", false);
+				$("#domain, #username, #password").prop('disabled', false);
+				break;
+		}
+	});
+
+	socket.on('pdf', function(data) {
+		switch (data) {
+			case 'true':
+				$("#pdf").prop("checked", true);
+				break;
+			case 'false':
+				$("#pdf").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('qrpix', function(data) {
+		switch (data) {
+			case 'true':
+				$("#qrpix").prop("checked", true);
+				break;
+			case 'false':
+				$("#qrpix").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('pix', function(data) {
+		switch (data) {
+			case 'true':
+				$("#pix").prop("checked", true);
+				break;
+			case 'false':
+				$("#pix").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('bar', function(data) {
+		switch (data) {
+			case 'true':
+				$("#bar").prop("checked", true);
+				break;
+			case 'false':
+				$("#bar").prop("checked", false);
+				break;
+		}
+	});
+
+
+
 	socket.on('replyes', function(data) {
 		switch (data) {
 			case 'true':
@@ -392,9 +660,9 @@ $(document).ready(function() {
 	socket.on('count', function(data) {
 		$('#count').val(data);
 	});
-	socket.on('pix', function(src) {
-		$('#pix').attr('src', src);
-		$('#pix').show();
+	socket.on('donation', function(src) {
+		$('#donation').attr('src', src);
+		$('#donation').show();
 	});
 
 	$("#tabs").tabs({
@@ -599,7 +867,7 @@ $(document).ready(function() {
 		}
 	});
 	$("#Save_Options").on("click", function() {
-
+		var Host = window.location.href.split(':');
 		if ($("#pixfail").val() == "XXX" || $("#pixfail").val() == "") {
 			$("#pixfail").focus();
 		} else {
@@ -656,9 +924,12 @@ $(document).ready(function() {
 													var Icon = "fa-exclamation";
 												}
 												$("#Waiting").fadeIn("slow", function() {
+													if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
+														$('#tabs a[href="#tabs-1"]')[0].click();
+													}
 													$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
 														header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-														life: 2000,
+														life: 1500,
 														theme: 'Mwsm',
 														speed: 'slow',
 														close: function(e, m, o) {
@@ -668,19 +939,20 @@ $(document).ready(function() {
 																});
 
 															}
-
-															if (data.Status == "Success") {
-																$('#tabs a[href="#tabs-1"]')[0].click();
-															}
 															$("#Waiting").fadeOut("slow", function() {
-
-																$("#token").val("").focus();
+																if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
+																	$("#token").val("").focus();
+																}
 																if (data.Status == "Success") {
-																	$("#Locked").show();
+																	if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
+																		$("#Locked").show();
+																	}
 																	$("#Scroll").animate({
 																		scrollTop: $("#Scroll")[0].scrollHeight
 																	}, 1000);
-																	var Host = window.location.href.split(':');
+																	setTimeout(function() {
+																		$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+																	}, 1000);
 																	if (Host[2].replace(/[^0-9]/g, '') != data.Port) {
 																		setTimeout(function() {
 																			$(location).prop('href', Host[0] + ':' + Host[1] + ':' + data.Port);

@@ -53,14 +53,14 @@
 			</div>
 			
 			<div id="tabs-2" style="z-index:1;">
-				<div id="Locked">
+				<div id="Locked" style="display:block;">
 					<div class="Protect"></div>
 					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:30px;margin-top:130px;background:#FFF;">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
 						</div>
 						<span class='Password'><i class="fa fa-refresh fa-spin Token"></i></span>
-						<input type="text" id="token" class="form-control" placeholder="Token" style="height:40px;">
+						<input type="password" id="token" class="form-control" placeholder="Token" style="height:40px;">
 					</div>
 				</div>
 				
@@ -79,7 +79,7 @@
 													<div class="input-group-prepend">
 														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-money" aria-hidden="true"></i></span>
 													</div>
-													<input type="text" id="pixfail" placeholder="Chave Pix" style="width:256px;">
+													<input type="password" id="pixfail" placeholder="Chave Pix" style="width:256px;">
 												</div>
 												
 												
@@ -91,7 +91,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-comments-o" aria-hidden="true"></i></i></span>
 															</div>
-															<input type="text" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
+															<input type="password" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
 														</div>
 														
 													</div>
@@ -115,7 +115,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
 															</div>
-															<input type="text" id="interval" placeholder="1000" style="width:55px;">
+															<input type="tel" id="interval" placeholder="1000" style="width:55px;">
 														</div>
 														
 														
@@ -128,7 +128,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:26px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
 															</div>
-															<input type="text" id="sendwait" placeholder="30000" style="width:60px;">
+															<input type="tel" id="sendwait" placeholder="30000" style="width:60px;">
 														</div>
 														
 													</div>
@@ -140,7 +140,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
 															</div>
-															<input type="text" id="access" placeholder="8000" style="width:55px;">
+															<input type="tel" id="access" placeholder="8000" style="width:55px;">
 														</div>
 														
 														
@@ -163,7 +163,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:25px;"><i class="fa fa-calculator" aria-hidden="true"></i></span>
 															</div>
-															<input type="text" id="count" placeholder="1" style="width:55px;">
+															<input type="tel" id="count" placeholder="1" style="width:55px;">
 														</div>
 														
 														
@@ -176,7 +176,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
 															</div>
-															<input type="text" id="limiter" placeholder="100" style="width:60px;" disabled>
+															<input type="tel" id="limiter" placeholder="100" style="width:60px;" disabled>
 														</div>
 														
 														
@@ -237,27 +237,27 @@
 										<div class="Msg-floating" style="width:100%;height:175px;">
 											<textarea class="Msg-control" placeholder="" id="Message" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;" disabled></textarea>
 											<label for="Message">Message</label>
-                                                                                        <i class="fa fa-times" id="SendClear" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+											<i class="fa fa-times" id="SendClear" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
 										</div>
 										
 										<div style="width:100%;height:35px;padding:0px;">
-
-												<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
-													<div class="col-20">
-														<label><input type="checkbox" id="Simulator" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Mkauth Simulador</b></label>
-													</div>
-													
+											
+											<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
+												<div class="col-20">
+													<label><input type="checkbox" id="Simulator" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Mkauth Simulador</b></label>
 												</div>
-
+												
+											</div>
+											
 											<div class="input-group mb-3" style="height:35px;width:330px;float:right;margin-left:15px;margin-top:-5px;padding:0px;">
 												
-
-
+												
+												
 												<div class="input-group mb-3" style="height:40px;width:170px;margin-right:5px;margin-top:7px;">
 													<div class="input-group-prepend">
 														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
 													</div>
-													<input type="text" id="WhatsApp" placeholder="" style="width:125px;">
+													<input type="password" id="WhatsApp" placeholder="" style="width:125px;">
 												</div>
 												
 												
@@ -276,12 +276,167 @@
 							</div>
 						</div>
 						
+						<div id="tabs-2E" style="z-index:1;">
+							<div class="row" style="padding:0px 10px;height:220px;">
+								
+								
+								<div class="row">
+									<div class="col-75">
+										<form>
+											<div class="row" style="padding-top:0px;">
+												<div class="col-50">
+													<label for="Username"> Username</label>
+													
+													<div class="input-group mb-3" style="height:40px;width:540px;">
+														<div class="input-group-prepend">
+															<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+														</div>
+														<input type="password" id="username" placeholder="Client_Id" style="width:91%">
+													</div>
+													
+													
+													
+													<div class="row" style="margin-top:10px;">
+														<div class="col-50">
+															<label for="Password">Password</label>
+															<div class="input-group mb-3" style="height:40px;width:540x;">
+																<div class="input-group-prepend">
+																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
+																</div>
+																<input type="password" id="password" placeholder="Client_Secret" style="width:91%;">
+															</div>
+															
+														</div>
+													</div>
+													
+													<div class="row" style="margin-top:10px;">
+														<div class="col-50">
+															<label for="Server">Server</label>
+															<div class="input-group mb-3" style="height:40px;width:540x;">
+																<div class="input-group-prepend">
+																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-server" aria-hidden="true"></i></i></span>
+																</div>
+																<input type="password" id="domain" placeholder="MKAUTH-DOMAIN SSL" style="width:91%;">
+															</div>
+															
+														</div>
+													</div>
+													
+													
+													
+													
+													<div style="width:100%;height:35px;padding:0px;position:absolute;float:right:">
+														
+														
+														
+														
+														<div style="width:100%;height:35px;padding:0px;margin=left:20px;">
+															
+															
+															
+															<div class="row" style="margin-top:-22px;padding-left:20px;z-index:9999999;float:right;width:150px;">
+																<label><b style="margin-top:-20px;position:absolute;margin-left:5px;">MkAuth Link</b></label>
+																<div class="col-20" style="padding-left:12px;margin-top:-5px;">
+																	<input type="checkbox" id="module" class="green">
+																</div>
+																
+															</div>
+															
+															
+														</div>
+														
+														
+													</div>
+													
+													
+													
+													
+												</div>
+												
+												<div class="col-75" style="height:160px;width:90px;position:absolute;right:10px;margin-top:20px;">
+													<div class="row">
+														<div class="col-75">
+															
+															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+																<div class="col-20">
+																	<label><input type="checkbox" id="bar" name="toogle" class="blue">
+																		<c style="margin-top:3px;position:absolute;margin-left:5px;">BAR</c>
+																	</label>
+																</div>
+																
+															</div>
+															
+															
+															
+															
+															
+														</div>
+														<div class="col-75">
+															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+																<div class="col-20">
+																	<label><input type="checkbox" id="pix" name="toogle" class="blue">
+																		<c style="margin-top:3px;position:absolute;margin-left:5px;">PIX</c>
+																	</label>
+																</div>
+																
+															</div>
+															
+															
+														</div>
+														<div class="col-75">
+															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+																<div class="col-20">
+																	<label><input type="checkbox" id="qrpix" name="toogle" class="blue">
+																		<c style="margin-top:3px;position:absolute;margin-left:5px;">QR</c>
+																	</label>
+																</div>
+																
+															</div>
+															
+															
+														</div>
+														
+														
+														<div class="col-75">
+															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+																<div class="col-20">
+																	<label><input type="checkbox" id="pdf" name="toogle" class="blue">
+																		<c style="margin-top:3px;position:absolute;margin-left:5px;">PDF</c>
+																	</label>
+																</div>
+																
+															</div>
+															
+															
+														</div>
+														
+														
+													</div>
+													
+													
+													
+													
+													
+												</div>
+												
+											</div>
+										</form>
+									</div>
+									
+									
+									
+								</div>
+							</div>
+						</div>
+						
+						
 					</div>
 					<ul>
 						<li><a href="#tabs-2A">Options</a></li>
 						<li><a href="#tabs-2B">Extras</a></li>
 						<li><a href="#tabs-2C">Hotkeys</a></li>
 						<li><a href="#tabs-2D">Run</a></li>
+						<li><a href="#tabs-2E">API</a></li>
 					</ul>
 					
 				</div>
@@ -318,7 +473,7 @@
 							<p style="padding-left:20px;color:#000;">
 							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Chave Aleatoria:</div>
 							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;z-index:2;">
-								<input type="text" id="PixKey" class="form-control" value="e9b9d669-4412-4dec-994c-310005904088" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+								<input type="password" id="PixKey" class="form-control" value="e9b9d669-4412-4dec-994c-310005904088" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
 								<div class="input-group-append" style="margin:0px;padding:0px;">
 									<button class="btn btn-light Copy" type="button" id="ButtonKey"><i class="fa fa-clone PixKey" aria-hidden="true"></i></button>
 								</div>
@@ -328,7 +483,7 @@
 							<p style="padding-left:20px;color:#000;">
 							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Copia & Cola:</div>
 							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;">
-								<input type="text" id="PixCode" type="text" class="form-control" value="00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+								<input type="password" id="PixCode" type="password" class="form-control" value="00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
 								<div class="input-group-append" style="margin:0px;padding:0px;">
 									<button class="btn btn-light Copy" type="button" id="ButtonCode"><i class="fa fa-clone PixCode" aria-hidden="true"></i></button>
 								</div>
@@ -342,7 +497,7 @@
 					</div>
 					<div class="col-25" style="position: absolute;top:100px;left:430px;">
 						<div class="row">
-							<img src="" alt="QR Code" id="pix" style="max-width:200px;max-height:200px;width: auto;height: auto;">
+							<img src="" alt="QR Code" id="donation" style="max-width:200px;max-height:200px;width: auto;height: auto;">
 						</div>
 					</div>
 				</div>

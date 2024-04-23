@@ -1,6 +1,8 @@
 const {
 	Client,
 	LocalAuth,
+	Buttons,
+	List,
 	MessageMedia
 } = require('whatsapp-web.js');
 const express = require('express');
@@ -8,7 +10,7 @@ const {
 	body,
 	validationResult
 } = require('express-validator');
-var Delay, Wait, Sendding, Permission = false,
+var Delay, Wait, Reboot, Sending, Permission = false,
 	MsgBox = false,
 	Session = false;
 const socketIO = require('socket.io');
@@ -23,19 +25,16 @@ const hostName = os.hostname();
 const server = http.createServer(app);
 const io = socketIO(server);
 const sys = require('util');
+const puppeteer = require('puppeteer');
 const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('mwsm.db');
 const register = new Date().getDate();
 require('events').EventEmitter.defaultMaxListeners = Infinity;
-const CONSOLE = link.prepare('SELECT * FROM console').get();
-const RESOURCE = link.prepare('SELECT * FROM resources').get();
-const OPTIONS = link.prepare('SELECT * FROM options').get();
-const ATTACHMENTS = link.prepare('SELECT suffixes FROM attachments').pluck().all();
 const crypto = require('crypto');
 const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
-var Password = [OPTIONS.token, Keygen()];
+var Password = [Debug('OPTIONS').token, Keygen()];
 global.io = io;
 
 function delay(t, v) {
@@ -43,6 +42,19 @@ function delay(t, v) {
 		setTimeout(resolve.bind(null, v), t)
 	});
 }
+
+function Debug(Select, Search = '*', Mode = 'single') {
+	switch (Mode.toLowerCase()) {
+		case "single":
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase()).get();
+			break;
+		case "multiple":
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase()).pluck().all();
+			break;
+	}
+	return Select;
+}
+
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -57,60 +69,132 @@ app.get('/', (req, res) => {
 	});
 });
 
-function WwbUpgrade(){
-		delay(0).then(async function() {
-			const Upgrade = async (GET) => {
-				const Update = await fetch(GET).then(response => {
-					return response.json();
-				}).catch(err => {
-					return {
-						'currentVersion': '0.0.0.0'
-					}
-				});
-				return Update;
-			};
-			Update = await Upgrade('https://raw.githubusercontent.com/wppconnect-team/wa-version/main/versions.json');
-			if (Update.currentVersion == '0.0.0.0') {
-				console.log('> Bot-Mwsm : ' + CONSOLE.fail);
-				global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.fail);
+const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') => {
+	var SEARCH;
+	const Authentication = await axios.get('https://' + Debug('MKAUTH').domain + '/api/', {
+		auth: {
+			username: Debug('MKAUTH').client_id,
+			password: Debug('MKAUTH').client_secret
+		}
+	}).then(response => {
+		return response.data;
+	}).catch(err => {
+		return false;
+	});
+	if (Authentication) {
+		const MkSync = await axios.get('https://' + Debug('MKAUTH').domain + '/api/' + TYPE + '/' + EXT + '/' + UID, {
+			headers: {
+				'Authorization': 'Bearer ' + Authentication
+			}
+		}).then(response => {
+			return response.data;
+		}).catch(err => {
+			return false;
+		});
+		if (MkSync) {
+			if (MODE) {
+				SEARCH = MkSync.titulos;
 			} else {
-				if (Update.currentVersion.replace(/\D/g, "") == link.prepare('SELECT * FROM release').get().webjs.replace(/\D/g, "")) {
-					console.log('> Bot-Mwsm : ' + CONSOLE.lastet);
-					global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.lastet);
-				} else {
-					if (Update.currentBeta == null) {
-						Update.versions.forEach(function(Return) {
-							if (Return.version.includes(Update.currentVersion)) {
-								if ((Return.version != link.prepare('SELECT * FROM release').get().webjs)) {
-									db.run("UPDATE release SET webjs=?", [Return.version], (err) => {
-										if (err) {
-											console.log('> Bot-Mwsm : ' + err)
-										}
-										console.log('> Bot-Mwsm : ' + CONSOLE.updating);
-										global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updating);
-										exec('pm2 restart Bot-Mwsm --update-env');
-									});
-								}
-
+				SEARCH = MkSync;
+			}
+			(SEARCH).some(function(Send, index) {
+				if (Send.titulo == FIND) {
+					Json = {
+						"Status": Send.status,
+						"Payments": [{
+								"value": Send.linhadig,
+								"caption": "Bar"
+							},
+							{
+								"value": Send.pix,
+								"caption": "Pix"
+							},
+							{
+								"value": Send.pix_qr.split("base64,")[1],
+								"caption": "QRCode"
+							},
+							{
+								"value": "https://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
+								"caption": "Boleto"
 							}
-						});
-					} else {
-						if (Return.version != link.prepare('SELECT * FROM release').get().webjs) {
-							db.run("UPDATE release SET webjs=?", [Update.currentBeta], (err) => {
-								if (err) {
-									console.log('> Bot-Mwsm : ' + err)
-								}
-								console.log('> Bot-Mwsm : ' + CONSOLE.updating);
-								global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updating);
-								exec('pm2 restart Bot-Mwsm --update-env');
-							});
+						]
+					};
+				}
+			});
+			return Json;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+};
+
+function testJSON(text) {
+	if (typeof text !== "string") {
+		return false;
+	}
+	try {
+		var json = JSON.parse(text);
+		return (typeof json === 'object');
+	} catch (error) {
+		return false;
+	}
+}
+
+function WwbUpgrade() {
+	delay(0).then(async function() {
+		const Upgrade = async (GET) => {
+			const Update = await fetch(GET).then(response => {
+				return response.json();
+			}).catch(err => {
+				return {
+					'currentVersion': '0.0.0.0'
+				}
+			});
+			return Update;
+		};
+		Update = await Upgrade('https://raw.githubusercontent.com/wppconnect-team/wa-version/main/versions.json');
+		if (Update.currentVersion == '0.0.0.0') {
+			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').fail);
+			global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').fail);
+		} else {
+			if (Update.currentVersion.replace(/\D/g, "") == Debug('RELEASE').webjs.replace(/\D/g, "")) {
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').lastet);
+				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').lastet);
+			} else {
+				if (Update.currentBeta == null) {
+					Update.versions.forEach(function(Return) {
+						if (Return.version.includes(Update.currentVersion)) {
+							if ((Return.version != Debug('RELEASE').webjs)) {
+								db.run("UPDATE release SET webjs=?", [Return.version], (err) => {
+									if (err) {
+										console.log('> Bot-Mwsm : ' + err)
+									}
+									console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updating);
+									global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updating);
+									exec('pm2 restart Bot-Mwsm --update-env');
+								});
+							}
+
 						}
+					});
+				} else {
+					if (Return.version != Debug('RELEASE').webjs) {
+						db.run("UPDATE release SET webjs=?", [Update.currentBeta], (err) => {
+							if (err) {
+								console.log('> Bot-Mwsm : ' + err)
+							}
+							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updating);
+							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updating);
+							exec('pm2 restart Bot-Mwsm --update-env');
+						});
 					}
 				}
-
 			}
-		});
 
+		}
+	});
 }
 
 const client = new Client({
@@ -134,28 +218,29 @@ const client = new Client({
 	},
 	webVersionCache: {
 		type: 'remote',
-		remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/' + link.prepare('SELECT * FROM release').get().webjs + '.html',
+		remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/' + Debug('RELEASE').webjs + '.html',
 	},
 });
 
 io.on('connection', function(socket) {
+
 	socket.emit('Reset', true);
-	if (Session || (OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
-		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-		socket.emit('qr', RESOURCE.authenticated);
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
-		socket.emit('qr', RESOURCE.ready);
+	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		socket.emit('qr', Debug('RESOURCES').authenticated);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		socket.emit('qr', Debug('RESOURCES').ready);
 		Session = true;
 	} else {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-		console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-		socket.emit('qr', RESOURCE.connection);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+		socket.emit('qr', Debug('RESOURCES').connection);
 	}
 
 	client.on('qr', (qr) => {
-                WwbUpgrade();
+		WwbUpgrade();
 		qrcode.toDataURL(qr, (err, url) => {
 			try {
 				socket.emit('qr', url);
@@ -163,23 +248,23 @@ io.on('connection', function(socket) {
 				console.log('> Bot-Mwsm : ' + err);
 				socket.emit('message', '> Bot-Mwsm : ' + err);
 			} finally {
-				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.received);
-				console.log('> Bot-Mwsm : ' + CONSOLE.received);
+				socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').received);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').received);
 			}
 		});
 	});
 
 	client.on('ready', async () => {
-		if ((OPTIONS.auth == 0 || OPTIONS.auth == "false")) {
+		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
 					console.log('> Bot-Mwsm : ' + err)
 				}
 			});
 		}
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.ready);
-		console.log('> Bot-Mwsm : ' + CONSOLE.ready);
-		socket.emit('qr', RESOURCE.ready);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		socket.emit('qr', Debug('RESOURCES').ready);
 		Session = true;
 		if (!Permission) {
 			Permission = true;
@@ -189,16 +274,16 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('authenticated', (data) => {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-		console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-		socket.emit('qr', RESOURCE.authenticated);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+		socket.emit('qr', Debug('RESOURCES').authenticated);
 	});
 
 
 	client.on('auth_failure', () => {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.auth_failure);
-		console.log('> Bot-Mwsm : ' + CONSOLE.auth_failure);
-		socket.emit('qr', RESOURCE.auth_failure);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').auth_failure);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').auth_failure);
+		socket.emit('qr', Debug('RESOURCES').auth_failure);
 		db.run("UPDATE options SET auth=?", [false], (err) => {
 			if (err) {
 				console.log('> Bot-Mwsm : ' + err)
@@ -211,9 +296,9 @@ io.on('connection', function(socket) {
 
 
 	client.on('disconnected', (reason) => {
-		socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.disconnected);
-		console.log('> Bot-Mwsm : ' + CONSOLE.disconnected);
-		socket.emit('qr', RESOURCE.disconnected);
+		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+		socket.emit('qr', Debug('RESOURCES').disconnected);
 		db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
 			if (err) {
 				console.log('> Bot-Mwsm : ' + err)
@@ -228,9 +313,9 @@ io.on('connection', function(socket) {
 				console.log('> Bot-Mwsm : ' + err);
 				socket.emit('message', '> Bot-Mwsm : ' + err);
 			} finally {
-				socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-				console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-				socket.emit('qr', RESOURCE.connection);
+				socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				socket.emit('qr', Debug('RESOURCES').connection);
 				socket.emit('Reset', true);
 				delay(2000).then(async function() {
 					exec('pm2 restart Bot-Mwsm --update-env');
@@ -245,22 +330,22 @@ io.on('connection', function(socket) {
 		console.log('> Bot-Mwsm : Loading application', percent + '%');
 		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
 		if (percent >= "100") {
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.authenticated);
-			console.log('> Bot-Mwsm : ' + CONSOLE.authenticated);
-			socket.emit('qr', RESOURCE.authenticated);
+			socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+			socket.emit('qr', Debug('RESOURCES').authenticated);
 		} else {
-                        WwbUpgrade();
-			socket.emit('message', '> Bot-Mwsm : ' + CONSOLE.connection);
-			console.log('> Bot-Mwsm : ' + CONSOLE.connection);
-			socket.emit('qr', RESOURCE.connection);
+			WwbUpgrade();
+			socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+			socket.emit('qr', Debug('RESOURCES').connection);
 			socket.emit('Reset', true);
 
 		}
 
 	});
 
-	global.io.emit('background', RESOURCE.background);
-	global.io.emit('pix', RESOURCE.about);
+	socket.emit('background', Debug('RESOURCES').background);
+	socket.emit('donation', Debug('RESOURCES').about);
 
 	delay(2000).then(async function() {
 		if (Session && Permission) {
@@ -277,7 +362,7 @@ app.post('/reset', (req, res) => {
 		if (err) {
 			console.log('> Bot-Mwsm : ' + err)
 		}
-		global.io.emit('qr', RESOURCE.connection);
+		global.io.emit('qr', Debug('RESOURCES').connection);
 	});
 	const Reset = req.body.reset;
 	if (Reset == "true") {
@@ -292,7 +377,7 @@ app.post('/reset', (req, res) => {
 app.post('/shutdown', (req, res) => {
 	const Shutdown = req.body.shutdown;
 	const Token = req.body.token;
-	if (Shutdown == "true" && [link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
+	if (Shutdown == "true" && [Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		res.json({
 			Status: "Success"
 		});
@@ -300,7 +385,7 @@ app.post('/shutdown', (req, res) => {
 	} else {
 		res.json({
 			Status: "Fail",
-			Return: CONSOLE.wrong
+			Return: Debug('CONSOLE').wrong
 		});
 	}
 });
@@ -308,7 +393,7 @@ app.post('/shutdown', (req, res) => {
 
 // Authenticated
 app.post('/authenticated', (req, res) => {
-	if ((OPTIONS.auth == 1 || OPTIONS.auth == "true")) {
+	if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		res.json({
 			Status: "Success"
 		});
@@ -323,26 +408,34 @@ app.post('/authenticated', (req, res) => {
 // Token
 app.post('/token', (req, res) => {
 	const Token = req.body.token;
-	if ([link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
-		global.io.emit('interval', OPTIONS.interval);
-		global.io.emit('sendwait', OPTIONS.sendwait);
-		global.io.emit('response', OPTIONS.response);
-		global.io.emit('access', OPTIONS.access);
-		global.io.emit('port', OPTIONS.access);
-		global.io.emit('pixfail', OPTIONS.pixfail);
-		global.io.emit('replyes', OPTIONS.replyes);
-		global.io.emit('count', OPTIONS.count);
-		global.io.emit('onbot', OPTIONS.onbot);
-		global.io.emit('limiter', OPTIONS.limiter);
+	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
+		global.io.emit('interval', Debug('OPTIONS').interval);
+		global.io.emit('sendwait', Debug('OPTIONS').sendwait);
+		global.io.emit('response', Debug('OPTIONS').response);
+		global.io.emit('access', Debug('OPTIONS').access);
+		global.io.emit('port', Debug('OPTIONS').access);
+		global.io.emit('pixfail', Debug('OPTIONS').pixfail);
+		global.io.emit('replyes', Debug('OPTIONS').replyes);
+		global.io.emit('count', Debug('OPTIONS').count);
+		global.io.emit('onbot', Debug('OPTIONS').onbot);
+		global.io.emit('limiter', Debug('OPTIONS').limiter);
+		global.io.emit('domain', Debug('MKAUTH').domain);
+		global.io.emit('username', Debug('MKAUTH').client_id);
+		global.io.emit('password', Debug('MKAUTH').client_secret);
+		global.io.emit('module', Debug('MKAUTH').module);
+		global.io.emit('bar', Debug('MKAUTH').bar);
+		global.io.emit('pix', Debug('MKAUTH').pix);
+		global.io.emit('qrpix', Debug('MKAUTH').qrpix);
+		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		res.json({
 			Status: "Success",
-			Return: CONSOLE.right
+			Return: Debug('CONSOLE').right
 		});
 
 	} else {
 		res.json({
 			Status: "Fail",
-			Return: CONSOLE.wrong
+			Return: Debug('CONSOLE').wrong
 		});
 	}
 });
@@ -358,21 +451,49 @@ app.post('/getdata', (req, res) => {
 		} else {
 			res.json({
 				Status: "Success",
-				interval: OPTIONS.interval,
-				sendwait: OPTIONS.sendwait,
-				response: OPTIONS.response,
-				access: OPTIONS.access,
-				port: OPTIONS.access,
-				pixfail: OPTIONS.pixfail,
-				replyes: OPTIONS.replyes,
-				count: OPTIONS.count,
-				onbot: OPTIONS.onbot,
-				limiter: OPTIONS.limiter
+				interval: Debug('OPTIONS').interval,
+				sendwait: Debug('OPTIONS').sendwait,
+				response: Debug('OPTIONS').response,
+				access: Debug('OPTIONS').access,
+				port: Debug('OPTIONS').access,
+				pixfail: Debug('OPTIONS').pixfail,
+				replyes: Debug('OPTIONS').replyes,
+				count: Debug('OPTIONS').count,
+				onbot: Debug('OPTIONS').onbot,
+				limiter: Debug('OPTIONS').limiter,
+				domain: Debug('MKAUTH').domain,
+				username: Debug('MKAUTH').client_id,
+				password: Debug('MKAUTH').client_secret,
+				module: Debug('MKAUTH').module,
+				bar: Debug('MKAUTH').bar,
+				pix: Debug('MKAUTH').pix,
+				qrpix: Debug('MKAUTH').qrpix,
+				pdf: Debug('MKAUTH').pdf,
 			});
 
 		}
 	});
 });
+
+// Set Options Mkauth
+app.post('/options_mkauth', (req, res) => {
+	const define = req.body.define;
+	const enable = req.body.enable;
+	db.run("UPDATE mkauth SET " + define + "=?", [enable], (err) => {
+		if (err) {
+			res.json({
+				Status: "Fail",
+				Return: Debug('MKAUTH').define
+			});
+		}
+		res.json({
+			Status: "Success",
+			Return: enable
+		});
+	});
+});
+
+
 
 // Update SQLite
 app.post('/sqlite-options', (req, res) => {
@@ -386,28 +507,36 @@ app.post('/sqlite-options', (req, res) => {
 	const Count = req.body.count;
 	const Token = req.body.token;
 	const Limiter = req.body.limiter;
-	if (Response == "") {
-		Response = OPTIONS.response;
+	if (Access != Debug('OPTIONS').access) {
+		Reboot = true;
+	} else {
+		Reboot = false;
 	}
-	if ([link.prepare('SELECT * FROM options').get().token, Password[1]].includes(Token)) {
+	if (Response == "") {
+		Response = Debug('OPTIONS').response;
+	}
+	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
 			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
 				if (err) {
 					res.json({
 						Status: "Fail",
-						Return: "Failed to Insert Data"
+						Return: Debug('CONSOLE').failed
 					});
 				}
-				console.log('> Bot-Mwsm : ' + CONSOLE.settings);
-				global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.settings);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').settings);
+				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').settings);
 				res.json({
 					Status: "Success",
-					Return: CONSOLE.settings,
+					Return: Debug('CONSOLE').settings,
 					Port: Access
 				});
 				session = false;
-				global.io.emit('Reset', true);
-				exec('pm2 restart Bot-Mwsm --update-env');
+				if (Reboot) {
+					global.io.emit('Reset', true);
+					exec('pm2 restart Bot-Mwsm --update-env');
+
+				}
 			});
 
 		} else {
@@ -420,7 +549,7 @@ app.post('/sqlite-options', (req, res) => {
 	} else {
 		res.json({
 			Status: "Fail",
-			Return: "Incorrect Credentials"
+			Return: Debug('CONSOLE').wrong
 		});
 	}
 
@@ -457,10 +586,10 @@ app.post('/force-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-	Sendding = 1;
+	Sending = 1;
 	Mensagem.some(function(Send, index) {
-		delay(index * OPTIONS.interval).then(async function() {
-			if (ATTACHMENTS.some(Row => Send.includes(Row))) {
+		delay(index * Debug('OPTIONS').interval).then(async function() {
+			if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
 				const Cloud = async (Url) => {
 					let mimetype;
 					const attachment = await axios.get(Url, {
@@ -473,28 +602,75 @@ app.post('/force-message', [
 				};
 				Send = await Cloud(Send);
 			}
-			client.sendMessage(WhatsApp, Send).then(response => {
-				Wait = WhatsApp;
-				Sendding = (Sendding + 1);
-			}).catch(err => {
-				res.status(500).json({
-					Status: "Fail",
-					message: 'Bot-Mwsm : Message was not Sent'
+			if (Send != "") {
+				client.sendMessage(WhatsApp, Send).then(response => {
+					Wait = WhatsApp;
+                                        Sending = (Sending + 1);
+						if (Sending == (Mensagem.length)) {
+							return res.status(201).json({
+								Status: "Success",
+								message: 'Bot-Mwsm : Message Sent'
+							});
+						}
+				}).catch(err => {
+					return res.status(500).json({
+						Status: "Fail",
+						message: 'Bot-Mwsm : Message was not Sent'
+					});
 				});
-				return true;
-			});
-			if (Sendding == Mensagem.length) {
-				res.json({
-					Status: "Success",
-					message: 'Bot-Mwsm : Message Sent'
-				});
-
 			}
 		});
 
 	});
 });
 
+// Link Mkauth
+app.post('/link_mkauth', async (req, res) => {
+	const User = req.body.username;
+	const Pass = req.body.password;
+	const Domain = req.body.domain;
+	const Module = req.body.module;
+	const Token = req.body.token;
+	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
+		const Authentication = await axios.get('https://' + Domain + '/api/', {
+			auth: {
+				username: User,
+				password: Pass
+			}
+		}).then(response => {
+			return response.data;
+		}).catch(err => {
+			return false;
+		});
+
+		if (Authentication) {
+			db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, module=?", [User, Pass, Domain, Module], (err) => {
+				if (err) {
+					res.json({
+						Status: "Fail",
+						Return: Debug('CONSOLE').failed
+					});
+				}
+				res.json({
+					Status: "Success",
+					Return: Debug('CONSOLE').mksuccess
+				});
+			});
+		} else {
+			res.json({
+				Status: "Fail",
+				Return: Debug('CONSOLE').mkfail
+			});
+		}
+
+	} else {
+		res.json({
+			Status: "Fail",
+			Return: Debug('CONSOLE').wrong
+		});
+
+	}
+});
 
 // Send message
 app.post('/send-message', [
@@ -527,23 +703,24 @@ app.post('/send-message', [
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
 
-
 	if (WhatsApp == Wait || Wait == undefined) {
 		Delay = 300;
 	} else {
-		Delay = OPTIONS.sendwait;
+		Delay = Debug('OPTIONS').sendwait;
 	}
 
-	if (OPTIONS.schedule <= OPTIONS.limiter) {
+
+	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
+		Sending = 1;
 		setTimeout(function() {
-			Sendding = 1;
 			Mensagem.some(function(Send, index) {
-				delay(index * OPTIONS.interval).then(async function() {
+				delay(index * Debug('OPTIONS').interval).then(async function() {
+					var RETURNS = [];
 					const PIXFAIL = [undefined, "XXX", null, ""];
-					if (!PIXFAIL.includes(OPTIONS.pixfail) && Send == "CodigoIndisponivel") {
-						Send = Send.replace("CodigoIndisponivel", OPTIONS.pixfail);
+					if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+						Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
 					}
-					if (ATTACHMENTS.some(Row => Send.includes(Row))) {
+					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
 						const Cloud = async (Url) => {
 							let mimetype;
 							const attachment = await axios.get(Url, {
@@ -556,31 +733,110 @@ app.post('/send-message', [
 						};
 						Send = await Cloud(Send);
 					}
-					client.sendMessage(WhatsApp, Send).then(response => {
-						Wait = WhatsApp;
-						Sendding = (Sendding + 1);
-					}).catch(err => {
-						res.status(500).json({
-							Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
+					if (testJSON(Send.replace(/'/g, '"'))) {
+						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+							const Json = JSON.parse(Send.replace(/'/g, '"'));
+							const MkAUth = await MkAuth(Json.uid, Json.find);
+							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+								RETURNS.push('Bar');
+							}
+
+							if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+								RETURNS.push('Pix');
+							}
+
+							if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+								RETURNS.push('QRCode');
+							}
+
+							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+								RETURNS.push('Boleto');
+							}
+
+							if (MkAUth.Status != "pago") {
+								Sending = 0;
+								(MkAUth.Payments).forEach(function(GET, index) {
+									if (RETURNS.includes(GET.caption)) {
+										switch (GET.caption) {
+											case 'Bar':
+												Send = GET.value;
+												Preview = false;
+												break;
+											case 'Pix':
+												Send = GET.value;
+												Preview = false;
+												break;
+											case 'QRCode':
+												Send = new MessageMedia('image/png', GET.value, 'Media');
+												Preview = false;
+												break;
+											case 'Boleto':
+												Send = GET.value;
+												Preview = true;
+												break;
+										}
+
+										client.sendMessage(WhatsApp, Send, {
+											caption: GET.caption,
+											linkPreview: Preview
+										}).then(response => {
+											Wait = WhatsApp;
+											Sending = (Sending + 1);
+											if (Sending == (RETURNS.length)) {
+												return res.status(201).json({
+													Status: "Success",
+													message: 'Bot-Mwsm : Message Sent'
+												});
+											}
+										}).catch(err => {
+											return res.status(500).json({
+												Status: "Fail",
+												message: 'Bot-Mwsm : Message was not Sent'
+											});
+										});
+
+									}
+								});
+								Send = false;
+							} else {
+								Send = false;
+							}
+						} else {
+							Send = false;
+						}
+
+					}
+
+					if (Send) {
+						client.sendMessage(WhatsApp, Send).then(response => {
+							Wait = WhatsApp;
+							Sending = (Sending + 1);
+						}).catch(err => {
+							return res.status(500).json({
+								Status: "Fail",
+								message: 'Bot-Mwsm : Message was not Sent'
+							});
 						});
-						return true;
-					});
-					if (Sendding == Mensagem.length) {
-						res.json({
-							Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
+						if (Sending == (Mensagem.length)) {
+							return res.status(201).json({
+								Status: "Success",
+								message: 'Bot-Mwsm : Message Sent'
+							});
+						}
+
 
 					}
 				});
 
 			});
+
+
 		}, Math.floor(Delay + Math.random() * 1000));
 	} else {
 		console.log("Mensagem Agendada");
 	}
 });
+
 
 client.on('message', async msg => {
 	const nomeContato = msg._data.notifyName;
@@ -591,18 +847,18 @@ client.on('message', async msg => {
 	if (msg.from.includes("@g.us")) return null;
 	const NULLED = [undefined, "XXX", null, ""];
 
-	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(link.prepare('SELECT * FROM options').get().token)) {
+	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(Debug('OPTIONS').token)) {
 		if (msg.body.includes(":") && msg.body.replace(/[^a-z0-9]/gi, '').length == 12) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
 				if (err) throw err;
-				console.log('> Bot-Mwsm : ' + CONSOLE.saved);
-				global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.saved);
-				msg.reply(CONSOLE.saved);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').saved);
+				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').saved);
+				msg.reply(Debug('CONSOLE').saved);
 			});
 		} else {
-			console.log('> Bot-Mwsm : ' + CONSOLE.wrong);
-			global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.wrong);
-			msg.reply(CONSOLE.wrong);
+			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').wrong);
+			global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').wrong);
+			msg.reply(Debug('CONSOLE').wrong);
 		}
 	} else {
 		db.serialize(() => {
@@ -612,8 +868,8 @@ client.on('message', async msg => {
 						if (err) {
 							console.log('> Bot-Mwsm : ' + err)
 						}
-						console.log('> Bot-Mwsm : ' + CONSOLE.inserted);
-						global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.inserted);
+						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').inserted);
+						global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').inserted);
 						MsgBox = true;
 					});
 
@@ -624,22 +880,22 @@ client.on('message', async msg => {
 							if (err) {
 								console.log('> Bot-Mwsm : ' + err)
 							}
-							console.log('> Bot-Mwsm : ' + CONSOLE.updated);
-							global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
+							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
 							MsgBox = true;
 						});
 					} else {
-						if (OPTIONS.count > REPLIES.count) {
+						if (Debug('OPTIONS').count > REPLIES.count) {
 							COUNT = REPLIES.count + 1;
 							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
 								if (err) throw err;
-								console.log('> Bot-Mwsm : ' + CONSOLE.updated);
-								global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.updated);
+								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
+								global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
 								MsgBox = true;
 							});
 						} else {
-							console.log('> Bot-Mwsm : ' + CONSOLE.found);
-							global.io.emit('message', '> Bot-Mwsm : ' + CONSOLE.found);
+							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').found);
+							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').found);
 							MsgBox = false;
 
 						}
@@ -652,11 +908,11 @@ client.on('message', async msg => {
 					console.log('> Bot-Mwsm : ' + err)
 				}
 				if (REPLIES != undefined) {
-					if (MsgBox && (OPTIONS.onbot == 1 || OPTIONS.onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
-						if ((OPTIONS.replyes == 1 || OPTIONS.replyes == "true")) {
-							msg.reply(OPTIONS.response);
+					if (MsgBox && (Debug('OPTIONS').onbot == 1 || Debug('OPTIONS').onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
+						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
+							msg.reply(Debug('OPTIONS').response);
 						} else {
-							client.sendMessage(msg.from, OPTIONS.response);
+							client.sendMessage(msg.from, Debug('OPTIONS').response);
 						}
 					}
 				}
@@ -668,7 +924,7 @@ client.on('message', async msg => {
 });
 
 console.log("\nAPI is Ready!\n");
-const Port = process.env.PORT || OPTIONS.access;
+const Port = process.env.PORT || Debug('OPTIONS').access;
 server.listen(Port, function() {
 	console.log('Server Running on Port *: ' + Port);
 });

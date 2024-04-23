@@ -1,4 +1,4 @@
-html {
+﻿html {
 	margin 0;
 	padding: 0;
 }
@@ -172,6 +172,21 @@ input[type=text]:focus {
 	border: 1px solid #ddd;
 	box-shadow: 0 0 5px #719ECE;
 }
+
+input[type=password] {
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+input[type=password]:focus {
+	outline: none !important;
+	border: 1px solid #ddd;
+	box-shadow: 0 0 5px #719ECE;
+}
+
 
 input[type=tel] {
 	width: 100%;
@@ -2943,9 +2958,7 @@ fieldset:disabled a.btn {
 	margin-top: 0.5rem;
 }
 
-input[type="submit"].btn-block,
-input[type="reset"].btn-block,
-input[type="button"].btn-block {
+input[type=submit].btn-block, input[type=reset].btn-block, input[type=button].btn-block {
 	width: 100%;
 }
 
@@ -6899,8 +6912,7 @@ fieldset[disabled] .btn-link:focus {
 	border-radius: 0.25rem;
 }
 
-.input-group-text input[type="radio"],
-.input-group-text input[type="checkbox"] {
+.input-group-text input[type=radio], .input-group-text input[type=checkbox] {
 	margin-top: 0;
 }
 
@@ -7261,4 +7273,92 @@ textarea.Msg-control {
   height: auto;
 }
 
+
+input[name=toogle],
+input[name=toogle]::after,
+input[name=toogle]::before {
+	box-sizing: border-box;
+}
+
+input[name=toogle] {
+	outline: none;
+	position: relative;
+	z-index: 1;
+	margin: 2px;
+	padding: 0;
+	cursor: pointer;
+	width: 44px;
+	height: 14px;
+	overflow: hidden;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+input[name=toogle]::before,
+input[name=toogle]::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	
+	/*efeito animado*/
+	transition: left .15s cubic-bezier(.25, .8, .25, .1),
+		transform .15s ease-in;
+}
+
+input[name=toogle]::before {
+	background-color: #ccc;
+	width: 100%;
+	height: 100%;
+	border-radius: 3px;
+}
+
+input[name=toogle]::after {
+	margin: 2px 0 0 2px;
+	background: #fff;
+	width: 10px;
+	height: 10px;
+	border-radius: 10%;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+input[name=toogle]:checked::before {
+	background-color: #75a940;
+}
+
+input[name=toogle]:checked::after {
+	left: 29px;
+}
+
+input[name=toogle]:not([disabled]):active::after {
+	transform: scale(1.15, 0.85);
+}
+
+input[name=toogle]:disabled::before {
+	background-color: #b1b4b7 !important;
+}
+
+input[name=toogle]:disabled::after {
+	background-color: #dcd8d8 !important;
+}
+
+/*OUTRAS CORES = Cores alternativas*/
+
+input[name=toogle].red:checked::before {
+	background-color: #fd4554;
+}
+
+input[name=toogle].blue:checked::before {
+	background-color: #0f90dc;
+}
+
+input[name=toogle].red:checked::before {
+	background-color: #fd4554;
+}
+
+input[name=toogle].purple:checked::before {
+	background-color: #9e3eff;
+}
 

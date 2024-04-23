@@ -1,6 +1,6 @@
 {
   "name": "Bot-Mwsm",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Bot-Mwsm: based on Whatsapp API",
   "main": "app.js",
   "scripts": {
@@ -20,8 +20,10 @@
     "express-fileupload": "^1.5.0",
     "express-validator": "^7.0.1",
     "http": "0.0.1-security",
+    "jspdf": "^2.5.1",
     "mime-types": "^2.1.35",
     "node-cron": "^3.0.3",
+    "puppeteer": "^22.6.5",
     "qrcode": "^1.5.3",
     "socket.io": "^2.5.0",
     "util": "^0.12.5",
