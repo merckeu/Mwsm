@@ -193,7 +193,7 @@ Altere o valor conforme suas necessidades.
 
 ** `Provedor > Controle de Usuarios > API`
 
-Copie ambos os codigos ( client e secret ), habilite a opção Endpoint `titulo.api` e clique em `gravar`
+Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
 
 <b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
