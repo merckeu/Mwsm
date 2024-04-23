@@ -605,13 +605,13 @@ app.post('/force-message', [
 			if (Send != "") {
 				client.sendMessage(WhatsApp, Send).then(response => {
 					Wait = WhatsApp;
-                                        Sending = (Sending + 1);
-						if (Sending == (Mensagem.length)) {
-							return res.status(201).json({
-								Status: "Success",
-								message: 'Bot-Mwsm : Message Sent'
-							});
-						}
+					Sending = (Sending + 1);
+					if (Sending == (Mensagem.length)) {
+						return res.status(201).json({
+							Status: "Success",
+							message: 'Bot-Mwsm : Message Sent'
+						});
+					}
 				}).catch(err => {
 					return res.status(500).json({
 						Status: "Fail",
@@ -708,13 +708,15 @@ app.post('/send-message', [
 	} else {
 		Delay = Debug('OPTIONS').sendwait;
 	}
-
-
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
-		Sending = 1;
+
 		setTimeout(function() {
+			var Sending = 1;
+			var Filter;
 			Mensagem.some(function(Send, index) {
 				delay(index * Debug('OPTIONS').interval).then(async function() {
+					var Preview = false;
+					var Caption;
 					var RETURNS = [];
 					const PIXFAIL = [undefined, "XXX", null, ""];
 					if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
@@ -733,8 +735,14 @@ app.post('/send-message', [
 						};
 						Send = await Cloud(Send);
 					}
+
+					var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').pdf];
+
 					if (testJSON(Send.replace(/'/g, '"'))) {
-						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						Filter = Send.replace(/'/g, '"');
+					}
+					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						if (testJSON(Send.replace(/'/g, '"')) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 							const Json = JSON.parse(Send.replace(/'/g, '"'));
 							const MkAUth = await MkAuth(Json.uid, Json.find);
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
@@ -753,62 +761,47 @@ app.post('/send-message', [
 								RETURNS.push('Boleto');
 							}
 
+
 							if (MkAUth.Status != "pago") {
-								Sending = 0;
 								(MkAUth.Payments).forEach(function(GET, index) {
+
 									if (RETURNS.includes(GET.caption)) {
+
 										switch (GET.caption) {
 											case 'Bar':
 												Send = GET.value;
 												Preview = false;
+												Caption = GET.caption;
 												break;
 											case 'Pix':
 												Send = GET.value;
 												Preview = false;
+												Caption = GET.caption;
 												break;
 											case 'QRCode':
 												Send = new MessageMedia('image/png', GET.value, 'Media');
 												Preview = false;
+												Caption = GET.caption;
 												break;
 											case 'Boleto':
 												Send = GET.value;
 												Preview = true;
+												Caption = GET.caption;
 												break;
 										}
-
-										client.sendMessage(WhatsApp, Send, {
-											caption: GET.caption,
-											linkPreview: Preview
-										}).then(response => {
-											Wait = WhatsApp;
-											Sending = (Sending + 1);
-											if (Sending == (RETURNS.length)) {
-												return res.status(201).json({
-													Status: "Success",
-													message: 'Bot-Mwsm : Message Sent'
-												});
-											}
-										}).catch(err => {
-											return res.status(500).json({
-												Status: "Fail",
-												message: 'Bot-Mwsm : Message was not Sent'
-											});
-										});
-
+										Mensagem.push(Send);
 									}
-								});
-								Send = false;
-							} else {
-								Send = false;
-							}
-						} else {
-							Send = false;
-						}
 
+								});
+							}
+						}
 					}
 
-					if (Send) {
-						client.sendMessage(WhatsApp, Send).then(response => {
+					if (Send != "") {
+						client.sendMessage(WhatsApp, Send, {
+							caption: Caption,
+							linkPreview: Preview
+						}).then(response => {
 							Wait = WhatsApp;
 							Sending = (Sending + 1);
 						}).catch(err => {
@@ -817,19 +810,23 @@ app.post('/send-message', [
 								message: 'Bot-Mwsm : Message was not Sent'
 							});
 						});
-						if (Sending == (Mensagem.length)) {
+						if (Sending >= (Mensagem.filter(function(v) {
+								return v !== '' + Filter + ''
+							}).length)) {
 							return res.status(201).json({
 								Status: "Success",
 								message: 'Bot-Mwsm : Message Sent'
 							});
 						}
-
-
+					} else {
+						return res.json({
+							Status: "Error"
+						});
 					}
+
 				});
 
 			});
-
 
 		}, Math.floor(Delay + Math.random() * 1000));
 	} else {
