@@ -198,7 +198,7 @@ Copie ambos os codigos ( client e secret ), habilite a opção Endpoint `titulo.
 <b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
 
-OBS: em server insira somente o dominio ex: www.provedorx.com que deve ser accessivel via https ou não conseguira conectar com a API do mkauth, apoós inserir os dados clique em Mkauth Link e aguarde a conclusão da sincronia
+OBS: em server insira somente o dominio ex: www.provedorx.com que deve ser accessivel via https ou não conseguira conectar com a API do mkauth, após inserir os dados clique em Mkauth Link e aguarde a conclusão da sincronia
 
 
 ### Extras :
