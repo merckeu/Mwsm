@@ -796,7 +796,9 @@ app.post('/send-message', [
 							}
 						}
 					}
-
+					if (Send == Filter) {
+						Send = "";
+					}
 					if (Send != "") {
 						client.sendMessage(WhatsApp, Send, {
 							caption: Caption,
