@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 11 (16/04/24)
+# MkAuth WhatsApp Send Message v2 beta 12 (23/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -39,15 +39,25 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 11   |  Adicionado suporte a envio de midias ( png e pdf ) + Atualização wwjs               |
+|  beta 12   |  Integração com API do Mkauth para envio de boleto, pix, qrcode + Correção de bugs   |
+
+> ### ATENÇÃO!: Integração com API do MkAuth
+> O Recurso PDF não foi concluido portanto se habilitado enviara o URL do boleto ao inves do PDF em sí,
+> a chamada do recurso será feita por codigo json onde o uid seria o login ou cpf do cliente e o find seria o identificador da mensalidade que pode ser o codigo do boleto ou numero do titulo conforme variaveis do mkauth
+> exemplo para teste no webadmin ( mkauth simulator )
+```sh
+{"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
+```
+Utilização no mkauth seria algo do tipo
+```sh
+{"uid":"%logincliente%","find":"%numerotitulo%"}
+```
 
 > ### ATENÇÃO!: envio de midia
 > Insira o URL do arquivo utilizando o separador ## para separar texto da midia seguindo o exemplo abaixo
 ```sh
 Mensagem1##Mensagem2##https://via.placeholder.com/350x150.png##Mensagem4
 ``` 
-
-
-
 
 ### Funcionalidade:
 * Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
@@ -176,6 +186,19 @@ Altere o valor conforme suas necessidades.
 
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+
+
+<b>5 - </b>Habilite a API do MKauth
+
+** `Provedor > Controle de Usuarios > API`
+
+Copie ambos os codigos ( client e secret ), habilite a opção Endpoint `titulo.api` e clique em `gravar`
+
+<b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
+
+OBS: em server insira somente o dominio ex: www.provedorx.com que deve ser accessivel via https ou não conseguira conectar com a API do mkauth, apoós inserir os dados clique em Mkauth Link e aguarde a conclusão da sincronia
+
 
 ### Extras :
 
