@@ -763,43 +763,46 @@ app.post('/send-message', [
 
 							if (MkAUth.Status != "pago") {
 								(MkAUth.Payments).forEach(function(GET, INDEX) {
-									if (RETURNS.includes(GET.caption)) {
-										switch (GET.caption) {
-											case 'Bar':
-												Connect = GET.value;
-												Preview = false;
-												Caption = GET.caption;
-												break;
-											case 'Pix':
-												Connect = GET.value;
-												Preview = false;
-												Caption = GET.caption;
-												break;
-											case 'QRCode':
-												Connect = new MessageMedia('image/png', GET.value, 'Media');
-												Preview = false;
-												Caption = GET.caption;
-												break;
-											case 'Boleto':
-												Connect = GET.value;
-												Preview = true;
-												Caption = GET.caption;
-												break;
-										}
-										client.sendMessage(WhatsApp, Connect, {
-											caption: Caption,
-											linkPreview: Preview
-										}).then(response => {
-											Wait = WhatsApp;
-											Sending = (Sending + 1);
-										}).catch(err => {
-											return res.status(500).json({
-												Status: "Fail",
-												message: 'Bot-Mwsm : Message was not Sent'
-											});
-										});
+									setTimeout(function() {
+										if (RETURNS.includes(GET.caption)) {
+											switch (GET.caption) {
+												case 'Bar':
+													Connect = GET.value;
+													Preview = false;
+													Caption = GET.caption;
+													break;
+												case 'Pix':
+													Connect = GET.value;
+													Preview = false;
+													Caption = GET.caption;
+													break;
+												case 'QRCode':
+													Connect = new MessageMedia('image/png', GET.value, 'Media');
+													Preview = false;
+													Caption = GET.caption;
+													break;
+												case 'Boleto':
+													Connect = GET.value;
+													Preview = true;
+													Caption = GET.caption;
+													break;
+											}
 
-									}
+											client.sendMessage(WhatsApp, Connect, {
+												caption: Caption,
+												linkPreview: Preview
+											}).then(response => {
+												Wait = WhatsApp;
+												Sending = (Sending + 1);
+											}).catch(err => {
+												return res.status(500).json({
+													Status: "Fail",
+													message: 'Bot-Mwsm : Message was not Sent'
+												});
+											});
+
+										}
+									}, Math.floor(Debug('OPTIONS').interval + Math.random() * 1000));
 
 								});
 							}
@@ -829,9 +832,9 @@ app.post('/send-message', [
 						}
 					} else {
 						return res.status(201).json({
-								Status: "Success",
-								message: 'Bot-Mwsm : Message Sent'
-							});
+							Status: "Success",
+							message: 'Bot-Mwsm : Message Sent'
+						});
 					}
 
 				});
