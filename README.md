@@ -44,7 +44,8 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 > ### ATENÇÃO!: Integração com API do MkAuth
 > O Recurso PDF não foi concluido portanto se habilitado enviara o URL do boleto ao inves do PDF em sí,
 > a chamada do recurso será feita por codigo json onde o uid seria o login ou cpf do cliente e o find seria o identificador da mensalidade que pode ser o codigo do boleto ou numero do titulo conforme variaveis do mkauth
-> exemplo para teste no webadmin ( mkauth simulator )
+ 
+exemplo para teste no webadmin ( mkauth simulator )
 ```sh
 {"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
 ```
