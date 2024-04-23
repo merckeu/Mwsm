@@ -98,7 +98,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 				SEARCH = MkSync;
 			}
 			(SEARCH).some(function(Send, index) {
-				if (Send.titulo == FIND) {
+				if (Send.titulo == FIND || Send.linhadig == FIND) {
 					Json = {
 						"Status": Send.status,
 						"Payments": [{
