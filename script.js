@@ -258,18 +258,26 @@ $(document).ready(function() {
 								if (data.Status == "Fail") {
 									var Icon = "fa-exclamation";
 								}
-								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.message, {
-									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-									life: 2000,
-									theme: 'Mwsm',
-									speed: 'slow',
-									close: function(e, m, o) {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-										$("#Waiting").fadeOut("slow", function() {
+								if (data.Status == "Error") {
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+									$("#Waiting").fadeOut("slow", function() {
 
-										});
-									}
-								});
+									});
+
+								} else {
+									$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.message, {
+										header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+										life: 2000,
+										theme: 'Mwsm',
+										speed: 'slow',
+										close: function(e, m, o) {
+											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+											$("#Waiting").fadeOut("slow", function() {
+
+											});
+										}
+									});
+								}
 							},
 							error: function(request, status, error) {
 								var Icon = "fa-exclamation";
@@ -449,7 +457,6 @@ $(document).ready(function() {
 								});
 
 							}
-
 							if (data.Status == "Fail") {
 								$("#token").prop('disabled', false).val("").focus();
 							}
