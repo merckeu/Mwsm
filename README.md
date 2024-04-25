@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 13 (23/04/24)
+# MkAuth WhatsApp Send Message v2 beta 14 (25/04/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -41,6 +41,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 |  beta 11   |  Adicionado suporte a envio de midias ( png e pdf ) + Atualização wwjs               |
 |  beta 12   |  Integração com API do Mkauth para envio de boleto, pix, qrcode + Correção de bugs   |
 |  beta 13   |  Correção de Disparos utilizando a API do MkAuth                                     |
+|  beta 14   |  Codigo de Disparos Refeito Utilizando Promisses para ordenamento de mensagens       |
 
 > ### ATENÇÃO!: Integração com API do MkAuth
 > O Recurso PDF não foi concluido portanto se habilitado enviara o URL do boleto ao inves do PDF em sí,
