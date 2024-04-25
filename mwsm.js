@@ -131,6 +131,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 };
 
 function testJSON(text) {
+	text = text.toString().replace(/'/g, '"');
 	if (typeof text !== "string") {
 		return false;
 	}
@@ -586,41 +587,76 @@ app.post('/force-message', [
 	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-	Sending = 1;
-	Mensagem.some(function(Send, index) {
-		delay(index * Debug('OPTIONS').interval).then(async function() {
-			if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-				const Cloud = async (Url) => {
-					let mimetype;
-					const attachment = await axios.get(Url, {
-						responseType: 'arraybuffer'
-					}).then(response => {
-						mimetype = response.headers['content-type'];
-						return response.data.toString('base64');
+	const Reconstructor = new Promise((resolve, reject) => {
+		if (Mensagem.some(Rows => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Rows.includes(Row)))) {
+			var Array = {};
+			Mensagem.some(function(Send, index) {
+				if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+					const Cloud = async (Url) => {
+						let mimetype;
+						const attachment = await axios.get(Url, {
+							responseType: 'arraybuffer'
+						}).then(response => {
+							mimetype = response.headers['content-type'];
+							return response.data.toString('base64');
+						});
+						return new MessageMedia(mimetype, attachment, 'Media');
+					};
+
+					Cloud(Send).then(Return => {
+						Array[Send] = Return;
+						resolve(Array);
+					}).catch(err => {
+						resolve(undefined);
 					});
-					return new MessageMedia(mimetype, attachment, 'Media');
-				};
-				Send = await Cloud(Send);
+				}
+			});
+		} else {
+			resolve(undefined);
+		}
+	});
+
+	delay(0).then(async function() {
+		const Retorno = await Promise.all([Reconstructor]);
+		var Assembly = [];
+		var Sending = 1;
+		Mensagem.some(function(Send, index) {
+			if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+				if (Retorno[1].hasOwnProperty(Send)) {
+					Assembly.push(Retorno[1][Send]);
+				}
+			} else {
+				Assembly.push(Send);
 			}
-			if (Send != "") {
-				client.sendMessage(WhatsApp, Send).then(response => {
+		});
+
+		Assembly.some(function(Send, index) {
+			setTimeout(function() {
+
+				var Preview = false;
+				var Caption = "QRCode";
+
+				client.sendMessage(WhatsApp, Send, {
+					caption: Caption,
+					linkPreview: Preview
+				}).then(response => {
 					Wait = WhatsApp;
 					Sending = (Sending + 1);
-					if (Sending == (Mensagem.length)) {
-						return res.status(201).json({
-							Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
-					}
 				}).catch(err => {
 					return res.status(500).json({
 						Status: "Fail",
 						message: 'Bot-Mwsm : Message was not Sent'
 					});
 				});
-			}
-		});
 
+				if (Sending >= Assembly.length) {
+					return res.status(201).json({
+						Status: "Success",
+						message: 'Bot-Mwsm : Message Sent'
+					});
+				}
+			}, index * Debug('OPTIONS').interval);
+		});
 	});
 });
 
@@ -703,48 +739,25 @@ app.post('/send-message', [
 		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
 
-	if (WhatsApp == Wait || Wait == undefined) {
-		Delay = 300;
-	} else {
-		Delay = Debug('OPTIONS').sendwait;
-	}
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 
-		setTimeout(function() {
-			var Sending = 1;
-			var Filter;
-			Mensagem.some(function(Send, index) {
-				delay(index * Debug('OPTIONS').interval).then(async function() {
-					var Preview = false;
-					var Caption, Connect;
-					var RETURNS = [];
-					const PIXFAIL = [undefined, "XXX", null, ""];
-					if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
-						Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
-					}
-					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-						const Cloud = async (Url) => {
-							let mimetype;
-							const attachment = await axios.get(Url, {
-								responseType: 'arraybuffer'
-							}).then(response => {
-								mimetype = response.headers['content-type'];
-								return response.data.toString('base64');
-							});
-							return new MessageMedia(mimetype, attachment, 'Media');
-						};
-						Send = await Cloud(Send);
-					}
+		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').pdf];
 
-					var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').pdf];
 
-					if (testJSON(Send.replace(/'/g, '"'))) {
-						Filter = Send.replace(/'/g, '"');
-					}
-					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (testJSON(Send.replace(/'/g, '"')) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-							const Json = JSON.parse(Send.replace(/'/g, '"'));
-							const MkAUth = await MkAuth(Json.uid, Json.find);
+
+
+		const Constructor = new Promise((resolve, reject) => {
+
+			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+				var Array = [];
+				var Preview = false;
+				var Caption, Send;
+				var RETURNS = [];
+				Mensagem.some(function(Send, index) {
+					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
+						const Json = JSON.parse(Send);
+						MkAuth(Json.uid, Json.find).then(Synchronization => {
+
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
 							}
@@ -760,58 +773,134 @@ app.post('/send-message', [
 							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 								RETURNS.push('Boleto');
 							}
-
-							if (MkAUth.Status != "pago") {
-								(MkAUth.Payments).forEach(function(GET, INDEX) {
-									setTimeout(function() {
-										if (RETURNS.includes(GET.caption)) {
-											switch (GET.caption) {
-												case 'Bar':
-													Connect = GET.value;
-													Preview = false;
-													Caption = GET.caption;
-													break;
-												case 'Pix':
-													Connect = GET.value;
-													Preview = false;
-													Caption = GET.caption;
-													break;
-												case 'QRCode':
-													Connect = new MessageMedia('image/png', GET.value, 'Media');
-													Preview = false;
-													Caption = GET.caption;
-													break;
-												case 'Boleto':
-													Connect = GET.value;
-													Preview = true;
-													Caption = GET.caption;
-													break;
-											}
-
-											client.sendMessage(WhatsApp, Connect, {
-												caption: Caption,
-												linkPreview: Preview
-											}).then(response => {
-												Wait = WhatsApp;
-												Sending = (Sending + 1);
-											}).catch(err => {
-												return res.status(500).json({
-													Status: "Fail",
-													message: 'Bot-Mwsm : Message was not Sent'
-												});
-											});
-
+							if (Synchronization.Status != "pago") {
+								(Synchronization.Payments).forEach(function(GET, index) {
+									if (RETURNS.includes(GET.caption)) {
+										switch (GET.caption) {
+											case 'Bar':
+												Send = GET.value;
+												Caption = GET.caption;
+												break;
+											case 'Pix':
+												Send = GET.value;
+												Caption = GET.caption;
+												break;
+											case 'QRCode':
+												Send = new MessageMedia('image/png', GET.value, GET.caption);
+												Caption = GET.caption;
+												break;
+											case 'Boleto':
+												Send = GET.value;
+												Caption = GET.caption;
+												break;
 										}
-									}, Math.floor(Debug('OPTIONS').interval + Math.random() * 1000));
-
+										Array.push(Send);
+									}
+									if((Array.length == RETURNS.length) && ((Synchronization.Payments).length == (index+1))){
+										resolve(Array);
+									}
 								});
 							}
+						}).catch(err => {
+							resolve(undefined);
+						});
+					}
+				});
+			} else {
+				resolve(undefined);
+			}
+		});
+
+		const Reconstructor = new Promise((resolve, reject) => {
+			if (Mensagem.some(Rows => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Rows.includes(Row)))) {
+				var Array = {};
+				Mensagem.some(function(Send, index) {
+					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+						const Cloud = async (Url) => {
+							let mimetype;
+							const attachment = await axios.get(Url, {
+								responseType: 'arraybuffer'
+							}).then(response => {
+								mimetype = response.headers['content-type'];
+								return response.data.toString('base64');
+							});
+							return new MessageMedia(mimetype, attachment, 'Media');
+						};
+						Cloud(Send).then(Return => {
+							Array[Send] = Return;
+							resolve(Array);
+						}).catch(err => {
+							resolve(undefined);
+						});
+					}
+				});
+			} else {
+				resolve(undefined);
+			}
+		});
+
+		delay(0).then(async function() {
+			const Retorno = await Promise.all([Constructor, Reconstructor]);
+			var Assembly = [];
+			var Sending = 1;
+			Mensagem.some(function(Send, index) {
+				if (testJSON(Send)) {
+					if (Retorno[0] != undefined) {
+						for (let i = 0; i < Retorno[0].length; i++) {
+							Assembly.push(Retorno[0][i]);
 						}
 					}
-					if (Send == Filter) {
-						Send = "";
+				} else {
+					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+						if (Retorno[1].hasOwnProperty(Send)) {
+							Assembly.push(Retorno[1][Send]);
+						}
+					} else {
+						Assembly.push(Send);
 					}
-					if (Send != "") {
+				}
+			});
+
+			if (WhatsApp == Wait || Wait == undefined) {
+				Delay = 300;
+			} else {
+				Delay = Debug('OPTIONS').sendwait;
+			}
+
+			setTimeout(function() {
+				Assembly.some(function(Send, index) {
+					const PIXFAIL = [undefined, "XXX", null, ""];
+					if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+						Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+					}
+
+					setTimeout(function() {
+						if (typeof Send === 'string') {
+
+							if ((Send.indexOf("boleto.hhvm") > -1)) {
+								Caption = "Boleto";
+								Preview = true;
+							} else {
+								if ((Send.indexOf("http") > -1)) {
+									Caption = undefined;
+									Preview = true;
+
+								} else {
+									Caption = undefined;
+									Preview = false;
+
+								}
+							}
+						} else {
+							if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+								Caption = JSON.parse(JSON.stringify(Send)).filename;
+								Preview = false;
+							} else {
+								Caption = undefined;
+								Preview = false;
+							}
+						}
+
 						client.sendMessage(WhatsApp, Send, {
 							caption: Caption,
 							linkPreview: Preview
@@ -824,24 +913,17 @@ app.post('/send-message', [
 								message: 'Bot-Mwsm : Message was not Sent'
 							});
 						});
-						if (await Sending >= (Mensagem.length)) {
-							return res.status(201).json({
+						if (Sending >= Assembly.length) {
+							return res.json({
 								Status: "Success",
 								message: 'Bot-Mwsm : Message Sent'
 							});
 						}
-					} else {
-						return res.status(201).json({
-							Status: "Success",
-							message: 'Bot-Mwsm : Message Sent'
-						});
-					}
-
+					}, index * Debug('OPTIONS').interval);
 				});
+			}, Math.floor(Delay + Math.random() * 1000));
 
-			});
-
-		}, Math.floor(Delay + Math.random() * 1000));
+		});
 	} else {
 		console.log("Mensagem Agendada");
 	}
