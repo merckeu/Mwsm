@@ -628,14 +628,13 @@ app.post('/force-message', [
 		var Sending = 1;
 		Mensagem.some(function(Send, index) {
 			if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-				if (Retorno[1].hasOwnProperty(Send)) {
-					Assembly.push(Retorno[1][Send]);
+				if (Retorno[0].hasOwnProperty(Send)) {
+					Assembly.push(Retorno[0][Send]);
 				}
 			} else {
 				Assembly.push(Send);
 			}
 		});
-
 		Assembly.some(function(Send, index) {
 			setTimeout(function() {
 
