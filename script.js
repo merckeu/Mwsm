@@ -30,6 +30,16 @@ $(document).ready(function() {
 		MkAuth("#qrpix", Enable);
 	});
 
+	$("#qrlink").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		MkAuth("#qrlink", Enable);
+	});
+
+
 	$("#pdf").on('change', function() {
 		if ($(this).is(":checked")) {
 			Enable = true;
@@ -624,6 +634,17 @@ $(document).ready(function() {
 				break;
 			case 'false':
 				$("#qrpix").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('qrlink', function(data) {
+		switch (data) {
+			case 'true':
+				$("#qrlink").prop("checked", true);
+				break;
+			case 'false':
+				$("#qrlink").prop("checked", false);
 				break;
 		}
 	});

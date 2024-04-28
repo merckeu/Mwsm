@@ -25,6 +25,7 @@ const hostName = os.hostname();
 const server = http.createServer(app);
 const io = socketIO(server);
 const sys = require('util');
+const ip = require('ip');
 const puppeteer = require('puppeteer');
 const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
@@ -112,6 +113,10 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 							{
 								"value": Send.pix_qr.split("base64,")[1],
 								"caption": "QRCode"
+							},
+							{
+								"value": Send.pix_link,
+								"caption": "Link"
 							},
 							{
 								"value": "https://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
@@ -427,6 +432,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('bar', Debug('MKAUTH').bar);
 		global.io.emit('pix', Debug('MKAUTH').pix);
 		global.io.emit('qrpix', Debug('MKAUTH').qrpix);
+		global.io.emit('qrlink', Debug('MKAUTH').qrlink);
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		res.json({
 			Status: "Success",
@@ -469,6 +475,7 @@ app.post('/getdata', (req, res) => {
 				bar: Debug('MKAUTH').bar,
 				pix: Debug('MKAUTH').pix,
 				qrpix: Debug('MKAUTH').qrpix,
+				qrlink: Debug('MKAUTH').qrlink,
 				pdf: Debug('MKAUTH').pdf,
 			});
 
@@ -543,7 +550,7 @@ app.post('/sqlite-options', (req, res) => {
 		} else {
 			res.json({
 				Status: "Fail",
-				Return: "Enter all Data"
+				Return: Debug('CONSOLE').unnamed
 			});
 		}
 
@@ -740,14 +747,8 @@ app.post('/send-message', [
 	}
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
-
-		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').pdf];
-
-
-
-
+		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
 		const Constructor = new Promise((resolve, reject) => {
-
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 				var Array = [];
 				var Preview = false;
@@ -770,6 +771,10 @@ app.post('/send-message', [
 								RETURNS.push('QRCode');
 							}
 
+							if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+								RETURNS.push('Link');
+							}
+
 							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 								RETURNS.push('Boleto');
 							}
@@ -789,6 +794,10 @@ app.post('/send-message', [
 												Send = new MessageMedia('image/png', GET.value, GET.caption);
 												Caption = GET.caption;
 												break;
+											case 'Link':
+												Send = GET.value;
+												Caption = GET.caption;
+												break;
 											case 'Boleto':
 												Send = GET.value;
 												Caption = GET.caption;
@@ -796,7 +805,7 @@ app.post('/send-message', [
 										}
 										Array.push(Send);
 									}
-									if((Array.length == RETURNS.length) && ((Synchronization.Payments).length == (index+1))){
+									if ((Array.length == RETURNS.length) && ((Synchronization.Payments).length == (index + 1))) {
 										resolve(Array);
 									}
 								});
@@ -867,62 +876,71 @@ app.post('/send-message', [
 				Delay = Debug('OPTIONS').sendwait;
 			}
 
-			setTimeout(function() {
-				Assembly.some(function(Send, index) {
-					const PIXFAIL = [undefined, "XXX", null, ""];
-					if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
-						Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
-					}
-
-					setTimeout(function() {
-						if (typeof Send === 'string') {
-
-							if ((Send.indexOf("boleto.hhvm") > -1)) {
-								Caption = "Boleto";
-								Preview = true;
-							} else {
-								if ((Send.indexOf("http") > -1)) {
-									Caption = undefined;
+			if (Assembly.length >= 1) {
+				setTimeout(function() {
+					Assembly.some(function(Send, index) {
+						const PIXFAIL = [undefined, "XXX", null, ""];
+						if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+							Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+						}
+						setTimeout(function() {
+							if (typeof Send === 'string') {
+								if ((Send.indexOf("boleto.hhvm") > -1)) {
+									Caption = "Boleto";
 									Preview = true;
+								} else {
+									if ((Send.indexOf("http") > -1)) {
+										Caption = undefined;
+										Preview = true;
 
+									} else {
+										Caption = undefined;
+										Preview = false;
+									}
+								}
+							} else {
+								if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+									Caption = JSON.parse(JSON.stringify(Send)).filename;
+									Preview = false;
 								} else {
 									Caption = undefined;
 									Preview = false;
-
 								}
 							}
-						} else {
-							if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
-								Caption = JSON.parse(JSON.stringify(Send)).filename;
-								Preview = false;
-							} else {
-								Caption = undefined;
-								Preview = false;
+							client.sendMessage(WhatsApp, Send, {
+								caption: Caption,
+								linkPreview: Preview
+							}).then(response => {
+								Wait = WhatsApp;
+								Sending = (Sending + 1);
+							}).catch(err => {
+								return res.status(500).json({
+									Status: "Fail",
+									message: 'Bot-Mwsm : Message was not Sent'
+								});
+							});
+							if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+								return res.json({
+									Status: "Success",
+									message: 'Bot-Mwsm : Message Sent'
+								});
 							}
-						}
-
-						client.sendMessage(WhatsApp, Send, {
-							caption: Caption,
-							linkPreview: Preview
-						}).then(response => {
-							Wait = WhatsApp;
-							Sending = (Sending + 1);
-						}).catch(err => {
-							return res.status(500).json({
-								Status: "Fail",
-								message: 'Bot-Mwsm : Message was not Sent'
-							});
-						});
-						if (Sending >= Assembly.length) {
-							return res.json({
-								Status: "Success",
-								message: 'Bot-Mwsm : Message Sent'
-							});
-						}
-					}, index * Debug('OPTIONS').interval);
-				});
-			}, Math.floor(Delay + Math.random() * 1000));
-
+						}, index * Debug('OPTIONS').interval);
+					});
+				}, Math.floor(Delay + Math.random() * 1000));
+			} else {
+				if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+					return res.json({
+						Status: "Fail",
+						message: Debug('CONSOLE').mkunselect
+					});
+				} else {
+					return res.json({
+						Status: "Fail",
+						message: Debug('CONSOLE').unnamed
+					});
+				}
+			}
 		});
 	} else {
 		console.log("Mensagem Agendada");
@@ -1018,5 +1036,5 @@ client.on('message', async msg => {
 console.log("\nAPI is Ready!\n");
 const Port = process.env.PORT || Debug('OPTIONS').access;
 server.listen(Port, function() {
-	console.log('Server Running on Port *: ' + Port);
+	console.log('Server Running on *' + ip.address() + ':' + Port);
 });
