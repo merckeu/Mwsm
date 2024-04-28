@@ -26,7 +26,6 @@ const server = http.createServer(app);
 const io = socketIO(server);
 const sys = require('util');
 const ip = require('ip');
-const puppeteer = require('puppeteer');
 const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
 const sqlite3 = require('sqlite3').verbose();
