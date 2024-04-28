@@ -639,7 +639,7 @@ app.post('/force-message', [
 			setTimeout(function() {
 
 				var Preview = false;
-				var Caption = "QRCode";
+				var Caption = "Media";
 
 				client.sendMessage(WhatsApp, Send, {
 					caption: Caption,
