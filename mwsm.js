@@ -956,7 +956,7 @@ client.on('message', async msg => {
 	const NULLED = [undefined, "XXX", null, ""];
 
 	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(Debug('OPTIONS').token)) {
-		if (msg.body.includes(":") && msg.body.replace(/[^a-z0-9]/gi, '').length == 12) {
+		if (msg.body.includes(":") && msg.body.split(":")[1].length == 7) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
 				if (err) throw err;
 				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').saved);
