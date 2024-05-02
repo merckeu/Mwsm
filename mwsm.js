@@ -447,7 +447,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('qrpix', Debug('MKAUTH').qrpix);
 		global.io.emit('qrlink', Debug('MKAUTH').qrlink);
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
-                global.io.emit('delay', Debug('MKAUTH').delay);
+		global.io.emit('delay', Debug('MKAUTH').delay);
 		res.json({
 			Status: "Success",
 			Return: Debug('CONSOLE').right
@@ -491,7 +491,7 @@ app.post('/getdata', (req, res) => {
 				qrpix: Debug('MKAUTH').qrpix,
 				qrlink: Debug('MKAUTH').qrlink,
 				pdf: Debug('MKAUTH').pdf,
-                                delay: Debug('MKAUTH').delay,
+				delay: Debug('MKAUTH').delay,
 			});
 
 		}
@@ -519,20 +519,20 @@ app.post('/options_mkauth', (req, res) => {
 // Delay Mkauth
 app.post('/delay_mkauth', (req, res) => {
 	const range = req.body.range;
-if(Debug('MKAUTH').delay != range){
-	db.run("UPDATE mkauth SET delay=?", [range], (err) => {
-		if (err) {
+	if (Debug('MKAUTH').delay != range) {
+		db.run("UPDATE mkauth SET delay=?", [range], (err) => {
+			if (err) {
+				res.json({
+					Status: "Fail",
+					Return: Debug('MKAUTH').delay
+				});
+			}
 			res.json({
-				Status: "Fail",
-				Return: Debug('MKAUTH').delay
+				Status: "Success",
+				Return: range
 			});
-		}
-		res.json({
-			Status: "Success",
-			Return: range 
 		});
-	});
-}
+	}
 });
 
 
@@ -884,9 +884,9 @@ app.post('/send-message', [
 		delay(0).then(async function() {
 			const Retorno = await Promise.all([Constructor, Reconstructor]);
 			var Boleto, PDF2Base64, Sleep = 0;
-                        if(Debug('MKAUTH').delay >= 1){
-                         Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
-                        }
+			if (Debug('MKAUTH').delay >= 1) {
+				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
+			}
 			if (Retorno[0] != undefined) {
 				for (let i = 0; i < Retorno[0].length; i++) {
 					if (typeof Retorno[0][i] === 'string') {
@@ -922,7 +922,8 @@ app.post('/send-message', [
 			}
 			delay(Sleep).then(async function() {
 				var Assembly = [];
-				var Sending = 1;
+				var Sending = 1,
+					Ryzen = 0;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
 						if (Retorno[0] != undefined) {
@@ -974,44 +975,50 @@ app.post('/send-message', [
 										}
 										Caption = "Boleto";
 										Preview = true;
+										Ryzen = 1000;
 									} else {
 										if ((Send.indexOf("http") > -1)) {
 											Caption = undefined;
 											Preview = true;
-
+											Ryzen = 1000;
 										} else {
 											Caption = undefined;
 											Preview = false;
+											Ryzen = 0;
 										}
 									}
 								} else {
 									if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
 										Caption = JSON.parse(JSON.stringify(Send)).filename;
 										Preview = false;
+										Ryzen = 0;
 									} else {
 										Caption = undefined;
 										Preview = false;
+										Ryzen = 0;
 									}
 								}
-								client.sendMessage(WhatsApp, Send, {
-									caption: Caption,
-									linkPreview: Preview
-								}).then(response => {
-									Wait = WhatsApp;
-									Sending = (Sending + 1);
-								}).catch(err => {
-									return res.status(500).json({
-										Status: "Fail",
-										message: 'Bot-Mwsm : Message was not Sent'
+								setTimeout(function() {
+									client.sendMessage(WhatsApp, Send, {
+										caption: Caption,
+										linkPreview: Preview
+									}).then(response => {
+										Wait = WhatsApp;
+										Sending = (Sending + 1);
+									}).catch(err => {
+										return res.status(500).json({
+											Status: "Fail",
+											message: 'Bot-Mwsm : Message was not Sent'
+										});
 									});
-								});
-								if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
-									return res.json({
-										Status: "Success",
-										message: 'Bot-Mwsm : Message Sent'
-									});
-								}
-							}, index * Debug('OPTIONS').interval);
+									if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+										return res.json({
+											Status: "Success",
+											message: 'Bot-Mwsm : Message Sent'
+										});
+									}
+								}, (index + Debug('MKAUTH').delay) * 1000);
+							}, (index) * Debug('OPTIONS').interval);
 						});
 					}, Math.floor(Delay + Math.random() * 1000));
 				} else {
