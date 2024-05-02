@@ -968,6 +968,7 @@ app.post('/send-message', [
 							setTimeout(function() {
 								if (typeof Send === 'string') {
 									if ((Send.indexOf("boleto.hhvm") > -1)) {
+										Ryzen = 1000;
 										if (Boleto != undefined) {
 											if (typeof Boleto !== 'string') {
 												Send = Boleto;
@@ -988,11 +989,11 @@ app.post('/send-message', [
 									if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
 										Caption = JSON.parse(JSON.stringify(Send)).filename;
 										Preview = false;
-										Ryzen = 1000;
 									} else {
 										Caption = undefined;
 										Preview = false;
 									}
+									Ryzen = 1000;
 								}
 								setTimeout(function() {
 									client.sendMessage(WhatsApp, Send, {
