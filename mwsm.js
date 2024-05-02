@@ -1,3 +1,6 @@
+//******************************************************************
+const Protocol = "http";
+//******************************************************************
 const {
 	Client,
 	LocalAuth,
@@ -25,7 +28,10 @@ const hostName = os.hostname();
 const server = http.createServer(app);
 const io = socketIO(server);
 const sys = require('util');
+const fs = require("fs");
 const ip = require('ip');
+const Url2PDF = require("Url2PDF");
+const htmlPDF = new Url2PDF();
 const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
 const sqlite3 = require('sqlite3').verbose();
@@ -55,6 +61,14 @@ function Debug(Select, Search = '*', Mode = 'single') {
 	return Select;
 }
 
+Array.prototype.someAsync = function(callbackfn) {
+	return new Promise(async (resolve, reject) => {
+		await Promise.all(this.map(async item => {
+			if (await callbackfn(item)) resolve(true)
+		})).catch(reject)
+		resolve(false)
+	})
+}
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -433,6 +447,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('qrpix', Debug('MKAUTH').qrpix);
 		global.io.emit('qrlink', Debug('MKAUTH').qrlink);
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
+                global.io.emit('delay', Debug('MKAUTH').delay);
 		res.json({
 			Status: "Success",
 			Return: Debug('CONSOLE').right
@@ -476,6 +491,7 @@ app.post('/getdata', (req, res) => {
 				qrpix: Debug('MKAUTH').qrpix,
 				qrlink: Debug('MKAUTH').qrlink,
 				pdf: Debug('MKAUTH').pdf,
+                                delay: Debug('MKAUTH').delay,
 			});
 
 		}
@@ -498,6 +514,25 @@ app.post('/options_mkauth', (req, res) => {
 			Return: enable
 		});
 	});
+});
+
+// Delay Mkauth
+app.post('/delay_mkauth', (req, res) => {
+	const range = req.body.range;
+if(Debug('MKAUTH').delay != range){
+	db.run("UPDATE mkauth SET delay=?", [range], (err) => {
+		if (err) {
+			res.json({
+				Status: "Fail",
+				Return: Debug('MKAUTH').delay
+			});
+		}
+		res.json({
+			Status: "Success",
+			Return: range 
+		});
+	});
+}
 });
 
 
@@ -564,7 +599,7 @@ app.post('/sqlite-options', (req, res) => {
 
 
 
-// Force message
+// Force Message
 app.post('/force-message', [
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
@@ -713,7 +748,7 @@ app.post('/link_mkauth', async (req, res) => {
 	}
 });
 
-// Send message
+// Send Message
 app.post('/send-message', [
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
@@ -819,7 +854,7 @@ app.post('/send-message', [
 		});
 
 		const Reconstructor = new Promise((resolve, reject) => {
-			if (Mensagem.some(Rows => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Rows.includes(Row)))) {
+			if (Mensagem.some(Row => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Rows => Row.includes(Rows)))) {
 				var Array = {};
 				Mensagem.some(function(Send, index) {
 					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
@@ -848,104 +883,204 @@ app.post('/send-message', [
 
 		delay(0).then(async function() {
 			const Retorno = await Promise.all([Constructor, Reconstructor]);
-			var Assembly = [];
-			var Sending = 1;
-			Mensagem.some(function(Send, index) {
-				if (testJSON(Send)) {
-					if (Retorno[0] != undefined) {
-						for (let i = 0; i < Retorno[0].length; i++) {
-							Assembly.push(Retorno[0][i]);
+			var Boleto, PDF2Base64, Sleep = 0;
+                        if(Debug('MKAUTH').delay >= 1){
+                         Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
+                        }
+			if (Retorno[0] != undefined) {
+				for (let i = 0; i < Retorno[0].length; i++) {
+					if (typeof Retorno[0][i] === 'string') {
+						if ((Retorno[0][i].indexOf("boleto.hhvm") > -1)) {
+							const UID = Retorno[0][i].split("=")[1];
+							Boleto = await Build(Retorno[0][i]);
+							PDF2Base64 = await new Promise((resolve, reject) => {
+								if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Boleto.includes(Row))) {
+									const Cloud = async (Url) => {
+										let mimetype;
+										const attachment = await axios.get(Url, {
+											responseType: 'arraybuffer'
+										}).then(response => {
+											mimetype = response.headers['content-type'];
+											return response.data.toString('base64');
+										});
+										return new MessageMedia(mimetype, attachment, 'Fatura');
+									};
+									Cloud(Boleto).then(Return => {
+										resolve(Return);
+									}).catch(err => {
+										resolve(undefined);
+									});
+								}
+							});
+							Boleto = await PDF2Base64;
+							if (fs.existsSync(__dirname + "/" + UID + ".pdf")) {
+								fs.unlinkSync(__dirname + "/" + UID + ".pdf");
+							}
 						}
-					}
-				} else {
-					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-						if (Retorno[1].hasOwnProperty(Send)) {
-							Assembly.push(Retorno[1][Send]);
-						}
-					} else {
-						Assembly.push(Send);
 					}
 				}
-			});
-
-			if (WhatsApp == Wait || Wait == undefined) {
-				Delay = 300;
-			} else {
-				Delay = Debug('OPTIONS').sendwait;
 			}
-
-			if (Assembly.length >= 1) {
-				setTimeout(function() {
-					Assembly.some(function(Send, index) {
-						const PIXFAIL = [undefined, "XXX", null, ""];
-						if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
-							Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+			delay(Sleep).then(async function() {
+				var Assembly = [];
+				var Sending = 1;
+				Mensagem.someAsync(async (Send) => {
+					if (testJSON(Send)) {
+						if (Retorno[0] != undefined) {
+							for (let i = 0; i < Retorno[0].length; i++) {
+								Assembly.push(Retorno[0][i]);
+							}
 						}
-						setTimeout(function() {
+					} else {
+						if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
 							if (typeof Send === 'string') {
-								if ((Send.indexOf("boleto.hhvm") > -1)) {
-									Caption = "Boleto";
-									Preview = true;
+								if ((Send.indexOf("http") > -1)) {
+									if (Retorno[1].hasOwnProperty(Send)) {
+										Assembly.push(Retorno[1][Send]);
+									}
 								} else {
-									if ((Send.indexOf("http") > -1)) {
-										Caption = undefined;
-										Preview = true;
+									Assembly.push(Send);
+								}
+							} else {
+								if (Retorno[1].hasOwnProperty(Send)) {
+									Assembly.push(Retorno[1][Send]);
+								}
+							}
+						} else {
+							Assembly.push(Send);
+						}
+					}
+				});
 
+				if (WhatsApp == Wait || Wait == undefined) {
+					Delay = 300;
+				} else {
+					Delay = Debug('OPTIONS').sendwait;
+				}
+
+				if (Assembly.length >= 1) {
+					setTimeout(function() {
+						Assembly.some(function(Send, index) {
+							const PIXFAIL = [undefined, "XXX", null, ""];
+							if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+								Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+							}
+							setTimeout(function() {
+								if (typeof Send === 'string') {
+									if ((Send.indexOf("boleto.hhvm") > -1)) {
+										if (Boleto != undefined) {
+											if (typeof Boleto !== 'string') {
+												Send = Boleto;
+											}
+										}
+										Caption = "Boleto";
+										Preview = true;
+									} else {
+										if ((Send.indexOf("http") > -1)) {
+											Caption = undefined;
+											Preview = true;
+
+										} else {
+											Caption = undefined;
+											Preview = false;
+										}
+									}
+								} else {
+									if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+										Caption = JSON.parse(JSON.stringify(Send)).filename;
+										Preview = false;
 									} else {
 										Caption = undefined;
 										Preview = false;
 									}
 								}
-							} else {
-								if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
-									Caption = JSON.parse(JSON.stringify(Send)).filename;
-									Preview = false;
-								} else {
-									Caption = undefined;
-									Preview = false;
+								client.sendMessage(WhatsApp, Send, {
+									caption: Caption,
+									linkPreview: Preview
+								}).then(response => {
+									Wait = WhatsApp;
+									Sending = (Sending + 1);
+								}).catch(err => {
+									return res.status(500).json({
+										Status: "Fail",
+										message: 'Bot-Mwsm : Message was not Sent'
+									});
+								});
+								if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+									return res.json({
+										Status: "Success",
+										message: 'Bot-Mwsm : Message Sent'
+									});
 								}
-							}
-							client.sendMessage(WhatsApp, Send, {
-								caption: Caption,
-								linkPreview: Preview
-							}).then(response => {
-								Wait = WhatsApp;
-								Sending = (Sending + 1);
-							}).catch(err => {
-								return res.status(500).json({
-									Status: "Fail",
-									message: 'Bot-Mwsm : Message was not Sent'
-								});
-							});
-							if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
-								return res.json({
-									Status: "Success",
-									message: 'Bot-Mwsm : Message Sent'
-								});
-							}
-						}, index * Debug('OPTIONS').interval);
-					});
-				}, Math.floor(Delay + Math.random() * 1000));
-			} else {
-				if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-					return res.json({
-						Status: "Fail",
-						message: Debug('CONSOLE').mkunselect
-					});
+							}, index * Debug('OPTIONS').interval);
+						});
+					}, Math.floor(Delay + Math.random() * 1000));
 				} else {
-					return res.json({
-						Status: "Fail",
-						message: Debug('CONSOLE').unnamed
-					});
+					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						return res.json({
+							Status: "Fail",
+							message: Debug('CONSOLE').mkunselect
+						});
+					} else {
+						return res.json({
+							Status: "Fail",
+							message: Debug('CONSOLE').unnamed
+						});
+					}
 				}
-			}
+			});
 		});
 	} else {
 		console.log("Mensagem Agendada");
 	}
 });
 
+// Html to PDF
+app.get('/build', [
+	body('uid').notEmpty()
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		uid
+	}) => {
+		return uid;
+	});
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			status: false,
+			message: errors.mapped()
+		});
+	}
+	const GET = req.body.uid;
+	const UID = GET.split('=')[1];
+	const URL = ([GET]);
+	URL.someAsync(async (Send) => {
+		htmlPDF.setOptions({
+			format: "A4",
+			timeout: 5000
+		});
+		htmlPDF.setAutoCloseBrowser(false);
+		const Buffer = await htmlPDF.create(Send);
+		const Patch = `${__dirname}/${UID}.pdf`;
+		await htmlPDF.writeFile(Buffer, Patch);
+		return res.json({
+			Return: Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
+		});
+	});
+});
+const Build = async (SET) => {
+	const PDFGet = await axios.get(Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/build", {
+		data: {
+			uid: SET,
+		}
+	}).then(response => {
+		return response.data;
+	}).catch(err => {
+		return false;
+	});
+	return await PDFGet['Return'];
+};
 
+
+// WhatsApp Bot
 client.on('message', async msg => {
 	const nomeContato = msg._data.notifyName;
 	let groupChat = await msg.getChat();
@@ -1028,7 +1163,6 @@ client.on('message', async msg => {
 
 		});
 	}
-
 });
 
 console.log("\nAPI is Ready!\n");

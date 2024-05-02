@@ -7362,3 +7362,6 @@ input[name=toogle].purple:checked::before {
 	background-color: #9e3eff;
 }
 
+input[type="range"] {
+  accent-color: #0f90dc;
+}

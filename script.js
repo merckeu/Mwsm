@@ -49,6 +49,40 @@ $(document).ready(function() {
 		MkAuth("#pdf", Enable);
 	});
 
+	$("#inject").on('change', function() {
+		var Range = $("#ranger").val();
+		$.ajax({
+			type: "POST",
+			url: "/delay_mkauth",
+			data: {
+				range: Range,
+			},
+
+			success: function(data) {
+				if (data.Status == "Fail") {
+					$("#inject").val(data.Return);
+				}
+			},
+			error: function(request, status, error) {
+				var Icon = "fa-exclamation";
+				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+					life: 2000,
+					theme: 'Mwsm',
+					speed: 'slow',
+					close: function(e, m, o) {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+						$("#Waiting").fadeOut("slow", function() {
+							$("#inject").val(Range);
+						});
+					}
+				});
+			}
+		});
+
+	});
+
+
 	function MkAuth(OPTION, SET) {
 		$.ajax({
 			type: "POST",
@@ -588,6 +622,10 @@ $(document).ready(function() {
 	});
 	socket.on('limiter', function(data) {
 		$('#limiter').val(data);
+	});
+
+	socket.on('delay', function(data) {
+		$('#inject, #ranger').val(data);
 	});
 
 	socket.on('onbot', function(data) {

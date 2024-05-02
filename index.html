@@ -273,7 +273,7 @@
 							</div>
 						</div>
 						
-												<div id="tabs-2E" style="z-index:1;">
+						<div id="tabs-2E" style="z-index:1;">
 							<div class="row" style="padding:0px 10px;height:220px;">
 								<div class="row">
 									<div class="col-75">
@@ -307,14 +307,26 @@
 													<div class="row" style="margin-top:10px;">
 														<div class="col-50">
 															<label for="Server">Server</label>
-															<div class="input-group mb-3" style="height:40px;width:540x;">
+															<div class="input-group mb-3" style="height:40px;width:480px">
 																<div class="input-group-prepend">
 																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-server" aria-hidden="true"></i></i></span>
 																</div>
-																<input type="password" id="domain" placeholder="MKAUTH-DOMAIN SSL" style="width:91%;">
+																<input type="password" id="domain" placeholder="MKAUTH-DOMAIN SSL" style="width:80%;">
 															</div>
 															
 														</div>
+														
+														<div class="col-15" style="margin-left:-60px;">
+															<label for="Server">Delay</label>
+															<div class="input-group mb-3" style="height:40px;width:120px;">
+																<form>
+																	<input type="range" id="inject" name="amountRange" min="0" max="10" value="0" oninput="this.form.amountInput.value=this.value" style="width:80px;" />
+																	<input type="number" id="ranger" name="amountInput" min="0" max="10" value="0" oninput="this.form.amountRange.value=this.value" style="width:30px;border:none;padding:0px;color:#0f90dc;" disabled>
+																</form>
+															</div>
+															
+														</div>
+														
 													</div>
 													
 													
@@ -390,7 +402,7 @@
 															
 															
 														</div>
-
+														
 														<div class="col-75">
 															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
 																<div class="col-20">
@@ -403,7 +415,7 @@
 															
 															
 														</div>
-
+														
 														
 														
 														<div class="col-75">
@@ -418,7 +430,7 @@
 															
 															
 														</div>
-																												
+														
 													</div>
 													
 													
@@ -435,7 +447,7 @@
 									
 								</div>
 							</div>
-						</div>						
+						</div>
 						
 					</div>
 					<ul>
