@@ -130,6 +130,7 @@ sudo npm run start:mwsm
 <br>
 
 <b>1 - </b>Acesse seu servidor web através do IP:PORTA
+
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/terminal.png)](#)
 
 <b>2 - </b>Aguarde a geração do QRCode
@@ -178,7 +179,20 @@ Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.
 Obs: a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
 
 <b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
+
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
+
+Utilize conforme suas necessidades.
+
+| Nome           |  Função                                                         |
+| -------------- |   --------------------------------------------------------------|
+| `Delay`        | Tempo de espera para disparo de mensagens ordenadas.            |
+| `MkAuth Link`  | Habilita a sincronia com a API do MkAuth.                       |
+| `BAR`          | Envia codigo de barras.                                         |
+| `PIX`          | Envia codigo pix copia e cola                                   |
+| `QR`           | Envia imagem do Qrcode pix.                                     |
+| `QRL`          | Envia link pix Para acessar QRCode e Copia e cola.              |
+| `PDF`          | Envia Boleto em PDF                                             |
 
 > ### Sujestão
 > Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
