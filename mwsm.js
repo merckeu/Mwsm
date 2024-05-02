@@ -966,36 +966,36 @@ app.post('/send-message', [
 								Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
 							}
 							setTimeout(function() {
-								if (typeof Send === 'string') {
-									if ((Send.indexOf("boleto.hhvm") > -1)) {
-										Ryzen = 1000;
-										if (Boleto != undefined) {
-											if (typeof Boleto !== 'string') {
-												Send = Boleto;
+								setTimeout(function() {
+									if (typeof Send === 'string') {
+										if ((Send.indexOf("boleto.hhvm") > -1)) {
+											if (Boleto != undefined) {
+												if (typeof Boleto !== 'string') {
+													Send = Boleto;
+												}
+											}
+											Caption = "Boleto";
+											Preview = true;
+											Ryzen = 1000;
+										} else {
+											if ((Send.indexOf("http") > -1)) {
+												Caption = undefined;
+												Preview = true;
+											} else {
+												Caption = undefined;
+												Preview = false;
 											}
 										}
-										Caption = "Boleto";
-										Preview = true;
 									} else {
-										if ((Send.indexOf("http") > -1)) {
-											Caption = undefined;
-											Preview = true;
+										if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+											Caption = JSON.parse(JSON.stringify(Send)).filename;
+											Preview = false;
 										} else {
 											Caption = undefined;
 											Preview = false;
 										}
+										Ryzen = 1000;
 									}
-								} else {
-									if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
-										Caption = JSON.parse(JSON.stringify(Send)).filename;
-										Preview = false;
-									} else {
-										Caption = undefined;
-										Preview = false;
-									}
-									Ryzen = 1000;
-								}
-								setTimeout(function() {
 									client.sendMessage(WhatsApp, Send, {
 										caption: Caption,
 										linkPreview: Preview
@@ -1068,7 +1068,7 @@ app.get('/build', [
 		return res.json({
 			Return: Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
 		});
-                await htmlPDF.closeBrowser();
+		await htmlPDF.closeBrowser();
 	});
 });
 const Build = async (SET) => {
