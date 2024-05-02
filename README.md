@@ -35,32 +35,11 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 
 </details>
 
-### Novidades V2.0.15++
+### Novidades V2.0.16++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 15   |  Adicionado todas as opções de cobrança da API MkAuth                                |
-|  beta 16   |  Conversão de Boleto Html recebido via API MkAuth para Arquivo PDF                   |
+|  beta 16   |  Integração 100% com API de Cobranças do MKauth                                      |
 
-> ### ATENÇÃO!: Integração com API do MkAuth
-> Converter o Boleto HTML em PDF teve o custo de +/- 5s para inicio dos disparos.
-> 
-> Caso utilize a opção PDF mantenha o delay em 2 ou superior para manter a ordem de disparos.
-
- 
-exemplo para teste no webadmin ( mkauth simulator )
-```sh
-{"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
-```
-Utilização no mkauth seria algo do tipo
-```sh
-{"uid":"%logincliente%","find":"%numerotitulo%"}
-```
-
-> ### ATENÇÃO!: envio de midia
-> Insira o URL do arquivo utilizando o separador ## para separar texto da midia seguindo o exemplo abaixo
-```sh
-Mensagem1##Mensagem2##https://via.placeholder.com/350x150.png##Mensagem4
-``` 
 
 ### Funcionalidade:
 * Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
@@ -196,12 +175,31 @@ Altere o valor conforme suas necessidades.
 ** `Provedor > Controle de Usuarios > API`
 
 Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
+Obs: a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
 
 <b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
 
-OBS: em server insira somente o dominio ex: www.provedorx.com que deve ser accessivel via https ou não conseguira conectar com a API do mkauth, após inserir os dados clique em Mkauth Link e aguarde a conclusão da sincronia
+> ### Sujestão
+> Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
+> 
+> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 
+> ### Utilização da API
+> Exemplo para teste no webadmin ( mkauth simulator )
+> ```sh
+> {"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
+> ```
+> Exemplo de utilização no mkauth
+> ```sh
+> {"uid":"%logincliente%","find":"%numerotitulo%"}
+> ```
+
+> ### Combinar utilzações
+> É possivel combinar a Utilização com a tag ## seguindo o exemplo abaixo:
+> ```sh
+> Mensagem1##https://via.placeholder.com/350x150.png##Mensagem3##{"uid":"%logincliente%","find":"%numerotitulo%"}##Mensagem5
+> ```
 
 ### Extras :
 
