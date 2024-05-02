@@ -184,6 +184,8 @@ Obs: a api do mkauth aceita conexões somente via https, certifique-se de possui
 > Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
 > 
 > Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
+> 
+> [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sms.png)](#)
 
 > ### Utilização da API
 > Exemplo para teste no webadmin ( mkauth simulator )
