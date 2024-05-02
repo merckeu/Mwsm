@@ -44,7 +44,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 > ### ATENÇÃO!: Integração com API do MkAuth
 > Converter o Boleto HTML em PDF teve o custo de +/- 5s para inicio dos disparos.
 > 
-> Por padrão mantenha o Delay em 0 (zero) porem se sentir necessidade elevar esse delay, aumente o valor conforme for necessário
+> Caso utilize a opção PDF mantenha o delay em 2 ou superior ( dois ) para manter a ordem de disparos.
 
  
 exemplo para teste no webadmin ( mkauth simulator )
