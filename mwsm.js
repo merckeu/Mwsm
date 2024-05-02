@@ -884,7 +884,7 @@ app.post('/send-message', [
 		delay(0).then(async function() {
 			const Retorno = await Promise.all([Constructor, Reconstructor]);
 			var Boleto, PDF2Base64, Sleep = 0;
-			if (Debug('MKAUTH').delay >= 1) {
+			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
 			if (Retorno[0] != undefined) {
@@ -922,8 +922,8 @@ app.post('/send-message', [
 			}
 			delay(Sleep).then(async function() {
 				var Assembly = [];
-				var Sending = 1,
-					Ryzen = 0;
+				var Sending = 1;
+				var Ryzen = 0;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
 						if (Retorno[0] != undefined) {
@@ -975,27 +975,23 @@ app.post('/send-message', [
 										}
 										Caption = "Boleto";
 										Preview = true;
-										Ryzen = 1000;
 									} else {
 										if ((Send.indexOf("http") > -1)) {
 											Caption = undefined;
 											Preview = true;
-											Ryzen = 1000;
 										} else {
 											Caption = undefined;
 											Preview = false;
-											Ryzen = 0;
 										}
 									}
 								} else {
 									if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
 										Caption = JSON.parse(JSON.stringify(Send)).filename;
 										Preview = false;
-										Ryzen = 0;
+										Ryzen = 1000;
 									} else {
 										Caption = undefined;
 										Preview = false;
-										Ryzen = 0;
 									}
 								}
 								setTimeout(function() {
@@ -1017,7 +1013,7 @@ app.post('/send-message', [
 											message: 'Bot-Mwsm : Message Sent'
 										});
 									}
-								}, (index + Debug('MKAUTH').delay) * 1000);
+								}, ((Debug('MKAUTH').delay + index) * Ryzen));
 							}, (index) * Debug('OPTIONS').interval);
 						});
 					}, Math.floor(Delay + Math.random() * 1000));
