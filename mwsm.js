@@ -1068,7 +1068,7 @@ app.get('/build', [
 		return res.json({
 			Return: Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
 		});
-		await htmlPDF.closeBrowser();
+		htmlPDF.closeBrowser();
 	});
 });
 const Build = async (SET) => {

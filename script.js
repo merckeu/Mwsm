@@ -137,7 +137,8 @@ $(document).ready(function() {
 	$("#Clear").on("click", function() {
 		$("#Message").prop('disabled', true);
 		$(over).show();
-		$("#WhatsApp").prop('disabled', false).val("").focus();
+                $("#WhatsApp").val("");
+		$("#WhatsApp").prop('disabled', false).focus();
 	});
 	var Simulator = "/force-message";
 	$("#Simulator").on('change', function() {
@@ -435,8 +436,7 @@ $(document).ready(function() {
 			if ($("#Message").val() == "") {
 				$("#Message").prop('disabled', false).val("").focus();
 			}
-
-			$('#WhatsApp').mask("(99) 9 9999-9999");
+			$('#WhatsApp').mask("(00) 0 0000-0000");
 			$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
 		} else {
 			$('#WhatsApp').mask(behavior, options);
@@ -445,12 +445,12 @@ $(document).ready(function() {
 
 	$("#WhatsApp").on('input, focusout', function() {
 		var Whats = $(this).val().replace(/\D/g, '');
-		if (Whats.length >= 10) {
+		if (Whats.length == 10) {
 			if ($("#Message").val() == "") {
 				$("#Message").prop('disabled', false).val("").focus();
 			}
 			Whats = Whats.substr(0, 2) + "9" + Whats.substr(2, 8);
-			$('#WhatsApp').mask("(99) 9 9999-9999");
+			$('#WhatsApp').mask("(00) 0 0000-0000");
 			$("#WhatsApp").val($("#WhatsApp").masked(Whats)).prop('disabled', true);
 		}
 	});
