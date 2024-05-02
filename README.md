@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 15 (28/04/24)
+# MkAuth WhatsApp Send Message v2 beta 16 (01/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -39,10 +39,13 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 15   |  Adicionado todas as opções de cobrança da API MkAuth                                |
+|  beta 16   |  Conversão de Boleto Html recebido via API MkAuth para Arquivo PDF                   |
 
 > ### ATENÇÃO!: Integração com API do MkAuth
-> O Recurso PDF não foi concluido portanto se habilitado enviara o URL do boleto ao inves do PDF em sí,
-> a chamada do recurso será feita por codigo json onde o uid seria o login ou cpf do cliente e o find seria o identificador da mensalidade que pode ser o codigo do boleto ou numero do titulo conforme variaveis do mkauth
+> Converter o Boleto HTML em PDF teve o custo de +/- 5s para inicio dos disparos.
+> 
+> Por padrão mantenha o Delay em 0 (zero) porem se sentir necessidade elevar esse delay, aumente o valor conforme for necessário
+
  
 exemplo para teste no webadmin ( mkauth simulator )
 ```sh
