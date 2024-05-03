@@ -149,9 +149,9 @@ Token:SENHA
 <b>TOKEN</b> = *Comando* | <b>:</b> = *Divisor* | <b>SENHA</b> { altere para sua senha de 7 digitos }
 
 
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
+<b>5 - </b>Altere o valor conforme suas necessidades.
 
-Altere o valor conforme suas necessidades.
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
 
 | Nome           | Valor             | Função                                                          |
 | -------------- | ----------------- | --------------------------------------------------------------- |
@@ -165,24 +165,27 @@ Altere o valor conforme suas necessidades.
 
 
 <br>
-<b>4 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+<b>6 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
 
-<b>5 - </b>Habilite a API do MKauth
+<b>7 - </b>Habilite a API do MKauth
 
 ** `Provedor > Controle de Usuarios > API`
 
 Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
-Obs: a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
 
-<b>6 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
+<b>Obs:</b> a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
+<br>
+<br>
+
+<b>8 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
+
+<b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
-
-Utilize conforme suas necessidades.
 
 | Nome           |  Função                                                         |
 | -------------- |   --------------------------------------------------------------|
@@ -196,8 +199,6 @@ Utilize conforme suas necessidades.
 
 > ### Sujestão
 > Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
-> 
-> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 > 
 > [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/msn.png)](#)
 
