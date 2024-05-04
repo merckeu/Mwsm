@@ -179,7 +179,7 @@ Token:SENHA
 | Nome           | Default           | Função                                                          |
 | -------------- | ----------------- | --------------------------------------------------------------- |
 | `Break`        | `1 segundo`       | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
-| `Sleep`        | `30 segundos`     | Tempo de disparo entre mensagens cpm numeros diferentes.        |
+| `Sleep`        | `30 segundos`     | Tempo de disparo entre mensagens com numeros diferentes.        |
 | `Access`       | `8000`            | Porta de acesso do sistema/interface.                           |
 | `Pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
 | `Response`     | `on`              | Resposta Automatica.                                            |
