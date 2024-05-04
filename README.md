@@ -246,24 +246,6 @@ Token:SENHA
 
 </details>
 
-<details>
-<summary>Teste</summary>
-<br>
-Para testar utilize o comando abaixo no Prompt
-
-`DDDNUMERO` : Troque pelo numero com DDD
-
-`MENSAGEM` : Troque pela sua mensagem
-
-`IPDOSERVIDOR` : Troque pelo ip do servidor
-
-`PORTA` : Troque pela porta do servidor
-
-```sh
-sudo curl -d "to=55DDDNUMERO&msg=MENSAGEM" --header "application/x-www-form-urlencoded" -X POST http://IPDOSERVIDOR:PORTA/send-message
-```
-</details>
-
 ### DOAÇÕES PIX :
 Contribua com a sobrevivência desse projeto estimulando melhorias e atualizações.
 
