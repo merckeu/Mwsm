@@ -153,14 +153,14 @@ Token:SENHA
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
 
-| Nome           | Valor             | Função                                                          |
+| Nome           | Default           | Função                                                          |
 | -------------- | ----------------- | --------------------------------------------------------------- |
-| `interval`     | `1000` =  1s      | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
-| `sendwait`     | `30000` = 30s     | Tempo de disparo entre mensagens de modo geral.                 |
+| `Break`        | `1 segundo`       | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
+| `Sleep`        | `30 segundos`     | Tempo de disparo entre mensagens cpm numeros diferentes.        |
 | `access`       | `8000`            | Porta de acesso do sistema/interface.                           |
 | `pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
-| `response`     |                   | Resposta Automatica.                                            |
-| `replies`      |                   | Marcar conversas em resposta automaticas.                       |
+| `response`     | `on`              | Resposta Automatica.                                            |
+| `replies`      | `on`              | Marcar conversas em resposta automaticas.                       |
 | `count`        | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
 
