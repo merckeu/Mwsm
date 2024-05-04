@@ -3,62 +3,62 @@ var Slide = false;
 $(document).ready(function() {
 
 	$("#IntervalUP").on('click', function() {
-		GET = parseFloat($("#interval").val());
+		inGET = parseFloat($("#interval").val());
 		Min = parseFloat($("#interval").attr('min'));
 		Max = parseFloat($("#interval").attr('max'));
-		if (GET < Max) {
-			GET = GET + 1;
-			$("#interval").val(GET);
+		if (inGET < Max) {
+			inGET = inGET + 1;
+			$("#interval").val(inGET);
 		}
 	});
 
 	$("#IntervalDown").on('click', function() {
-		GET = parseFloat($("#interval").val());
+		inGET = parseFloat($("#interval").val());
 		Min = parseFloat($("#interval").attr('min'));
 		Max = parseFloat($("#interval").attr('max'));
-		if (GET > Min) {
-			GET = GET - 1;
-			$("#interval").val(GET);
+		if (inGET > Min) {
+			inGET = inGET - 1;
+			$("#interval").val(inGET);
 		}
 	});
 
 	$("#SendwaitUP").on('click', function() {
-		GET = parseFloat($("#sendwait").val());
+		inGET = parseFloat($("#sendwait").val());
 		Min = parseFloat($("#sendwait").attr('min'));
 		Max = parseFloat($("#sendwait").attr('max'));
-		if (GET < Max) {
-			GET = GET + 1;
-			$("#sendwait").val(GET);
+		if (inGET < Max) {
+			inGET = inGET + 1;
+			$("#sendwait").val(inGET);
 		}
 	});
 
 	$("#SendwaitDown").on('click', function() {
-		GET = parseFloat($("#sendwait").val());
+		inGET = parseFloat($("#sendwait").val());
 		Min = parseFloat($("#sendwait").attr('min'));
 		Max = parseFloat($("#sendwait").attr('max'));
-		if (GET > Min) {
-			GET = GET - 1;
-			$("#sendwait").val(GET);
+		if (inGET > Min) {
+			inGET = inGET - 1;
+			$("#sendwait").val(inGET);
 		}
 	});
 
 	$("#CountUP").on('click', function() {
-		GET = parseFloat($("#count").val());
+		inGET = parseFloat($("#count").val());
 		Min = parseFloat($("#count").attr('min'));
 		Max = parseFloat($("#count").attr('max'));
-		if (GET < Max) {
-			GET = GET + 1;
-			$("#count").val(GET);
+		if (inGET < Max) {
+			inGET = inGET + 1;
+			$("#count").val(inGET );
 		}
 	});
 
 	$("#CountDown").on('click', function() {
-		GET = parseFloat($("#count").val());
+		inGET = parseFloat($("#count").val());
 		Min = parseFloat($("#count").attr('min'));
 		Max = parseFloat($("#count").attr('max'));
-		if (GET > Min) {
-			GET = GET - 1;
-			$("#count").val(GET);
+		if (inGET > Min) {
+			inGET = inGET - 1;
+			$("#count").val(inGET);
 		}
 	});
 

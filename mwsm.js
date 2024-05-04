@@ -594,7 +594,6 @@ app.post('/sqlite-options', (req, res) => {
 			Return: Debug('CONSOLE').wrong
 		});
 	}
-
 });
 
 
@@ -811,6 +810,7 @@ app.post('/send-message', [
 							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 								RETURNS.push('Boleto');
 							}
+
 							if (Synchronization.Status != "pago") {
 								(Synchronization.Payments).forEach(function(GET, index) {
 									if (RETURNS.includes(GET.caption)) {
@@ -842,6 +842,8 @@ app.post('/send-message', [
 										resolve(Array);
 									}
 								});
+							} else {
+								resolve("Fail");
 							}
 						}).catch(err => {
 							resolve(undefined);
@@ -883,11 +885,12 @@ app.post('/send-message', [
 
 		delay(0).then(async function() {
 			const Retorno = await Promise.all([Constructor, Reconstructor]);
+
 			var Boleto, PDF2Base64, Sleep = 0;
 			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
-			if (Retorno[0] != undefined) {
+			if (Retorno[0] != undefined && Retorno[0] != "Fail") {
 				for (let i = 0; i < Retorno[0].length; i++) {
 					if (typeof Retorno[0][i] === 'string') {
 						if ((Retorno[0][i].indexOf("boleto.hhvm") > -1)) {
@@ -924,9 +927,10 @@ app.post('/send-message', [
 				var Assembly = [];
 				var Sending = 1;
 				var Ryzen = 0;
+				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if (Retorno[0] != undefined) {
+						if (Retorno[0] != undefined && Retorno[0] != "Fail") {
 							for (let i = 0; i < Retorno[0].length; i++) {
 								Assembly.push(Retorno[0][i]);
 							}
@@ -957,73 +961,87 @@ app.post('/send-message', [
 				} else {
 					Delay = Debug('OPTIONS').sendwait;
 				}
-
 				if (Assembly.length >= 1) {
-					setTimeout(function() {
-						Assembly.some(function(Send, index) {
-							const PIXFAIL = [undefined, "XXX", null, ""];
-							if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
-								Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
-							}
-							setTimeout(function() {
+					if (Retorno[0] == "Fail") {
+						return res.json({
+							Status: "Fail",
+							message: Debug('CONSOLE').unavailable
+						});
+					} else {
+
+						setTimeout(function() {
+							Assembly.some(function(Send, index) {
+								const PIXFAIL = [undefined, "XXX", null, ""];
+								if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+									Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+								}
 								setTimeout(function() {
-									if (typeof Send === 'string') {
-										if ((Send.indexOf("boleto.hhvm") > -1)) {
-											if (Boleto != undefined) {
-												if (typeof Boleto !== 'string') {
-													Send = Boleto;
+									setTimeout(function() {
+										if (typeof Send === 'string') {
+											if ((Send.indexOf("boleto.hhvm") > -1)) {
+												if (Boleto != undefined) {
+													if (typeof Boleto !== 'string') {
+														Send = Boleto;
+													}
+												}
+												Caption = "Boleto";
+												Preview = true;
+												Ryzen = 1000;
+											} else {
+												if ((Send.indexOf("http") > -1)) {
+													Caption = undefined;
+													Preview = true;
+												} else {
+													Caption = undefined;
+													Preview = false;
 												}
 											}
-											Caption = "Boleto";
-											Preview = true;
-											Ryzen = 1000;
 										} else {
-											if ((Send.indexOf("http") > -1)) {
-												Caption = undefined;
-												Preview = true;
+											if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+												Caption = JSON.parse(JSON.stringify(Send)).filename;
+												Preview = false;
 											} else {
 												Caption = undefined;
 												Preview = false;
 											}
+											Ryzen = 1000;
 										}
-									} else {
-										if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
-											Caption = JSON.parse(JSON.stringify(Send)).filename;
-											Preview = false;
-										} else {
-											Caption = undefined;
-											Preview = false;
+										client.sendMessage(WhatsApp, Send, {
+											caption: Caption,
+											linkPreview: Preview
+										}).then(response => {
+											Wait = WhatsApp;
+											Sending = (Sending + 1);
+										}).catch(err => {
+											return res.status(500).json({
+												Status: "Fail",
+												message: 'Bot-Mwsm : Message was not Sent'
+											});
+										});
+										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+											return res.json({
+												Status: "Success",
+												message: 'Bot-Mwsm : Message Sent'
+											});
 										}
-										Ryzen = 1000;
-									}
-									client.sendMessage(WhatsApp, Send, {
-										caption: Caption,
-										linkPreview: Preview
-									}).then(response => {
-										Wait = WhatsApp;
-										Sending = (Sending + 1);
-									}).catch(err => {
-										return res.status(500).json({
-											Status: "Fail",
-											message: 'Bot-Mwsm : Message was not Sent'
-										});
-									});
-									if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
-										return res.json({
-											Status: "Success",
-											message: 'Bot-Mwsm : Message Sent'
-										});
-									}
-								}, ((Debug('MKAUTH').delay + index) * Ryzen));
-							}, (index) * Debug('OPTIONS').interval);
-						});
-					}, Math.floor(Delay + Math.random() * 1000));
+									}, ((Debug('MKAUTH').delay + index) * Ryzen));
+								}, (index) * Debug('OPTIONS').interval);
+							});
+						}, Math.floor(Delay + Math.random() * 1000));
+					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						return res.json({
-							Status: "Fail",
-							message: Debug('CONSOLE').mkunselect
-						});
+						if (Retorno[0] == "Fail") {
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').unavailable
+							});
+						} else {
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').mkunselect
+							});
+						}
 					} else {
 						return res.json({
 							Status: "Fail",
