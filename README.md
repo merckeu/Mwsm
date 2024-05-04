@@ -126,8 +126,31 @@ sudo npm run start:mwsm
 </details>
 
 
-### Utilização & Configuração :
+### Configuração :
+<details>
+<summary>Mkauth</summary>
 <br>
+<b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+
+** `Opções > Servidor de SMS > Servidor`
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+
+
+<b>2 - </b>Habilite a API do MKauth
+
+** `Provedor > Controle de Usuarios > API`
+
+Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
+
+<b>Obs:</b> a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
+<br>
+<br>
+
+</details>
+
+
+<details>
+<summary>WebAdmin</summary>
 
 <b>1 - </b>Acesse seu servidor web através do IP:PORTA
 
@@ -157,31 +180,15 @@ Token:SENHA
 | -------------- | ----------------- | --------------------------------------------------------------- |
 | `Break`        | `1 segundo`       | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
 | `Sleep`        | `30 segundos`     | Tempo de disparo entre mensagens cpm numeros diferentes.        |
-| `access`       | `8000`            | Porta de acesso do sistema/interface.                           |
-| `pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
-| `response`     | `on`              | Resposta Automatica.                                            |
-| `replies`      | `on`              | Marcar conversas em resposta automaticas.                       |
-| `count`        | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
+| `Access`       | `8000`            | Porta de acesso do sistema/interface.                           |
+| `Pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
+| `Response`     | `on`              | Resposta Automatica.                                            |
+| `Replies`      | `on`              | Marcar conversas em resposta automaticas.                       |
+| `Counter`      | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
 
-<br>
-<b>6 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
-** `Opções > Servidor de SMS > Servidor`
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
-
-
-<b>7 - </b>Habilite a API do MKauth
-
-** `Provedor > Controle de Usuarios > API`
-
-Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
-
-<b>Obs:</b> a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
-<br>
-<br>
-
-<b>8 - </b>Insiria os codigos copiados no Mwsm via webadmin ( Settings > API ).
+<b>6 - </b>Insiria os codigos extraidos do mkauth no Mwsm via webadmin ( Settings > API ).
 
 <b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 
@@ -197,12 +204,18 @@ Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.
 | `QRL`          | Envia link pix Para acessar QRCode e Copia e cola.              |
 | `PDF`          | Envia Boleto em PDF                                             |
 
-> ### Sujestão
-> Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
-> 
-> [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/msn.png)](#)
 
-> ### Utilização da API
+</details>
+
+### Utilização :
+<details>
+<summary>API MkAuth</summary>
+<br>
+ 
+> Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
+ 
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/msn.png)](#)
+ 
 > Exemplo para teste no webadmin ( mkauth simulator )
 > ```sh
 > {"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
@@ -211,12 +224,13 @@ Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.
 > ```sh
 > {"uid":"%logincliente%","find":"%numerotitulo%"}
 > ```
-
-> ### Combinar utilzações
 > É possivel combinar a Utilização com a tag ## seguindo o exemplo abaixo:
 > ```sh
 > Mensagem1##https://via.placeholder.com/350x150.png##Mensagem3##{"uid":"%logincliente%","find":"%numerotitulo%"}##Mensagem5
 > ```
+ 
+</details>
+
 
 ### Extras :
 
