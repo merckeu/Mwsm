@@ -1,6 +1,73 @@
 var Slide = false;
 
 $(document).ready(function() {
+
+	$("#IntervalUP").on('click', function() {
+		GET = parseFloat($("#interval").val());
+		Min = parseFloat($("#interval").attr('min'));
+		Max = parseFloat($("#interval").attr('max'));
+		if (GET < Max) {
+			GET = GET + 1;
+			$("#interval").val(GET);
+		}
+	});
+
+	$("#IntervalDown").on('click', function() {
+		GET = parseFloat($("#interval").val());
+		Min = parseFloat($("#interval").attr('min'));
+		Max = parseFloat($("#interval").attr('max'));
+		if (GET > Min) {
+			GET = GET - 1;
+			$("#interval").val(GET);
+		}
+	});
+
+	$("#SendwaitUP").on('click', function() {
+		GET = parseFloat($("#sendwait").val());
+		Min = parseFloat($("#sendwait").attr('min'));
+		Max = parseFloat($("#sendwait").attr('max'));
+		if (GET < Max) {
+			GET = GET + 1;
+			$("#sendwait").val(GET);
+		}
+	});
+
+	$("#SendwaitDown").on('click', function() {
+		GET = parseFloat($("#sendwait").val());
+		Min = parseFloat($("#sendwait").attr('min'));
+		Max = parseFloat($("#sendwait").attr('max'));
+		if (GET > Min) {
+			GET = GET - 1;
+			$("#sendwait").val(GET);
+		}
+	});
+
+	$("#CountUP").on('click', function() {
+		GET = parseFloat($("#count").val());
+		Min = parseFloat($("#count").attr('min'));
+		Max = parseFloat($("#count").attr('max'));
+		if (GET < Max) {
+			GET = GET + 1;
+			$("#count").val(GET);
+		}
+	});
+
+	$("#CountDown").on('click', function() {
+		GET = parseFloat($("#count").val());
+		Min = parseFloat($("#count").attr('min'));
+		Max = parseFloat($("#count").attr('max'));
+		if (GET > Min) {
+			GET = GET - 1;
+			$("#count").val(GET);
+		}
+	});
+
+
+
+});
+
+
+$(document).ready(function() {
 	$("input[type=password]").prop('type', 'text');
 
 	$("#bar").on('change', function() {
@@ -137,7 +204,7 @@ $(document).ready(function() {
 	$("#Clear").on("click", function() {
 		$("#Message").prop('disabled', true);
 		$(over).show();
-                $("#WhatsApp").val("");
+		$("#WhatsApp").val("");
 		$("#WhatsApp").prop('disabled', false).focus();
 	});
 	var Simulator = "/force-message";
@@ -455,8 +522,8 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#sendwait").mask('99999');
-	$("#interval, #access").mask('9999');
+	$("#sendwait").mask('99');
+	$("#interval, #access").mask('99');
 	$("#limiter, #count").mask('999');
 	$("#token").mask('ZZZZZZZ', {
 		translation: {
@@ -605,9 +672,11 @@ $(document).ready(function() {
 
 
 	socket.on('interval', function(data) {
+		data = (parseFloat(data) / 1000)
 		$('#interval').val(data);
 	});
 	socket.on('sendwait', function(data) {
+		data = (parseFloat(data) / 1000)
 		$('#sendwait').val(data);
 	});
 	socket.on('pixfail', function(data) {
@@ -724,6 +793,7 @@ $(document).ready(function() {
 		}
 	});
 	socket.on('count', function(data) {
+		data = parseFloat(data);
 		$('#count').val(data);
 	});
 	socket.on('donation', function(src) {
@@ -937,10 +1007,10 @@ $(document).ready(function() {
 		if ($("#pixfail").val() == "XXX" || $("#pixfail").val() == "") {
 			$("#pixfail").focus();
 		} else {
-			if ($("#interval").val().length < 4 || $("#interval").val() == "") {
+			if ($("#interval").val().length < 1 || $("#interval").val() == "") {
 				$("#interval").val("").focus();
 			} else {
-				if ($("#sendwait").val().length < 5 || $("#sendwait").val() == "") {
+				if ($("#sendwait").val().length < 2 || $("#sendwait").val() == "") {
 					$("#sendwait").val("").focus();
 				} else {
 					if ($("#access").val().length < 4 || $("#access").val() == "") {
@@ -966,14 +1036,14 @@ $(document).ready(function() {
 											type: "POST",
 											url: "/sqlite-options",
 											data: {
-												interval: $("#interval").val(),
-												sendwait: $("#sendwait").val(),
+												interval: (parseFloat($("#interval").val()) * 1000),
+												sendwait: (parseFloat($("#sendwait").val()) * 1000),
 												access: $("#access").val(),
 												pixfail: $("#pixfail").val(),
 												response: $("#response").val(),
 												replyes: $("#replyes").prop('checked'),
 												onbot: $("#onbot").prop('checked'),
-												count: $("#count").val(),
+												count: (parseFloat($("#count").val())),
 												token: $("#token").val(),
 												limiter: $("#limiter").val()
 											},
