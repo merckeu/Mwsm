@@ -149,7 +149,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 };
 
 function testJSON(text) {
-	text = text.toString().replace(/'/g, '"');
+	text = text.toString().replace(/'/g, '"').replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 	if (typeof text !== "string") {
 		return false;
 	}
@@ -788,7 +788,7 @@ app.post('/send-message', [
 				var RETURNS = [];
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-						const Json = JSON.parse(Send);
+						const Json = JSON.parse(Send.replace(/'/g, '"').replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}'));
 						MkAuth(Json.uid, Json.find).then(Synchronization => {
 
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
