@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 18 (06/05/24)
+# MkAuth WhatsApp Send Message v2 beta 19 (07/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -41,6 +41,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 |  beta 16   |  Integração 100% com API de Cobranças do MKauth                                      |
 |  beta 17   |  Somente Clientes Inadimplentes Receberão Cobranças                                  |
 |  beta 18   |  Correção do Modulo PDF do MkAuth                                                    |
+|  beta 19   |  Melhoria do metodo de conexão com API MkAUth                                        |
 
 
 ### Funcionalidade:
