@@ -731,7 +731,7 @@ app.post('/link_mkauth', async (req, res) => {
 			}).catch(err => {
 				return false;
 			});
-			if (MkSync) {
+			if ((MkSync.error == undefined)) {
 				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, module=?", [User, Pass, Domain, Module], (err) => {
 					if (err) {
 						res.json({
