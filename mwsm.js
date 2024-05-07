@@ -722,7 +722,7 @@ app.post('/link_mkauth', async (req, res) => {
 		});
 
 		if (Authentication) {
-			const MkSync = await axios.get('https://' + Debug('MKAUTH').domain + '/api/titulo/listar/limite=1&pagina=1', {
+			const MkSync = await axios.get('https://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
