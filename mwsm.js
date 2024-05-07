@@ -139,6 +139,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 					};
 				}
 			});
+
 			return Json;
 		} else {
 			return false;
@@ -148,9 +149,10 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 	}
 };
 
+
 function testJSON(text) {
 	text = text.toString().replace(/"/g, "").replace(/'/g, "");
-        text = text.toString().replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
+	text = text.toString().replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 	if (typeof text !== "string") {
 		return false;
 	}
@@ -720,18 +722,35 @@ app.post('/link_mkauth', async (req, res) => {
 		});
 
 		if (Authentication) {
-			db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, module=?", [User, Pass, Domain, Module], (err) => {
-				if (err) {
-					res.json({
-						Status: "Fail",
-						Return: Debug('CONSOLE').failed
-					});
+			const MkSync = await axios.get('https://' + Debug('MKAUTH').domain + '/api/titulo/listar/limite=1&pagina=1', {
+				headers: {
+					'Authorization': 'Bearer ' + Authentication
 				}
-				res.json({
-					Status: "Success",
-					Return: Debug('CONSOLE').mksuccess
-				});
+			}).then(response => {
+				return response.data;
+			}).catch(err => {
+				return false;
 			});
+			if (MkSync) {
+				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, module=?", [User, Pass, Domain, Module], (err) => {
+					if (err) {
+						res.json({
+							Status: "Fail",
+							Return: Debug('CONSOLE').failed
+						});
+					}
+					res.json({
+						Status: "Success",
+						Return: Debug('CONSOLE').mksuccess
+					});
+				});
+			} else {
+				res.json({
+					Status: "Fail",
+					Return: Debug('CONSOLE').mkfail
+				});
+
+			}
 		} else {
 			res.json({
 				Status: "Fail",
@@ -787,12 +806,12 @@ app.post('/send-message', [
 				var Preview = false;
 				var Caption, Send;
 				var RETURNS = [];
+				var ERRORS = [];
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-                                                const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
+						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
 						MkAuth(Json.uid, Json.find).then(Synchronization => {
-
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
 							}
