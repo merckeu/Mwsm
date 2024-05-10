@@ -35,14 +35,10 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 
 </details>
 
-### Novidades V2.0.16++
+### Novidades V2.0.20++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 16   |  Integração 100% com API de Cobranças do MKauth                                      |
-|  beta 17   |  Somente Clientes Inadimplentes Receberão Cobranças                                  |
-|  beta 18   |  Correção do Modulo PDF do MkAuth                                                    |
-|  beta 19   |  Melhoria do metodo de conexão com API MkAUth                                        |
-|  beta 20   |  Tratativa de Erros Retornados da conexão com API do MkAuth                          |
+|  beta 20   | Melhoria da tratativa de erros com API MkAuth                                        |
 
 
 ### Funcionalidade:
