@@ -762,7 +762,6 @@ app.post('/link_mkauth', async (req, res) => {
 				Return: Debug('CONSOLE').mkfail
 			});
 		}
-
 	} else {
 		res.json({
 			Status: "Fail",
@@ -992,7 +991,7 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
-					if (Retorno[0] == "Fail" || !Retorno[0] || (Retorno[0] == "Error")) {
+					if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error")) {
 						if (Retorno[0] == "Fail") {
 							return res.json({
 								Status: "Fail",
@@ -1006,7 +1005,7 @@ app.post('/send-message', [
 							});
 						}
 
-						if (!Retorno[0]) {
+						if (Retorno[0] == false) {
 							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').mkfail
@@ -1075,7 +1074,7 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (Retorno[0] == "Fail" || !Retorno[0] || (Retorno[0] == "Error")) {
+						if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error")) {
 							if (Retorno[0] == "Fail") {
 								return res.json({
 									Status: "Fail",
@@ -1089,7 +1088,7 @@ app.post('/send-message', [
 								});
 							}
 
-							if (!Retorno[0]) {
+							if (Retorno[0] == false) {
 								var SELECTOR = false;
 								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 									SELECTOR = true;
