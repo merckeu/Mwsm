@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 21 (11/05/24)
+# MkAuth WhatsApp Send Message v2 beta 22 (12/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -40,6 +40,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 20   | Melhoria da tratativa de erros com API MkAuth                                        |
 |  beta 21   | Correção do disparo de mensagens                                                     |
+|  beta 22   | Correção do disparo de mensagens com API                                             |
 
 
 ### Funcionalidade:
