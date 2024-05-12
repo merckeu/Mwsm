@@ -113,39 +113,66 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 			}
 			(SEARCH).some(function(Send, index) {
 				if (Send.titulo == FIND || Send.linhadig == FIND) {
-					Json = {
-						"Status": Send.status,
-						"Payments": [{
-								"value": Send.linhadig,
-								"caption": "Bar"
-							},
-							{
-								"value": Send.pix,
-								"caption": "Pix"
-							},
-							{
-								"value": Send.pix_qr.split("base64,")[1],
-								"caption": "QRCode"
-							},
-							{
-								"value": Send.pix_link,
-								"caption": "Link"
-							},
-							{
-								"value": "https://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
-								"caption": "Boleto"
-							}
-						]
-					};
-				} else {
+					var SEND = [];
+					if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+						SEND.push(Send.linhadig);
+					}
 
-					Json = {
-						"Status": "Error"
-					};
+					if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+						SEND.push(Send.pix);
+					}
 
+					if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+						SEND.push(Send.pix_qr);
+					}
 
+					if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+						SEND.push(Send.pix_link);
+					}
+
+					if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+						SEND.push(Send.uuid);
+					}
+					if (SEND.length >= 1) {
+						if ((SEND.includes(undefined) || SEND.includes(null))) {
+							Json = {
+								"Status": "Null"
+							};
+						} else {
+							Json = {
+								"Status": Send.status,
+								"Payments": [{
+										"value": Send.linhadig,
+										"caption": "Bar"
+									},
+									{
+										"value": Send.pix,
+										"caption": "Pix"
+									},
+									{
+										"value": Send.pix_qr.split("base64,")[1],
+										"caption": "QRCode"
+									},
+									{
+										"value": Send.pix_link,
+										"caption": "Link"
+									},
+									{
+										"value": "https://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
+										"caption": "Boleto"
+									}
+								]
+							};
+						}
+
+					}
 				}
 			});
+			if (Json == undefined) {
+				Json = {
+					"Status": "Error"
+				};
+			}
 			return Json;
 		} else {
 			return false;
@@ -725,9 +752,8 @@ app.post('/link_mkauth', async (req, res) => {
 		}).catch(err => {
 			return false;
 		});
-
 		if (Authentication) {
-			const MkSync = await axios.get('https://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
+			const MkSync = await axios.get('http://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
@@ -754,7 +780,6 @@ app.post('/link_mkauth', async (req, res) => {
 					Status: "Fail",
 					Return: Debug('CONSOLE').refused
 				});
-
 			}
 		} else {
 			res.json({
@@ -835,7 +860,7 @@ app.post('/send-message', [
 								RETURNS.push('Boleto');
 							}
 
-							if (Synchronization.Status != "pago" && Synchronization.Status != "Error") {
+							if (Synchronization.Status != "pago" && Synchronization.Status != "Error" && Synchronization.Status != "Null") {
 								(Synchronization.Payments).forEach(function(GET, index) {
 									if (RETURNS.includes(GET.caption)) {
 										switch (GET.caption) {
@@ -870,10 +895,12 @@ app.post('/send-message', [
 								if (Synchronization.Status == "Error") {
 									resolve("Error");
 								} else {
-									resolve("Fail");
+									if (Synchronization.Status == "Null") {
+										resolve("Null");
+									} else {
+										resolve("Fail");
+									}
 								}
-
-
 							}
 						}).catch(err => {
 							resolve(false);
@@ -919,7 +946,8 @@ app.post('/send-message', [
 			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
-			if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error")) {
+			if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error") && (Retorno[0] != "Null")) {
+
 				for (let i = 0; i < Retorno[0].length; i++) {
 					if (typeof Retorno[0][i] === 'string') {
 						if ((Retorno[0][i].indexOf("boleto.hhvm") > -1)) {
@@ -959,7 +987,7 @@ app.post('/send-message', [
 				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error")) {
+						if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error") && (Retorno[0] != "Null")) {
 							for (let i = 0; i < Retorno[0].length; i++) {
 								Assembly.push(Retorno[0][i]);
 							}
@@ -991,7 +1019,7 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
-					if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error")) {
+					if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error") || (Retorno[0] == "Null")) {
 						if (Retorno[0] == "Fail") {
 							return res.json({
 								Status: "Fail",
@@ -1002,6 +1030,12 @@ app.post('/send-message', [
 							return res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').request
+							});
+						}
+						if (Retorno[0] == "Null") {
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').missing
 							});
 						}
 
@@ -1074,7 +1108,7 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error")) {
+						if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error") || (Retorno[0] == "Null")) {
 							if (Retorno[0] == "Fail") {
 								return res.json({
 									Status: "Fail",
@@ -1085,6 +1119,12 @@ app.post('/send-message', [
 								return res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').request
+								});
+							}
+							if (Retorno[0] == "Null") {
+								return res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').missing
 								});
 							}
 
@@ -1110,20 +1150,24 @@ app.post('/send-message', [
 									SELECTOR = true;
 								}
 								if (SELECTOR) {
-									res.json({
+									return res.json({
 										Status: "Fail",
 										message: Debug('CONSOLE').refused
 									});
-
 								} else {
-									res.json({
+									return res.json({
 										Status: "Fail",
 										message: Debug('CONSOLE').mkunselect
 									});
-
 								}
 							}
-						}
+					} else {
+						return res.json({
+							Status: "Fail",
+							message: Debug('CONSOLE').mkunselect
+						});
+					}
+
 					} else {
 						return res.json({
 							Status: "Fail",
