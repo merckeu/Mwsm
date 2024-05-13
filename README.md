@@ -149,7 +149,7 @@ sudo npm run start:mwsm
 
 <b>2 - </b>Habilite o EndPoint (Titulos GET) do MkAuth
 
-** `Provedor > Controle de Usuarios > API > ( Habilitar e Gravar )`
+** `Provedor > Controle de Usuarios > API > ( Habilitar Endpoint titulo.api GET e Gravar )`
 
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/endpoint.png)](#)
 
