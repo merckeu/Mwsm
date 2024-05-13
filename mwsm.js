@@ -96,7 +96,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 		return false;
 	});
 	if (Authentication) {
-		const MkSync = await axios.get('https://' + Debug('MKAUTH').domain + '/api/' + TYPE + '/' + EXT + '/' + UID, {
+		const MkSync = await axios.get(Protocol + '://' + Debug('MKAUTH').domain + '/api/' + TYPE + '/' + EXT + '/' + UID, {
 			headers: {
 				'Authorization': 'Bearer ' + Authentication
 			}
@@ -158,7 +158,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 										"caption": "Link"
 									},
 									{
-										"value": "https://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
+										"value": Protocol + "://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
 										"caption": "Boleto"
 									}
 								]
@@ -753,7 +753,7 @@ app.post('/link_mkauth', async (req, res) => {
 			return false;
 		});
 		if (Authentication) {
-			const MkSync = await axios.get('http://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
+			const MkSync = await axios.get(Protocol + '://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
