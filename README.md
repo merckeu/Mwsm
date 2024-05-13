@@ -129,42 +129,31 @@ sudo npm run start:mwsm
 
 
 ### Configuração :
-<details>
-<summary>Mkauth</summary>
 <br>
-<b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+<b>1 - </b>Habilite o Tunel Dev API do MKauth
 
-** `Opções > Servidor de SMS > Servidor`
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+** `Opções > Rede do Servidor > MkTunel > ( Ativar e Gravar )`
 
-
-<b>2 - </b>Habilite a API do MKauth
-
-** `Provedor > Controle de Usuarios > API`
-
-Copie ambos os codigos ( client e secret ), habilite a opção `Endpoint titulo.api GET` e clique em `gravar`
-
-<b>Obs:</b> a api do mkauth aceita conexões somente via https, certifique-se de possuir um dominio com certificado SSL.
-<br>
-<br>
-
-</details>
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/dev.png)](#)
 
 
-<details>
-<summary>WebAdmin</summary>
+<b>2 - </b>Habilite o EndPoint (Titulos GET) do MkAuth
 
-<b>1 - </b>Acesse seu servidor web através do IP:PORTA
+** `Provedor > Controle de Usuarios > API > ( Habilitar e Gravar )`
+
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/endpoint.png)](#)
+
+<b>3 - </b>Acesse seu servidor web através do IP:PORTA em uma nova aba do novegador
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/terminal.png)](#)
 
-<b>2 - </b>Aguarde a geração do QRCode
+<b>4 - </b>Aguarde a geração do QRCode
 
-<b>3 - </b>Faça a leitura do QRCode com o WhatsApp
+<b>5 - </b>Faça a leitura do QRCode com o WhatsApp
 
-** `Menu > Aparelhos Conectados > Conectar um Aparelho`
+** `Whatsapp > Menu > Aparelhos Conectados > Conectar um Aparelho`
 
-<b>4 - </b>Entre no whatsapp que acabou de conectar e pegue o token temporario para acessar as configurações
+<b>6 - </b>Entre no whatsapp que acabou de conectar e pegue o token temporario para acessar as configurações
 
 <b>OBS:</b> para criar um token fixo envie o comando como mensagem de outro celular para o numero conectado a API
 
@@ -174,7 +163,7 @@ Token:SENHA
 <b>TOKEN</b> = *Comando* | <b>:</b> = *Divisor* | <b>SENHA</b> { altere para sua senha de 7 digitos }
 
 
-<b>5 - </b>Altere o valor conforme suas necessidades.
+<b>7- </b>Altere o valor conforme suas necessidades.
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
 
@@ -190,9 +179,15 @@ Token:SENHA
 
 
 
-<b>6 - </b>Insiria os codigos extraidos do mkauth no Mwsm via webadmin ( Settings > API ).
+<b>8 - </b>Configure a API do MkAuth no Mwsm.
+** `Mwsm > Settings > API`
 
-<b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
+| Campo     |  Dado                                                     |
+| ----------|-------------------------------------------------------------|
+| `TUNEL`   | Insira o URL encontrada em Tunel no passo 2 desse tutoria   |
+| `CLIENT`  | Insira o URL encontrada em Client no passo 2 desse tutorial |
+| `SECRET`  | Insira o URL encontrada em Secret no passo 2 desse tutorial |
+| `DOMAIN`  | Insira o Dominio ou IP do seu mkauth                        |
 
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
 
@@ -206,8 +201,12 @@ Token:SENHA
 | `QRL`          | Envia link pix Para acessar QRCode e Copia e cola.              |
 | `PDF`          | Envia Boleto em PDF                                             |
 
+<b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 
-</details>
+<b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+
+** `Opções > Servidor de SMS > Servidor`
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
 
 ### Utilização :
 <details>
