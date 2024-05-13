@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 22 (12/05/24)
+# MkAuth WhatsApp Send Message v2 beta 23 (13/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -35,12 +35,20 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 
 </details>
 
+ > ### ERROS ###
+> em caso de Erros ou Falhas na API do MkAuth habilite o debugger e poste o retorno no forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
+>
+> ** `Mwsm > Settings > Extras > ( Habilite o Debugger )`
+> 
+OBS: Após Habilitar o Debbuger será possivel visualizar os resultados da conexão com a API do mkauth via Console
+
 ### Novidades V2.0.20++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 20   | Melhoria da tratativa de erros com API MkAuth                                        |
 |  beta 21   | Correção do disparo de mensagens                                                     |
 |  beta 22   | Correção do disparo de mensagens com API                                             |
+|  beta 23   | Adesão do [ Tunel dev API ] como padrão + inclusão dp recurso Debug                  |
 
 
 ### Funcionalidade:
@@ -129,6 +137,8 @@ sudo npm run start:mwsm
 
 
 ### Configuração :
+<details>
+<summary>Tutorial</summary>
 <br>
 <b>1 - </b>Habilite o Tunel Dev API do MKauth
 
@@ -207,6 +217,7 @@ Token:SENHA
 
 ** `Opções > Servidor de SMS > Servidor`
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+</details>
 
 ### Utilização :
 <details>
