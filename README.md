@@ -144,18 +144,18 @@ sudo npm run start:mwsm
 
 ** `Opções > Rede do Servidor > MkTunel > ( Ativar e Gravar )`
 
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/dev.png)](#)
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/dev.png)](#)
 
 
 <b>2 - </b>Habilite o EndPoint (Titulos GET) do MkAuth
 
 ** `Provedor > Controle de Usuarios > API > ( Habilitar Endpoint titulo.api GET e Gravar )`
 
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/endpoint.png)](#)
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/endpoint.png)](#)
 
 <b>3 - </b>Acesse seu servidor web através do IP:PORTA em uma nova aba do novegador
 
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/terminal.png)](#)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/terminal.png)](#)
 
 <b>4 - </b>Aguarde a geração do QRCode
 
@@ -175,7 +175,7 @@ Token:SENHA
 
 <b>7- </b>Altere o valor conforme suas necessidades.
 
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/settings.png)](#)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/settings.png)](#)
 
 | Nome           | Default           | Função                                                          |
 | -------------- | ----------------- | --------------------------------------------------------------- |
@@ -199,7 +199,7 @@ Token:SENHA
 | `SECRET`  | Insira o URL encontrada em Secret no passo 2 desse tutorial |
 | `DOMAIN`  | Insira o Dominio ou IP do seu mkauth                        |
 
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/sync.png)](#)
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/sync.png)](#)
 
 | Nome           |  Função                                                         |
 | -------------- |   --------------------------------------------------------------|
@@ -216,7 +216,7 @@ Token:SENHA
 <b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
 ** `Opções > Servidor de SMS > Servidor`
-[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/mkauth.png)](#)
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/mkauth.png)](#)
 </details>
 
 ### Utilização :
@@ -226,7 +226,7 @@ Token:SENHA
  
 > Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
  
-[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/msn.png)](#)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/msn.png)](#)
  
 > Exemplo para teste no webadmin ( mkauth simulator )
 > ```sh
