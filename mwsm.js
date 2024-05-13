@@ -118,8 +118,24 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 			} else {
 				SEARCH = MkSync;
 			}
+
 			(SEARCH).some(function(Send, index) {
 				if (Send.titulo == FIND || Send.linhadig == FIND) {
+					var Bolix = '';
+					if (Send.linhadig == undefined || Send.linhadig == null) {
+						Send.linhadig = '';
+					} else {
+						Bolix = Protocol + "://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
+					}
+					if (Send.pix == undefined || Send.pix == null) {
+						Send.pix = '';
+					}
+					if (Send.pix_qr == undefined || Send.pix_qr == null) {
+						Send.pix_qr = 'base64,';
+					}
+					if (Send.pix_link == undefined || Send.pix_link == null) {
+						Send.pix_link = '';
+					}
 					Terminal(Send);
 					var SEND = [];
 					if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
@@ -141,6 +157,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 					if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 						SEND.push(Send.uuid);
 					}
+
 					if (SEND.length >= 1) {
 						if ((SEND.includes(undefined) || SEND.includes(null))) {
 							Json = {
@@ -166,7 +183,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 										"caption": "Link"
 									},
 									{
-										"value": Protocol + "://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid,
+										"value": Bolix,
 										"caption": "Boleto"
 									}
 								]
@@ -182,6 +199,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 				};
 			}
 			Terminal(Json);
+			console.log(Json);
 			return Json;
 		} else {
 			return false;
@@ -921,9 +939,11 @@ app.post('/send-message', [
 												Caption = GET.caption;
 												break;
 										}
-										Array.push(Send);
+										if (Send != '') {
+											Array.push(Send);
+										}
 									}
-									if ((Array.length == RETURNS.length) && ((Synchronization.Payments).length == (index + 1))) {
+									if (((Synchronization.Payments).length == (index + 1))) {
 										resolve(Array);
 									}
 								});
@@ -1203,7 +1223,6 @@ app.post('/send-message', [
 								message: Debug('CONSOLE').mkunselect
 							});
 						}
-
 					} else {
 						return res.json({
 							Status: "Fail",
