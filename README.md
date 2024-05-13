@@ -48,7 +48,7 @@ OBS: Após Habilitar o Debbuger será possivel visualizar os resultados da conex
 |  beta 20   | Melhoria da tratativa de erros com API MkAuth                                        |
 |  beta 21   | Correção do disparo de mensagens                                                     |
 |  beta 22   | Correção do disparo de mensagens com API                                             |
-|  beta 23   | Adesão do [ Tunel dev API ] como padrão + inclusão dp recurso Debug                  |
+|  beta 23   | Adesão do [ Tunel dev API ] como padrão + inclusão do recurso Debug                  |
 
 
 ### Funcionalidade:
