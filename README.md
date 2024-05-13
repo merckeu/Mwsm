@@ -232,7 +232,7 @@ Token:SENHA
 > ```sh
 > {"uid":"E5:BE:ED:DE:2E:EF","find":"415"}
 > ```
-> Exemplo de utilização no mkauth
+> Exemplo de utilização no mkauth ( Insira exatamente assim, não edite )
 > ```sh
 > {"uid":"%logincliente%","find":"%numerotitulo%"}
 > ```
