@@ -48,7 +48,7 @@ $(document).ready(function() {
 		Max = parseFloat($("#count").attr('max'));
 		if (inGET < Max) {
 			inGET = inGET + 1;
-			$("#count").val(inGET );
+			$("#count").val(inGET);
 		}
 	});
 
@@ -496,6 +496,14 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	$("#domain").on('focusout', function() {
+		var Dominio = $("#domain").val().split('//')[1].split('/')[0];
+		if (Dominio != "") {
+			$("#domain").val(Dominio);
+		}
+	});
+
 
 	$("#WhatsApp").on('input, keyup', function() {
 		var Whats = $(this).val().replace(/\D/g, '');
