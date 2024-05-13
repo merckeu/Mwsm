@@ -194,7 +194,7 @@ Token:SENHA
 
 | Campo     |  Dado                                                     |
 | ----------|-------------------------------------------------------------|
-| `TUNEL`   | Insira o URL encontrada em Tunel no passo 2 desse tutoria   |
+| `TUNEL`   | Insira o URL encontrada em Tunel no passo 2 desse tutorial  |
 | `CLIENT`  | Insira o URL encontrada em Client no passo 2 desse tutorial |
 | `SECRET`  | Insira o URL encontrada em Secret no passo 2 desse tutorial |
 | `DOMAIN`  | Insira o Dominio ou IP do seu mkauth                        |
