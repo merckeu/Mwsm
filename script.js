@@ -227,19 +227,19 @@ $(document).ready(function() {
 			success: function(data) {
 				if (data.Status == "Success") {
 					$("#module").prop("checked", false);
-					$("#domain, #username, #password").prop('disabled', false);
+					$("#domain, #username, #password, #tunel").prop('disabled', false);
 				}
 				if (data.Status == "Fail") {
 					setTimeout(() => {
 						$("#module").prop("checked", true);
-						$("#domain, #username, #password").prop('disabled', true);
+						$("#domain, #username, #password, #tunel").prop('disabled', true);
 					}, "500");
 				}
 			},
 			error: function(request, status, error) {
 				setTimeout(() => {
 					$("#module").prop("checked", true);
-					$("#domain, #username, #password").prop('disabled', true);
+					$("#domain, #username, #password, #tunel").prop('disabled', true);
 				}, "500");
 			}
 		});
@@ -249,6 +249,7 @@ $(document).ready(function() {
 		var User = $("#username").val();
 		var Pass = $("#password").val();
 		var Domain = $("#domain").val();
+		var Tunel = $("#tunel").val();
 		if ($(this).is(":checked")) {
 			if (User == "" || !User.includes("Client_Id_")) {
 				setTimeout(() => {
@@ -270,62 +271,72 @@ $(document).ready(function() {
 						}, "500");
 
 					} else {
-						$.ajax({
-							type: "POST",
-							url: "/link_mkauth",
-							data: {
-								username: $("#username").val(),
-								password: $("#password").val(),
-								module: $("#module").prop('checked'),
-								domain: $("#domain").val(),
-								token: $("#token").val()
-							},
-							beforeSend: function(data) {
-								$("#Waiting").fadeIn("slow", function() {
-									$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-									$("#domain, #username, #password").prop('disabled', true);
-								});
-							},
-							success: function(data) {
-								if (data.Status == "Success") {
-									var Icon = "fa-check";
-								}
-								if (data.Status == "Fail") {
+						if (Tunel == "") {
+							setTimeout(() => {
+								$("#module").prop("checked", false);
+								$("#tunel").focus().val("");
+							}, "500");
+						} else {
+
+							$.ajax({
+								type: "POST",
+								url: "/link_mkauth",
+								data: {
+									username: $("#username").val(),
+									password: $("#password").val(),
+									module: $("#module").prop('checked'),
+									domain: $("#domain").val(),
+									tunel: $("#tunel").val(),
+									token: $("#token").val()
+								},
+								beforeSend: function(data) {
+									$("#Waiting").fadeIn("slow", function() {
+										$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+										$("#domain, #username, #password, #tunel").prop('disabled', true);
+									});
+								},
+								success: function(data) {
+									if (data.Status == "Success") {
+										var Icon = "fa-check";
+									}
+									if (data.Status == "Fail") {
+										var Icon = "fa-exclamation";
+									}
+									$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+										header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+										life: 2000,
+										theme: 'Mwsm',
+										speed: 'slow',
+										close: function(e, m, o) {
+											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+											$("#Waiting").fadeOut("slow", function() {
+												if (data.Status == "Fail") {
+													$("#module").prop("checked", false);
+													$("#domain, #username, #password, #tunel").prop('disabled', false);
+												}
+											});
+										}
+									});
+								},
+								error: function(request, status, error) {
 									var Icon = "fa-exclamation";
-								}
-								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
-									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-									life: 2000,
-									theme: 'Mwsm',
-									speed: 'slow',
-									close: function(e, m, o) {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-										$("#Waiting").fadeOut("slow", function() {
-											if (data.Status == "Fail") {
+									$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+										header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+										life: 2000,
+										theme: 'Mwsm',
+										speed: 'slow',
+										close: function(e, m, o) {
+											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+											$("#Waiting").fadeOut("slow", function() {
 												$("#module").prop("checked", false);
-												$("#domain, #username, #password").prop('disabled', false);
-											}
-										});
-									}
-								});
-							},
-							error: function(request, status, error) {
-								var Icon = "fa-exclamation";
-								$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
-									header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-									life: 2000,
-									theme: 'Mwsm',
-									speed: 'slow',
-									close: function(e, m, o) {
-										$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-										$("#Waiting").fadeOut("slow", function() {
-											$("#module").prop("checked", false);
-											$("#domain, #username, #password").prop('disabled', false);
-										});
-									}
-								});
-							}
-						});
+												$("#domain, #username, #password, #tunel").prop('disabled', false);
+											});
+										}
+									});
+								}
+							});
+						}
+
 					}
 				}
 			}
@@ -504,6 +515,15 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#tunel").on('focusout', function() {
+		var Dominio = $("#tunel").val().split('//')[1].split('/')[0];
+		if (Dominio != "" && Dominio.includes('mk-auth.dev.br')) {
+			$("#tunel").val(Dominio);
+		} else {
+			$("#tunel").val("");
+		}
+	});
+
 
 	$("#WhatsApp").on('input, keyup', function() {
 		var Whats = $(this).val().replace(/\D/g, '');
@@ -665,6 +685,13 @@ $(document).ready(function() {
 			$('#domain').prop('disabled', true);
 		}
 	});
+	socket.on('tunel', function(data) {
+		$('#tunel').val(data);
+		if (data != "") {
+			$('#tunel').prop('disabled', true);
+		}
+	});
+
 	socket.on('username', function(data) {
 		$('#username').val(data);
 		if (data != "") {
@@ -718,15 +745,27 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('debugger', function(data) {
+		switch (data) {
+			case 'true':
+				$("#debugger").prop("checked", true);
+				break;
+			case 'false':
+				$("#debugger").prop("checked", false);
+				break;
+		}
+	});
+
+
 	socket.on('module', function(data) {
 		switch (data) {
 			case 'true':
 				$("#module").prop("checked", true);
-				$("#domain, #username, #password").prop('disabled', true);
+				$("#domain, #username, #password, #tunel").prop('disabled', true);
 				break;
 			case 'false':
 				$("#module").prop("checked", false);
-				$("#domain, #username, #password").prop('disabled', false);
+				$("#domain, #username, #password, #tunel").prop('disabled', false);
 				break;
 		}
 	});
@@ -1010,6 +1049,27 @@ $(document).ready(function() {
 			$("#response, #replyes").prop('disabled', true);
 		}
 	});
+
+	$("#debugger").on('change', function() {
+		$.ajax({
+			type: "POST",
+			url: "/debug",
+			data: {
+				debug: $("#debugger").prop('checked')
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+
+	});
+
 	$("#Save_Options").on("click", function() {
 		var Host = window.location.href.split(':');
 		if ($("#pixfail").val() == "XXX" || $("#pixfail").val() == "") {

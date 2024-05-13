@@ -75,6 +75,12 @@ app.use(express.urlencoded({
 	extended: true
 }));
 
+function Terminal(Value) {
+	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
+		console.error(Value);
+	}
+}
+
 app.use("/", express.static(__dirname + "/"))
 
 app.get('/', (req, res) => {
@@ -85,7 +91,7 @@ app.get('/', (req, res) => {
 
 const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') => {
 	var SEARCH;
-	const Authentication = await axios.get('https://' + Debug('MKAUTH').domain + '/api/', {
+	const Authentication = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/', {
 		auth: {
 			username: Debug('MKAUTH').client_id,
 			password: Debug('MKAUTH').client_secret
@@ -95,8 +101,9 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 	}).catch(err => {
 		return false;
 	});
+	Terminal(Authentication);
 	if (Authentication) {
-		const MkSync = await axios.get(Protocol + '://' + Debug('MKAUTH').domain + '/api/' + TYPE + '/' + EXT + '/' + UID, {
+		const MkSync = await axios.get(Protocol + '://' + Debug('MKAUTH').tunel + '/api/' + TYPE + '/' + EXT + '/' + UID, {
 			headers: {
 				'Authorization': 'Bearer ' + Authentication
 			}
@@ -113,6 +120,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 			}
 			(SEARCH).some(function(Send, index) {
 				if (Send.titulo == FIND || Send.linhadig == FIND) {
+					Terminal(Send);
 					var SEND = [];
 					if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 						SEND.push(Send.linhadig);
@@ -173,6 +181,7 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 					"Status": "Error"
 				};
 			}
+			Terminal(Json);
 			return Json;
 		} else {
 			return false;
@@ -459,6 +468,25 @@ app.post('/authenticated', (req, res) => {
 	}
 });
 
+// Debug
+app.post('/debug', (req, res) => {
+	const debug = req.body.debug;
+	if (Debug('OPTIONS').debugger != debug) {
+		db.run("UPDATE options SET debugger=?", [debug], (err) => {
+			if (err) {
+				res.json({
+					Status: "Fail",
+					Return: Debug('OPTIONS').debugger
+				});
+			}
+			res.json({
+				Status: "Success",
+				Return: debug
+			});
+		});
+	}
+});
+
 // Token
 app.post('/token', (req, res) => {
 	const Token = req.body.token;
@@ -474,6 +502,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('onbot', Debug('OPTIONS').onbot);
 		global.io.emit('limiter', Debug('OPTIONS').limiter);
 		global.io.emit('domain', Debug('MKAUTH').domain);
+		global.io.emit('tunel', Debug('MKAUTH').tunel);
 		global.io.emit('username', Debug('MKAUTH').client_id);
 		global.io.emit('password', Debug('MKAUTH').client_secret);
 		global.io.emit('module', Debug('MKAUTH').module);
@@ -483,6 +512,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('qrlink', Debug('MKAUTH').qrlink);
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
+		global.io.emit('debugger', Debug('OPTIONS').debugger);
 		res.json({
 			Status: "Success",
 			Return: Debug('CONSOLE').right
@@ -518,6 +548,7 @@ app.post('/getdata', (req, res) => {
 				onbot: Debug('OPTIONS').onbot,
 				limiter: Debug('OPTIONS').limiter,
 				domain: Debug('MKAUTH').domain,
+				tunel: Debug('MKAUTH').tunel,
 				username: Debug('MKAUTH').client_id,
 				password: Debug('MKAUTH').client_secret,
 				module: Debug('MKAUTH').module,
@@ -527,6 +558,7 @@ app.post('/getdata', (req, res) => {
 				qrlink: Debug('MKAUTH').qrlink,
 				pdf: Debug('MKAUTH').pdf,
 				delay: Debug('MKAUTH').delay,
+				debugger: Debug('OPTIONS').debugger,
 			});
 
 		}
@@ -739,10 +771,11 @@ app.post('/link_mkauth', async (req, res) => {
 	const User = req.body.username;
 	const Pass = req.body.password;
 	const Domain = req.body.domain;
+	const Tunel = req.body.tunel;
 	const Module = req.body.module;
 	const Token = req.body.token;
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
-		const Authentication = await axios.get('https://' + Domain + '/api/', {
+		const Authentication = await axios.get('https://' + Tunel + '/api/', {
 			auth: {
 				username: User,
 				password: Pass
@@ -752,8 +785,9 @@ app.post('/link_mkauth', async (req, res) => {
 		}).catch(err => {
 			return false;
 		});
+		Terminal('Link : ' + Authentication);
 		if (Authentication) {
-			const MkSync = await axios.get(Protocol + '://' + Domain + '/api/titulo/listar/limite=1&pagina=1', {
+			const MkSync = await axios.get(Protocol + '://' + Tunel + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
@@ -762,8 +796,9 @@ app.post('/link_mkauth', async (req, res) => {
 			}).catch(err => {
 				return false;
 			});
+			Terminal(MkSync);
 			if ((MkSync.error == undefined)) {
-				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, module=?", [User, Pass, Domain, Module], (err) => {
+				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?", [User, Pass, Domain, Tunel, Module], (err) => {
 					if (err) {
 						res.json({
 							Status: "Fail",
@@ -839,6 +874,7 @@ app.post('/send-message', [
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
+						Terminal(JsonEncode);
 						MkAuth(Json.uid, Json.find).then(Synchronization => {
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
@@ -947,7 +983,6 @@ app.post('/send-message', [
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
 			if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error") && (Retorno[0] != "Null")) {
-
 				for (let i = 0; i < Retorno[0].length; i++) {
 					if (typeof Retorno[0][i] === 'string') {
 						if ((Retorno[0][i].indexOf("boleto.hhvm") > -1)) {
@@ -1019,6 +1054,7 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
+					Terminal(Assembly);
 					if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error") || (Retorno[0] == "Null")) {
 						if (Retorno[0] == "Fail") {
 							return res.json({
@@ -1161,12 +1197,12 @@ app.post('/send-message', [
 									});
 								}
 							}
-					} else {
-						return res.json({
-							Status: "Fail",
-							message: Debug('CONSOLE').mkunselect
-						});
-					}
+						} else {
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').mkunselect
+							});
+						}
 
 					} else {
 						return res.json({

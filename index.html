@@ -220,7 +220,13 @@
 									<div class="row" style="padding:0px 10px;height:220px;">
 										
 										
-										under construction
+										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+											<div class="col-20">
+												<label><input type="checkbox" id="debugger" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Debugger</b></label>
+											</div>
+											
+										</div>
+										
 										
 										
 									</div>
@@ -290,27 +296,27 @@
 								<div class="row">
 									<div class="col-75">
 										<form>
-											<div class="row" style="padding-top:0px;">
+											<div class="row" style="padding-top:-5px;">
 												<div class="col-50">
-													<label for="Username"> Username</label>
+													<label for="Username"> API Connection</label>
 													
 													<div class="input-group mb-3" style="height:40px;width:540px;">
 														<div class="input-group-prepend">
-															<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+															<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-link" aria-hidden="true"></i></i></span>
 														</div>
-														<input type="password" id="username" placeholder="Client_Id" style="width:91%">
+														<input type="password" id="tunel" placeholder="TUNEL" style="width:91%;">
 													</div>
 													
 													
 													
 													<div class="row" style="margin-top:10px;">
 														<div class="col-50">
-															<label for="Password">Password</label>
 															<div class="input-group mb-3" style="height:40px;width:540x;">
+
 																<div class="input-group-prepend">
-																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
+																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
 																</div>
-																<input type="password" id="password" placeholder="Client_Secret" style="width:91%;">
+																<input type="password" id="username" placeholder="CLIENT" style="width:91%">
 															</div>
 															
 														</div>
@@ -318,19 +324,32 @@
 													
 													<div class="row" style="margin-top:10px;">
 														<div class="col-50">
-															<label for="Server">Server</label>
+															<div class="input-group mb-3" style="height:40px;width:540x;">
+																<div class="input-group-prepend">
+																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
+																</div>
+																<input type="password" id="password" placeholder="SECRET" style="width:91%;">
+	
+															</div>
+															
+														</div>
+													</div>
+													
+													
+													<div class="row" style="margin-top:10px;">
+														<div class="col-50">
 															<div class="input-group mb-3" style="height:40px;width:480px">
 																<div class="input-group-prepend">
 																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-server" aria-hidden="true"></i></i></span>
 																</div>
-																<input type="password" id="domain" placeholder="MKAUTH-DOMAIN SSL" style="width:80%;">
+																<input type="password" id="domain" placeholder="MKAUTH-IP/DOMAIN" style="width:80%;">
 															</div>
 															
 														</div>
 														
 														<div class="col-15" style="margin-left:-60px;">
 															<label for="Server">Delay</label>
-															<div class="input-group mb-3" style="height:40px;width:120px;">
+															<div class="input-group mb-3" style="height:40px;width:120px;margin-top:-20px;">
 																<form>
 																	<input type="range" id="inject" name="amountRange" min="0" max="10" value="0" oninput="this.form.amountInput.value=this.value" style="width:80px;" />
 																	<input type="number" id="ranger" name="amountInput" min="0" max="10" value="0" oninput="this.form.amountRange.value=this.value" style="width:30px;border:none;padding:0px;color:#0f90dc;" disabled>
