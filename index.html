@@ -99,7 +99,13 @@
 												
 												<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
 													<div class="col-20">
-														<label><input type="checkbox" checked="checked" id="onbot" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Auto-Response</b></label>
+														
+														
+														<label class="switch">
+															<input type="checkbox" class="switch-input" checked="checked" id="onbot"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Response</b>
+															<span class="switch-label" data-on="On" data-off="Off"></span>
+															<span class="switch-handle"></span>
+														</label>
 													</div>
 													
 												</div>
@@ -156,8 +162,14 @@
 													<div class="col-15" style="margin-top:10px;">
 														<label for="count">Reply</label>
 														<div class="input-group mb-3" style="height:40px;width:90px;">
-															<label><input type="checkbox" checked="checked" id="replyes"></label>
 															
+															
+															
+															<label class="switch switch-green">
+																<input type="checkbox" class="switch-input" checked="checked" id="replyes">
+																<span class="switch-label" data-on="On" data-off="Off"></span>
+																<span class="switch-handle"></span>
+															</label>
 														</div>
 														
 														
@@ -222,7 +234,13 @@
 										
 										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
 											<div class="col-20">
-												<label><input type="checkbox" id="debugger" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Debugger</b></label>
+												
+												<label class="switch">
+													<input type="checkbox" class="switch-input" checked="checked" id="debugger"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Debugger</b>
+													<span class="switch-label" data-on="On" data-off="Off"></span>
+													<span class="switch-handle"></span>
+												</label>
+												
 											</div>
 											
 										</div>
@@ -262,7 +280,12 @@
 											
 											<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
 												<div class="col-20">
-													<label><input type="checkbox" id="Simulator" class="blue"><b style="margin-top:7px;position:absolute;margin-left:5px;">Mkauth Simulator</b></label>
+													<label class="switch">
+														<input type="checkbox" class="switch-input" checked="checked" id="Simulator"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Mkauth Simulator</b>
+														<span class="switch-label" data-on="On" data-off="Off"></span>
+														<span class="switch-handle"></span>
+													</label>
+													
 												</div>
 												
 											</div>
@@ -312,7 +335,7 @@
 													<div class="row" style="margin-top:10px;">
 														<div class="col-50">
 															<div class="input-group mb-3" style="height:40px;width:540x;">
-
+																
 																<div class="input-group-prepend">
 																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
 																</div>
@@ -329,7 +352,7 @@
 																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
 																</div>
 																<input type="password" id="password" placeholder="SECRET" style="width:91%;">
-	
+																
 															</div>
 															
 														</div>
@@ -375,7 +398,13 @@
 															<div class="row" style="margin-top:-22px;padding-left:20px;z-index:9999999;float:right;width:150px;">
 																<label><b style="margin-top:-20px;position:absolute;margin-left:5px;">MkAuth Link</b></label>
 																<div class="col-20" style="padding-left:12px;margin-top:-5px;">
-																	<input type="checkbox" id="module" class="green">
+																	
+																	<label class="switch switch-green">
+																		<input type="checkbox" class="switch-input" checked="checked" id="module">
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
+																	</label>
+																	
 																</div>
 																
 															</div>
@@ -391,55 +420,50 @@
 													
 												</div>
 												
-												<div class="col-75" style="height:160px;width:90px;position:absolute;right:10px;margin-top:10px;">
+												<div class="col-75" style="height:160px;width:90px;position:absolute;right:10px;margin-top:7px;">
 													<div class="row">
 														<div class="col-75">
 															
-															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
 																<div class="col-20">
-																	<label><input type="checkbox" id="bar" name="toogle" class="blue">
-																		<c style="margin-top:3px;position:absolute;margin-left:5px;">BAR</c>
+																	
+																	
+																	<label class="switch">
+																		<input type="checkbox" class="switch-input" id="bar"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Bar</b>
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
 																	</label>
+																	
 																</div>
 																
 															</div>
 															
-															
-															
-															
-															
 														</div>
 														<div class="col-75">
-															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
 																<div class="col-20">
-																	<label><input type="checkbox" id="pix" name="toogle" class="blue">
-																		<c style="margin-top:3px;position:absolute;margin-left:5px;">PIX</c>
+																	
+																	<label class="switch">
+																		<input type="checkbox" class="switch-input" id="pix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Pix</b>
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
 																	</label>
-																</div>
-																
-															</div>
-															
-															
-														</div>
-														<div class="col-75">
-															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label><input type="checkbox" id="qrpix" name="toogle" class="blue">
-																		<c style="margin-top:3px;position:absolute;margin-left:5px;">QR</c>
-																	</label>
+																	
 																</div>
 																
 															</div>
 															
 															
 														</div>
-														
 														<div class="col-75">
-															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
 																<div class="col-20">
-																	<label><input type="checkbox" id="qrlink" name="toogle" class="blue">
-																		<c style="margin-top:3px;position:absolute;margin-left:5px;">QRL</c>
+																	<label class="switch">
+																		<input type="checkbox" class="switch-input" id="qrpix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QR</b>
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
 																	</label>
+																	
 																</div>
 																
 															</div>
@@ -447,14 +471,33 @@
 															
 														</div>
 														
+														<div class="col-75">
+															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																<div class="col-20">
+																	<label class="switch">
+																		<input type="checkbox" class="switch-input" id="qrlink"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QRL</b>
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
+																	</label>
+																	
+																</div>
+																
+															</div>
+															
+															
+														</div>
+														
 														
 														
 														<div class="col-75">
-															<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
 																<div class="col-20">
-																	<label><input type="checkbox" id="pdf" name="toogle" class="blue">
-																		<c style="margin-top:3px;position:absolute;margin-left:5px;">PDF</c>
+																	<label class="switch">
+																		<input type="checkbox" class="switch-input" id="pdf"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">PDF</b>
+																		<span class="switch-label" data-on="On" data-off="Off"></span>
+																		<span class="switch-handle"></span>
 																	</label>
+																	
 																</div>
 																
 															</div>
@@ -516,9 +559,9 @@
 				<div class="container" style="padding:0px;margin:-3px -10px -10px -10px;">
 					<div class="col-75">
 						<div style="width: 100%;height: 256px;border-radius:5px;max-height:256px;">
-							<p style="padding-left:20px;color:#000;">Mwsm é um projeto desenvolvido e mantido por voluntarios, sua principal função é manipular notificações via whatsapp integrado ao mkauth e/ou mikrotik.</p>
-							<p style="padding-left:20px;color:#000;"><b>Distribuição e utilização 100% gratuita.</b></p>
-							<p style="padding-left:20px;color:#000;">Contribua com ideias e/ou sugestões:</b></i><br><a href="https://github.com/MKCodec/Mwsm/discussions" target="_blank" style="color:blue;">https://github.com/MKCodec/Mwsm/discussions</a></p>
+							<p style="padding-left:20px;color:#000;">Mwsm Ã© um projeto desenvolvido e mantido por voluntarios, sua principal funÃ§Ã£o Ã© manipular notificaÃ§Ãµes via whatsapp integrado ao mkauth e/ou mikrotik.</p>
+							<p style="padding-left:20px;color:#000;"><b>DistribuiÃ§Ã£o e utilizaÃ§Ã£o 100% gratuita.</b></p>
+							<p style="padding-left:20px;color:#000;">Contribua com ideias e/ou sugestÃµes:</b></i><br><a href="https://github.com/MKCodec/Mwsm/discussions" target="_blank" style="color:blue;">https://github.com/MKCodec/Mwsm/discussions</a></p>
 							<p style="padding-left:20px;color:#000;">Ajude a manter o projeto vivo:</p>
 							<p style="padding-left:20px;color:#000;">
 							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Chave Aleatoria:</div>
