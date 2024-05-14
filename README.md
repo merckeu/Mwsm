@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 24 (13/05/24)
+# MkAuth WhatsApp Send Message v2 beta 25 (14/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -42,14 +42,10 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 > 
 OBS: Após Habilitar o Debbuger será possivel visualizar os resultados da conexão com a API do mkauth via Console
 
-### Novidades V2.0.20++
+### Novidades V2.0.25++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 20   | Melhoria da tratativa de erros com API MkAuth                                        |
-|  beta 21   | Correção do disparo de mensagens                                                     |
-|  beta 22   | Correção do disparo de mensagens com API                                             |
-|  beta 23   | Adesão do [ Tunel dev API ] como padrão + inclusão do recurso Debug                  |
-|  beta 24   | Melhoria da tratativa de erros com API MkAuth                                        |
+|  beta 25   | Correção da Interface                                                                |
 
 
 ### Funcionalidade:
