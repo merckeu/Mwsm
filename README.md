@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 25 (14/05/24)
+# MkAuth WhatsApp Send Message v2 beta 26 (15/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -42,10 +42,10 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
-### Novidades V2.0.25++
+### Novidades V2.0.26++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 25   | Correção da Interface                                                                |
+|  beta 26   | Melhoria do Recurso Debugger                                                         |
 
 
 ### Funcionalidade:
