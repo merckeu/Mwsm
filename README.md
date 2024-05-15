@@ -36,11 +36,11 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 </details>
 
  > ### ERROS ###
-> em caso de Erros ou Falhas na API do MkAuth habilite o debugger e poste o retorno no forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
+> Em Caso de Erros Habilite o Debbuger e Siga as Dicas do Guia de Utilização `Debugger` no Final da Pagina
 >
 > ** `Mwsm > Settings > Extras > ( Habilite o Debugger )`
-> 
-OBS: Após Habilitar o Debbuger será possivel visualizar os resultados da conexão com a API do mkauth via Console
+>
+No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
 ### Novidades V2.0.25++
 | Versão     | Recurso                                                                              |
@@ -240,6 +240,70 @@ Token:SENHA
  
 </details>
 
+<details>
+<summary>Debug</summary>
+<br>
+ 
+> Para um melhor entendimento utilize esse guia como base na solução de possiveis erros.
+> 
+> ** `Settings > Extras > Debug ON`
+>
+> Todos os Resultados tem somente 2 retornos possiveis ( True ou False ) que correspondem a ( Positivo ou Negativo )
+
+### 1 - Teste a Conexão com API MkAuth
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/auth.png)](#)
+| Opção       |  Retorno                                                    |
+| ------------|-------------------------------------------------------------|
+| `Token`     | Resultado da Autenticação com API do MkAuth                 |
+| `Response`  | Resultado da Comunicação com a API do MkAuth                |
+
+
+<br>
+
+### 2 - Teste a Comunicação da API MkAuth
+
+Utilize o Simulador MkAuth para analisar esses dados
+
+** `Settings > Run > MkAuth Simulator ON`
+
+Em um cenario em que a comunicação foi feita de forma correta receberemos o seguinte resultado
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/success.png)](#)
+
+> Na Primeira linha temos o comando de entrada de acesso a API do MkAuth.
+> 
+> Nas Demais Linhas Temos o Retorno Da API e por Fim o Resultado da Requisição.
+
+
+| Opção        |  Retorno                                                |
+| -------------|---------------------------------------------------------|
+| `Payment`    | Status do Pagamento da Mensalidade Pesquisada           |
+| `MkAuth`     | Modulos Disponiveis no Aplicativo                       |
+| `Module`     | Função Integrada pela API                               |
+| `Available`  | Disponibilidade pelo Gateway de Pagamento               |
+| `Allowed`    | Permissão de Utilização Configurada em `Settings > API` |
+
+Em um Cenario em que Ocorreu uma Falha na Requisição, o Debug ira Apontar a Falha e Onde Ocorreu
+
+O Dado inserido no campo uid esta incorreto ( não existe no MkAUth )
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/uid.png)](#)
+
+O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/find.png)](#)
+
+
+> É importante Levar em Consideração que os Dados Enviados Pelo MkAuth utilizando suas variaveis são enviados ao Aplicativo Seguindo o Mesmo Caminho que o `MkAUth Simulator`.
+>
+> Se o Comando `{"uid":"%logincliente%","find":"%numerotitulo%"}` Vindo do MkAuth Funcionar más o `{"uid":"Paulo.Santos","find":"144"}` inserido no Simulador não Funcionar é Possivel que vc Esteja Inserindo de Forma Errada.
+>
+> Sugerimos que Dispare uma Mensagem Via MkAuth e Copie a Primeira Linha do Debug para Disparar via Simulador.
+>
+> **OBS:**  `%numerotitulo%` é uma variavel **exclusiva** de SMS `Opções > Servidor de SMS > Mensagens` e não é possivel incluir como mensagem ( cartinha na lista de clientes ).
+
+</details>
 
 ### Extras :
 
@@ -250,7 +314,7 @@ Token:SENHA
 | Tag            | Efeito         | Exemplo                                                         |
 | -------------- | -------------- | --------------------------------------------------------------- |
 | `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                                     |
-| `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                     |
+| `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                              |
 | `*`    | negrito        | `*`Mensagem`*`                                                          |
 
 </details>
