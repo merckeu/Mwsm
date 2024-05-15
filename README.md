@@ -254,7 +254,8 @@ Token:SENHA
 > 
 > ** `Settings > Extras > Debug ON`
 >
-> Todos os Resultados tem somente 2 retornos possiveis ( True ou False ) que correspondem a ( Positivo ou Negativo )
+> Todos os Resultados tem somente 2 retornos possiveis:<br>
+> <b>True</b> = Positivo<br><b>False</b> = Negativo
 
 ### 1 - Teste a Conexão com API MkAuth
 
@@ -301,11 +302,7 @@ O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/find.png)](#)
 
 
-> É importante Levar em Consideração que os Dados Enviados Pelo MkAuth utilizando suas variaveis são enviados ao Aplicativo Seguindo o Mesmo Caminho que o `MkAUth Simulator`.
->
-> Se o Comando `{"uid":"%logincliente%","find":"%numerotitulo%"}` Vindo do MkAuth Funcionar más o `{"uid":"Paulo.Santos","find":"144"}` inserido no Simulador não Funcionar é Possivel que vc Esteja Inserindo de Forma Errada.
->
-> Sugerimos que Dispare uma Mensagem Via MkAuth e Copie a Primeira Linha do Debug para Disparar via Simulador.
+> É importante Levar em Consideração que os Dados Enviados Pelo MkAuth utilizando suas variaveis são enviados ao Aplicativo Seguindo o Mesmo Caminho que o `MkAUth Simulator`, se o Comando `{"uid":"%logincliente%","find":"%numerotitulo%"}` vindo do MkAuth Funcionar más o `{"uid":"Paulo.Santos","find":"144"}` inserido no Simulador não Funcionar é Possivel que vc Esteja Inserindo de Forma Errada, desse modo sugerimos que Dispare uma Mensagem via MkAuth e Copie a Primeira Linha do Debug para Disparar via Simulador.
 >
 > **OBS:**  `%numerotitulo%` é uma variavel **exclusiva** de SMS `Opções > Servidor de SMS > Mensagens` e não é possivel incluir como mensagem ( cartinha na lista de clientes ).
 
