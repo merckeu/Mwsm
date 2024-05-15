@@ -258,6 +258,7 @@ Token:SENHA
 > <b>True</b> = Positivo<br><b>False</b> = Negativo
 
 ### 1 - Teste a Conexão com API MkAuth
+> ** `Settings > API > MkAuth Link` ( Desabilite e Habilite )
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/auth.png)](#)
 | Opção       |  Retorno                                                    |
