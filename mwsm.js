@@ -1,5 +1,5 @@
 //******************************************************************
-const Protocol = "http";
+// MkAuth WhatsApp Send Message
 //******************************************************************
 const {
 	Client,
@@ -49,6 +49,7 @@ function delay(t, v) {
 	});
 }
 
+
 function Debug(Select, Search = '*', Mode = 'single') {
 	switch (Mode.toLowerCase()) {
 		case "single":
@@ -90,7 +91,7 @@ app.get('/', (req, res) => {
 });
 
 const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') => {
-	var SEARCH;
+	var SEARCH, Json = undefined;
 	const Authentication = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/', {
 		auth: {
 			username: Debug('MKAUTH').client_id,
@@ -101,9 +102,8 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 	}).catch(err => {
 		return false;
 	});
-	Terminal(Authentication);
 	if (Authentication) {
-		const MkSync = await axios.get(Protocol + '://' + Debug('MKAUTH').tunel + '/api/' + TYPE + '/' + EXT + '/' + UID, {
+		const MkSync = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/' + TYPE + '/' + EXT + '/' + UID, {
 			headers: {
 				'Authorization': 'Bearer ' + Authentication
 			}
@@ -112,31 +112,44 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 		}).catch(err => {
 			return false;
 		});
-		if (MkSync) {
+		if (MkSync.mensagem == undefined) {
 			if (MODE) {
 				SEARCH = MkSync.titulos;
 			} else {
 				SEARCH = MkSync;
 			}
-
 			(SEARCH).some(function(Send, index) {
 				if (Send.titulo == FIND || Send.linhadig == FIND) {
 					var Bolix = '';
 					if (Send.linhadig == undefined || Send.linhadig == null) {
 						Send.linhadig = '';
+						Json_Bar = "false";
 					} else {
-						Bolix = Protocol + "://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
+						Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
+						Json_Bar = "true";
 					}
 					if (Send.pix == undefined || Send.pix == null) {
 						Send.pix = '';
+						Json_Pix = "false";
+					} else {
+
+						Json_Pix = "true";
 					}
 					if (Send.pix_qr == undefined || Send.pix_qr == null) {
 						Send.pix_qr = 'base64,';
+						Json_QR = "false";
+					} else {
+
+						Json_QR = "true";
 					}
+
 					if (Send.pix_link == undefined || Send.pix_link == null) {
 						Send.pix_link = '';
+						Json_Link = "false";
+					} else {
+
+						Json_Link = "true";
 					}
-					Terminal(Send);
 					var SEND = [];
 					if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 						SEND.push(Send.linhadig);
@@ -168,23 +181,28 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 								"Status": Send.status,
 								"Payments": [{
 										"value": Send.linhadig,
-										"caption": "Bar"
+										"caption": "Bar",
+										"status": Json_Bar
 									},
 									{
 										"value": Send.pix,
-										"caption": "Pix"
+										"caption": "Pix",
+										"status": Json_Pix
 									},
 									{
 										"value": Send.pix_qr.split("base64,")[1],
-										"caption": "QRCode"
+										"caption": "QRCode",
+										"status": Json_QR
 									},
 									{
 										"value": Send.pix_link,
-										"caption": "Link"
+										"caption": "Link",
+										"status": Json_Link
 									},
 									{
 										"value": Bolix,
-										"caption": "Boleto"
+										"caption": "Boleto",
+										"status": Json_Bar
 									}
 								]
 							};
@@ -197,11 +215,49 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 				Json = {
 					"Status": "Error"
 				};
+				JDebug = {
+					"MkAuth": "Cannot Find the Data > find",
+				};
+				Terminal(JSON.stringify(JDebug));
+			} else {
+				JDebug = {
+					"Payment": Json.Status,
+					"MkAuth": [{
+							"Module": "Bar",
+							"Available": Json["Payments"][0].status,
+							"Allowed": "" + Debug('MKAUTH').bar + ""
+
+						},
+						{
+							"Module": "Pix",
+							"Available": Json["Payments"][1].status,
+							"Allowed": "" + Debug('MKAUTH').pix + ""
+						},
+						{
+							"Module": "QRC",
+							"Available": Json["Payments"][2].status,
+							"Allowed": "" + Debug('MKAUTH').qrpix + ""
+						},
+						{
+							"Module": "QRL",
+							"Available": Json["Payments"][3].status,
+							"Allowed": "" + Debug('MKAUTH').qrlink + ""
+						},
+						{
+							"Module": "PDF",
+							"Available": Json["Payments"][4].status,
+							"Allowed": "" + Debug('MKAUTH').pdf + ""
+						}
+					]
+				}
+				Terminal(JDebug);
 			}
-			Terminal(Json);
-			console.log(Json);
 			return Json;
 		} else {
+			JDebug = {
+				"MkAuth": "Cannot Find the Data > uid",
+			};
+			Terminal(JSON.stringify(JDebug));
 			return false;
 		}
 	} else {
@@ -792,6 +848,7 @@ app.post('/link_mkauth', async (req, res) => {
 	const Tunel = req.body.tunel;
 	const Module = req.body.module;
 	const Token = req.body.token;
+	var ConnAuth, ResAuth;
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		const Authentication = await axios.get('https://' + Tunel + '/api/', {
 			auth: {
@@ -803,9 +860,10 @@ app.post('/link_mkauth', async (req, res) => {
 		}).catch(err => {
 			return false;
 		});
-		Terminal('Link : ' + Authentication);
+		ConnAuth = false;
 		if (Authentication) {
-			const MkSync = await axios.get(Protocol + '://' + Tunel + '/api/titulo/listar/limite=1&pagina=1', {
+			ConnAuth = true;
+			const MkSync = await axios.get('https://' + Tunel + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
@@ -814,8 +872,9 @@ app.post('/link_mkauth', async (req, res) => {
 			}).catch(err => {
 				return false;
 			});
-			Terminal(MkSync);
+			ResAuth = false;
 			if ((MkSync.error == undefined)) {
+				ResAuth = true;
 				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?", [User, Pass, Domain, Tunel, Module], (err) => {
 					if (err) {
 						res.json({
@@ -840,6 +899,13 @@ app.post('/link_mkauth', async (req, res) => {
 				Return: Debug('CONSOLE').mkfail
 			});
 		}
+		JDebug = {
+			"Authentication": [{
+				"Token": "" + ConnAuth + "",
+				"Response": "" + ResAuth + ""
+			}]
+		};
+		Terminal(JSON.stringify(JDebug));
 	} else {
 		res.json({
 			Status: "Fail",
@@ -892,7 +958,7 @@ app.post('/send-message', [
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
-						Terminal(JsonEncode);
+						Terminal(JSON.stringify(Json));
 						MkAuth(Json.uid, Json.find).then(Synchronization => {
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
@@ -961,6 +1027,8 @@ app.post('/send-message', [
 						}).catch(err => {
 							resolve(false);
 						});
+
+
 					}
 				});
 			} else {
@@ -1265,13 +1333,14 @@ app.get('/build', [
 		const Patch = `${__dirname}/${UID}.pdf`;
 		await htmlPDF.writeFile(Buffer, Patch);
 		return res.json({
-			Return: Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
+			Return: "http://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
 		});
 		htmlPDF.closeBrowser();
 	});
 });
+
 const Build = async (SET) => {
-	const PDFGet = await axios.get(Protocol + "://" + ip.address() + ":" + Debug('OPTIONS').access + "/build", {
+	const PDFGet = await axios.get("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/build", {
 		data: {
 			uid: SET,
 		}
