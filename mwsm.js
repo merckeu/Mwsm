@@ -900,9 +900,9 @@ app.post('/link_mkauth', async (req, res) => {
 			});
 		}
 		JDebug = {
-			"Authentication": [{
-				"Token": "" + ConnAuth + "",
-				"Response": "" + ResAuth + ""
+			"MkAuth": [{
+				"Authentication": "" + ConnAuth + "",
+				"Communication": "" + ResAuth + ""
 			}]
 		};
 		Terminal(JSON.stringify(JDebug));
