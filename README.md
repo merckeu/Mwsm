@@ -237,7 +237,13 @@ Token:SENHA
 > ```sh
 > Mensagem1##https://via.placeholder.com/350x150.png##Mensagem3##{"uid":"%logincliente%","find":"%numerotitulo%"}##Mensagem5
 > ```
- 
+
+### Exemplo De Mensagem Para Utilização no MkAuth
+> ** `Opções > Servidor de SMS > Mensagens`
+> 
+> ```sh
+> Olá %nomeresumido%, sua fatura %numerotitulo% vence no dia %vencimento%, para sua comodidade estamos enviado os dados para pagamento: ##{"uid":"%logincliente%","find":"%numerotitulo%"}##desconsidere esse aviso caso tenha feito o pagamento.
+> ``` 
 </details>
 
 <details>
