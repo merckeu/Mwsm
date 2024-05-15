@@ -241,7 +241,7 @@ Token:SENHA
 </details>
 
 <details>
-<summary>Debug</summary>
+<summary>Debugger</summary>
 <br>
  
 > Para um melhor entendimento utilize esse guia como base na solução de possiveis erros.
