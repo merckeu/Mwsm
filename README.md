@@ -261,10 +261,10 @@ Token:SENHA
 > ** `Settings > API > MkAuth Link` ( Desabilite e Habilite )
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/auth.png)](#)
-| Opção       |  Retorno                                                    |
-| ------------|-------------------------------------------------------------|
-| `Token`     | Resultado da Autenticação com API do MkAuth                 |
-| `Response`  | Resultado da Comunicação com a API do MkAuth                |
+| Opção            |  Retorno                                                    |
+| -----------------|-------------------------------------------------------------|
+| `Authentication` | Autenticação com API do MkAuth via Token JWT                |
+| `Communication`  | Comunicação Entre APP com a API do MkAuth                   |
 
 
 <br>
