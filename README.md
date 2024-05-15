@@ -264,7 +264,7 @@ Token:SENHA
 | Opção            |  Retorno                                                    |
 | -----------------|-------------------------------------------------------------|
 | `Authentication` | Autenticação com API do MkAuth via Token JWT                |
-| `Communication`  | Comunicação Entre APP com a API do MkAuth                   |
+| `Communication`  | Comunicação Entre APP e API do MkAuth                   |
 
 
 <br>
