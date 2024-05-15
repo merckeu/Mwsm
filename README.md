@@ -38,7 +38,7 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
  > ### ERROS ###
 > Em Caso de Erros Habilite o Debbuger e Siga as Dicas do Guia de Utilização `Debugger` no Final da Pagina
 >
-> ** `Mwsm > Settings > Extras > ( Habilite o Debugger )`
+> ** `Mwsm > Settings > Extras > Debugger`
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
