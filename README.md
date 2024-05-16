@@ -47,6 +47,11 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 26   | Melhoria do Recurso Debugger                                                         |
 
+### Compatibilidade [ MkAuth API ]
+|                 | BAR | PIX | QR | QRL | PDF  |
+| --------------------  | --- | --- | -- | --- | ---- |
+|  Gerencianet     | ✅ | ✅  | ✅ | ✅ | ✅  | 
+|  Santander     | ✅ | ❌  | ❌ | ❌ | ✅  | 
 
 ### Funcionalidade:
 * Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
