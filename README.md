@@ -51,7 +51,8 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |                 | BAR | PIX | QR | QRL | PDF  |
 | --------------------  | --- | --- | -- | --- | ---- |
 |  Gerencianet     | ✅ | ✅  | ✅ | ✅ | ✅  | 
-|  iugu     | ✅ | ✅  | ✅ | ✅ | ✅  | 
+|  Iugu     | ✅ | ✅  | ✅ | ✅ | ✅  | 
+|  Galaxpay     | ✅ | ✅  | ✅ | ✅ | ✅  | 
 |  Santander     | ✅ | ❌  | ❌ | ❌ | ✅  | 
 
 ### Funcionalidade:
