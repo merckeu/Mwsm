@@ -122,7 +122,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 			}
 			(SEARCH).some(function(Send, index) {
 				if (EXT == 'titulos') {
-					if (Send.titulo == FIND || Send.linhadig == FIND) {
+					if ((Send.titulo == FIND || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
 						var Bolix = '';
 						if (Send.linhadig == undefined || Send.linhadig == null) {
 							Send.linhadig = '';
@@ -315,7 +315,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 };
 
 delay(0).then(async function() {
-	const Vaster = await MkAuth('5', 'vencido', 'listagem');
+//	const Master = await MkAuth('5', 'vencido', 'listagem');
 });
 
 function testJSON(text) {
@@ -1012,7 +1012,7 @@ app.post('/send-message', [
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
 						Terminal(JSON.stringify(Json));
-						MkAuth(Json.uid, (Json.find).replace(/^0+/, '')).then(Synchronization => {
+						MkAuth(Json.uid, Json.find).then(Synchronization => {
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
 							}
