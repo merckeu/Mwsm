@@ -1,4 +1,4 @@
-html {
+﻿html {
 	margin 0;
 	padding: 0;
 }
@@ -7621,4 +7621,17 @@ cursor: no-drop;
 
 .switch>.switch-input:disabled~.switch-label {
         background: #ccc;
+}
+.Next{
+    outline: none !important;
+    box-shadow: none !important;
+height:25px;
+}
+.Under{
+display:none;
+}
+#Control{
+float:right;
+margin-top:-8px;
+
 }

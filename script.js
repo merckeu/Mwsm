@@ -2,6 +2,15 @@ var Slide = false;
 
 $(document).ready(function() {
 
+	$("#tabs2").tabs({
+		activate: function(event, ui) {
+			if (ui.newTab.find(".ui-tabs-anchor").attr('href') == "#tabs-2E") {
+				$("#Control").show("fast");
+			} else {
+                               $("#Control").hide("fast");			
+                        }
+		},
+	});
 	$("#IntervalUP").on('click', function() {
 		inGET = parseFloat($("#interval").val());
 		Min = parseFloat($("#interval").attr('min'));
@@ -62,6 +71,44 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#001").on('click', function() {
+		if ($("#tabs-2E3").is(":visible")) {
+			$("#tabs-2E3").fadeOut("slow", function() {
+				$("#tabs-2E2").fadeIn("slow", function() {
+
+				});
+			});
+		} else {
+			if ($("#tabs-2E2").is(":visible")) {
+
+				$("#tabs-2E2").fadeOut("slow", function() {
+					$("#tabs-2E1").fadeIn("slow", function() {
+
+					});
+				});
+			}
+		}
+	});
+
+
+	$("#002").on('click', function() {
+		if ($("#tabs-2E1").is(":visible")) {
+			$("#tabs-2E1").fadeOut("slow", function() {
+				$("#tabs-2E2").fadeIn("slow", function() {
+
+				});
+			});
+		} else {
+			if ($("#tabs-2E2").is(":visible")) {
+
+				$("#tabs-2E2").fadeOut("slow", function() {
+					$("#tabs-2E3").fadeIn("slow", function() {
+
+					});
+				});
+			}
+		}
+	});
 
 
 });
@@ -146,7 +193,6 @@ $(document).ready(function() {
 				});
 			}
 		});
-
 	});
 
 
@@ -2239,8 +2285,6 @@ $(document).ready(function() {
 				});
 
 				if (options.using) {
-
-					// Adds feedback as second argument to using callback, if present
 					using = function(props) {
 						var left = targetOffset.left - position.left,
 							right = left + targetWidth - elemWidth,

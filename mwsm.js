@@ -90,8 +90,10 @@ app.get('/', (req, res) => {
 	});
 });
 
-const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') => {
-	var SEARCH, Json = undefined;
+
+const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
+	var SEARCH, LIST, PUSH = [],
+		Json = undefined;
 	const Authentication = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/', {
 		auth: {
 			username: Debug('MKAUTH').client_id,
@@ -119,151 +121,202 @@ const MkAuth = async (UID, FIND, MODE = true, TYPE = 'titulo', EXT = 'titulos') 
 				SEARCH = MkSync;
 			}
 			(SEARCH).some(function(Send, index) {
-				if (Send.titulo == FIND || Send.linhadig == FIND) {
-					var Bolix = '';
-					if (Send.linhadig == undefined || Send.linhadig == null) {
-						Send.linhadig = '';
-						Json_Bar = "false";
-					} else {
-						Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
-						Json_Bar = "true";
-					}
-					if (Send.pix == undefined || Send.pix == null) {
-						Send.pix = '';
-						Json_Pix = "false";
-					} else {
-
-						Json_Pix = "true";
-					}
-					if (Send.pix_qr == undefined || Send.pix_qr == null) {
-						Send.pix_qr = 'base64,';
-						Json_QR = "false";
-					} else {
-
-						Json_QR = "true";
-					}
-
-					if (Send.pix_link == undefined || Send.pix_link == null) {
-						Send.pix_link = '';
-						Json_Link = "false";
-					} else {
-
-						Json_Link = "true";
-					}
-					var SEND = [];
-					if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
-						SEND.push(Send.linhadig);
-					}
-
-					if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
-						SEND.push(Send.pix);
-					}
-
-					if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
-						SEND.push(Send.pix_qr);
-					}
-
-					if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
-						SEND.push(Send.pix_link);
-					}
-
-					if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
-						SEND.push(Send.uuid);
-					}
-
-					if (SEND.length >= 1) {
-						if ((SEND.includes(undefined) || SEND.includes(null))) {
-							Json = {
-								"Status": "Null"
-							};
+				if (EXT == 'titulos') {
+					if (Send.titulo == FIND || Send.linhadig == FIND) {
+						var Bolix = '';
+						if (Send.linhadig == undefined || Send.linhadig == null) {
+							Send.linhadig = '';
+							Json_Bar = "false";
 						} else {
-							Json = {
-								"Status": Send.status,
-								"Payments": [{
-										"value": Send.linhadig,
-										"caption": "Bar",
-										"status": Json_Bar
-									},
-									{
-										"value": Send.pix,
-										"caption": "Pix",
-										"status": Json_Pix
-									},
-									{
-										"value": Send.pix_qr.split("base64,")[1],
-										"caption": "QRCode",
-										"status": Json_QR
-									},
-									{
-										"value": Send.pix_link,
-										"caption": "Link",
-										"status": Json_Link
-									},
-									{
-										"value": Bolix,
-										"caption": "Boleto",
-										"status": Json_Bar
-									}
-								]
-							};
+							Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
+							Json_Bar = "true";
+						}
+						if (Send.pix == undefined || Send.pix == null) {
+							Send.pix = '';
+							Json_Pix = "false";
+						} else {
+
+							Json_Pix = "true";
+						}
+						if (Send.pix_qr == undefined || Send.pix_qr == null) {
+							Send.pix_qr = 'base64,';
+							Json_QR = "false";
+						} else {
+
+							Json_QR = "true";
 						}
 
+						if (Send.pix_link == undefined || Send.pix_link == null) {
+							Send.pix_link = '';
+							Json_Link = "false";
+						} else {
+
+							Json_Link = "true";
+						}
+						var SEND = [];
+						if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+							SEND.push(Send.linhadig);
+						}
+
+						if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+							SEND.push(Send.pix);
+						}
+
+						if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+							SEND.push(Send.pix_qr);
+						}
+
+						if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+							SEND.push(Send.pix_link);
+						}
+
+						if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+							SEND.push(Send.uuid);
+						}
+						if (SEND.length >= 1) {
+							if (SEND.some(Row => Row == '')) {
+								Json = {
+									"Status": "Null"
+								};
+							} else {
+								Json = {
+									"Status": Send.status,
+									"Payments": [{
+											"value": Send.linhadig,
+											"caption": "Bar",
+											"status": Json_Bar
+										},
+										{
+											"value": Send.pix,
+											"caption": "Pix",
+											"status": Json_Pix
+										},
+										{
+											"value": Send.pix_qr.split("base64,")[1],
+											"caption": "QRCode",
+											"status": Json_QR
+										},
+										{
+											"value": Send.pix_link,
+											"caption": "Link",
+											"status": Json_Link
+										},
+										{
+											"value": Bolix,
+											"caption": "Boleto",
+											"status": Json_Bar
+										}
+									]
+								};
+							}
+
+						}
+					}
+				}
+				if (EXT == 'listagem') {
+					LIST = [FIND];
+					if (FIND == 'all') {
+						LIST = [Send.status];
+					}
+					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
+						UID = "0" + UID;
+					}
+					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's') {
+						Json = {
+							"Identifier": Send.titulo,
+							"Client": Send.nome,
+							"Reward": Send.datavenc,
+							"Payment": Send.status,
+							"Connect": Send.login
+						};
+						PUSH.push(Json);
+						Json = PUSH;
 					}
 				}
 			});
-			if (Json == undefined) {
-				Json = {
-					"Status": "Error"
-				};
-				JDebug = {
-					"MkAuth": "Cannot Find the Data > find",
-				};
-				Terminal(JSON.stringify(JDebug));
-			} else {
-				JDebug = {
-					"Payment": Json.Status,
-					"MkAuth": [{
-							"Module": "Bar",
-							"Available": Json["Payments"][0].status,
-							"Allowed": "" + Debug('MKAUTH').bar + ""
 
-						},
-						{
-							"Module": "Pix",
-							"Available": Json["Payments"][1].status,
-							"Allowed": "" + Debug('MKAUTH').pix + ""
-						},
-						{
-							"Module": "QRC",
-							"Available": Json["Payments"][2].status,
-							"Allowed": "" + Debug('MKAUTH').qrpix + ""
-						},
-						{
-							"Module": "QRL",
-							"Available": Json["Payments"][3].status,
-							"Allowed": "" + Debug('MKAUTH').qrlink + ""
-						},
-						{
-							"Module": "PDF",
-							"Available": Json["Payments"][4].status,
-							"Allowed": "" + Debug('MKAUTH').pdf + ""
-						}
-					]
+			if (EXT == 'titulos') {
+				if (Json == undefined) {
+					Json = {
+						"Status": "Error"
+					};
+					JDebug = {
+						"MkAuth": "Cannot Find the Data > find",
+					};
+					Terminal(JSON.stringify(JDebug));
+				} else {
+					JDebug = {
+						"Payment": Json.Status,
+						"MkAuth": [{
+								"Module": "Bar",
+								"Available": Json["Payments"][0].status,
+								"Allowed": "" + Debug('MKAUTH').bar + ""
+
+							},
+							{
+								"Module": "Pix",
+								"Available": Json["Payments"][1].status,
+								"Allowed": "" + Debug('MKAUTH').pix + ""
+							},
+							{
+								"Module": "QRC",
+								"Available": Json["Payments"][2].status,
+								"Allowed": "" + Debug('MKAUTH').qrpix + ""
+							},
+							{
+								"Module": "QRL",
+								"Available": Json["Payments"][3].status,
+								"Allowed": "" + Debug('MKAUTH').qrlink + ""
+							},
+							{
+								"Module": "PDF",
+								"Available": Json["Payments"][4].status,
+								"Allowed": "" + Debug('MKAUTH').pdf + ""
+							}
+						]
+					}
+					Terminal(JDebug);
 				}
-				Terminal(JDebug);
+				return Json;
 			}
-			return Json;
+			if (EXT == 'listagem') {
+				if (Json == undefined) {
+					Json = {
+						"Status": "Error"
+					};
+					JDebug = {
+						"MkAuth": "Cannot Find the Data",
+					};
+					Terminal(JSON.stringify(JDebug));
+				} else {
+					Terminal(Json);
+				}
+				return Json;
+			}
 		} else {
-			JDebug = {
-				"MkAuth": "Cannot Find the Data > uid",
-			};
-			Terminal(JSON.stringify(JDebug));
-			return false;
+			if (MkSync.mensagem != undefined) {
+				if (EXT == 'titulos') {
+					JDebug = {
+						"MkAuth": "Cannot Find the Data > uid",
+					};
+					Terminal(JSON.stringify(JDebug));
+					return false;
+
+				}
+
+				if (EXT == 'listagem') {
+					return false;
+				}
+			}
 		}
 	} else {
 		return false;
 	}
 };
+
+delay(0).then(async function() {
+	const Vaster = await MkAuth('5', 'vencido', 'listagem');
+});
 
 function testJSON(text) {
 	text = text.toString().replace(/"/g, "").replace(/'/g, "");
@@ -1424,7 +1477,7 @@ client.on('message', async msg => {
 					console.log('> Bot-Mwsm : ' + err)
 				}
 				if (REPLIES != undefined) {
-					if (MsgBox && (Debug('OPTIONS').onbot == 1 || Debug('OPTIONS').onbot == "true") && msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia) {
+					if (MsgBox && (Debug('OPTIONS').onbot == 1 || Debug('OPTIONS').onbot == "true") && (msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia)) {
 						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
 							msg.reply(Debug('OPTIONS').response);
 						} else {
