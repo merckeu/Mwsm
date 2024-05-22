@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 27 (22/05/24)
+# MkAuth WhatsApp Send Message v2 beta 28 (22/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -46,7 +46,10 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 26   | Melhoria do Recurso Debugger                                                         |
-|  beta 27   | Correção da Resposta Automatica                                                     |
+|  beta 27   | Correção da Resposta Automatica                                                      |
+|  beta 28   | Correção de Bugs ( API MkAuth & Debugger )  ATUALIZAÇÃO OBRIGATÓRIA                  |
+
+OBS: Todas as versões que utilizam a api do mkauth antes da versão 28 devem obrigatoriamente ser atualizadas sob risco de mal funcionamento no disparo das mensagens. 
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
