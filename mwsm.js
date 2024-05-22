@@ -92,7 +92,7 @@ app.get('/', (req, res) => {
 
 
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
-	var SEARCH, LIST, PUSH = [],
+	var SEARCH, LIST, STATUS, PUSH = [],
 		Json = undefined;
 	const Authentication = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/', {
 		auth: {
@@ -122,7 +122,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 			}
 			(SEARCH).some(function(Send, index) {
 				if (EXT == 'titulos') {
-					if ((Send.titulo == FIND || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
+					if ((Send.titulo == FIND.replace(/^0+/, '') || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
 						var Bolix = '';
 						if (Send.linhadig == undefined || Send.linhadig == null) {
 							Send.linhadig = '';
@@ -150,7 +150,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							Send.pix_link = '';
 							Json_Link = "false";
 						} else {
-
 							Json_Link = "true";
 						}
 						var SEND = [];
@@ -175,44 +174,43 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 						}
 						if (SEND.length >= 1) {
 							if (SEND.some(Row => Row == '')) {
-								Json = {
-									"Status": "Null"
-								};
+								STATUS = "Null";
 							} else {
-								Json = {
-									"Status": Send.status,
-									"Payments": [{
-											"value": Send.linhadig,
-											"caption": "Bar",
-											"status": Json_Bar
-										},
-										{
-											"value": Send.pix,
-											"caption": "Pix",
-											"status": Json_Pix
-										},
-										{
-											"value": Send.pix_qr.split("base64,")[1],
-											"caption": "QRCode",
-											"status": Json_QR
-										},
-										{
-											"value": Send.pix_link,
-											"caption": "Link",
-											"status": Json_Link
-										},
-										{
-											"value": Bolix,
-											"caption": "Boleto",
-											"status": Json_Bar
-										}
-									]
-								};
+								STATUS = Send.status;
 							}
-
+							Json = {
+								"Status": STATUS,
+								"Payments": [{
+										"value": Send.linhadig,
+										"caption": "Bar",
+										"status": Json_Bar
+									},
+									{
+										"value": Send.pix,
+										"caption": "Pix",
+										"status": Json_Pix
+									},
+									{
+										"value": Send.pix_qr.split("base64,")[1],
+										"caption": "QRCode",
+										"status": Json_QR
+									},
+									{
+										"value": Send.pix_link,
+										"caption": "Link",
+										"status": Json_Link
+									},
+									{
+										"value": Bolix,
+										"caption": "Boleto",
+										"status": Json_Bar
+									}
+								]
+							};
 						}
 					}
 				}
+
 				if (EXT == 'listagem') {
 					LIST = [FIND];
 					if (FIND == 'all') {
@@ -234,7 +232,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					}
 				}
 			});
-
 			if (EXT == 'titulos') {
 				if (Json == undefined) {
 					Json = {
@@ -315,7 +312,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 };
 
 delay(0).then(async function() {
-//	const Master = await MkAuth('5', 'vencido', 'listagem');
+	//	const Master = await MkAuth('5', 'vencido', 'listagem');
 });
 
 function testJSON(text) {
