@@ -1012,7 +1012,7 @@ app.post('/send-message', [
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
 						Terminal(JSON.stringify(Json));
-						MkAuth(Json.uid, Json.find).then(Synchronization => {
+						MkAuth(Json.uid, (Json.find).replace(/^0+/, '')).then(Synchronization => {
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 								RETURNS.push('Bar');
 							}
@@ -1388,7 +1388,7 @@ app.get('/build', [
 		return res.json({
 			Return: "http://" + ip.address() + ":" + Debug('OPTIONS').access + "/" + UID + ".pdf"
 		});
-		htmlPDF.closeBrowser();
+		await htmlPDF.closeBrowser();
 	});
 });
 
