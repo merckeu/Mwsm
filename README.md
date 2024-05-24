@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 28 (22/05/24)
+# MkAuth WhatsApp Send Message v2 beta 29 (24/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -42,14 +42,10 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
-### Novidades V2.0.26++
+### Novidades V2.0.29++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 26   | Melhoria do Recurso Debugger                                                         |
-|  beta 27   | Correção da Resposta Automatica                                                      |
-|  beta 28   | Correção de Bugs ( API MkAuth & Debugger )  ATUALIZAÇÃO OBRIGATÓRIA                  |
-
-OBS: Todas as versões que utilizam a api do mkauth antes da versão 28 devem obrigatoriamente ser atualizadas sob risco de mal funcionamento no disparo das mensagens. 
+|  beta 29   | Recurso Log Inserido                                                         |
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
@@ -254,7 +250,23 @@ Token:SENHA
 > 
 > ```sh
 > Olá %nomeresumido%, sua fatura %numerotitulo% vence no dia %vencimento%, para sua comodidade estamos enviado os dados para pagamento: ##{"uid":"%logincliente%","find":"%numerotitulo%"}##desconsidere esse aviso caso tenha feito o pagamento.
-> ``` 
+> ```
+
+### Testando
+<b>1 - </b>Envie uma mensagem pelo Sumulador `settings > Options > Run` ou MkAuth `Opções > Servidor de SMS > Mensagens`
+
+<b>2 - </b>Verifique o Status do envio no Log `Mwsm > Log`.
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/log.png)](#)
+| Opção            |  Função                                                                              |
+| -----------------|--------------------------------------------------------------------------------------|
+| `ID`             | Idenificador de Registro                                                             |
+| `TITLE`          | Balão Flutuante com numero do titulo (Boleto) ao selecionar um Registro              |
+| `START`          | Inicio do Processamento                                                              |
+| `FINISH`         | Conclusão do Processamento                                                           |
+| `TARGET`         | Whatsapp Alvo do Disparo                                                             |
+| `STATUS`         | Status do Envio                                                                      |
+
 </details>
 
 <details>
