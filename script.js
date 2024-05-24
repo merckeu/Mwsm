@@ -4,13 +4,13 @@ $(document).ready(function() {
 	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
 		position: {
-			of: '#TABLE',
-			my: 'left',
-			at: 'right'
+			my: 'left center',
+			at: 'right center'
 		},
-
+                placement: 'right'
 	});
 });
+
 
 $(document).ready(function() {
 	$("#tabs2").tabs({
