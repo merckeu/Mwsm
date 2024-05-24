@@ -1,7 +1,7 @@
 var Slide = false;
 
 $(document).ready(function() {
-	$(".Table").tooltip({
+	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
 		position: {
 			of: '#TABLE',
@@ -11,7 +11,6 @@ $(document).ready(function() {
 
 	});
 });
-
 
 $(document).ready(function() {
 	$("#tabs2").tabs({
