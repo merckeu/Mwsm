@@ -41,6 +41,7 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 const crypto = require('crypto');
 const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
 var Password = [Debug('OPTIONS').token, Keygen()];
+process.env.LANG = "pt-BR.utf8";
 global.io = io;
 
 function delay(t, v) {
@@ -53,14 +54,18 @@ function delay(t, v) {
 function Debug(Select, Search = '*', Mode = 'single') {
 	switch (Mode.toLowerCase()) {
 		case "single":
-			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase()).get();
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').get();
 			break;
 		case "multiple":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase()).pluck().all();
 			break;
+		case "all":
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').all();
+			break;
 	}
 	return Select;
 }
+
 
 Array.prototype.someAsync = function(callbackfn) {
 	return new Promise(async (resolve, reject) => {
@@ -90,6 +95,19 @@ app.get('/', (req, res) => {
 	});
 });
 
+function AddZero(num) {
+	return (num >= 0 && num < 10) ? "0" + num : num + "";
+}
+
+function DateTime() {
+	isDate = new Date();
+	UTC = isDate.getTime() + (isDate.getTimezoneOffset() * 60000);
+	now = new Date(UTC + (3600000 * -3));
+	var strDateTime = [
+		[now.getFullYear(), AddZero(now.getMonth() + 1), AddZero(now.getDate())].join("-"), [AddZero(now.getHours()), AddZero(now.getMinutes()), AddZero(now.getSeconds())].join(":")
+	].join(" ");
+	return strDateTime;
+};
 
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
@@ -180,6 +198,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							}
 							Json = {
 								"Status": STATUS,
+								"ID": Send.titulo,
 								"Payments": [{
 										"value": Send.linhadig,
 										"caption": "Bar",
@@ -556,6 +575,7 @@ app.post('/reset', (req, res) => {
 		res.json({
 			Status: "Success"
 		});
+		global.io.emit('getlog', true);
 		exec('pm2 restart Bot-Mwsm --update-env');
 	}
 });
@@ -568,6 +588,7 @@ app.post('/shutdown', (req, res) => {
 		res.json({
 			Status: "Success"
 		});
+		global.io.emit('getlog', true);
 		client.logout();
 	} else {
 		res.json({
@@ -611,6 +632,8 @@ app.post('/debug', (req, res) => {
 	}
 });
 
+
+
 // Token
 app.post('/token', (req, res) => {
 	const Token = req.body.token;
@@ -637,6 +660,28 @@ app.post('/token', (req, res) => {
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
+
+		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
+			var isTARGET = [];
+			Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+				GetLog = {
+					"ID": TARGET.id,
+					"TITLE": TARGET.title,
+					"START": TARGET.start,
+					"END": TARGET.end,
+					"TARGET": TARGET.target,
+					"STATUS": TARGET.status,
+				};
+				isTARGET.push(GetLog);
+
+				if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+					global.io.emit('getlog', true);
+					global.io.emit('setlog', isTARGET);
+				}
+			});
+		} else {
+			global.io.emit('getlog', false);
+		}
 		res.json({
 			Status: "Success",
 			Return: Debug('CONSOLE').right
@@ -999,11 +1044,17 @@ app.post('/send-message', [
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
 		const Constructor = new Promise((resolve, reject) => {
+			var Array = [];
+			var Radeon = {};
+			var Preview = false;
+			var Caption, Send, Register, Renner;
+			var RETURNS = [];
+			Radeon['Title'] = 'xxx';
+
+			db.run("INSERT INTO target(start) VALUES(?)", [DateTime()], (err) => {
+				if (err) throw err;
+			});
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-				var Array = [];
-				var Preview = false;
-				var Caption, Send;
-				var RETURNS = [];
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
@@ -1029,7 +1080,13 @@ app.post('/send-message', [
 							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 								RETURNS.push('Boleto');
 							}
+							if (Synchronization.ID != undefined) {
+								Radeon['Title'] = Synchronization.ID;
 
+								db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, Debug('TARGET').id], (err) => {
+									if (err) throw err;
+								});
+							}
 							if (Synchronization.Status != "pago" && Synchronization.Status != "Error" && Synchronization.Status != "Null") {
 								(Synchronization.Payments).forEach(function(GET, index) {
 									if (RETURNS.includes(GET.caption)) {
@@ -1060,29 +1117,39 @@ app.post('/send-message', [
 										}
 									}
 									if (((Synchronization.Payments).length == (index + 1))) {
-										resolve(Array);
+										Radeon['Message'] = Array;
+										resolve(Radeon);
 									}
 								});
 							} else {
 								if (Synchronization.Status == "Error") {
-									resolve("Error");
+									Radeon['Message'] = "Error";
+									resolve(Radeon);
+
 								} else {
 									if (Synchronization.Status == "Null") {
-										resolve("Null");
+										Radeon['Message'] = "Null";
+										resolve(Radeon);
+
 									} else {
-										resolve("Fail");
+										Radeon['Message'] = "Fail";
+										resolve(Radeon);
+
 									}
 								}
 							}
 						}).catch(err => {
-							resolve(false);
+							Radeon['Message'] = false;
+							resolve(Radeon);
+
 						});
 
 
 					}
 				});
 			} else {
-				resolve(undefined);
+				Radeon['Message'] = undefined;
+				resolve(Radeon);
 			}
 		});
 
@@ -1120,12 +1187,12 @@ app.post('/send-message', [
 			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
-			if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error") && (Retorno[0] != "Null")) {
-				for (let i = 0; i < Retorno[0].length; i++) {
-					if (typeof Retorno[0][i] === 'string') {
-						if ((Retorno[0][i].indexOf("boleto.hhvm") > -1)) {
-							const UID = Retorno[0][i].split("=")[1];
-							Boleto = await Build(Retorno[0][i]);
+			if (Retorno[0].Message != undefined && Retorno[0].Message != "Fail" && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+				for (let i = 0; i < Retorno[0].Message.length; i++) {
+					if (typeof Retorno[0].Message[i] === 'string') {
+						if ((Retorno[0].Message[i].indexOf("boleto.hhvm") > -1)) {
+							const UID = Retorno[0].Message[i].split("=")[1];
+							Boleto = await Build(Retorno[0].Message[i]);
 							PDF2Base64 = await new Promise((resolve, reject) => {
 								if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Boleto.includes(Row))) {
 									const Cloud = async (Url) => {
@@ -1160,9 +1227,9 @@ app.post('/send-message', [
 				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if (Retorno[0] != undefined && Retorno[0] != "Fail" && (Retorno[0] != false) && (Retorno[0] != "Error") && (Retorno[0] != "Null")) {
-							for (let i = 0; i < Retorno[0].length; i++) {
-								Assembly.push(Retorno[0][i]);
+						if (Retorno[0].Message != undefined && Retorno[0].Message != "Fail" && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+							for (let i = 0; i < Retorno[0].Message.length; i++) {
+								Assembly.push(Retorno[0].Message[i]);
 							}
 						}
 					} else {
@@ -1193,32 +1260,73 @@ app.post('/send-message', [
 				}
 				if (Assembly.length >= 1) {
 					Terminal(Assembly);
-					if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error") || (Retorno[0] == "Null")) {
-						if (Retorno[0] == "Fail") {
+					if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null")) {
+						if (Retorno[0].Message == "Fail") {
 							return res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').unavailable
 							});
 						}
-						if (Retorno[0] == "Error") {
+						if (Retorno[0].Message == "Error") {
 							return res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').request
 							});
 						}
-						if (Retorno[0] == "Null") {
+						if (Retorno[0].Message == "Null") {
 							return res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').missing
 							});
 						}
 
-						if (Retorno[0] == false) {
+						if (Retorno[0].Message == false) {
+							Retorno[0].Message = "Fail";
 							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').mkfail
 							});
 						}
+
+
+
+						db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+							if (TARGET != undefined) {
+
+								if (Retorno[0].Title == "xxx") {
+									Retorno[0].Title = Debug('TARGET').id;
+								}
+								db.serialize(() => {
+									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+
+										if (err) throw err;
+									});
+									db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+										isTARGET = [];
+										if (TARGET != undefined) {
+											Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+												GetLog = {
+													"ID": TARGET.id,
+													"TITLE": TARGET.title,
+													"START": TARGET.start,
+													"END": TARGET.end,
+													"TARGET": TARGET.target,
+													"STATUS": TARGET.status,
+												};
+												isTARGET.push(GetLog);
+												if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+													if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+														global.io.emit('setlog', isTARGET);
+													}
+												}
+											});
+										}
+									});
+								});
+							}
+						});
+
+
 					} else {
 						setTimeout(function() {
 							Assembly.some(function(Send, index) {
@@ -1270,6 +1378,44 @@ app.post('/send-message', [
 											});
 										});
 										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+
+
+											db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+												if (TARGET != undefined) {
+
+													if (Retorno[0].Title == "xxx") {
+														Retorno[0].Title = Debug('TARGET').id;
+													}
+													db.serialize(() => {
+														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+
+															if (err) throw err;
+														});
+														db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+															isTARGET = [];
+															if (TARGET != undefined) {
+																Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+																	GetLog = {
+																		"ID": TARGET.id,
+																		"TITLE": TARGET.title,
+																		"START": TARGET.start,
+																		"END": TARGET.end,
+																		"TARGET": TARGET.target,
+																		"STATUS": TARGET.status,
+																	};
+																	isTARGET.push(GetLog);
+																	if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+																		if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																			global.io.emit('setlog', isTARGET);
+																		}
+																	}
+																});
+															}
+														});
+													});
+												}
+											});
+
 											return res.json({
 												Status: "Success",
 												message: 'Bot-Mwsm : Message Sent'
@@ -1282,27 +1428,27 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (Retorno[0] == "Fail" || Retorno[0] == false || (Retorno[0] == "Error") || (Retorno[0] == "Null")) {
-							if (Retorno[0] == "Fail") {
+						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null")) {
+							if (Retorno[0].Message == "Fail") {
 								return res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').unavailable
 								});
 							}
-							if (Retorno[0] == "Error") {
+							if (Retorno[0].Message == "Error") {
 								return res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').request
 								});
 							}
-							if (Retorno[0] == "Null") {
+							if (Retorno[0].Message == "Null") {
 								return res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').missing
 								});
 							}
 
-							if (Retorno[0] == false) {
+							if (Retorno[0].Message == false) {
 								var SELECTOR = false;
 								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
 									SELECTOR = true;
@@ -1323,6 +1469,7 @@ app.post('/send-message', [
 								if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 									SELECTOR = true;
 								}
+								Retorno[0].Message = "Fail";
 								if (SELECTOR) {
 									return res.json({
 										Status: "Fail",
@@ -1335,6 +1482,44 @@ app.post('/send-message', [
 									});
 								}
 							}
+
+							db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+								if (TARGET != undefined) {
+
+									if (Retorno[0].Title == "xxx") {
+										Retorno[0].Title = Debug('TARGET').id;
+									}
+									db.serialize(() => {
+										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+
+											if (err) throw err;
+										});
+										db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+											isTARGET = [];
+											if (TARGET != undefined) {
+												Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+													GetLog = {
+														"ID": TARGET.id,
+														"TITLE": TARGET.title,
+														"START": TARGET.start,
+														"END": TARGET.end,
+														"TARGET": TARGET.target,
+														"STATUS": TARGET.status,
+													};
+													isTARGET.push(GetLog);
+													if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+															global.io.emit('setlog', isTARGET);
+														}
+													}
+												});
+											}
+										});
+									});
+								}
+							});
+
+
 						} else {
 							return res.json({
 								Status: "Fail",

@@ -1,14 +1,19 @@
 var Slide = false;
 
 $(document).ready(function() {
+	$("body").tooltip({
+		selector: '[data-toggle=tooltip]'
+	});
+});
 
+$(document).ready(function() {
 	$("#tabs2").tabs({
 		activate: function(event, ui) {
 			if (ui.newTab.find(".ui-tabs-anchor").attr('href') == "#tabs-2E") {
 				$("#Control").show("fast");
 			} else {
-                               $("#Control").hide("fast");			
-                        }
+				$("#Control").hide("fast");
+			}
 		},
 	});
 	$("#IntervalUP").on('click', function() {
@@ -724,6 +729,43 @@ $(document).ready(function() {
 			$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 		}
 	});
+
+
+
+	socket.on('getlog', function(data) {
+		if (data) {
+			$(".inWait").text("Waiting for Authentication...");
+		} else {
+			$(".inWait").text("Waiting for New Records...");
+		}
+	});
+
+
+	socket.on('setlog', function(value) {
+		var data = {};
+		data.d = value;
+		var html = '';
+		$('#TABLE tr').empty();
+		for (var i = 0; i < data.d.length; i++) {
+			var Numero = (data.d[i].TARGET).toString();
+			if (Numero.length == 10) {
+				$('#WhatsApp').mask("(00) 0 0000-0000");
+				data.d[i].TARGET = $("#WhatsApp").masked(Numero.substr(0, 2) + "9" + Numero.substr(2, 8));
+			}
+			html += '<tr data-toggle="tooltip" data-placement="right" title="' + data.d[i].TITLE + '">';
+			html += '<td class="text-center tbajust">' + data.d[i].ID + '</td>';
+			html += '<td class="text-center">' + new Date(data.d[i].START).toLocaleString("pt-br").replace(",", "") + '</td>';
+			html += '<td class="text-center">' + new Date(data.d[i].END).toLocaleString("pt-br").replace(",", "") + '</td>';
+			html += '<td class="text-center">' + data.d[i].TARGET + '</td>';
+			html += '<td class="text-center tbajust">' + data.d[i].STATUS + '</td>';
+			html += '</tr>';
+		}
+		$('#TABLE tr').first().after(html);
+		$("#inTable").fadeOut("slow", function() {
+
+		});
+	});
+
 
 	socket.on('domain', function(data) {
 		$('#domain').val(data);
