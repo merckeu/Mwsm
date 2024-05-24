@@ -45,7 +45,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 ### Novidades V2.0.29++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 29   | Recurso Log Inserido                                                         |
+|  beta 29   | Função Log Inserida                                                         |
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
