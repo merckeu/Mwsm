@@ -47,6 +47,8 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | ---------- | ------------------------------------------------------------------------------------ |
 |  beta 29   | Função Log Inserida                                                         |
 
+OBS: Funão Log vai registrar somente os disparos via POST ou Simulador com MkAuth Sumulator Habilitado
+
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
 | --------------------  | --- | --- | -- | --- | ---- |
