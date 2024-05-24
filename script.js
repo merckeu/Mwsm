@@ -1,10 +1,17 @@
 var Slide = false;
 
 $(document).ready(function() {
-	$("body").tooltip({
-		selector: '[data-toggle=tooltip]'
+	$(".Table").tooltip({
+		selector: '[data-toggle=tooltip]',
+		position: {
+			of: '#TABLE',
+			my: 'left',
+			at: 'right'
+		},
+
 	});
 });
+
 
 $(document).ready(function() {
 	$("#tabs2").tabs({
