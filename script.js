@@ -7,7 +7,7 @@ $(document).ready(function() {
 			my: 'left center',
 			at: 'right center'
 		},
-                placement: 'right'
+		placement: 'right'
 	});
 });
 
@@ -81,6 +81,27 @@ $(document).ready(function() {
 			$("#count").val(inGET);
 		}
 	});
+
+	$("#SleepCallUP").on('click', function() {
+		inGET = parseFloat($("#SleepCall").val());
+		Min = parseFloat($("#SleepCall").attr('min'));
+		Max = parseFloat($("#SleepCall").attr('max'));
+		if (inGET < Max) {
+			inGET = inGET + 1;
+			$("#SleepCall").val(inGET);
+		}
+	});
+
+	$("#SleepCallDown").on('click', function() {
+		inGET = parseFloat($("#SleepCall").val());
+		Min = parseFloat($("#SleepCall").attr('min'));
+		Max = parseFloat($("#SleepCall").attr('max'));
+		if (inGET > Min) {
+			inGET = inGET - 1;
+			$("#SleepCall").val(inGET);
+		}
+	});
+
 
 	$("#001").on('click', function() {
 		if ($("#tabs-2E3").is(":visible")) {
@@ -608,7 +629,9 @@ $(document).ready(function() {
 	});
 
 	$("#sendwait").mask('99');
-	$("#interval, #access").mask('99');
+	$("#SleepCall").mask('99');
+	$("#interval").mask('99');
+	$("#access").mask('9999');
 	$("#limiter, #count").mask('999');
 	$("#token").mask('ZZZZZZZ', {
 		translation: {
@@ -804,6 +827,12 @@ $(document).ready(function() {
 		data = (parseFloat(data) / 1000)
 		$('#interval').val(data);
 	});
+
+	socket.on('sleep', function(data) {
+		data = (parseFloat(data) / 1000)
+		$('#SleepCall').val(data);
+	});
+
 	socket.on('sendwait', function(data) {
 		data = (parseFloat(data) / 1000)
 		$('#sendwait').val(data);
@@ -813,6 +842,10 @@ $(document).ready(function() {
 	});
 	socket.on('response', function(data) {
 		$('#response').val(data);
+
+	});
+	socket.on('call', function(data) {
+		$('#Call').val(data);
 
 	});
 	socket.on('access', function(data) {
@@ -838,6 +871,20 @@ $(document).ready(function() {
 				break;
 		}
 	});
+
+	socket.on('reject', function(data) {
+		switch (data) {
+			case 'true':
+				$("#Reject").prop("checked", true);
+				$("#Call, #Alert").prop('disabled', false);
+				break;
+			case 'false':
+				$("#Reject").prop("checked", false);
+				$("#Call, #Alert").prop('disabled', true);
+				break;
+		}
+	});
+
 
 	socket.on('debugger', function(data) {
 		switch (data) {
@@ -933,6 +980,18 @@ $(document).ready(function() {
 				break;
 		}
 	});
+
+	socket.on('alert', function(data) {
+		switch (data) {
+			case 'true':
+				$("#Alert").prop("checked", true);
+				break;
+			case 'false':
+				$("#Alert").prop("checked", false);
+				break;
+		}
+	});
+
 	socket.on('count', function(data) {
 		data = parseFloat(data);
 		$('#count').val(data);
@@ -1144,6 +1203,19 @@ $(document).ready(function() {
 		}
 	});
 
+
+	$("#Reject").on('change', function() {
+		if ($(this).is(":checked")) {
+			$("#Call, #Alert").prop('disabled', false);
+			if ($("#Call").val() == "") {
+				$("#Call").focus();
+			}
+		} else {
+			$("#Call, #Alert").prop('disabled', true);
+		}
+	});
+
+
 	$("#debugger").on('change', function() {
 		$.ajax({
 			type: "POST",
@@ -1166,8 +1238,8 @@ $(document).ready(function() {
 
 	$("#Save_Options").on("click", function() {
 		var Host = window.location.href.split(':');
-		if ($("#pixfail").val() == "XXX" || $("#pixfail").val() == "") {
-			$("#pixfail").focus();
+		if ($("#Call").val() == "" && $("#Reject").prop('checked')) {
+			$("#Call").focus();
 		} else {
 			if ($("#interval").val().length < 1 || $("#interval").val() == "") {
 				$("#interval").val("").focus();
@@ -1193,18 +1265,21 @@ $(document).ready(function() {
 										});
 
 									} else {
-
 										$.ajax({
 											type: "POST",
 											url: "/sqlite-options",
 											data: {
+												sleep: (parseFloat($("#SleepCall").val()) * 1000),
 												interval: (parseFloat($("#interval").val()) * 1000),
 												sendwait: (parseFloat($("#sendwait").val()) * 1000),
 												access: $("#access").val(),
 												pixfail: $("#pixfail").val(),
 												response: $("#response").val(),
+												call: $("#Call").val(),
 												replyes: $("#replyes").prop('checked'),
 												onbot: $("#onbot").prop('checked'),
+												alert: $("#Alert").prop('checked'),
+												reject: $("#Reject").prop('checked'),
 												count: (parseFloat($("#count").val())),
 												token: $("#token").val(),
 												limiter: $("#limiter").val()
@@ -1235,7 +1310,6 @@ $(document).ready(function() {
 																$("#Locked").fadeIn("slow", function() {
 																	$("#token").val("").focus();
 																});
-
 															}
 															$("#Waiting").fadeOut("slow", function() {
 																if (Host[2].replace(/[^0-9]/g, '') != data.Port) {

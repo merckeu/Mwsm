@@ -55,7 +55,7 @@
 			<div id="tabs-2" style="z-index:1;">
 				<div id="Locked" style="display:block;">
 					<div class="Protect"></div>
-					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:30px;margin-top:130px;background:#FFF;">
+					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:30px;margin-top:170px;background:#FFF;">
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
 						</div>
@@ -66,166 +66,260 @@
 				
 				<div id="tabs2" style="position:absolute;margin-left:-17px;margin-top:-12px;padding:0px 0px 0px 0px;width:690px;height:296px;border:none;">
 					
-					<div class="container" style="margin: 10px;padding:0">
+					<div class="container" style="margin: 10px;padding:0;height:245px;">
 						<div id="tabs-2A">
 							<div class="row">
-								<div class="col-75">
-									<form>
-										<div class="row" style="padding-top:0px;">
-											<div class="col-50">
-												<label for="pixfail"> PixFail</label>
-												
-												<div class="input-group mb-3" style="height:40px;width:300px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-money" aria-hidden="true"></i></span>
-													</div>
-													<input type="password" id="pixfail" placeholder="Chave Pix" style="width:256px;">
+								
+								
+								<form>
+									<div class="col-50" style="height:50px;width:635px;">
+										<div style="float:left;">
+											
+											<label for="call" style="height:15px;width:380px;padding-bottom:-3px;">
+												<c style="float:left;">Call Response</c>
+												<c style="float:right;">Wait</c>
+											</label>
+											
+											<div class="input-group mb-3">
+												<div class="input-group-prepend">
+													<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-phone-square" aria-hidden="true"></i></span>
 												</div>
-												
-												
-												
-												<div class="row" style="margin-top:10px;">
-													<div class="col-50">
-														<label for="response">Response</label>
-														<div class="input-group mb-3" style="height:40px;width:300px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-comments-o" aria-hidden="true"></i></i></span>
-															</div>
-															<input type="password" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="width:256px;">
+												<input type="password" id="Call" placeholder="WhatsApp Controlado por Inteligencia Artificial" style="border-radius:0px;width:315px;">
+												<div class="input-group-append">
+													<div class="input-group mb-3" style="height:40px;">
+														<div class="quantity">
+															<input type="number" id="SleepCall" placeholder="0" style="width:55px;font-size:14px;" min="0" max="10" step="1" value="1" readonly>
+															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SleepCallUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SleepCallDown"></div>
 														</div>
 														
 													</div>
 												</div>
-												
-												<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
-													<div class="col-20">
-														
-														
-														<label class="switch">
-															<input type="checkbox" class="switch-input" id="onbot"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Response</b>
-															<span class="switch-label" data-on="On" data-off="Off"></span>
-															<span class="switch-handle"></span>
-														</label>
+											</div>
+											
+											
+											
+										</div>
+										
+										
+										<div style="float:right;width:210px;height:50px;">
+											
+											<div class="col-15" style="float:left;">
+												<label for="interval">Break</label>
+												<div class="input-group mb-3" style="height:40px;width:95px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+													</div>
+													<div class="quantity">
+														<input type="number" id="interval" placeholder="1" style="width:55px;font-size:14px;" min="1" max="10" step="1" value="1" readonly>
+														<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="IntervalUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="IntervalDown"></div>
 													</div>
 													
+												</div>
+												
+											</div>
+											
+											<div class="col-15" style="float:right;margin-left:-10px;">
+												<label for="sendwait">Sleep</label>
+												<div class="input-group mb-3" style="height:40px;width:105px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+													</div>
+													<div class="quantity">
+														<input type="number" id="sendwait" placeholder="1" style="width:60px;font-size:14px;" min="10" max="99" step="1" value="30" readonly>
+														<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SendwaitUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SendwaitDown"></div>
+													</div>
+													
+												</div>
+											</div>
+											
+											
+											
+										</div>
+									</div>
+									
+									
+								</form>
+								
+								<form>
+									<div class="col-50" style="height:50px;width:635px;margin-top:-15px;">
+										<div style="float:left;">
+											
+											<label for="call" style="height:12px;width:375px;">
+												<c style="float:left;">Message Response</c>
+												<c style="float:right;">Count</c>
+											</label>
+											
+											<div class="input-group mb-3">
+												<div class="input-group-prepend">
+													<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
+												</div>
+												<input type="password" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="border-radius:0px;width:300px;">
+												<div class="input-group-append">
+													<div class="input-group mb-3" style="height:40px;">
+														<div class="quantity">
+															<input type="number" id="count" placeholder="1" style="width:70px;font-size:14px;" min="1" max="999" step="1" value="1">
+															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="CountUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="CountDown"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											
+											
+										</div>
+										
+										
+										<div style="float:right;width:210px;height:50px;">
+											
+											<div class="col-15" style="float:left;">
+												<div style="display:none;">
+													<label for="count">Limiter</label>
+													<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
+														<div class="input-group-prepend">
+															<span class="input-group-text" style="height:25px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+														</div>
+														<input type="tel" id="limiter" placeholder="100" style="width:55px;" disabled>
+													</div>
+													
+												</div>
+												<label for="access">Access</label>
+												<input type="tel" id="port" placeholder="8000" hidden>
+												
+												<div class="input-group mb-3" style="height:40px;width:105px;">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
+													</div>
+													<input type="tel" id="access" placeholder="8000" style="width:55px;">
+												</div>
+												
+											</div>
+											
+											<div class="col-15" style="float:right;margin-left:-10px;">
+												
+												
+												
+
+<div style="width:97px;background:#000;">
+
+<label for="port" style="float:left;width:40px;">Stop</label>
+<label for="port" style="float:right;width:53px;">Reload</label>
+
+</div>												
+												<div class="input-group mb-3" style="height:40px;width:103px;padding:0px;">
+													<div class="input-group-prepend" style="padding:0px;">
+														<button type="button" class="btn btn-success" id="ShutDown" style="height:40px;width:40px;margin-right:5px;margin-top:0px;"><i class="fa fa-power-off fa-lg" aria-hidden="true"></i></button>
+													</div>
+													<button type="button" class="btn btn-primary" id="Save_Options" style="height:40px;width:53px;border-radius:0px 3px 3px 0px;margin-top:0px;"><i class="fa fa-retweet fa-lg" aria-hidden="true"></i></button>
 												</div>
 												
 												
 											</div>
 											
-											<div class="col-50">
-												<div class="row">
-													<div class="col-15">
-														<label for="interval">Break</label>
-														<div class="input-group mb-3" style="height:40px;width:95px;margin-left:-7px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-															</div>
-															<div class="quantity">
-																<input type="number" id="interval" placeholder="1" style="width:55px;font-size:14px;" min="1" max="10" step="1" value="1" readonly>
-																<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="IntervalUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="IntervalDown"></div>
-															</div>
-															
-														</div>
-														
-														
-														
-													</div>
-													<div class="col-15">
-														<label for="sendwait">Sleep</label>
-														<div class="input-group mb-3" style="height:40px;width:105px;margin-left:-7px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:26px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
-															</div>
-															<div class="quantity">
-																<input type="number" id="sendwait" placeholder="1" style="width:60px;font-size:14px;" min="10" max="99" step="1" value="30" readonly>
-																<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SendwaitUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SendwaitDown"></div>
-															</div>
-															
-														</div>
-														
-													</div>
-													<div class="col-15">
-														<label for="access">Access</label>
-														<input type="tel" id="port" placeholder="8000" hidden>
-														
-														<div class="input-group mb-3" style="height:40px;width:95px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
-															</div>
-															<input type="tel" id="access" placeholder="8000" style="width:55px;">
-														</div>
-														
-														
-													</div>
-													
-													<div class="col-15" style="margin-top:10px;">
-														<label for="count">Reply</label>
-														<div class="input-group mb-3" style="height:40px;width:90px;">
+											
+											
+										</div>
+									</div>
+									
+									
+								</form>
+								
+								
+								
+								
+								
+								<form>
+									<div class="col-50" style="height:60px;width:640px;margin-top:-30px;padding:0px 10px 0px 12px;">
+										
+										<div style="float:left;width:320px;padding:0px;">
+											
+											<fieldset>
+												<legend>Call Response</legend>
+												
+												<div style="width:245px;height:20px;">
+													<div style="float:left;">
+														<div class="col-20">
 															
 															
-															
-															<label class="switch switch-green">
-																<input type="checkbox" class="switch-input" id="replyes">
+															<label class="switch">
+																<input type="checkbox" class="switch-input" id="Reject"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Reject</b>
 																<span class="switch-label" data-on="On" data-off="Off"></span>
 																<span class="switch-handle"></span>
 															</label>
 														</div>
 														
-														
+													</div>
+													
+													<div style="float:right;">
+														<div class="col-20">
+															<label class="switch switch-green">
+																<input type="checkbox" class="switch-input" id="Alert">
+																<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Alert</c>
+																<span class="switch-label" data-on="On" data-off="Off"></span>
+																<span class="switch-handle"></span>
+															</label>
+														</div>
 													</div>
 													
 													
-													<div class="col-15" style="margin-top:10px;margin-left:-10px;margin-right:13px;">
-														<label for="count">Counter</label>
-														<div class="input-group mb-3" style="height:40px;width:120px;margin-left:-7px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:25px;"><i class="fa fa-calculator" aria-hidden="true"></i></span>
-															</div>
+												</div>
+												
+											</fieldset>
+											
+											
+										</div>
+										
+										
+										<div style="float:right;width:320px;padding:0px;">
+											
+											<fieldset>
+												<legend>Message Response</legend>
+												
+												<div style="width:245px;height:20px;">
+													<div style="float:left;">
+														<div class="col-20">
 															
-															<div class="quantity">
-																<input type="number" id="count" placeholder="1" style="width:70px;font-size:14px;" min="1" max="999" step="1" value="1">
-																<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="CountUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="CountDown"></div>
-															</div>
 															
+															<label class="switch">
+																<input type="checkbox" class="switch-input" id="onbot"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Response</b>
+																<span class="switch-label" data-on="On" data-off="Off"></span>
+																<span class="switch-handle"></span>
+															</label>
 														</div>
-														
 														
 													</div>
 													
-													
-													<div class="col-15" style="margin-top:10px;">
-														<label for="count">Limiter</label>
-														<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
-															<div class="input-group-prepend">
-																<span class="input-group-text" style="height:25px;padding:6.5px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
-															</div>
-															<input type="tel" id="limiter" placeholder="100" style="width:55px;" disabled>
+													<div style="float:right;">
+														<div class="col-20">
+															<label class="switch switch-green">
+																<input type="checkbox" class="switch-input" id="replyes">
+																<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Reply</c>
+																<span class="switch-label" data-on="On" data-off="Off"></span>
+																<span class="switch-handle"></span>
+															</label>
 														</div>
-														
 														
 													</div>
 													
 													
 												</div>
-											</div>
+												
+											</fieldset>
+											
 											
 										</div>
-										<div style="width:100%;height:35px;padding:0px;">
-											<div class="input-group mb-3" style="height:35px;width:125px;float:right;margin-left:15px;">
-												<div class="input-group-prepend">
-													<button type="button" class="btn btn-success" id="ShutDown" style="height:35px;width:40px;margin-right:5px;"><i class="fa fa-power-off" aria-hidden="true"></i></button>
-												</div>
-												<button type="button" class="btn btn-primary" id="Save_Options" style="height:35px;width:75px;border-radius:0px 3px 3px 0px;">Reload</button>
-											</div>
-											
-										</div>
-									</form>
-								</div>
+									</div>
+									
+									
+								</form>
+								
+								
+								
+								
+								
 							</div>
 							
-							
 						</div>
+						
 						<div id="tabs-2B" style="z-index:1;">
 							<div class="row">
 								<div class="col-75">

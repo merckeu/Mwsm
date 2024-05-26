@@ -560,8 +560,6 @@ io.on('connection', function(socket) {
 	});
 });
 
-client.initialize();
-
 // Reset
 app.post('/reset', (req, res) => {
 	db.run("UPDATE options SET auth=?", [false], (err) => {
@@ -639,14 +637,18 @@ app.post('/token', (req, res) => {
 	const Token = req.body.token;
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		global.io.emit('interval', Debug('OPTIONS').interval);
+		global.io.emit('sleep', Debug('OPTIONS').sleep);
 		global.io.emit('sendwait', Debug('OPTIONS').sendwait);
 		global.io.emit('response', Debug('OPTIONS').response);
+		global.io.emit('call', Debug('OPTIONS').call);
 		global.io.emit('access', Debug('OPTIONS').access);
 		global.io.emit('port', Debug('OPTIONS').access);
 		global.io.emit('pixfail', Debug('OPTIONS').pixfail);
 		global.io.emit('replyes', Debug('OPTIONS').replyes);
+		global.io.emit('alert', Debug('OPTIONS').alert);
 		global.io.emit('count', Debug('OPTIONS').count);
 		global.io.emit('onbot', Debug('OPTIONS').onbot);
+		global.io.emit('reject', Debug('OPTIONS').reject);
 		global.io.emit('limiter', Debug('OPTIONS').limiter);
 		global.io.emit('domain', Debug('MKAUTH').domain);
 		global.io.emit('tunel', Debug('MKAUTH').tunel);
@@ -707,14 +709,18 @@ app.post('/getdata', (req, res) => {
 			res.json({
 				Status: "Success",
 				interval: Debug('OPTIONS').interval,
+				sleep: Debug('OPTIONS').sleep,
 				sendwait: Debug('OPTIONS').sendwait,
 				response: Debug('OPTIONS').response,
+				call: Debug('OPTIONS').call,
 				access: Debug('OPTIONS').access,
 				port: Debug('OPTIONS').access,
 				pixfail: Debug('OPTIONS').pixfail,
 				replyes: Debug('OPTIONS').replyes,
+				alert: Debug('OPTIONS').alert,
 				count: Debug('OPTIONS').count,
 				onbot: Debug('OPTIONS').onbot,
+				reject: Debug('OPTIONS').reject,
 				limiter: Debug('OPTIONS').limiter,
 				domain: Debug('MKAUTH').domain,
 				tunel: Debug('MKAUTH').tunel,
@@ -776,12 +782,16 @@ app.post('/delay_mkauth', (req, res) => {
 // Update SQLite
 app.post('/sqlite-options', (req, res) => {
 	const Interval = req.body.interval;
+	const Sleep = req.body.sleep;
 	const Sendwait = req.body.sendwait;
 	const Access = req.body.access;
 	const Pixfail = req.body.pixfail;
 	var Response = req.body.response;
+	var Call = req.body.call;
 	const Replyes = req.body.replyes;
+	const Alert = req.body.alert;
 	const Onbot = req.body.onbot;
+	const Reject = req.body.reject;
 	const Count = req.body.count;
 	const Token = req.body.token;
 	const Limiter = req.body.limiter;
@@ -794,8 +804,8 @@ app.post('/sqlite-options', (req, res) => {
 		Response = Debug('OPTIONS').response;
 	}
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
-		if (Interval != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
-			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter], (err) => {
+		if (Interval != "" && Sleep != "" && Sendwait != "" && Access != "" && Pixfail != "" && Count != "" && Limiter != "") {
+			db.run("UPDATE options SET interval=?, sendwait=?, access=?, pixfail=?, response=?, replyes=?, onbot=?, count=?, limiter=?, sleep=?,  call=?,  reject=?,  alert=?", [Interval, Sendwait, Access, Pixfail, Response, Replyes, Onbot, Count, Limiter, Sleep, Call, Reject, Alert], (err) => {
 				if (err) {
 					res.json({
 						Status: "Fail",
@@ -1673,6 +1683,24 @@ client.on('message', async msg => {
 	}
 });
 
+client.on('call', async (call) => {
+	if ((Debug('OPTIONS').reject == 1 || Debug('OPTIONS').reject == "true")) {
+		setTimeout(function() {
+			call.reject().then(() => {
+				if ((Debug('OPTIONS').alert == 1 || Debug('OPTIONS').alert == "true")) {
+					client.sendMessage(call.from.split(":")[0] + '@c.us', Debug('OPTIONS').call).then().catch(err => {
+						console.log(err);
+					});
+				}
+			}).catch(err => {
+				console.log(err);
+			});
+		}, Math.floor(Debug('OPTIONS').sleep + Math.random() * 1000));
+	}
+});
+
+
+client.initialize();
 console.log("\nAPI is Ready!\n");
 const Port = process.env.PORT || Debug('OPTIONS').access;
 server.listen(Port, function() {
