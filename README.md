@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 29 (24/05/24)
+# MkAuth WhatsApp Send Message v2 beta 30 (26/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -45,7 +45,8 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 ### Novidades V2.0.29++
 | Versão     | Recurso                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
-|  beta 29   | Função Log Inserida                                                         |
+|  beta 29   | Função Log Inserida                                                                  |
+|  beta 30   | Remoção do PixFail + Adesão da do Call Reject ( Rejeição de Chamadas )               |
 
 OBS: Funão Log vai registrar somente os disparos via POST ou Simulador `settings > Options > Run` Simulator ON
 
@@ -183,15 +184,19 @@ Token:SENHA
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/settings.png)](#)
 
-| Nome           | Default           | Função                                                          |
-| -------------- | ----------------- | --------------------------------------------------------------- |
-| `Break`        | `1 segundo`       | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
-| `Sleep`        | `30 segundos`     | Tempo de disparo entre mensagens com numeros diferentes.        |
-| `Access`       | `8000`            | Porta de acesso do sistema/interface.                           |
-| `Pixfail`      |                   | Chave Pix Manual em caso de falha do mkauth.                    |
-| `Response`     | `on`              | Resposta Automatica.                                            |
-| `Replies`      | `on`              | Marcar conversas em resposta automaticas.                       |
-| `Counter`      | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
+| Nome            | Default           | Função                                                          |
+| --------------- | ----------------- | --------------------------------------------------------------- |
+| `Break`         | `1 segundo`       | Tempo de disparo entre mensagens condicionadas com a TAG `##`.  |
+| `Sleep`         | `30 segundos`     | Tempo de disparo entre mensagens com numeros diferentes.        |
+| `Access`        | `8000`            | Porta de acesso do sistema/interface.                           |
+| `Call`          |                   | Resposta após Receber uma Chamada.                              |
+| `Wait`          | `1 segundo`       | Tempo para Rejeitar uma Chamada.                                |
+| `Message      ` |                   | Resposta após Receber uma Mensagem.                             |
+| `Auto-Response` | `on`              | Habilitar Resposta Automatica.                                  |
+| `Replies`       | `on`              | Marcar conversas em resposta automaticas.                       |
+| `Auto-Reject`   | `on`              | Habilitar Resposta de Chamadas Automatica.                      |
+| `Alert`         | `on`              | Habilitar Mensagem de Resposta ao Rejeitar Chamadas.            |
+| `Counter`       | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
 
 
