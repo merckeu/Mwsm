@@ -652,7 +652,7 @@ $(document).ready(function() {
 				},
 				beforeSend: function(data) {
 					$("#token").prop('disabled', true);
-
+                                        $(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 				},
 				success: function(data) {
 					if (data.Status == "Success") {
@@ -669,6 +669,7 @@ $(document).ready(function() {
 						theme: 'Mwsm',
 						speed: 'slow',
 						close: function(e, m, o) {
+                                                        $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 							if (data.Status == "Success") {
 								$("#Locked").fadeOut("slow", function() {
 									$("#token").prop('disabled', false);
@@ -754,6 +755,9 @@ $(document).ready(function() {
 		} else {
 			if (!Slide) {
 				$('#tabs a[href="#tabs-1"]')[0].click();
+			$("#Locked").show("slow", function() {
+				$("#token").val("");
+			});
 			}
 			$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 		}
