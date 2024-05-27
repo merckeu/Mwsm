@@ -1072,8 +1072,10 @@ app.post('/send-message', [
 			Insert('TARGET', 'START', DateTime());
 
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
+
 						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
 						const Json = JSON.parse(JsonEncode);
 						Terminal(JSON.stringify(Json));
@@ -1165,8 +1167,34 @@ app.post('/send-message', [
 					}
 				});
 			} else {
-				Radeon['Message'] = undefined;
-				resolve(Radeon);
+
+				if (Mensagem.some(Row => testJSON(Row))) {
+					Mensagem.some(function(Send, index) {
+						if (testJSON(Send)) {
+							const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
+							const Json = JSON.parse(JsonEncode);
+							Terminal(JSON.stringify(Json));
+						}
+					});
+
+					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						if ((FUNCTION.includes('true') || FUNCTION.includes('1'))) {
+							Radeon['Message'] = undefined;
+						} else {
+							Radeon['Message'] = "False";
+						}
+					} else {
+						Radeon['Message'] = "Fatal";
+						JDebug = {
+							"MkAuth": "Connect was Failed",
+						};
+						Terminal(JSON.stringify(JDebug));
+					}
+					resolve(Radeon);
+				} else {
+					Radeon['Message'] = undefined;
+					resolve(Radeon);
+				}
 			}
 		});
 
@@ -1204,7 +1232,10 @@ app.post('/send-message', [
 			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
-			if (Retorno[0].Message != undefined && Retorno[0].Message != "Fail" && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+
+			if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+
+
 				for (let i = 0; i < Retorno[0].Message.length; i++) {
 					if (typeof Retorno[0].Message[i] === 'string') {
 						if ((Retorno[0].Message[i].indexOf("boleto.hhvm") > -1)) {
@@ -1244,7 +1275,7 @@ app.post('/send-message', [
 				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if (Retorno[0].Message != undefined && Retorno[0].Message != "Fail" && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+						if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null") || (Retorno[0].Message != "Fatal") || (Retorno[0].Message != "False")) {
 							for (let i = 0; i < Retorno[0].Message.length; i++) {
 								Assembly.push(Retorno[0].Message[i]);
 							}
@@ -1276,8 +1307,8 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
-					Terminal(Assembly);
-					if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null")) {
+					if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
+
 						if (Retorno[0].Message == "Fail") {
 							return res.json({
 								Status: "Fail",
@@ -1297,16 +1328,54 @@ app.post('/send-message', [
 							});
 						}
 
-						if (Retorno[0].Message == false) {
-							Retorno[0].Message = "Fail";
+						if (Retorno[0].Message == "Fatal") {
 							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').mkfail
 							});
 						}
 
+						if (Retorno[0].Message == "False") {
+							res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').mkunselect
+							});
+						}
 
+						if (Retorno[0].Message == false) {
+							var SELECTOR = false;
+							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+								SELECTOR = true;
+							}
 
+							if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+								SELECTOR = true;
+							}
+
+							if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+								SELECTOR = true;
+							}
+
+							if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+								SELECTOR = true;
+							}
+
+							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+								SELECTOR = true;
+							}
+							Retorno[0].Message = "Fail";
+							if (SELECTOR) {
+								return res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').refused
+								});
+							} else {
+								return res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').mkunselect
+								});
+							}
+						}
 						db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
 							if (TARGET != undefined) {
 
@@ -1316,6 +1385,10 @@ app.post('/send-message', [
 								if (Retorno[0].Message == undefined) {
 									Retorno[0].Message = "Null";
 								}
+								if (Retorno[0].Message == "False") {
+									Retorno[0].Message = "Fail";
+								}
+
 
 								db.serialize(() => {
 									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
@@ -1346,9 +1419,9 @@ app.post('/send-message', [
 								});
 							}
 						});
-
-
 					} else {
+
+						Terminal(Assembly);
 						setTimeout(function() {
 							Assembly.some(function(Send, index) {
 								const PIXFAIL = [undefined, "XXX", null, ""];
@@ -1386,6 +1459,7 @@ app.post('/send-message', [
 											}
 											Ryzen = 1000;
 										}
+
 										client.sendMessage(WhatsApp, Send, {
 											caption: Caption,
 											linkPreview: Preview
@@ -1398,8 +1472,8 @@ app.post('/send-message', [
 												message: 'Bot-Mwsm : Message was not Sent'
 											});
 										});
-										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
 
+										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
 
 											db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
 												if (TARGET != undefined) {
@@ -1410,6 +1484,10 @@ app.post('/send-message', [
 													if (Retorno[0].Message == undefined) {
 														Retorno[0].Message = "Null";
 													}
+													if (Retorno[0].Message == "False") {
+														Retorno[0].Message = "Fail";
+													}
+
 
 													db.serialize(() => {
 														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
@@ -1453,7 +1531,7 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null")) {
+						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 							if (Retorno[0].Message == "Fail") {
 								return res.json({
 									Status: "Fail",
@@ -1472,6 +1550,22 @@ app.post('/send-message', [
 									message: Debug('CONSOLE').missing
 								});
 							}
+
+							if (Retorno[0].Message == "Fatal") {
+								res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').mkfail
+								});
+							}
+
+							if (Retorno[0].Message == "False") {
+								res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').mkunselect
+								});
+							}
+
+
 
 							if (Retorno[0].Message == false) {
 								var SELECTOR = false;
@@ -1517,6 +1611,10 @@ app.post('/send-message', [
 									if (Retorno[0].Message == undefined) {
 										Retorno[0].Message = "Null";
 									}
+									if (Retorno[0].Message == "False") {
+										Retorno[0].Message = "Fail";
+									}
+
 
 									db.serialize(() => {
 										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
@@ -1559,6 +1657,10 @@ app.post('/send-message', [
 										if (Retorno[0].Message == undefined) {
 											Retorno[0].Message = "Null";
 										}
+										if (Retorno[0].Message == "False") {
+											Retorno[0].Message = "Fail";
+										}
+
 										db.serialize(() => {
 											db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
 
@@ -1600,6 +1702,7 @@ app.post('/send-message', [
 							});
 						}
 					} else {
+
 						if ((Debug('MKAUTH').module == 0 || Debug('MKAUTH').module == "false")) {
 							Retorno[0].Message = "Fail";
 							res.json({
@@ -1624,6 +1727,10 @@ app.post('/send-message', [
 
 									if (Retorno[0].Message == undefined) {
 										Retorno[0].Message = "Null";
+									}
+
+									if (Retorno[0].Message == "False") {
+										Retorno[0].Message = "Fail";
 									}
 
 									db.serialize(() => {
