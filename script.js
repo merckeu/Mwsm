@@ -745,6 +745,10 @@ $(document).ready(function() {
 		$("#qrcode").fadeOut("fast", function() {
 			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 		});
+			setTimeout(() => {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}, "1000");
+
 	});
 
 	socket.on('Reset', function(data) {
@@ -1188,7 +1192,6 @@ $(document).ready(function() {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 			},
 			success: function(data) {
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
                                 $('#tabs a[href="#tabs-1"]')[0].click();
 				$("#Locked").fadeIn("slow", function() {
 					$("#token").prop('disabled', false).val("");
