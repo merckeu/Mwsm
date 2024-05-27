@@ -59,6 +59,8 @@ OBS: Funão Log vai registrar somente os disparos via POST ou Simulador `setting
 |  Galaxpay     | ✅ | ✅  | ✅ | ✅ | ✅  | 
 |  Santander     | ✅ | ❌  | ❌ | ❌ | ✅  | 
 
+OBS: Compatibilidade Relatada por Usuarios Podendo Funcionar em Bancos/Gateways Ausentes Dessa Lista
+
 ### Funcionalidade:
 * Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
 
