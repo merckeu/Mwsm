@@ -66,6 +66,14 @@ function Debug(Select, Search = '*', Mode = 'single') {
 	return Select;
 }
 
+function Insert(Table, Column, Value) {
+	isInsert = link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
+	if (isInsert) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 Array.prototype.someAsync = function(callbackfn) {
 	return new Promise(async (resolve, reject) => {
@@ -1061,9 +1069,8 @@ app.post('/send-message', [
 			var RETURNS = [];
 			Radeon['Title'] = 'xxx';
 
-			db.run("INSERT INTO target(start) VALUES(?)", [DateTime()], (err) => {
-				if (err) throw err;
-			});
+			Insert('TARGET', 'START', DateTime());
+
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
@@ -1306,6 +1313,10 @@ app.post('/send-message', [
 								if (Retorno[0].Title == "xxx") {
 									Retorno[0].Title = Debug('TARGET').id;
 								}
+								if (Retorno[0].Message == undefined) {
+									Retorno[0].Message = "Null";
+								}
+
 								db.serialize(() => {
 									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
 
@@ -1396,6 +1407,10 @@ app.post('/send-message', [
 													if (Retorno[0].Title == "xxx") {
 														Retorno[0].Title = Debug('TARGET').id;
 													}
+													if (Retorno[0].Message == undefined) {
+														Retorno[0].Message = "Null";
+													}
+
 													db.serialize(() => {
 														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
 
@@ -1499,6 +1514,118 @@ app.post('/send-message', [
 									if (Retorno[0].Title == "xxx") {
 										Retorno[0].Title = Debug('TARGET').id;
 									}
+									if (Retorno[0].Message == undefined) {
+										Retorno[0].Message = "Null";
+									}
+
+									db.serialize(() => {
+										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+
+											if (err) throw err;
+										});
+										db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+											isTARGET = [];
+											if (TARGET != undefined) {
+												Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+													GetLog = {
+														"ID": TARGET.id,
+														"TITLE": TARGET.title,
+														"START": TARGET.start,
+														"END": TARGET.end,
+														"TARGET": TARGET.target,
+														"STATUS": TARGET.status,
+													};
+													isTARGET.push(GetLog);
+													if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+															global.io.emit('setlog', isTARGET);
+														}
+													}
+												});
+											}
+										});
+									});
+								}
+							});
+						} else {
+							if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
+
+								db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+									if (TARGET != undefined) {
+
+										if (Retorno[0].Title == "xxx") {
+											Retorno[0].Title = Debug('TARGET').id;
+										}
+										if (Retorno[0].Message == undefined) {
+											Retorno[0].Message = "Null";
+										}
+										db.serialize(() => {
+											db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+
+												if (err) throw err;
+											});
+											db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+												isTARGET = [];
+												if (TARGET != undefined) {
+													Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+														GetLog = {
+															"ID": TARGET.id,
+															"TITLE": TARGET.title,
+															"START": TARGET.start,
+															"END": TARGET.end,
+															"TARGET": TARGET.target,
+															"STATUS": TARGET.status,
+														};
+														isTARGET.push(GetLog);
+														if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
+															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																global.io.emit('setlog', isTARGET);
+															}
+														}
+													});
+												}
+											});
+										});
+									}
+								});
+
+							} else {
+								global.io.emit('getlog', true);
+
+							}
+
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').mkunselect
+							});
+						}
+					} else {
+						if ((Debug('MKAUTH').module == 0 || Debug('MKAUTH').module == "false")) {
+							Retorno[0].Message = "Fail";
+							res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').mkfail
+							});
+
+						} else {
+							return res.json({
+								Status: "Fail",
+								message: Debug('CONSOLE').unnamed
+							});
+						}
+
+						if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
+							db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+								if (TARGET != undefined) {
+
+									if (Retorno[0].Title == "xxx") {
+										Retorno[0].Title = Debug('TARGET').id;
+									}
+
+									if (Retorno[0].Message == undefined) {
+										Retorno[0].Message = "Null";
+									}
+
 									db.serialize(() => {
 										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
 
@@ -1529,18 +1656,11 @@ app.post('/send-message', [
 								}
 							});
 
-
 						} else {
-							return res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').mkunselect
-							});
+							global.io.emit('getlog', true);
+
 						}
-					} else {
-						return res.json({
-							Status: "Fail",
-							message: Debug('CONSOLE').unnamed
-						});
+
 					}
 				}
 			});
