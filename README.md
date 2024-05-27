@@ -49,7 +49,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  beta 30   | Remoção do PixFail + Adesão do Call Reject ( Rejeição de Chamadas )               |
 |  beta 31   | Correção de Bug da Função Log                                                        |
 
-OBS: Funão Log vai registrar somente os disparos via POST ou Simulador `settings > Options > Run` Simulator ON
+OBS: Função Log vai registrar somente os disparos via POST ou Simulador `settings > Options > Run` Simulator ON
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
