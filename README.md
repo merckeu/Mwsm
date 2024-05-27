@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 32 (27/05/24)
+# MkAuth WhatsApp Send Message v2 beta 31 (27/05/24)
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -48,7 +48,6 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  beta 29   | Função Log Inserida                                                                  |
 |  beta 30   | Remoção do PixFail + Adesão do Call Reject ( Rejeição de Chamadas )                  |
 |  beta 31   | Correção de Bug da Função Log                                                        |
-|  beta 32   | Melhoria do tratamento de Erros da função Log                                   |
 
 OBS: Função Log vai registrar somente os disparos via POST ou Simulador `settings > Options > Run` Simulator ON
 
