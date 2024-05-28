@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message v2 beta 31 (27/05/24)
+# MkAuth WhatsApp Send Message [28/05/24 12:31]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -42,14 +42,28 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
-### Novidades V2.0.29++
-| Versão     | Recurso                                                                              |
-| ---------- | ------------------------------------------------------------------------------------ |
-|  beta 29   | Função Log Inserida                                                                  |
-|  beta 30   | Remoção do PixFail + Adesão do Call Reject ( Rejeição de Chamadas )                  |
-|  beta 31   | Correção de Bug da Função Log                                                        |
+### Novidades V2.0.31++
+| Release    | Recurso                                                                              | Update                | Patch                  |
+| ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
+|  2.0.31    | Função Log                                                                           | 27/05/2024 00:00      | `28/05/2024 12:31`     |
 
-OBS: Função Log vai registrar somente os disparos via POST ou Simulador `settings > Options > Run` Simulator ON
+> **Update :** Utilize quando a sua versão instalada for inferior ao do Release
+>
+> **Patch :** Utilize quando a sua versão instalada for igual ao do Release
+
+### Update
+```sh
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
+
+``` 
+
+### Patch
+```sh
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
+```
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
