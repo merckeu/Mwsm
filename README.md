@@ -197,7 +197,7 @@ Token:SENHA
 | `Message      ` |                   | Resposta após Receber uma Mensagem.                             |
 | `Auto-Response` | `on`              | Habilitar Resposta Automatica.                                  |
 | `Replies`       | `on`              | Marcar conversas em resposta automaticas.                       |
-| `Auto-Reject`   | `on`              | Habilitar Resposta de Chamadas Automatica.                      |
+| `Auto-Reject`   | `on`              | Habilitar Rejeição de Chamadas Automatica.                      |
 | `Alert`         | `on`              | Habilitar Mensagem de Resposta ao Rejeitar Chamadas.            |
 | `Counter`       | `1`               | Quantidade de Auto-Respostas por usuario (renovado todo dia)    |
 
