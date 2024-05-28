@@ -64,6 +64,7 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/M
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
 ```
+**OBS:** Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização.
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
