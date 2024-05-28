@@ -63,6 +63,7 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mws
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
+cd ~ && cd /var/api/Mwsm && pm2 log 0
 ```
 **OBS:** Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização.
 
