@@ -20,9 +20,16 @@
 				<li><a href="#tabs-2"><i class="fa fa-cogs" aria-hidden="true" style="margin-right:5px;"></i>Settings</a></li>
 				<li><a href="#tabs-6"><i class="fa fa-list-alt" aria-hidden="true" style="margin-right:5px;"></i>Log</a></li>
 				<li><a href="#tabs-7"><i class="fa fa-comment-o" aria-hidden="true" style="margin-right:5px;"></i>About</a></li>
-				<div style="position:absolute;right:0px;padding:0px 10px;" id="Reset">
-					<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i></button>
+				
+				<div style="width:130px;position:absolute;right:0px;padding:0px 10px;height:20px;">
+					<div style="float:right;" id="Reset">
+						<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i></button>
+					</div>
+					<div style="float:left;" Class="Version">
+						<input type="password" id="Version" class="form-control" placeholder="v0.0.0" style="height:20px;width:80px;padding:12px;cursor: context-menu;" disabled>
+					</div>
 				</div>
+				
 			</ul>
 			<div id="Waiting">
 				<div class="loader"></div>
@@ -198,13 +205,13 @@
 												
 												
 												
-
-<div style="width:97px;background:#000;">
-
-<label for="port" style="float:left;width:40px;">Stop</label>
-<label for="port" style="float:right;width:53px;">Reload</label>
-
-</div>												
+												
+												<div style="width:97px;background:#000;">
+													
+													<label for="port" style="float:left;width:40px;">Stop</label>
+													<label for="port" style="float:right;width:53px;">Reload</label>
+													
+												</div>
 												<div class="input-group mb-3" style="height:40px;width:103px;padding:0px;">
 													<div class="input-group-prepend" style="padding:0px;">
 														<button type="button" class="btn btn-success" id="ShutDown" style="height:40px;width:40px;margin-right:5px;margin-top:0px;"><i class="fa fa-power-off fa-lg" aria-hidden="true"></i></button>

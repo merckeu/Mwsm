@@ -36,9 +36,11 @@ const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('mwsm.db');
-const register = new Date().getDate();
+const register = new Date().getDate(); 
+const Package = require('./package.json');
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 const crypto = require('crypto');
+
 const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
 var Password = [Debug('OPTIONS').token, Keygen()];
 process.env.LANG = "pt-BR.utf8";
@@ -437,7 +439,7 @@ const client = new Client({
 });
 
 io.on('connection', function(socket) {
-
+        socket.emit('Version', Package.version);
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);

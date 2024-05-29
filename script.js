@@ -814,6 +814,11 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('Version', function(data) {
+		$('#Version').val('v'+data);
+	});
+
+
 	socket.on('username', function(data) {
 		$('#username').val(data);
 		if (data != "") {
