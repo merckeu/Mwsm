@@ -40,19 +40,19 @@ const register = new Date().getDate();
 const Package = require('./package.json');
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 const crypto = require('crypto');
-
 const Keygen = (length = 7, characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') => Array.from(crypto.randomFillSync(new Uint32Array(length))).map((x) => characters[x % characters.length]).join('');
 var Password = [Debug('OPTIONS').token, Keygen()];
 process.env.LANG = "pt-BR.utf8";
 global.io = io;
 
+//Delay
 function delay(t, v) {
 	return new Promise(function(resolve) {
 		setTimeout(resolve.bind(null, v), t)
 	});
 }
 
-
+//Search DataBase
 function Debug(Select, Search = '*', Mode = 'single') {
 	switch (Mode.toLowerCase()) {
 		case "single":
@@ -68,6 +68,7 @@ function Debug(Select, Search = '*', Mode = 'single') {
 	return Select;
 }
 
+//Insert DataBase
 const Insert = async (Table, Column, Value) => {
 	const isInsert = await link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
 	if (isInsert) {
@@ -77,6 +78,7 @@ const Insert = async (Table, Column, Value) => {
 	}
 }
 
+//ForEach Async Mode
 Array.prototype.someAsync = function(callbackfn) {
 	return new Promise(async (resolve, reject) => {
 		await Promise.all(this.map(async item => {
@@ -91,6 +93,7 @@ app.use(express.urlencoded({
 	extended: true
 }));
 
+//Set Debugger
 function Terminal(Value) {
 	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
 		console.error(Value);
@@ -105,10 +108,11 @@ app.get('/', (req, res) => {
 	});
 });
 
+
+//Get Date
 function AddZero(num) {
 	return (num >= 0 && num < 10) ? "0" + num : num + "";
 }
-
 function DateTime() {
 	isDate = new Date();
 	UTC = isDate.getTime() + (isDate.getTimezoneOffset() * 60000);
@@ -119,6 +123,7 @@ function DateTime() {
 	return strDateTime;
 };
 
+//Search MkAUth API
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
 		Json = undefined;
@@ -340,10 +345,12 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 	}
 };
 
+//Test
 delay(0).then(async function() {
 	//	const Master = await MkAuth('5', 'vencido', 'listagem');
 });
 
+//Check is Json
 function testJSON(text) {
 	text = text.toString().replace(/"/g, "").replace(/'/g, "");
 	text = text.toString().replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
@@ -358,6 +365,7 @@ function testJSON(text) {
 	}
 }
 
+//Update WhatsApp
 function WwbUpgrade() {
 	delay(0).then(async function() {
 		const Upgrade = async (GET) => {
@@ -413,6 +421,7 @@ function WwbUpgrade() {
 	});
 }
 
+// WhatsApp-web.js Functions
 const client = new Client({
 	authStrategy: new LocalAuth({
 		clientId: 'Bot-Mwsm'
@@ -437,7 +446,6 @@ const client = new Client({
 		remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/' + Debug('RELEASE').webjs + '.html',
 	},
 });
-
 io.on('connection', function(socket) {
 	socket.emit('Version', Package.version);
 	socket.emit('Reset', true);
