@@ -36,7 +36,7 @@ const exec = require('child_process').exec;
 const link = require('better-sqlite3')('mwsm.db');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('mwsm.db');
-const register = new Date().getDate(); 
+const register = new Date().getDate();
 const Package = require('./package.json');
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 const crypto = require('crypto');
@@ -68,10 +68,10 @@ function Debug(Select, Search = '*', Mode = 'single') {
 	return Select;
 }
 
-function Insert(Table, Column, Value) {
-	isInsert = link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
+const Insert = async (Table, Column, Value) => {
+	const isInsert = await link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
 	if (isInsert) {
-		return link.prepare('SELECT * FROM ' + Table.toLowerCase()+' ORDER BY ID DESC').get().id;
+		return link.prepare('SELECT * FROM ' + Table.toLowerCase() + ' ORDER BY ID DESC').get().id;
 	} else {
 		return false;
 	}
@@ -439,7 +439,7 @@ const client = new Client({
 });
 
 io.on('connection', function(socket) {
-        socket.emit('Version', Package.version);
+	socket.emit('Version', Package.version);
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
@@ -1063,7 +1063,10 @@ app.post('/send-message', [
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
-		const uID = Insert('TARGET', 'START', DateTime());
+		const uID = await Insert('TARGET', 'START', DateTime());
+		if (uID == false) {
+			uID = Debug('TARGET').id;
+		}
 		const Constructor = new Promise((resolve, reject) => {
 			var Array = [];
 			var Radeon = {};
