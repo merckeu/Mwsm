@@ -71,7 +71,7 @@ function Debug(Select, Search = '*', Mode = 'single') {
 function Insert(Table, Column, Value) {
 	isInsert = link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
 	if (isInsert) {
-		return true;
+		return link.prepare('SELECT * FROM ' + Table.toLowerCase()+' ORDER BY ID DESC').get().id;
 	} else {
 		return false;
 	}
@@ -1034,7 +1034,6 @@ app.post('/link_mkauth', async (req, res) => {
 app.post('/send-message', [
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
-
 ], async (req, res) => {
 	const errors = validationResult(req).formatWith(({
 		msg
@@ -1048,6 +1047,7 @@ app.post('/send-message', [
 			message: errors.mapped()
 		});
 	}
+
 	const number = req.body.to;
 	const numberDDI = number.substr(0, 2);
 	const numberDDD = number.substr(2, 2);
@@ -1063,6 +1063,7 @@ app.post('/send-message', [
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
+		const uID = Insert('TARGET', 'START', DateTime());
 		const Constructor = new Promise((resolve, reject) => {
 			var Array = [];
 			var Radeon = {};
@@ -1070,8 +1071,6 @@ app.post('/send-message', [
 			var Caption, Send, Register, Renner;
 			var RETURNS = [];
 			Radeon['Title'] = 'xxx';
-
-			Insert('TARGET', 'START', DateTime());
 
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 
@@ -1104,7 +1103,7 @@ app.post('/send-message', [
 							if (Synchronization.ID != undefined) {
 								Radeon['Title'] = Synchronization.ID;
 
-								db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, Debug('TARGET').id], (err) => {
+								db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, uID], (err) => {
 									if (err) throw err;
 								});
 							}
@@ -1310,21 +1309,20 @@ app.post('/send-message', [
 				}
 				if (Assembly.length >= 1) {
 					if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
-
 						if (Retorno[0].Message == "Fail") {
-							return res.json({
+							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').unavailable
 							});
 						}
 						if (Retorno[0].Message == "Error") {
-							return res.json({
+							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').request
 							});
 						}
 						if (Retorno[0].Message == "Null") {
-							return res.json({
+							res.json({
 								Status: "Fail",
 								message: Debug('CONSOLE').missing
 							});
@@ -1367,7 +1365,7 @@ app.post('/send-message', [
 							}
 							Retorno[0].Message = "Fail";
 							if (SELECTOR) {
-								return res.json({
+								res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').refused
 								});
@@ -1380,7 +1378,6 @@ app.post('/send-message', [
 						}
 						db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
 							if (TARGET != undefined) {
-
 								if (Retorno[0].Title == "xxx") {
 									Retorno[0].Title = Debug('TARGET').id;
 								}
@@ -1393,7 +1390,7 @@ app.post('/send-message', [
 
 
 								db.serialize(() => {
-									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
 
 										if (err) throw err;
 									});
@@ -1492,7 +1489,7 @@ app.post('/send-message', [
 
 
 													db.serialize(() => {
-														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
 
 															if (err) throw err;
 														});
@@ -1535,19 +1532,19 @@ app.post('/send-message', [
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 							if (Retorno[0].Message == "Fail") {
-								return res.json({
+								res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').unavailable
 								});
 							}
 							if (Retorno[0].Message == "Error") {
-								return res.json({
+								res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').request
 								});
 							}
 							if (Retorno[0].Message == "Null") {
-								return res.json({
+								res.json({
 									Status: "Fail",
 									message: Debug('CONSOLE').missing
 								});
@@ -1592,12 +1589,12 @@ app.post('/send-message', [
 								}
 								Retorno[0].Message = "Fail";
 								if (SELECTOR) {
-									return res.json({
+									res.json({
 										Status: "Fail",
 										message: Debug('CONSOLE').refused
 									});
 								} else {
-									return res.json({
+									res.json({
 										Status: "Fail",
 										message: Debug('CONSOLE').mkunselect
 									});
@@ -1619,7 +1616,7 @@ app.post('/send-message', [
 
 
 									db.serialize(() => {
-										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
 
 											if (err) throw err;
 										});
@@ -1664,7 +1661,7 @@ app.post('/send-message', [
 										}
 
 										db.serialize(() => {
-											db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+											db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
 
 												if (err) throw err;
 											});
@@ -1736,7 +1733,7 @@ app.post('/send-message', [
 									}
 
 									db.serialize(() => {
-										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Debug('TARGET').id], (err) => {
+										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
 
 											if (err) throw err;
 										});
@@ -1838,7 +1835,7 @@ client.on('message', async msg => {
 	const NULLED = [undefined, "XXX", null, ""];
 
 	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(Debug('OPTIONS').token)) {
-		if (msg.body.includes(":") && msg.body.split(":")[1].length == 7) {
+		if (msg.body.includes(":") && (msg.body.split(":")[1].length == 7)) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
 				if (err) throw err;
 				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').saved);
