@@ -161,9 +161,30 @@ const GetUpdate = async (GET, SET) => {
 								await global.io.emit('upgrade', true);
 								await global.io.emit('update', true);
 							} else {
-								await global.io.emit('upgrade', true);
+								await global.io.emit('upgrade', false);
 							}
 							Status = true;
+						} else {
+							if (Conclusion && ((isUpdate.version)[i].patch) == (isDateTime)) {
+								Conclusion = false;
+								if (SET == false) {
+									await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+									console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+								}
+								await global.io.emit('upgrade', true);
+								Status = false;
+							} else {
+								if (Conclusion) {
+									Conclusion = false;
+									await global.io.emit('upgrade', false);
+									if (SET == false) {
+										await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+										console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+									}
+								}
+
+							}
+
 						}
 					} else {
 
@@ -190,7 +211,6 @@ const GetUpdate = async (GET, SET) => {
 	});
 	return Status;
 }
-
 
 cron.schedule('*/2 00-05 * * *', async () => {
 	await GetUpdate(WServer, true);
@@ -604,6 +624,7 @@ io.on('connection', function(socket) {
 		Session = true;
 		if (!Permission) {
 			Permission = true;
+			await GetUpdate(WServer, false);
 			await socket.emit('Reset', false);
 			await client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
 		}
