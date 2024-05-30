@@ -119,6 +119,7 @@ function wget(url, dest) {
 	});
 }
 
+
 const GetUpdate = async (GET, SET) => {
 	var Status;
 	const Upgrade = async (GET) => {
@@ -137,7 +138,7 @@ const GetUpdate = async (GET, SET) => {
 	isUpdate = await Upgrade(GET);
 	var Conclusion = true;
 	(isUpdate.version).someAsync(async (Return) => {
-		if ((Return.release >= Package.version)) {
+		if ((Return.release == Package.version)) {
 			var isDateTime = Debug('RELEASE').mwsm;
 			if (isDateTime == "undefined" || isDateTime == null) {
 				isDateTime = "0000-00-00 00:00:00";
@@ -145,7 +146,6 @@ const GetUpdate = async (GET, SET) => {
 			for (let i = 1; i < (isUpdate.version).length; i++) {
 				if ((isUpdate.version)[i].patch >= Return.patch) {
 					if (((isUpdate.version)[i].patch) > (isDateTime)) {
-
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
@@ -191,8 +191,6 @@ const GetUpdate = async (GET, SET) => {
 	return Status;
 }
 
-
-GetUpdate(WServer, false);
 
 cron.schedule('*/2 00-05 * * *', async () => {
 	await GetUpdate(WServer, true);
@@ -767,7 +765,6 @@ app.post('/debug', (req, res) => {
 // API Update
 app.post('/update', (req, res) => {
 	const UP = req.body.uptodate;
-	console.log(Debug('RELEASE').isupdate + " - " + UP);
 	if (Debug('RELEASE').isupdate != UP) {
 		db.run("UPDATE release SET isupdate=?", [UP], (err) => {
 			if (err) {
@@ -819,7 +816,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
-		global.io.emit('uptodate', Debug('RELEASE').update);
+		global.io.emit('uptodate', Debug('RELEASE').isupdate);
 
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
@@ -892,7 +889,7 @@ app.post('/getdata', (req, res) => {
 				pdf: Debug('MKAUTH').pdf,
 				delay: Debug('MKAUTH').delay,
 				debugger: Debug('OPTIONS').debugger,
-				uptodate: Debug('RELEASE').update,
+				uptodate: Debug('RELEASE').isupdate,
 			});
 
 		}
