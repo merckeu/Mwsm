@@ -148,14 +148,14 @@ const GetUpdate = async (GET, SET = true) => {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
-							const Register = await Insert('OPTIONS', 'PATCH', ((isUpdate.version)[i].patch), true);
+							const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
 							if (Register) {
 								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupfiles);
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
-								console.log('> Bot-Mwsm : ' + 'API Updated Successfully!');
+								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
 								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
 								await global.io.emit('upgrade', true);
 								await global.io.emit('update', true);
