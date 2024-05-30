@@ -8033,3 +8033,54 @@ fieldset {
 legend {
     padding: 2px;    
 }
+#Version {
+       transition: color 1s;
+       transition: background 1s;
+       font-weight: bold;
+       color:#000;
+       background:transparent;
+height:20px;
+width:80px;
+padding:12px;
+cursor: context-menu;
+}
+.IsDefault {
+        transition: color 1s;
+        display:inline-block;
+        position: relative
+}
+.IsDefault:after {
+        color:#000;
+        font-family: 'FontAwesome';
+        content: '\f0dd';
+        position: absolute;
+        top:6px;
+        right: 12px;
+}
+
+.IsUpdate {
+        transition: color 1s;
+        display:inline-block;
+        position: relative
+}
+.IsUpdate:after {
+        color:#FFF;
+        font-family: 'FontAwesome';
+        content: '\f00c';
+        position: absolute;
+        top:6px;
+        right: 12px;
+}
+
+.IsUpgrade {
+        transition: color 1s;
+        display:inline-block;
+        position: relative
+}
+.IsUpgrade:after {
+        color:#FFF;
+        font-family: 'FontAwesome';
+        content: '\f12a';
+        position: absolute;
+        top:6px;
+        right: 12px;

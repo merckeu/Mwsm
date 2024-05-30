@@ -25,8 +25,8 @@
 					<div style="float:right;" id="Reset">
 						<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i></button>
 					</div>
-					<div style="float:left;" Class="Version">
-						<input type="password" id="Version" class="form-control" placeholder="v0.0.0" style="height:20px;width:80px;padding:12px;cursor: context-menu;" disabled>
+					<div style="float:left;" Class="Version IsDefault">
+						<input type="password" id="Version" class="form-control" placeholder="v0.0.0" disabled>
 					</div>
 				</div>
 				
@@ -328,10 +328,9 @@
 						</div>
 						
 						<div id="tabs-2B" style="z-index:1;">
-							<div class="row">
+							<div class="row" style="padding:0px 10px;height:220px;">
 								<div class="col-75">
-									<div class="row" style="padding:0px 10px;height:220px;">
-										
+									<div class="row">
 										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
 											<div class="col-15">
 												
@@ -344,8 +343,25 @@
 											</div>
 											
 										</div>
+
+									</div>
+									<div class="row">
+										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+											<div class="col-15">
+												
+												<label class="switch">
+													<input type="checkbox" class="switch-input" id="uptodate"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Update</b>
+													<span class="switch-label" data-on="On" data-off="Off"></span>
+													<span class="switch-handle"></span>
+												</label>
+												
+											</div>
+											
+										</div>
+
 									</div>
 								</div>
+
 							</div>
 						</div>
 						

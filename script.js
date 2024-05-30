@@ -707,6 +707,22 @@ $(document).ready(function() {
 		$('#background').show();
 	});
 
+	socket.on('update', function(data) {
+		if (data) {
+			location.reload();
+		}
+	});
+
+	socket.on('upgrade', function(data) {
+			if (data) {
+				$("#Version").css({"background":"#25D366","color":"#FFF"});
+                                $('.Version').removeClass("IsDefault").removeClass("IsUpgrade").addClass("IsUpdate");
+			} else {
+				$("#Version").css({"background":"#FF0000","color":"#FFF"});
+                                $('.Version').removeClass("IsDefault").removeClass("IsUpdate").addClass("IsUpgrade");
+			}
+	});
+
 
 	socket.on('message', function(msg) {
 		$('.logs').append($('<li>').text(msg));
@@ -906,6 +922,18 @@ $(document).ready(function() {
 				break;
 		}
 	});
+
+	socket.on('uptodate', function(data) {
+		switch (data) {
+			case 'true':
+				$("#uptodate").prop("checked", true);
+				break;
+			case 'false':
+				$("#uptodate").prop("checked", false);
+				break;
+		}
+	});
+
 
 
 	socket.on('module', function(data) {
@@ -1248,8 +1276,28 @@ $(document).ready(function() {
 				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 			}
 		});
-
 	});
+
+	$("#uptodate").on('change', function() {
+		$.ajax({
+			type: "POST",
+			url: "/update",
+			data: {
+				uptodate: $("#uptodate").prop('checked')
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+    		        $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+	});
+
+
 
 	$("#Save_Options").on("click", function() {
 		var Host = window.location.href.split(':');
