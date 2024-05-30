@@ -776,7 +776,7 @@ app.post('/update', (req, res) => {
 			if (err) {
 				res.json({
 					Status: "Fail",
-					Return: Debug('OPTIONS').isupdate
+					Return: Debug('RELEASE').isupdate
 				});
 			}
 			res.json({
@@ -788,6 +788,7 @@ app.post('/update', (req, res) => {
 
 	}
 });
+
 
 
 
