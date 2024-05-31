@@ -1,6 +1,7 @@
 var Slide = false;
-
+alert("Test");
 $(document).ready(function() {
+alert("Test");
 	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
 		position: {
@@ -710,7 +711,10 @@ $(document).ready(function() {
 	socket.on('update', function(data) {
 		if (data) {
 			setTimeout(() => {
-				location.reload();
+				var head = document.getElementsByTagName('head')[0];
+				var script = document.createElement('script');
+				script.src = 'script.js';
+				head.appendChild(script);
 			}, "2000");
 		}
 	});
