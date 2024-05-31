@@ -709,18 +709,27 @@ $(document).ready(function() {
 
 	socket.on('update', function(data) {
 		if (data) {
-			location.reload();
+			setTimeout(() => {
+				location.reload();
+			}, "2000");
 		}
 	});
 
 	socket.on('upgrade', function(data) {
-			if (data) {
-				$("#Version").css({"background":"#25D366","color":"#FFF"});
-                                $('.Version').removeClass("IsDefault").removeClass("IsUpgrade").addClass("IsUpdate");
-			} else {
-				$("#Version").css({"background":"#FF0000","color":"#FFF"});
-                                $('.Version').removeClass("IsDefault").removeClass("IsUpdate").addClass("IsUpgrade");
-			}
+		if (data) {
+			$("#Version").css({
+				"background": "#25D366",
+				"color": "#FFF"
+			});
+			$('.Version').removeClass("IsDefault IsUpgrade").addClass("IsUpdate");
+		} else {
+			$("#Version").css({
+				"background": "#FF0000",
+				"color": "#FFF"
+			});
+			$('.Version').removeClass("IsDefault IsUpdate").addClass("IsUpgrade");
+		}
+		$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 	});
 
 
@@ -761,9 +770,9 @@ $(document).ready(function() {
 		$("#qrcode").fadeOut("fast", function() {
 			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 		});
-			setTimeout(() => {
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-			}, "1000");
+		setTimeout(() => {
+			$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+		}, "1000");
 
 	});
 
@@ -831,7 +840,7 @@ $(document).ready(function() {
 	});
 
 	socket.on('Version', function(data) {
-		$('#Version').val('v'+data);
+		$('#Version').val('v' + data);
 	});
 
 
@@ -1225,7 +1234,7 @@ $(document).ready(function() {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 			},
 			success: function(data) {
-                                $('#tabs a[href="#tabs-1"]')[0].click();
+				$('#tabs a[href="#tabs-1"]')[0].click();
 				$("#Locked").fadeIn("slow", function() {
 					$("#token").prop('disabled', false).val("");
 				});
@@ -1289,7 +1298,7 @@ $(document).ready(function() {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 			},
 			success: function(data) {
-    		        $(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 			},
 			error: function(request, status, error) {
 				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
