@@ -1,6 +1,5 @@
 var Slide = false;
 $(document).ready(function() {
-alert("Test");
 	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
 		position: {
