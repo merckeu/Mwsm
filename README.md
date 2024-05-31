@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [28/05/2024 12:31]
+# MkAuth WhatsApp Send Message [31/05/2024 00:29]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -46,16 +46,22 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.31    | Função Log                                                                           | 27/05/2024 00:00      | `28/05/2024 12:31`     |
+|  2.0.32    | Função Update                                                                        | 31/05/2024 00:29      | `31/05/2024 00:29`     |
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
 
+### Atualização:
+
+<details>
+<summary>Manual</summary>
+
 ### Update
 ```sh
 cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
 
-``` 
+```
 
 ### Patch
 ```sh
@@ -65,7 +71,19 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/M
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
 cd ~ && cd /var/api/Mwsm && pm2 log 0
 ```
-**OBS:** Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização.
+
+</details>
+
+<details>
+<summary>Automática</summary>
+
+<b>1 - </b>Habilite a função de atualizações automaticas, detalhe, as atualizações serão instaladas entre 00:00 e 05:00 am
+
+** `Extras > Update`
+
+</details>
+
+**OBS:** Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
