@@ -1,5 +1,4 @@
 var Slide = false;
-alert("Test");
 $(document).ready(function() {
 alert("Test");
 	$("#TABLE").tooltip({
