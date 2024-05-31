@@ -56,14 +56,17 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 
 <details>
 <summary>Manual</summary>
+<b>1 - </b>Insira um dos codigos no prompt de comando onde o mwsm esta instalado. 
+ 
+> Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
 
-### Update
+Update
 ```sh
 cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
 
 ```
 
-### Patch
+Patch
 ```sh
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
@@ -77,13 +80,12 @@ cd ~ && cd /var/api/Mwsm && pm2 log 0
 <details>
 <summary>Automática</summary>
 
-<b>1 - </b>Habilite a função de atualizações automaticas, detalhe, as atualizações serão instaladas entre 00:00 e 05:00 am
+<b>1 - </b>Habilite a função no webadmin do mwsm. 
+> as atualizações serão instaladas entre 00:00 e 05:00 am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual
 
 ** `Extras > Update`
 
 </details>
-
-**OBS:** Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
 
 ### Compatibilidade [ MkAuth API ]
 |                 | BAR | PIX | QR | QRL | PDF  |
