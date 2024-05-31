@@ -169,7 +169,7 @@ const GetUpdate = async (GET, SET) => {
 								Conclusion = false;
 								if (SET == false) {
 									await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-									console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+									await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
 								}
 								await global.io.emit('upgrade', true);
 								Status = false;
@@ -179,7 +179,7 @@ const GetUpdate = async (GET, SET) => {
 									await global.io.emit('upgrade', false);
 									if (SET == false) {
 										await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-										console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+										await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
 									}
 								}
 
@@ -611,6 +611,7 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('ready', async () => {
+                await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
@@ -624,7 +625,6 @@ io.on('connection', function(socket) {
 		Session = true;
 		if (!Permission) {
 			Permission = true;
-			await GetUpdate(WServer, false);
 			await socket.emit('Reset', false);
 			await client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
 		}
