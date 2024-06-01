@@ -2038,7 +2038,24 @@ client.on('message', async msg => {
 	if (msg.body == "") return null;
 	if (msg.from.includes("@g.us")) return null;
 	const NULLED = [undefined, "XXX", null, ""];
-
+	var isWid = msg.from;
+	const RegEx = new Set("!@#:$%^&*()_");
+	for (let Return of isWid) {
+		if (RegEx.has(Return)) {
+			isWid = isWid.replace(Return, '%');
+		}
+	}
+	isWid = isWid.split("%")[0];
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const isWhatsApp = WhatsApp.split("@")[0];
 	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(Debug('OPTIONS').token)) {
 		if (msg.body.includes(":") && (msg.body.split(":")[1].length == 7)) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
@@ -2054,9 +2071,9 @@ client.on('message', async msg => {
 		}
 	} else {
 		db.serialize(() => {
-			db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
+			db.get("SELECT * FROM replies WHERE whats='" + isWhatsApp + "'", (err, REPLIES) => {
 				if (REPLIES == undefined) {
-					db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
+					db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [isWhatsApp, register, 1], (err) => {
 						if (err) {
 							console.log('> Bot-Mwsm : ' + err)
 						}
@@ -2068,7 +2085,7 @@ client.on('message', async msg => {
 				} else {
 
 					if (register.toString() > REPLIES.date) {
-						db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
+						db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, isWhatsApp], (err) => {
 							if (err) {
 								console.log('> Bot-Mwsm : ' + err)
 							}
@@ -2079,7 +2096,7 @@ client.on('message', async msg => {
 					} else {
 						if (Debug('OPTIONS').count > REPLIES.count) {
 							COUNT = REPLIES.count + 1;
-							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
+							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, isWhatsApp], (err) => {
 								if (err) throw err;
 								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
 								global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
@@ -2104,23 +2121,6 @@ client.on('message', async msg => {
 						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
 							msg.reply(Debug('OPTIONS').response);
 						} else {
-							var isWid = msg.from;
-							const RegEx = new Set("!@#:$%^&*()_");
-							for (let Return of isWid) {
-								if (RegEx.has(Return)) {
-									isWid = isWid.replace(Return, '%');
-								}
-							}
-							isWid = isWid.split("%")[0];
-							const isDDI = isWid.substr(0, 2);
-							const isDDD = isWid.substr(2, 2);
-							const isCall = isWid.slice(-8);
-							var WhatsApp = isWid + '@c.us';
-							if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-								WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-							} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-								WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-							}
 							const Mensagem = (Debug('OPTIONS').response).replaceAll("\\n", "\r\n").split("##");
 							Mensagem.some(function(Send, index) {
 								setTimeout(function() {
