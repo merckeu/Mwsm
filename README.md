@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [01/06/2024 05:44]
+# MkAuth WhatsApp Send Message [01/06/2024 08:06]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -45,11 +45,12 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 ### Novidades V2.0.31++
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
-|  2.0.31    | Função Log                                                                           | 27/05/2024 00:00      | `28/05/2024 12:31`     |
-|  2.0.32    | Função Update                                                                        | 31/05/2024 00:29      | `31/05/2024 01:11`     |
-|  2.0.32    | Melhoria da Função Call/Message Response                                  | 31/05/2024 00:29      | `01/06/2024 05:44`     |
+|  2.0.31    | Função Log                                                                           | 27/05/2024 00:00 ✅   |      |
+|  2.0.32    | Função Update                                                                        | 31/05/2024 00:29 ✅   |      |
+|  2.0.32    | Melhoria da Função Call/Message Response                                             |       | `01/06/2024 05:44`  ✅   |
+|  2.0.32    | Melhoria da Função Update                                                            |       | `01/06/2024 08:06`  ✅   |
 
-> **Update :** Utilize quando a sua versão instalada for inferior ao do Release
+> **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
 
