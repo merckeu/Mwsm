@@ -159,7 +159,7 @@ const GetUpdate = async (GET, SET) => {
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
-                                                                await global.io.emit('update', true);
+								await global.io.emit('update', true);
 							} else {
 								await global.io.emit('upgrade', false);
 							}
@@ -610,7 +610,7 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('ready', async () => {
-                await GetUpdate(WServer, false);
+		await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
@@ -1037,18 +1037,19 @@ app.post('/force-message', [
 			message: errors.mapped()
 		});
 	}
-	const number = req.body.to;
-	const numberDDI = number.substr(0, 2);
-	const numberDDD = number.substr(2, 2);
-	const numberUser = number.substr(-8, 8);
-	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
-	var WhatsApp = number + "@c.us";
 
-	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
-		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
-	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
-		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
+	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
+
 	const Reconstructor = new Promise((resolve, reject) => {
 		if (Mensagem.some(Rows => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Rows.includes(Row)))) {
 			var Array = {};
@@ -1214,18 +1215,17 @@ app.post('/send-message', [
 		});
 	}
 
-	const number = req.body.to;
-	const numberDDI = number.substr(0, 2);
-	const numberDDD = number.substr(2, 2);
-	const numberUser = number.substr(-8, 8);
-	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
-	var WhatsApp = number + "@c.us";
-
-	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
-		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
-	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
-		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
+	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
@@ -2068,7 +2068,34 @@ client.on('message', async msg => {
 						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
 							msg.reply(Debug('OPTIONS').response);
 						} else {
-							client.sendMessage(msg.from, Debug('OPTIONS').response);
+							var isWid = msg.from;
+							const RegEx = new Set("!@#:$%^&*()_");
+							for (let Return of isWid) {
+								if (RegEx.has(Return)) {
+									isWid = isWid.replace(Return, '%');
+								}
+							}
+							isWid = isWid.split("%")[0];
+							const isDDI = isWid.substr(0, 2);
+							const isDDD = isWid.substr(2, 2);
+							const isCall = isWid.slice(-8);
+							var WhatsApp = isWid + '@c.us';
+							if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+								WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+							} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+								WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+							}
+							const Mensagem = (Debug('OPTIONS').response).replaceAll("\\n", "\r\n").split("##");
+							Mensagem.some(function(Send, index) {
+								setTimeout(function() {
+									client.sendMessage(WhatsApp, Send).then().catch(err => {
+										console.log(err);
+									});
+
+								}, Math.floor(Delay + Math.random() * 1000));
+
+							});
+
 						}
 					}
 				}
@@ -2079,12 +2106,38 @@ client.on('message', async msg => {
 });
 
 client.on('call', async (call) => {
+	var isWid = call.from;
+	const RegEx = new Set("!@#:$%^&*()_");
+	for (let Return of isWid) {
+		if (RegEx.has(Return)) {
+			isWid = isWid.replace(Return, '%');
+		}
+	}
+	isWid = isWid.split("%")[0];
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = (Debug('OPTIONS').call).replaceAll("\\n", "\r\n").split("##");
+
 	if ((Debug('OPTIONS').reject == 1 || Debug('OPTIONS').reject == "true")) {
 		setTimeout(function() {
 			call.reject().then(() => {
 				if ((Debug('OPTIONS').alert == 1 || Debug('OPTIONS').alert == "true")) {
-					client.sendMessage(call.from.split(":")[0] + '@c.us', Debug('OPTIONS').call).then().catch(err => {
-						console.log(err);
+
+					Mensagem.some(function(Send, index) {
+						setTimeout(function() {
+							client.sendMessage(WhatsApp, Send).then().catch(err => {
+								console.log(err);
+							});
+
+						}, Math.floor(Delay + Math.random() * 1000));
+
 					});
 				}
 			}).catch(err => {
