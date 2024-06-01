@@ -119,6 +119,7 @@ function wget(url, dest) {
 	});
 }
 
+console.log();
 
 const GetUpdate = async (GET, SET) => {
 	var Status;
@@ -174,13 +175,47 @@ const GetUpdate = async (GET, SET) => {
 								await global.io.emit('upgrade', true);
 								Status = false;
 							} else {
-								if (Conclusion) {
-									Conclusion = false;
-									await global.io.emit('upgrade', false);
-									if (SET == false) {
-										await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-										await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+								var isUpgrade = true;
+								if ((isDateTime == "0000-00-00 00:00:00") && (Return.patch != "0000-00-00 00:00:00")) {
+									var isDate = (new Date()).toISOString();
+									const RegEx = new Set(".");
+									for (let Return of isDate) {
+										if (RegEx.has(Return)) {
+											isDate = isDate.replace(Return, '%');
+										}
 									}
+									isDate = isDate.split("%")[0].replace('T', ' ');
+									if ((isDate > (isUpdate.version)[i].patch)) {
+										const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
+										if (Register) {
+											isUpgrade = false;
+										} else {
+											isUpgrade = true;
+										}
+									}
+								}
+								if (isUpgrade) {
+									if (Conclusion) {
+										Conclusion = false;
+										Status = true;
+										await global.io.emit('upgrade', false);
+										if (SET == false) {
+											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+											await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+										}
+
+									}
+								} else {
+									if (Conclusion) {
+										Conclusion = false;
+										if (SET == false) {
+											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+											console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+										}
+										await global.io.emit('upgrade', true);
+										Status = false;
+									}
+
 								}
 
 							}
@@ -199,6 +234,7 @@ const GetUpdate = async (GET, SET) => {
 					}
 				} else if (Return.release != '0.0.0' && Conclusion) {
 					Conclusion = false;
+					Status = true;
 					await global.io.emit('upgrade', false);
 					if (SET == false) {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
