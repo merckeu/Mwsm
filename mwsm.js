@@ -1254,6 +1254,9 @@ app.post('/send-image', [
 			message: errors.mapped()
 		});
 	}
+
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1264,9 +1267,9 @@ app.post('/send-image', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia('image/png', (req.body.image), 'Media')
+	const Mensagem = new MessageMedia(Mimetype, (req.body.image), 'Media');
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: undefined,
+		caption: Caption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
@@ -1298,6 +1301,10 @@ app.post('/send-document', [
 			message: errors.mapped()
 		});
 	}
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
+	const FileName = req.body.filename;
+
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1308,9 +1315,9 @@ app.post('/send-document', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia('application/pdf', (req.body.document), 'PDF')
+	const Mensagem = new MessageMedia(Mimetype, (req.body.document), FileName);
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: undefined,
+		caption: Caption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
@@ -1532,8 +1539,7 @@ app.post('/send-message', [
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
 
-			if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
-
+			if (["Fail", false, "Error", "Null", "Fatal", "False", undefined].some(Returns => Returns != Retorno[0].Message)) {
 
 				for (let i = 0; i < Retorno[0].Message.length; i++) {
 					if (typeof Retorno[0].Message[i] === 'string') {
@@ -1574,7 +1580,7 @@ app.post('/send-message', [
 				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null") || (Retorno[0].Message != "Fatal") || (Retorno[0].Message != "False")) {
+						if (["Fail", false, "Error", "Null", "Fatal", "False", undefined].some(Returns => Returns != Retorno[0].Message)) {
 							for (let i = 0; i < Retorno[0].Message.length; i++) {
 								Assembly.push(Retorno[0].Message[i]);
 							}
@@ -1606,7 +1612,7 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
-					if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
+					if (["Fail", false, "Error", "Null", "Fatal", "False"].some(Returns => Returns == Retorno[0].Message)) {
 						if (Retorno[0].Message == "Fail") {
 							res.json({
 								Status: "Fail",
@@ -1828,7 +1834,8 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
+
+						if (["Fail", false, "Error", "Null", "Fatal", "False"].some(Returns => Returns == Retorno[0].Message)) {
 							if (Retorno[0].Message == "Fail") {
 								res.json({
 									Status: "Fail",
