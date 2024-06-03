@@ -119,8 +119,6 @@ function wget(url, dest) {
 	});
 }
 
-console.log();
-
 const GetUpdate = async (GET, SET) => {
 	var Status;
 	const Upgrade = async (GET) => {
@@ -254,9 +252,15 @@ cron.schedule('*/2 00-05 * * *', async () => {
 	timezone: "America/Sao_Paulo"
 });
 
-app.use(express.json());
+app.use(express.json({
+	limit: '200mb'
+}));
 app.use(express.urlencoded({
+	limit: '200mb',
 	extended: true
+}));
+app.use(express.text({
+	limit: '200mb'
 }));
 
 //Set Debugger
@@ -1232,6 +1236,95 @@ app.post('/link_mkauth', async (req, res) => {
 
 	}
 });
+
+// Send Image
+app.post('/send-image', [
+	body('to').notEmpty(),
+	body('image').notEmpty(),
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		msg
+	}) => {
+		return msg;
+	});
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			Status: "Fail",
+			message: errors.mapped()
+		});
+	}
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = new MessageMedia('image/png', (req.body.image), 'Media')
+	client.sendMessage(WhatsApp, Mensagem, {
+		caption: undefined,
+		linkPreview: false
+	}).then(response => {
+		return res.json({
+			Status: "Success",
+			message: 'Bot-Mwsm : Message Sent'
+		});
+	}).catch(err => {
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+	});
+});
+
+// Send Document
+app.post('/send-document', [
+	body('to').notEmpty(),
+	body('document').notEmpty(),
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		msg
+	}) => {
+		return msg;
+	});
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			Status: "Fail",
+			message: errors.mapped()
+		});
+	}
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = new MessageMedia('application/pdf', (req.body.document), 'PDF')
+	client.sendMessage(WhatsApp, Mensagem, {
+		caption: undefined,
+		linkPreview: false
+	}).then(response => {
+		return res.json({
+			Status: "Success",
+			message: 'Bot-Mwsm : Message Sent'
+		});
+	}).catch(err => {
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+	});
+});
+
 
 // Send Message
 app.post('/send-message', [
