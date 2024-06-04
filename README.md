@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [04/06/2024 00:04]
+# MkAuth WhatsApp Send Message [04/06/2024 12:42]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -42,16 +42,12 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
-### Novidades V2.0.31++
+### Novidades V2.0.33++
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
-|  2.0.31    | Função Log                                                                           | 27/05/2024 00:00 ✅   |      |
-|  2.0.32    | Função Update                                                                        | 31/05/2024 00:29 ✅   |      |
-|  2.0.32    | Melhoria da Função Call/Message Response                                             |       | `01/06/2024 05:44`  ✅   |
-|  2.0.32    | Melhoria da Função Update                                                            |       | `01/06/2024 08:06`  ✅   |
-|  2.0.32    | Adesão endpoints requeridas pelo mkauth 24.03                                                             |       | `03/06/2024 04:13`  ✅   |
-|  2.0.32    | Correção endpoints do mkauth 24.03                                                             |       | `03/06/2024 13:08`  ✅   |
-|  2.0.32    | Correção de bugs                                                             |       | `04/06/2024 00:04`  ✅   |
+|  2.0.33    | Alternativa de conexão com API do MkAuth                                             | 04/06/2024 12:42 ✅   |                        |
+
+**OBS:** a URL de conexão com API Tunel Dev passou a retornar Erros na versão MKAuth 24.03, desse modo adaptamos o codigo para acessar a api via dominio, insira um dominio com ssl valido no campo IP/Domain e selecione a opção Domain SSL
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
