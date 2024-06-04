@@ -298,7 +298,15 @@ function DateTime() {
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
 		Json = undefined;
-	const Authentication = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/', {
+	var Server = Debug('MKAUTH').client_link;
+
+	if (Server == "tunel") {
+		Server = Debug('MKAUTH').tunel;
+	} else if (Server == "domain") {
+		Server = Debug('MKAUTH').domain;
+	}
+
+	const Authentication = await axios.get('https://' + Server + '/api/', {
 		auth: {
 			username: Debug('MKAUTH').client_id,
 			password: Debug('MKAUTH').client_secret
@@ -309,7 +317,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 		return false;
 	});
 	if (Authentication) {
-		const MkSync = await axios.get('https://' + Debug('MKAUTH').tunel + '/api/' + TYPE + '/' + EXT + '/' + UID, {
+		const MkSync = await axios.get('https://' + Server + '/api/' + TYPE + '/' + EXT + '/' + UID, {
 			headers: {
 				'Authorization': 'Bearer ' + Authentication
 			}
@@ -325,6 +333,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 				SEARCH = MkSync;
 			}
 			(SEARCH).some(function(Send, index) {
+
 				if (EXT == 'titulos') {
 					if ((Send.titulo == FIND.replace(/^0+/, '') || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
 						var Bolix = '';
@@ -875,6 +884,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('qrlink', Debug('MKAUTH').qrlink);
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
+		global.io.emit('iserver', Debug('MKAUTH').client_link);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
 		global.io.emit('uptodate', Debug('RELEASE').isupdate);
 
@@ -950,6 +960,7 @@ app.post('/getdata', (req, res) => {
 				delay: Debug('MKAUTH').delay,
 				debugger: Debug('OPTIONS').debugger,
 				uptodate: Debug('RELEASE').isupdate,
+				iserver: Debug('MKAUTH').client_link,
 			});
 
 		}
@@ -1170,9 +1181,18 @@ app.post('/link_mkauth', async (req, res) => {
 	const Tunel = req.body.tunel;
 	const Module = req.body.module;
 	const Token = req.body.token;
+	const Server = req.body.server;
+	var iServer;
+
+	if (Server == "tunel") {
+		iServer = Tunel;
+	} else if (Server == "domain") {
+		iServer = Domain;
+	}
+
 	var ConnAuth, ResAuth;
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
-		const Authentication = await axios.get('https://' + Tunel + '/api/', {
+		const Authentication = await axios.get('https://' + iServer + '/api/', {
 			auth: {
 				username: User,
 				password: Pass
@@ -1185,7 +1205,7 @@ app.post('/link_mkauth', async (req, res) => {
 		ConnAuth = false;
 		if (Authentication) {
 			ConnAuth = true;
-			const MkSync = await axios.get('https://' + Tunel + '/api/titulo/listar/limite=1&pagina=1', {
+			const MkSync = await axios.get('https://' + iServer + '/api/titulo/listar/limite=1&pagina=1', {
 				headers: {
 					'Authorization': 'Bearer ' + Authentication
 				}
@@ -1197,7 +1217,7 @@ app.post('/link_mkauth', async (req, res) => {
 			ResAuth = false;
 			if ((MkSync.error == undefined)) {
 				ResAuth = true;
-				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?", [User, Pass, Domain, Tunel, Module], (err) => {
+				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?, client_link=?", [User, Pass, Domain, Tunel, Module, Server], (err) => {
 					if (err) {
 						res.json({
 							Status: "Fail",

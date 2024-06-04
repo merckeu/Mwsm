@@ -304,19 +304,19 @@ $(document).ready(function() {
 			success: function(data) {
 				if (data.Status == "Success") {
 					$("#module").prop("checked", false);
-					$("#domain, #username, #password, #tunel").prop('disabled', false);
+					$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
 				}
 				if (data.Status == "Fail") {
 					setTimeout(() => {
 						$("#module").prop("checked", true);
-						$("#domain, #username, #password, #tunel").prop('disabled', true);
+						$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
 					}, "500");
 				}
 			},
 			error: function(request, status, error) {
 				setTimeout(() => {
 					$("#module").prop("checked", true);
-					$("#domain, #username, #password, #tunel").prop('disabled', true);
+					$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
 				}, "500");
 			}
 		});
@@ -327,6 +327,7 @@ $(document).ready(function() {
 		var Pass = $("#password").val();
 		var Domain = $("#domain").val();
 		var Tunel = $("#tunel").val();
+		var Server = $("#iServer").val();
 		if ($(this).is(":checked")) {
 			if (User == "" || !User.includes("Client_Id_")) {
 				setTimeout(() => {
@@ -364,12 +365,13 @@ $(document).ready(function() {
 									module: $("#module").prop('checked'),
 									domain: $("#domain").val(),
 									tunel: $("#tunel").val(),
-									token: $("#token").val()
+									token: $("#token").val(),
+									server: $("#iServer").val()
 								},
 								beforeSend: function(data) {
 									$("#Waiting").fadeIn("slow", function() {
 										$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-										$("#domain, #username, #password, #tunel").prop('disabled', true);
+										$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
 									});
 								},
 								success: function(data) {
@@ -389,7 +391,7 @@ $(document).ready(function() {
 											$("#Waiting").fadeOut("slow", function() {
 												if (data.Status == "Fail") {
 													$("#module").prop("checked", false);
-													$("#domain, #username, #password, #tunel").prop('disabled', false);
+													$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
 												}
 											});
 										}
@@ -406,7 +408,7 @@ $(document).ready(function() {
 											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 											$("#Waiting").fadeOut("slow", function() {
 												$("#module").prop("checked", false);
-												$("#domain, #username, #password, #tunel").prop('disabled', false);
+												$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
 											});
 										}
 									});
@@ -841,6 +843,14 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('iserver', function(data) {
+		$('#iServer').val(data);
+		if (data != "") {
+			$('#iServer').prop('disabled', true);
+		}
+	});
+
+
 	socket.on('Version', function(data) {
 		$('#Version').val('v' + data);
 	});
@@ -951,11 +961,11 @@ $(document).ready(function() {
 		switch (data) {
 			case 'true':
 				$("#module").prop("checked", true);
-				$("#domain, #username, #password, #tunel").prop('disabled', true);
+				$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
 				break;
 			case 'false':
 				$("#module").prop("checked", false);
-				$("#domain, #username, #password, #tunel").prop('disabled', false);
+				$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
 				break;
 		}
 	});
