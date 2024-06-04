@@ -253,14 +253,14 @@ cron.schedule('*/2 00-05 * * *', async () => {
 });
 
 app.use(express.json({
-	limit: '200mb'
+	limit: '500mb'
 }));
 app.use(express.urlencoded({
-	limit: '200mb',
+	limit: '500mb',
 	extended: true
 }));
 app.use(express.text({
-	limit: '200mb'
+	limit: '500mb'
 }));
 
 //Set Debugger
@@ -322,18 +322,23 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 				'Authorization': 'Bearer ' + Authentication
 			}
 		}).then(response => {
-			return response.data;
+			if (typeof response.data !== "object") {
+				return JSON.parse((response.data).replace("}1", "}"))
+			} else {
+				return response.data;
+			}
 		}).catch(err => {
 			return false;
 		});
+
 		if (MkSync.mensagem == undefined) {
 			if (MODE) {
 				SEARCH = MkSync.titulos;
 			} else {
 				SEARCH = MkSync;
 			}
-			(SEARCH).some(function(Send, index) {
 
+			(SEARCH).some(function(Send, index) {
 				if (EXT == 'titulos') {
 					if ((Send.titulo == FIND.replace(/^0+/, '') || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
 						var Bolix = '';
