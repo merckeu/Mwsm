@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [04/06/2024 12:42]
+# MkAuth WhatsApp Send Message [04/06/2024 17:00]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -46,8 +46,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.33    | Alternativa de conexão com API do MkAuth                                             | 04/06/2024 12:42 ✅   |                        |
-
-**OBS:** a URL de conexão com API Tunel Dev passou a retornar Erros na versão MKAuth 24.03, desse modo adaptamos o codigo para acessar a api via dominio, insira um dominio com ssl valido no campo IP/Domain e selecione a opção Domain SSL
+|  2.0.33    | Correção do Bug Tunel Dev do Mkauth                                                  |                        |  04/06/2024 17:00 ✅  |
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
