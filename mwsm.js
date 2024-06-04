@@ -119,7 +119,7 @@ function wget(url, dest) {
 	});
 }
 
-const GetUpdate = async (GET, SET) => {
+const GetUpdate = async (GET, SET = true) => {
 	var Status;
 	const Upgrade = async (GET) => {
 		const Update = await fetch(GET).then(response => {
@@ -142,103 +142,52 @@ const GetUpdate = async (GET, SET) => {
 			if (isDateTime == "undefined" || isDateTime == null) {
 				isDateTime = "0000-00-00 00:00:00";
 			}
-			for (let i = 1; i < (isUpdate.version).length; i++) {
-				if ((isUpdate.version)[i].patch >= Return.patch) {
+			for (let i = 0; i < (isUpdate.version).length; i++) {
+				if ((isUpdate.version)[i].patch > Return.patch) {
 					if (((isUpdate.version)[i].patch) > (isDateTime)) {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
-							const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
+							const Register = await Insert('OPTIONS', 'PATCH', ((isUpdate.version)[i].patch), true);
 							if (Register) {
-								await global.io.emit('upgrade', true);
 								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupfiles);
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
-								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
+								console.log('> Bot-Mwsm : ' + 'API Updated Successfully!');
+								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
+								await global.io.emit('upgrade', true);
 								await global.io.emit('update', true);
 							} else {
-								await global.io.emit('upgrade', false);
+								await global.io.emit('upgrade', true);
 							}
 							Status = true;
-						} else {
-							if (Conclusion && ((isUpdate.version)[i].patch) == (Debug('RELEASE').mwsm)) {
-								Conclusion = false;
-								if (SET == false) {
-									await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-									await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-								}
-								await global.io.emit('upgrade', true);
-								Status = false;
-							} else {
-								var isUpgrade = true;
-								if ((isDateTime == "0000-00-00 00:00:00") && (Return.patch != "0000-00-00 00:00:00")) {
-									var isDate = (new Date()).toISOString();
-									const RegEx = new Set(".");
-									for (let Return of isDate) {
-										if (RegEx.has(Return)) {
-											isDate = isDate.replace(Return, '%');
-										}
-									}
-									isDate = isDate.split("%")[0].replace('T', ' ');
-									if ((isDate > (isUpdate.version)[i].patch)) {
-										const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
-										if (Register) {
-											isUpgrade = false;
-										} else {
-											isUpgrade = true;
-										}
-									}
-								}
-								if (isUpgrade) {
-									if (Conclusion) {
-										Conclusion = false;
-										Status = true;
-										await global.io.emit('upgrade', false);
-										if (SET == false) {
-											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-											await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-										}
-
-									}
-								} else {
-									if (Conclusion) {
-										Conclusion = false;
-										if (SET == false) {
-											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-											console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-										}
-										await global.io.emit('upgrade', true);
-										Status = false;
-									}
-
-								}
-
-							}
-
 						}
-					} else {
-						if (Conclusion) {
-							Conclusion = false;
-							if (SET == false) {
-								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-							}
-							await global.io.emit('upgrade', true);
-							Status = false;
+					} else if (Conclusion && i == (isUpdate.version).length) {
+						Conclusion = false;
+						if (!SET) {
+							await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
 						}
+						await global.io.emit('upgrade', true);
+						Status = false;
 					}
 				} else if (Return.release != '0.0.0' && Conclusion) {
 					Conclusion = false;
-					Status = true;
 					await global.io.emit('upgrade', false);
-					if (SET == false) {
+					if (!SET) {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
 					}
 				}
+			}
+		} else if (Return.release != '0.0.0' && Conclusion) {
+			Conclusion = false;
+			await global.io.emit('upgrade', false);
+			if (!SET) {
+				await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
 			}
 		}
 	});
@@ -246,21 +195,15 @@ const GetUpdate = async (GET, SET) => {
 }
 
 cron.schedule('*/2 00-05 * * *', async () => {
-	await GetUpdate(WServer, true);
+	await GetUpdate(WServer);
 }, {
 	scheduled: true,
 	timezone: "America/Sao_Paulo"
 });
 
-app.use(express.json({
-	limit: '200mb'
-}));
+app.use(express.json());
 app.use(express.urlencoded({
-	limit: '200mb',
 	extended: true
-}));
-app.use(express.text({
-	limit: '200mb'
 }));
 
 //Set Debugger
@@ -650,7 +593,6 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('ready', async () => {
-		await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
@@ -664,6 +606,7 @@ io.on('connection', function(socket) {
 		Session = true;
 		if (!Permission) {
 			Permission = true;
+			await GetUpdate(WServer, false);
 			await socket.emit('Reset', false);
 			await client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
 		}
@@ -761,6 +704,9 @@ app.post('/reset', (req, res) => {
 	});
 	const Reset = req.body.reset;
 	if (Reset == "true") {
+		if ((Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
+			GetUpdate(WServer);
+		}
 		res.json({
 			Status: "Success"
 		});
@@ -830,7 +776,7 @@ app.post('/update', (req, res) => {
 			if (err) {
 				res.json({
 					Status: "Fail",
-					Return: Debug('RELEASE').isupdate
+					Return: Debug('OPTIONS').isupdate
 				});
 			}
 			res.json({
@@ -876,7 +822,7 @@ app.post('/token', (req, res) => {
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
-		global.io.emit('uptodate', Debug('RELEASE').isupdate);
+		global.io.emit('uptodate', Debug('RELEASE').update);
 
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
@@ -949,7 +895,7 @@ app.post('/getdata', (req, res) => {
 				pdf: Debug('MKAUTH').pdf,
 				delay: Debug('MKAUTH').delay,
 				debugger: Debug('OPTIONS').debugger,
-				uptodate: Debug('RELEASE').isupdate,
+				uptodate: Debug('RELEASE').update,
 			});
 
 		}
@@ -1077,19 +1023,18 @@ app.post('/force-message', [
 			message: errors.mapped()
 		});
 	}
+	const number = req.body.to;
+	const numberDDI = number.substr(0, 2);
+	const numberDDD = number.substr(2, 2);
+	const numberUser = number.substr(-8, 8);
+	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
+	var WhatsApp = number + "@c.us";
 
-	const isWid = (req.body.to);
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
+		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
+	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
+		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
-
 	const Reconstructor = new Promise((resolve, reject) => {
 		if (Mensagem.some(Rows => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Rows.includes(Row)))) {
 			var Array = {};
@@ -1237,102 +1182,6 @@ app.post('/link_mkauth', async (req, res) => {
 	}
 });
 
-// Send Image
-app.post('/send-image', [
-	body('to').notEmpty(),
-	body('image').notEmpty(),
-], async (req, res) => {
-	const errors = validationResult(req).formatWith(({
-		msg
-	}) => {
-		return msg;
-	});
-
-	if (!errors.isEmpty()) {
-		return res.status(422).json({
-			Status: "Fail",
-			message: errors.mapped()
-		});
-	}
-
-	const Caption = req.body.caption;
-	const Mimetype = req.body.mimetype;
-	const isWid = (req.body.to);
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const Mensagem = new MessageMedia(Mimetype, (req.body.image), 'Media');
-	client.sendMessage(WhatsApp, Mensagem, {
-		caption: Caption,
-		linkPreview: false
-	}).then(response => {
-		return res.json({
-			Status: "Success",
-			message: 'Bot-Mwsm : Message Sent'
-		});
-	}).catch(err => {
-		return res.status(500).json({
-			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
-		});
-	});
-});
-
-// Send Document
-app.post('/send-document', [
-	body('to').notEmpty(),
-	body('document').notEmpty(),
-], async (req, res) => {
-	const errors = validationResult(req).formatWith(({
-		msg
-	}) => {
-		return msg;
-	});
-
-	if (!errors.isEmpty()) {
-		return res.status(422).json({
-			Status: "Fail",
-			message: errors.mapped()
-		});
-	}
-	const Caption = req.body.caption;
-	const Mimetype = req.body.mimetype;
-	const FileName = req.body.filename;
-
-	const isWid = (req.body.to);
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const Mensagem = new MessageMedia(Mimetype, (req.body.document), FileName);
-	client.sendMessage(WhatsApp, Mensagem, {
-		caption: Caption,
-		linkPreview: false
-	}).then(response => {
-		return res.json({
-			Status: "Success",
-			message: 'Bot-Mwsm : Message Sent'
-		});
-	}).catch(err => {
-		return res.status(500).json({
-			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
-		});
-	});
-});
-
-
 // Send Message
 app.post('/send-message', [
 	body('to').notEmpty(),
@@ -1351,17 +1200,18 @@ app.post('/send-message', [
 		});
 	}
 
-	const isWid = (req.body.to);
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	const number = req.body.to;
+	const numberDDI = number.substr(0, 2);
+	const numberDDD = number.substr(2, 2);
+	const numberUser = number.substr(-8, 8);
+	const Mensagem = req.body.msg.replaceAll("\\n", "\r\n").split("##");
+	var WhatsApp = number + "@c.us";
+
+	if (numberDDI === "55" && parseInt(numberDDD) <= 30) {
+		WhatsApp = "55" + numberDDD + "9" + numberUser + "@c.us";
+	} else if (numberDDI === "55" && parseInt(numberDDD) > 30) {
+		WhatsApp = "55" + numberDDD + numberUser + "@c.us";
 	}
-	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
@@ -1539,7 +1389,8 @@ app.post('/send-message', [
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
 
-			if (["Fail", false, "Error", "Null", "Fatal", "False", undefined].some(Returns => Returns != Retorno[0].Message)) {
+			if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+
 
 				for (let i = 0; i < Retorno[0].Message.length; i++) {
 					if (typeof Retorno[0].Message[i] === 'string') {
@@ -1580,7 +1431,7 @@ app.post('/send-message', [
 				var PrevERROR = false;
 				Mensagem.someAsync(async (Send) => {
 					if (testJSON(Send)) {
-						if (["Fail", false, "Error", "Null", "Fatal", "False", undefined].some(Returns => Returns != Retorno[0].Message)) {
+						if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null") || (Retorno[0].Message != "Fatal") || (Retorno[0].Message != "False")) {
 							for (let i = 0; i < Retorno[0].Message.length; i++) {
 								Assembly.push(Retorno[0].Message[i]);
 							}
@@ -1612,7 +1463,7 @@ app.post('/send-message', [
 					Delay = Debug('OPTIONS').sendwait;
 				}
 				if (Assembly.length >= 1) {
-					if (["Fail", false, "Error", "Null", "Fatal", "False"].some(Returns => Returns == Retorno[0].Message)) {
+					if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 						if (Retorno[0].Message == "Fail") {
 							res.json({
 								Status: "Fail",
@@ -1834,8 +1685,7 @@ app.post('/send-message', [
 					}
 				} else {
 					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-
-						if (["Fail", false, "Error", "Null", "Fatal", "False"].some(Returns => Returns == Retorno[0].Message)) {
+						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 							if (Retorno[0].Message == "Fail") {
 								res.json({
 									Status: "Fail",
@@ -2128,6 +1978,102 @@ const Build = async (SET) => {
 	return await PDFGet['Return'];
 };
 
+// Send Image
+app.post('/send-image', [
+	body('to').notEmpty(),
+	body('image').notEmpty(),
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		msg
+	}) => {
+		return msg;
+	});
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			Status: "Fail",
+			message: errors.mapped()
+		});
+	}
+
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = new MessageMedia(Mimetype, (req.body.image), 'Media');
+	client.sendMessage(WhatsApp, Mensagem, {
+		caption: Caption,
+		linkPreview: false
+	}).then(response => {
+		return res.json({
+			Status: "Success",
+			message: 'Bot-Mwsm : Message Sent'
+		});
+	}).catch(err => {
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+	});
+});
+
+// Send Document
+app.post('/send-document', [
+	body('to').notEmpty(),
+	body('document').notEmpty(),
+], async (req, res) => {
+	const errors = validationResult(req).formatWith(({
+		msg
+	}) => {
+		return msg;
+	});
+
+	if (!errors.isEmpty()) {
+		return res.status(422).json({
+			Status: "Fail",
+			message: errors.mapped()
+		});
+	}
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
+	const FileName = req.body.filename;
+
+	const isWid = (req.body.to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = new MessageMedia(Mimetype, (req.body.document), FileName);
+	client.sendMessage(WhatsApp, Mensagem, {
+		caption: Caption,
+		linkPreview: false
+	}).then(response => {
+		return res.json({
+			Status: "Success",
+			message: 'Bot-Mwsm : Message Sent'
+		});
+	}).catch(err => {
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+	});
+});
+
+
 
 // WhatsApp Bot
 client.on('message', async msg => {
@@ -2138,24 +2084,7 @@ client.on('message', async msg => {
 	if (msg.body == "") return null;
 	if (msg.from.includes("@g.us")) return null;
 	const NULLED = [undefined, "XXX", null, ""];
-	var isWid = msg.from;
-	const RegEx = new Set("!@#:$%^&*()_");
-	for (let Return of isWid) {
-		if (RegEx.has(Return)) {
-			isWid = isWid.replace(Return, '%');
-		}
-	}
-	isWid = isWid.split("%")[0];
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const isWhatsApp = WhatsApp.split("@")[0];
+
 	if (msg.body.toUpperCase().includes("TOKEN") && NULLED.includes(Debug('OPTIONS').token)) {
 		if (msg.body.includes(":") && (msg.body.split(":")[1].length == 7)) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
@@ -2171,9 +2100,9 @@ client.on('message', async msg => {
 		}
 	} else {
 		db.serialize(() => {
-			db.get("SELECT * FROM replies WHERE whats='" + isWhatsApp + "'", (err, REPLIES) => {
+			db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
 				if (REPLIES == undefined) {
-					db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [isWhatsApp, register, 1], (err) => {
+					db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [msg.from.replaceAll('@c.us', ''), register, 1], (err) => {
 						if (err) {
 							console.log('> Bot-Mwsm : ' + err)
 						}
@@ -2185,7 +2114,7 @@ client.on('message', async msg => {
 				} else {
 
 					if (register.toString() > REPLIES.date) {
-						db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, isWhatsApp], (err) => {
+						db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, msg.from.replaceAll('@c.us', '')], (err) => {
 							if (err) {
 								console.log('> Bot-Mwsm : ' + err)
 							}
@@ -2196,7 +2125,7 @@ client.on('message', async msg => {
 					} else {
 						if (Debug('OPTIONS').count > REPLIES.count) {
 							COUNT = REPLIES.count + 1;
-							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, isWhatsApp], (err) => {
+							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, msg.from.replaceAll('@c.us', '')], (err) => {
 								if (err) throw err;
 								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
 								global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
@@ -2221,17 +2150,7 @@ client.on('message', async msg => {
 						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
 							msg.reply(Debug('OPTIONS').response);
 						} else {
-							const Mensagem = (Debug('OPTIONS').response).replaceAll("\\n", "\r\n").split("##");
-							Mensagem.some(function(Send, index) {
-								setTimeout(function() {
-									client.sendMessage(WhatsApp, Send).then().catch(err => {
-										console.log(err);
-									});
-
-								}, Math.floor(Delay + Math.random() * 1000));
-
-							});
-
+							client.sendMessage(msg.from, Debug('OPTIONS').response);
 						}
 					}
 				}
@@ -2242,38 +2161,12 @@ client.on('message', async msg => {
 });
 
 client.on('call', async (call) => {
-	var isWid = call.from;
-	const RegEx = new Set("!@#:$%^&*()_");
-	for (let Return of isWid) {
-		if (RegEx.has(Return)) {
-			isWid = isWid.replace(Return, '%');
-		}
-	}
-	isWid = isWid.split("%")[0];
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const Mensagem = (Debug('OPTIONS').call).replaceAll("\\n", "\r\n").split("##");
-
 	if ((Debug('OPTIONS').reject == 1 || Debug('OPTIONS').reject == "true")) {
 		setTimeout(function() {
 			call.reject().then(() => {
 				if ((Debug('OPTIONS').alert == 1 || Debug('OPTIONS').alert == "true")) {
-
-					Mensagem.some(function(Send, index) {
-						setTimeout(function() {
-							client.sendMessage(WhatsApp, Send).then().catch(err => {
-								console.log(err);
-							});
-
-						}, Math.floor(Delay + Math.random() * 1000));
-
+					client.sendMessage(call.from.split(":")[0] + '@c.us', Debug('OPTIONS').call).then().catch(err => {
+						console.log(err);
 					});
 				}
 			}).catch(err => {
