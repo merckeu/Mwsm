@@ -155,7 +155,7 @@ const GetUpdate = async (GET, SET = true) => {
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
-								console.log('> Bot-Mwsm : ' + 'API Updated Successfully!');
+								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
 								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
 								await global.io.emit('upgrade', true);
 								await global.io.emit('update', true);
