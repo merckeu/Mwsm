@@ -346,12 +346,14 @@ $(document).ready(function() {
 						setTimeout(() => {
 							$("#module").prop("checked", false);
 							$("#domain").focus().val("");
+							$("#iServer").prop('disabled', false);
 						}, "500");
 
 					} else {
 						if (Tunel == "") {
 							setTimeout(() => {
 								$("#module").prop("checked", false);
+								$("#iServer").prop('disabled', false);
 								$("#tunel").focus().val("");
 							}, "500");
 						} else {
@@ -846,7 +848,11 @@ $(document).ready(function() {
 	socket.on('iserver', function(data) {
 		$('#iServer').val(data);
 		if (data != "") {
-			$('#iServer').prop('disabled', true);
+			if ($('#module').is(':checked')) {
+				$('#iServer').prop('disabled', true);
+			} else {
+				$('#iServer').prop('disabled', false);
+			}
 		}
 	});
 
