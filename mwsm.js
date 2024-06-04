@@ -1255,8 +1255,8 @@ app.post('/send-image', [
 		});
 	}
 
-	const Caption = req.body.caption;
-	const Mimetype = req.body.mimetype;
+	const hasCaption = req.body.caption;
+	const hasMimetype = req.body.mimetype;
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1267,9 +1267,9 @@ app.post('/send-image', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia(Mimetype, (req.body.image), 'Media');
+	const Mensagem = new MessageMedia(hasMimetype, (req.body.image), 'Media');
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: Caption,
+		caption: hasCaption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
@@ -1301,9 +1301,9 @@ app.post('/send-document', [
 			message: errors.mapped()
 		});
 	}
-	const Caption = req.body.caption;
-	const Mimetype = req.body.mimetype;
-	const FileName = req.body.filename;
+	const hasCaption = req.body.caption;
+	const hasMimetype = req.body.mimetype;
+	const hasFileName = req.body.filename;
 
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
@@ -1315,9 +1315,9 @@ app.post('/send-document', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia(Mimetype, (req.body.document), FileName);
+	const Mensagem = new MessageMedia(hasMimetype, (req.body.document), hasFileName);
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: Caption,
+		caption: hasCaption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
@@ -1506,25 +1506,27 @@ app.post('/send-message', [
 
 		const Reconstructor = new Promise((resolve, reject) => {
 			if (Mensagem.some(Row => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Rows => Row.includes(Rows)))) {
-				var Array = {};
-				Mensagem.some(function(Send, index) {
+				var isArray = {};
+				(Mensagem).someAsync(async (Send) => {
 					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-						const Cloud = async (Url) => {
-							let mimetype;
-							const attachment = await axios.get(Url, {
+						const isCloud = async (Url) => {
+							let isMimetype;
+							const isAttachment = await axios.get(Url, {
 								responseType: 'arraybuffer'
 							}).then(response => {
-								mimetype = response.headers['content-type'];
+								isMimetype = response.headers['content-type'];
 								return response.data.toString('base64');
 							});
-							return new MessageMedia(mimetype, attachment, 'Media');
+							return await new MessageMedia(isMimetype, isAttachment, 'Media');
 						};
-						Cloud(Send).then(Return => {
-							Array[Send] = Return;
-							resolve(Array);
+
+						await isCloud(Send).then(Return => {
+							isArray[Send] = Return;
+							resolve(isArray);
 						}).catch(err => {
 							resolve(undefined);
 						});
+
 					}
 				});
 			} else {
@@ -1589,15 +1591,20 @@ app.post('/send-message', [
 						if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
 							if (typeof Send === 'string') {
 								if ((Send.indexOf("http") > -1)) {
-									if (Retorno[1].hasOwnProperty(Send)) {
-										Assembly.push(Retorno[1][Send]);
+									if (Retorno[1][Send] != undefined) {
+										if (Retorno[1].hasOwnProperty(Send)) {
+											Assembly.push(Retorno[1][Send]);
+										}
+
 									}
 								} else {
 									Assembly.push(Send);
 								}
 							} else {
-								if (Retorno[1].hasOwnProperty(Send)) {
-									Assembly.push(Retorno[1][Send]);
+								if (Retorno[1][Send] != undefined) {
+									if (Retorno[1].hasOwnProperty(Send)) {
+										Assembly.push(Retorno[1][Send]);
+									}
 								}
 							}
 						} else {
