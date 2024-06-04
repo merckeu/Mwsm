@@ -1254,6 +1254,9 @@ app.post('/send-image', [
 			message: errors.mapped()
 		});
 	}
+
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1264,9 +1267,9 @@ app.post('/send-image', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia('image/png', (req.body.image), 'Media')
+	const Mensagem = new MessageMedia(Mimetype, (req.body.image), 'Media');
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: undefined,
+		caption: Caption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
@@ -1298,6 +1301,10 @@ app.post('/send-document', [
 			message: errors.mapped()
 		});
 	}
+	const Caption = req.body.caption;
+	const Mimetype = req.body.mimetype;
+	const FileName = req.body.filename;
+
 	const isWid = (req.body.to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1308,9 +1315,9 @@ app.post('/send-document', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = new MessageMedia('application/pdf', (req.body.document), 'PDF')
+	const Mensagem = new MessageMedia(Mimetype, (req.body.document), FileName);
 	client.sendMessage(WhatsApp, Mensagem, {
-		caption: undefined,
+		caption: Caption,
 		linkPreview: false
 	}).then(response => {
 		return res.json({
