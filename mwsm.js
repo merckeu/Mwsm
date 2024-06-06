@@ -71,24 +71,44 @@ function Debug(Select, Search = '*', Mode = 'single') {
 	return Select;
 }
 
-//Insert DataBase
-const Insert = async (Table, Column, Value, Update = false) => {
-	if (Update) {
-		const isInsert = await link.prepare('UPDATE ' + Table.toLowerCase() + ' SET ' + Column.toLowerCase() + ' = ? WHERE id = ?').run(Value, '1');
-		if (isInsert) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		const isInsert = await link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
-		if (isInsert) {
-			return link.prepare('SELECT * FROM ' + Table.toLowerCase() + ' ORDER BY ID DESC').get().id;
-		} else {
-			return false;
-		}
-
+//Manipulation DataBase
+const Dataset = async (Table, Column, Value, Mode) => {
+	switch (Mode.toLowerCase()) {
+		case "update":
+			Select = await link.prepare('UPDATE ' + Table.toLowerCase() + ' SET ' + Column.toLowerCase() + ' = ? WHERE id = ?').run(Value, '1');
+			if (Select) {
+				Select = true;
+			} else {
+				Select = false;
+			}
+			break;
+		case "insert":
+			Select = await link.prepare('INSERT INTO ' + Table.toLowerCase() + ' (' + Column.toLowerCase() + ') VALUES (?)').run(Value);
+			if (Select) {
+				Select = link.prepare('SELECT * FROM ' + Table.toLowerCase() + ' ORDER BY ID DESC').get().id;
+			} else {
+				Select = false
+			}
+			break;
+		case "delete":
+			Select = await link.prepare('DELETE FROM ' + Table.toLowerCase() + ' WHERE id = ?').run(Value);
+			if (Select) {
+				Select = true;
+			} else {
+				Select = false;
+			}
+			break;
+		case "flush":
+			const Flush = (link.prepare('SELECT * FROM ' + Value.toLowerCase()).all()).length;
+			Select = await link.prepare('UPDATE ' + Table.toLowerCase() + ' SET ' + Column.toLowerCase() + ' = ? WHERE NAME = ?').run(Flush.toString(), Value.toLowerCase());
+			if (Select) {
+				Select = true;
+			} else {
+				Select = false;
+			}
+			break;
 	}
+	return await Select;
 }
 
 //ForEach Async Mode
@@ -148,7 +168,7 @@ const GetUpdate = async (GET, SET) => {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
-							const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
+							const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
 							if (Register) {
 								await global.io.emit('upgrade', true);
 								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupfiles);
@@ -184,7 +204,7 @@ const GetUpdate = async (GET, SET) => {
 									}
 									isDate = isDate.split("%")[0].replace('T', ' ');
 									if ((isDate > (isUpdate.version)[i].patch)) {
-										const Register = await Insert('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), true);
+										const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
 										if (Register) {
 											isUpgrade = false;
 										} else {
@@ -322,8 +342,8 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 				'Authorization': 'Bearer ' + Authentication
 			}
 		}).then(response => {
-			if (typeof response.data !== "object") {
-				return JSON.parse((response.data).replace("}1", "}"))
+			if ((typeof response.data !== "object") && ((response.data).slice(-1) != '}')) {
+				return JSON.parse((response.data).substring(0, (response.data).length - 1));
 			} else {
 				return response.data;
 			}
@@ -895,22 +915,31 @@ app.post('/token', (req, res) => {
 
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
-			Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-				GetLog = {
-					"ID": TARGET.id,
-					"TITLE": TARGET.title,
-					"START": TARGET.start,
-					"END": TARGET.end,
-					"TARGET": TARGET.target,
-					"STATUS": TARGET.status,
-				};
-				isTARGET.push(GetLog);
 
-				if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-					global.io.emit('getlog', true);
-					global.io.emit('setlog', isTARGET);
+			Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+				if (TARGET.status == 'pending') {
+					Dataset('TARGET', '*', TARGET.id, 'DELETE');
+					Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+				} else {
+					GetLog = {
+						"ID": TARGET.id,
+						"TITLE": TARGET.title,
+						"START": TARGET.start,
+						"END": TARGET.end,
+						"TARGET": TARGET.target,
+						"STATUS": TARGET.status,
+					};
+					isTARGET.push(GetLog);
+					if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+						if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+							global.io.emit('getlog', true);
+							global.io.emit('setlog', isTARGET);
+
+						}
+					}
 				}
 			});
+
 		} else {
 			global.io.emit('getlog', false);
 		}
@@ -1390,7 +1419,7 @@ app.post('/send-message', [
 
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
-		const uID = await Insert('TARGET', 'START', DateTime());
+		const uID = await Dataset('TARGET', 'START', DateTime(), 'INSERT');
 		if (uID == false) {
 			uID = Debug('TARGET').id;
 		}
@@ -1406,9 +1435,19 @@ app.post('/send-message', [
 
 				Mensagem.some(function(Send, index) {
 					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-
-						const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
-						const Json = JSON.parse(JsonEncode);
+						var Json = Send.toString().replace('"', '').split(',');
+						isUid = Json[0].replace(/[{\}\\"]/g, '');
+						if (isUid.split(':').length == 2) {
+							isUid = isUid.split(':')[1];
+						} else {
+							isUid = (isUid).replace(isUid.split(':')[0], '');
+							isUid = isUid.replace(/^:+/, '');
+						}
+						isFind = Json[1].replace(/[^0-9]/g, '');
+						Json = {
+							uid: isUid,
+							find: isFind
+						};
 						Terminal(JSON.stringify(Json));
 						MkAuth(Json.uid, Json.find).then(Synchronization => {
 							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
@@ -1502,8 +1541,19 @@ app.post('/send-message', [
 				if (Mensagem.some(Row => testJSON(Row))) {
 					Mensagem.some(function(Send, index) {
 						if (testJSON(Send)) {
-							const JsonEncode = Send.toString().replace(/"/g, "").replace(/'/g, "").replace('uid:', '"uid":"').replace(',find:', '","find":"').replace('}', '"}');
-							const Json = JSON.parse(JsonEncode);
+							var Json = Send.toString().replace('"', '').split(',');
+							isUid = Json[0].replace(/[{\}\\"]/g, '');
+							if (isUid.split(':').length == 2) {
+								isUid = isUid.split(':')[1];
+							} else {
+								isUid = (isUid).replace(isUid.split(':')[0], '');
+								isUid = isUid.replace(/^:+/, '');
+							}
+							isFind = Json[1].replace(/[^0-9]/g, '');
+							Json = {
+								uid: isUid,
+								find: isFind
+							};
 							Terminal(JSON.stringify(Json));
 						}
 					});
@@ -1712,10 +1762,10 @@ app.post('/send-message', [
 								});
 							}
 						}
-						db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+						db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 							if (TARGET != undefined) {
 								if (Retorno[0].Title == "xxx") {
-									Retorno[0].Title = Debug('TARGET').id;
+									Retorno[0].Title = uID;
 								}
 								if (Retorno[0].Message == undefined) {
 									Retorno[0].Message = "Null";
@@ -1730,24 +1780,30 @@ app.post('/send-message', [
 
 										if (err) throw err;
 									});
-									db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+									db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 										isTARGET = [];
 										if (TARGET != undefined) {
 											Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-												GetLog = {
-													"ID": TARGET.id,
-													"TITLE": TARGET.title,
-													"START": TARGET.start,
-													"END": TARGET.end,
-													"TARGET": TARGET.target,
-													"STATUS": TARGET.status,
-												};
-												isTARGET.push(GetLog);
-												if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-													if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-														global.io.emit('setlog', isTARGET);
+												if (TARGET.status == 'pending') {
+													Dataset('TARGET', '*', TARGET.id, 'DELETE');
+													Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+												} else {
+													GetLog = {
+														"ID": TARGET.id,
+														"TITLE": TARGET.title,
+														"START": TARGET.start,
+														"END": TARGET.end,
+														"TARGET": TARGET.target,
+														"STATUS": TARGET.status,
+													};
+													isTARGET.push(GetLog);
+													if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+															global.io.emit('setlog', isTARGET);
+														}
 													}
 												}
+
 											});
 										}
 									});
@@ -1810,7 +1866,7 @@ app.post('/send-message', [
 
 										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
 
-											db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+											db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 												if (TARGET != undefined) {
 
 													if (Retorno[0].Title == "xxx") {
@@ -1829,24 +1885,30 @@ app.post('/send-message', [
 
 															if (err) throw err;
 														});
-														db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+														db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 															isTARGET = [];
 															if (TARGET != undefined) {
 																Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-																	GetLog = {
-																		"ID": TARGET.id,
-																		"TITLE": TARGET.title,
-																		"START": TARGET.start,
-																		"END": TARGET.end,
-																		"TARGET": TARGET.target,
-																		"STATUS": TARGET.status,
-																	};
-																	isTARGET.push(GetLog);
-																	if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-																		if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-																			global.io.emit('setlog', isTARGET);
+																	if (TARGET.status == 'pending') {
+																		Dataset('TARGET', '*', TARGET.id, 'DELETE');
+																		Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+																	} else {
+																		GetLog = {
+																			"ID": TARGET.id,
+																			"TITLE": TARGET.title,
+																			"START": TARGET.start,
+																			"END": TARGET.end,
+																			"TARGET": TARGET.target,
+																			"STATUS": TARGET.status,
+																		};
+																		isTARGET.push(GetLog);
+																		if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																			if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																				global.io.emit('setlog', isTARGET);
+																			}
 																		}
 																	}
+
 																});
 															}
 														});
@@ -1957,24 +2019,30 @@ app.post('/send-message', [
 
 											if (err) throw err;
 										});
-										db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+										db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 											isTARGET = [];
 											if (TARGET != undefined) {
 												Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-													GetLog = {
-														"ID": TARGET.id,
-														"TITLE": TARGET.title,
-														"START": TARGET.start,
-														"END": TARGET.end,
-														"TARGET": TARGET.target,
-														"STATUS": TARGET.status,
-													};
-													isTARGET.push(GetLog);
-													if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-															global.io.emit('setlog', isTARGET);
+													if (TARGET.status == 'pending') {
+														Dataset('TARGET', '*', TARGET.id, 'DELETE');
+														Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+													} else {
+														GetLog = {
+															"ID": TARGET.id,
+															"TITLE": TARGET.title,
+															"START": TARGET.start,
+															"END": TARGET.end,
+															"TARGET": TARGET.target,
+															"STATUS": TARGET.status,
+														};
+														isTARGET.push(GetLog);
+														if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																global.io.emit('setlog', isTARGET);
+															}
 														}
 													}
+
 												});
 											}
 										});
@@ -1984,11 +2052,11 @@ app.post('/send-message', [
 						} else {
 							if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 
-								db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+								db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 									if (TARGET != undefined) {
 
 										if (Retorno[0].Title == "xxx") {
-											Retorno[0].Title = Debug('TARGET').id;
+											Retorno[0].Title = uID;
 										}
 										if (Retorno[0].Message == undefined) {
 											Retorno[0].Message = "Null";
@@ -2002,24 +2070,30 @@ app.post('/send-message', [
 
 												if (err) throw err;
 											});
-											db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+											db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 												isTARGET = [];
 												if (TARGET != undefined) {
 													Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-														GetLog = {
-															"ID": TARGET.id,
-															"TITLE": TARGET.title,
-															"START": TARGET.start,
-															"END": TARGET.end,
-															"TARGET": TARGET.target,
-															"STATUS": TARGET.status,
-														};
-														isTARGET.push(GetLog);
-														if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-																global.io.emit('setlog', isTARGET);
+														if (TARGET.status == 'pending') {
+															Dataset('TARGET', '*', uID, 'DELETE');
+															Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+														} else {
+															GetLog = {
+																"ID": TARGET.id,
+																"TITLE": TARGET.title,
+																"START": TARGET.start,
+																"END": TARGET.end,
+																"TARGET": TARGET.target,
+																"STATUS": TARGET.status,
+															};
+															isTARGET.push(GetLog);
+															if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																	global.io.emit('setlog', isTARGET);
+																}
 															}
 														}
+
 													});
 												}
 											});
@@ -2054,7 +2128,7 @@ app.post('/send-message', [
 						}
 
 						if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
-							db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+							db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 								if (TARGET != undefined) {
 
 									if (Retorno[0].Title == "xxx") {
@@ -2074,24 +2148,30 @@ app.post('/send-message', [
 
 											if (err) throw err;
 										});
-										db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+										db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 											isTARGET = [];
 											if (TARGET != undefined) {
 												Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-													GetLog = {
-														"ID": TARGET.id,
-														"TITLE": TARGET.title,
-														"START": TARGET.start,
-														"END": TARGET.end,
-														"TARGET": TARGET.target,
-														"STATUS": TARGET.status,
-													};
-													isTARGET.push(GetLog);
-													if (Debug('TARGET', '*', 'ALL').length == (index + 1)) {
-														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-															global.io.emit('setlog', isTARGET);
+													if (TARGET.status == 'pending') {
+														Dataset('TARGET', '*', TARGET.id, 'DELETE');
+														Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+													} else {
+														GetLog = {
+															"ID": TARGET.id,
+															"TITLE": TARGET.title,
+															"START": TARGET.start,
+															"END": TARGET.end,
+															"TARGET": TARGET.target,
+															"STATUS": TARGET.status,
+														};
+														isTARGET.push(GetLog);
+														if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																global.io.emit('setlog', isTARGET);
+															}
 														}
 													}
+
 												});
 											}
 										});
