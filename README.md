@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [04/06/2024 17:00]
+# MkAuth WhatsApp Send Message [06/06/2024 11:45]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -47,6 +47,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.33    | Alternativa de conexão com API do MkAuth                                             | 04/06/2024 12:42 ✅   |                        |
 |  2.0.33    | Correção do Bug Tunel Dev do Mkauth                                                  |                        |  04/06/2024 17:00 ✅  |
+|  2.0.33    | Correção do sistema de log                                                           |                        |  06/06/2024 11:45 ✅  |
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
