@@ -1888,28 +1888,28 @@ app.post('/send-message', [
 														db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 															isTARGET = [];
 															if (TARGET != undefined) {
-																Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-																	if (TARGET.status == 'pending') {
-																		Dataset('TARGET', '*', TARGET.id, 'DELETE');
-																		Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
-																	} else {
-																		GetLog = {
-																			"ID": TARGET.id,
-																			"TITLE": TARGET.title,
-																			"START": TARGET.start,
-																			"END": TARGET.end,
-																			"TARGET": TARGET.target,
-																			"STATUS": TARGET.status,
-																		};
-																		isTARGET.push(GetLog);
-																		if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																			if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-																				global.io.emit('setlog', isTARGET);
-																			}
-																		}
-																	}
+											Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+												if (TARGET.status == 'pending') {
+													Dataset('TARGET', '*', TARGET.id, 'DELETE');
+													Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+												} else {
+													GetLog = {
+														"ID": TARGET.id,
+														"TITLE": TARGET.title,
+														"START": TARGET.start,
+														"END": TARGET.end,
+														"TARGET": TARGET.target,
+														"STATUS": TARGET.status,
+													};
+													isTARGET.push(GetLog);
+													if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+															global.io.emit('setlog', isTARGET);
+														}
+													}
+												}
 
-																});
+											});
 															}
 														});
 													});
@@ -2075,7 +2075,7 @@ app.post('/send-message', [
 												if (TARGET != undefined) {
 													Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
 														if (TARGET.status == 'pending') {
-															Dataset('TARGET', '*', uID, 'DELETE');
+															Dataset('TARGET', '*', TARGET.id, 'DELETE');
 															Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
 														} else {
 															GetLog = {
