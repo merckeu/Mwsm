@@ -266,8 +266,21 @@ Token:SENHA
 
 <b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 
+<details>
+<summary>MkAuth até Versão 24.02</summary>
 ** `Opções > Servidor de SMS > Servidor`
+ 
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/mkauth.png)](#)
+</details>
+
+<details>
+<summary>MkAuth Versão 24.03 ou Superior</summary>
+** `Opções > Servidor de WhatsApp > Servidor`
+ 
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/whatsapp.png)](#)
+</details>
+
+
 </details>
 
 ### Utilização :
