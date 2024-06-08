@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [06/06/2024 11:45]
+# MkAuth WhatsApp Send Message [08/06/2024 07:02]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -48,6 +48,9 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.33    | Alternativa de conexão com API do MkAuth                                             | 04/06/2024 12:42 ✅   |                        |
 |  2.0.33    | Correção do Bug Tunel Dev do Mkauth                                                  |                        |  04/06/2024 17:00 ✅  |
 |  2.0.33    | Correção do sistema de log                                                           |                        |  06/06/2024 11:45 ✅  |
+|  2.0.33    | Disparos via Mikrotik ( `/tool fetch` )                                              |                        |  08/06/2024 07:03 ✅  |
+
+**OBS:** Consulte o Guia Utilização para saber como enviar Mensagens via Mikrotik
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
@@ -310,6 +313,19 @@ Token:SENHA
 > 
 > ```sh
 > Olá %nomeresumido%, sua fatura %numerotitulo% vence no dia %vencimento%, para sua comodidade estamos enviado os dados para pagamento: ##{"uid":"%logincliente%","find":"%numerotitulo%"}##desconsidere esse aviso caso tenha feito o pagamento.
+> ```
+
+### Como Enviar Mensagens Via Mikrotik
+> As mensagens via Mikrotik podem ser enviadas via Script com o comando Abaixo:
+> 
+> ```sh
+> /tool fetch "http://IP-API/mikrotik/DDI+DDD+NUMERO/MENSAGEM"
+> ```
+>
+> **Exemplo:**
+>
+> ```sh
+> /tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem de Teste"
 > ```
 
 ### Testando
