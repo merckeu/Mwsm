@@ -1103,6 +1103,38 @@ app.post('/sqlite-options', (req, res) => {
 	}
 });
 
+// Send From Mikrotik
+app.get('/mikrotik/:to/:msg', async (req, res) => {
+	const {
+		to,
+		msg
+	} = req.params;
+	const isWid = (to);
+	const isDDI = isWid.substr(0, 2);
+	const isDDD = isWid.substr(2, 2);
+	const isCall = isWid.slice(-8);
+	var WhatsApp = isWid + '@c.us';
+	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+	}
+	const Mensagem = (msg);
+	setTimeout(function() {
+		client.sendMessage(WhatsApp, Mensagem).then(response => {
+			return res.json({
+				Status: "Success",
+				message: 'Bot-Mwsm : Message Sent'
+			});
+		}).catch(err => {
+			return res.status(500).json({
+				Status: "Fail",
+				message: 'Bot-Mwsm : Message was not Sent'
+			});
+		});
+
+	}, Math.floor(Debug('OPTIONS').interval + Math.random() * 1000));
+});
 
 
 // Force Message
