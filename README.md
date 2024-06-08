@@ -322,10 +322,12 @@ Token:SENHA
 > /tool fetch "http://IP-API/mikrotik/DDI+DDD+NUMERO/MENSAGEM"
 > ```
 >
-> **Exemplo:**
->
+> **OBS:** Subistitua os Espaços por %20 ao Inserir uma Mensage no Toll Fetch
+> 
+> **Ex:** Para `/tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem de Teste"` :
+> 
 > ```sh
-> /tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem de Teste"
+> /tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem%20de%20Teste"
 > ```
 
 ### Testando
