@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [08/06/2024 07:02]
+# MkAuth WhatsApp Send Message [11/06/2024 13:29]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -49,6 +49,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.33    | Correção do Bug Tunel Dev do Mkauth                                                  |                        |  04/06/2024 17:00 ✅  |
 |  2.0.33    | Correção do sistema de log                                                           |                        |  06/06/2024 11:45 ✅  |
 |  2.0.33    | Disparos via Mikrotik ( `/tool fetch` )                                              |                        |  08/06/2024 07:03 ✅  |
+|  2.0.33    | Verificação RegEx no Numero Disparado                                                |                        |  11/06/2024 13:29 ✅  |
 
 **OBS:** Consulte o Guia Utilização para saber como enviar Mensagens via Mikrotik
 
