@@ -1155,7 +1155,7 @@ app.post('/force-message', [
 		});
 	}
 
-	const isWid = (req.body.to);
+	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
 	const isCall = isWid.slice(-8);
@@ -1343,7 +1343,7 @@ app.post('/send-image', [
 
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
-	const isWid = (req.body.to);
+	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
 	const isCall = isWid.slice(-8);
@@ -1391,7 +1391,7 @@ app.post('/send-document', [
 	const hasMimetype = req.body.mimetype;
 	const hasFileName = req.body.filename;
 
-	const isWid = (req.body.to);
+	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
 	const isCall = isWid.slice(-8);
@@ -1437,7 +1437,7 @@ app.post('/send-message', [
 		});
 	}
 
-	const isWid = (req.body.to);
+	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
 	const isCall = isWid.slice(-8);
