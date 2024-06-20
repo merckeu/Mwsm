@@ -54,6 +54,8 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 
 **OBS:** Listagem de clientes faz parte da função inacabada de disparos automaticos
 
+Habilite o Endpoint em `Provedor > Controle de Usuarios > API > cliente.api GET`
+
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
