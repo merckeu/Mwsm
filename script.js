@@ -10,6 +10,36 @@ $(document).ready(function() {
 	});
 });
 
+$(document).ready(function() {
+	$("#HASHTABLE").tooltip({
+		selector: '[data-toggle=tooltip]',
+		position: {
+			my: 'left center',
+			at: 'right center'
+		},
+		placement: 'right'
+	});
+});
+
+function toCapitalize(str) {
+	return str
+		.toLowerCase()
+		.split(' ')
+		.map(word => word.charAt(0).toUpperCase() + word.substr(1))
+		.join(' ');
+}
+
+$(document).ready(function() {
+	$("tbody.onClick").delegate('tr', 'click', function() {
+		var User = $(this).attr('data-user');
+		var Title = $(this).attr('data-title');
+		var Status = $(this).attr('data-status');
+		var Payment = $(this).attr('data-payment');
+		var Contact = $(this).attr('data-contact');
+		alert(Title + " - " + User + " - " + Payment + " - " + Status + " - " + Contact);
+	});
+});
+
 
 $(document).ready(function() {
 	$("#tabs2").tabs({
@@ -101,17 +131,16 @@ $(document).ready(function() {
 		}
 	});
 
-
 	$("#001").on('click', function() {
 		if ($("#tabs-2E3").is(":visible")) {
-			$("#tabs-2E3").fadeOut("slow", function() {
+			$("#tabs-2E3, #isControls").fadeOut("slow", function() {
+				$("#isTable").show();
 				$("#tabs-2E2").fadeIn("slow", function() {
 
 				});
 			});
 		} else {
 			if ($("#tabs-2E2").is(":visible")) {
-
 				$("#tabs-2E2").fadeOut("slow", function() {
 					$("#tabs-2E1").fadeIn("slow", function() {
 
@@ -131,10 +160,11 @@ $(document).ready(function() {
 			});
 		} else {
 			if ($("#tabs-2E2").is(":visible")) {
-
 				$("#tabs-2E2").fadeOut("slow", function() {
 					$("#tabs-2E3").fadeIn("slow", function() {
-
+					$("#isControls").fadeIn("slow", function() {
+                                        $(".isWait").text("Waiting Select Options...");
+					});
 					});
 				});
 			}
@@ -142,8 +172,71 @@ $(document).ready(function() {
 	});
 
 
+	$("#003").on('click', function() {
+                $("#isMonth, #isSearch, #003").prop('disabled', true);
+		$("#isTable").fadeIn("slow", function() {				
+		$.ajax({
+			type: "POST",
+			url: "/clients_mkauth",
+			data: {
+				month: $('#isMonth').val(),
+				payment: $('#isSearch').val()
+			},
+			beforeSend: function(data) {
+                                        $(".isWait").text("Loading MkAuth Data...");
+					$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+
+			success: function(data) {
+				if (data.Status == "Success") {
+					$("#isControls").fadeIn("slow", function() {
+							$("#isTable").fadeOut("slow", function() {
+
+							});
+
+					});
+				}
+				if (data.Status == "Fail") {
+				var Icon = "fa-exclamation";
+				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+					life: 2000,
+					theme: 'Mwsm',
+					speed: 'slow',
+					close: function(e, m, o) {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+                                                $(".isWait").text("Waiting Select Options...");
+                                                $("#isMonth, #isSearch, #003").prop('disabled', false);
+					}
+				});
+
+				}
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+                                $("#isMonth, #isSearch, #003").prop('disabled', false);
+			},
+			error: function(request, status, error) {
+				var Icon = "fa-exclamation";
+				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+					life: 2000,
+					theme: 'Mwsm',
+					speed: 'slow',
+					close: function(e, m, o) {
+						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+                                                $(".isWait").text("Waiting Select Options...");
+                                                $("#isMonth, #isSearch, #003").prop('disabled', false);
+					}
+				});
+			}
+		});
+
+
+
+	});
+
 });
 
+});
 
 $(document).ready(function() {
 	$("input[type=password]").prop('type', 'text');
@@ -346,14 +439,12 @@ $(document).ready(function() {
 						setTimeout(() => {
 							$("#module").prop("checked", false);
 							$("#domain").focus().val("");
-							$("#iServer").prop('disabled', false);
 						}, "500");
 
 					} else {
 						if (Tunel == "") {
 							setTimeout(() => {
 								$("#module").prop("checked", false);
-								$("#iServer").prop('disabled', false);
 								$("#tunel").focus().val("");
 							}, "500");
 						} else {
@@ -831,6 +922,44 @@ $(document).ready(function() {
 		});
 	});
 
+	socket.on('getclients', function(value) {
+		var data = {};
+		data.d = value;
+		var html = '';
+
+		(data.d).sort(function(a, b) {
+			var Nome = a.CLIENT.localeCompare(b.CLIENT);
+			var Ordem = parseFloat(a.ORDER) - parseFloat(b.ORDER);
+			return Ordem || Nome;
+		});
+
+		$('#HASHTABLE tr').empty();
+		for (var i = 0; i < data.d.length; i++) {
+			if (data.d[i].PUSH != "" && data.d[i].PUSH != undefined) {
+				data.d[i].PUSH = new Date(data.d[i].PUSH).toLocaleString("pt-br").replace(",", "");
+			} else if (data.d[i].PUSH == "" || data.d[i].PUSH == undefined) {
+				data.d[i].PUSH = "00/00/0000 00:00:00";
+			}
+			if (data.d[i].STATUS == "" || data.d[i].STATUS == undefined) {
+				data.d[i].STATUS = "pending";
+			}
+
+			html += '<tr class="Fire" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-title="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '">';
+			html += '<td class="text-center tbajust">' + data.d[i].TITLE + '</td>';
+			html += '<td class="text-center">' + data.d[i].USER + '</td>';
+			html += '<td class="text-center tbreward">' + new Date(data.d[i].REWARD).toLocaleString("pt-br").split(",")[0] + '</td>';
+			html += '<td class="text-center">' + data.d[i].PUSH + '</td>';
+			html += '<td class="text-center tbajust">' + data.d[i].PAYMENT + '</td>';
+			html += '<td class="text-center tbajust">' + data.d[i].STATUS + '</td>';
+			html += '</tr>';
+		}
+		$('#HASHTABLE tr').first().after(html);
+		$("#isTable").fadeOut("slow", function() {
+
+		});
+	});
+
+
 
 	socket.on('domain', function(data) {
 		$('#domain').val(data);
@@ -848,14 +977,17 @@ $(document).ready(function() {
 	socket.on('iserver', function(data) {
 		$('#iServer').val(data);
 		if (data != "") {
-			if ($('#module').is(':checked')) {
-				$('#iServer').prop('disabled', true);
-			} else {
-				$('#iServer').prop('disabled', false);
-			}
+			$('#iServer').prop('disabled', true);
 		}
 	});
 
+	socket.on('ismonth', function(data) {
+		$('#isMonth').val(data);
+	});
+
+	socket.on('issearch', function(data) {
+		$('#isSearch').val(data);
+	});
 
 	socket.on('Version', function(data) {
 		$('#Version').val('v' + data);

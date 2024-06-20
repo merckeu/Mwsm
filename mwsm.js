@@ -139,6 +139,18 @@ function wget(url, dest) {
 	});
 }
 
+function ArrayPosition(...criteria) {
+	return (a, b) => {
+		for (let i = 0; i < criteria.length; i++) {
+			const curCriteriaComparatorValue = criteria[i](a, b)
+			if (curCriteriaComparatorValue !== 0) {
+				return curCriteriaComparatorValue
+			}
+		}
+		return 0
+	}
+}
+
 const GetUpdate = async (GET, SET) => {
 	var Status;
 	const Upgrade = async (GET) => {
@@ -314,10 +326,60 @@ function DateTime() {
 	return strDateTime;
 };
 
+
+const MkClient = async (FIND) => {
+	var Server = Debug('MKAUTH').client_link;
+
+	if (Server == "tunel") {
+		Server = Debug('MKAUTH').tunel;
+	} else if (Server == "domain") {
+		Server = Debug('MKAUTH').domain;
+	}
+	const Authentication = await axios.get('https://' + Server + '/api/', {
+		auth: {
+			username: Debug('MKAUTH').client_id,
+			password: Debug('MKAUTH').client_secret
+		}
+	}).then(response => {
+		return response.data;
+	}).catch(err => {
+		return false;
+	});
+
+	if (Authentication) {
+		const MkSync = await axios.get('https://' + Server + '/api/cliente/show/' + FIND, {
+			headers: {
+				'Authorization': 'Bearer ' + Authentication
+			}
+		}).then(response => {
+			if ((typeof response.data !== "object") && ((response.data).slice(-1) != '}')) {
+				return JSON.parse((response.data).substring(0, (response.data).length - 1));
+			} else {
+				return response.data;
+			}
+		}).catch(err => {
+			return false;
+		});
+		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
+			if (await MkSync.celular != undefined) {
+				return (await MkSync.celular).replace(/[^0-9\\.]+/g, '');
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+};
+
+
+
 //Search MkAUth API
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
-		Json = undefined;
+		JSON = [],
+		Json = undefined,
+                JDebug = undefined
 	var Server = Debug('MKAUTH').client_link;
 
 	if (Server == "tunel") {
@@ -458,8 +520,21 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
 						UID = "0" + UID;
 					}
+
 					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's') {
+						switch (Send.status) {
+							case 'aberto':
+								Send.status = 'open';
+								break;
+							case 'pago':
+								Send.status = 'paid';
+								break;
+							case 'vencido':
+								Send.status = 'due';
+								break;
+						}
 						Json = {
+							"Order": (new Date(Send.datavenc)).getDate(),
 							"Identifier": Send.titulo,
 							"Client": Send.nome,
 							"Reward": Send.datavenc,
@@ -467,7 +542,12 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Connect": Send.login
 						};
 						PUSH.push(Json);
-						Json = PUSH;
+						Json = (PUSH).sort(function(a, b) {
+							var Nome = a.Client.localeCompare(b.Client);
+							var Ordem = parseFloat(a.Order) - parseFloat(b.Order);
+							return Ordem || Nome;
+						});
+
 					}
 				}
 			});
@@ -479,7 +559,8 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					JDebug = {
 						"MkAuth": "Cannot Find the Data > find",
 					};
-					Terminal(JSON.stringify(JDebug));
+
+                                        Terminal(JSON.stringify(JDebug));
 				} else {
 					JDebug = {
 						"Payment": Json.Status,
@@ -523,8 +604,20 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					JDebug = {
 						"MkAuth": "Cannot Find the Data",
 					};
-					Terminal(JSON.stringify(JDebug));
+					Terminal(JDebug);
 				} else {
+					(Json).some(function(Send, index) {
+						isJson = {
+							"Order": (index + 1),
+							"Identifier": Send.Identifier,
+							"Client": Send.Client,
+							"Reward": Send.Reward,
+							"Payment": Send.Payment,
+							"Connect": Send.Connect
+						};
+						JSON.push(isJson);
+						Json = JSON;
+					});
 					Terminal(Json);
 				}
 				return Json;
@@ -535,7 +628,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					JDebug = {
 						"MkAuth": "Cannot Find the Data > uid",
 					};
-					Terminal(JSON.stringify(JDebug));
+					Terminal(JDebug);
 					return false;
 
 				}
@@ -552,7 +645,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 
 //Test
 delay(0).then(async function() {
-	//	const Master = await MkAuth('5', 'vencido', 'listagem');
+	//const Master = await MkAuth('7', 'vencido', 'listagem');
 });
 
 //Check is Json
@@ -881,7 +974,7 @@ app.post('/update', (req, res) => {
 
 
 // Token
-app.post('/token', (req, res) => {
+app.post('/token', async (req, res) => {
 	const Token = req.body.token;
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		global.io.emit('interval', Debug('OPTIONS').interval);
@@ -912,10 +1005,10 @@ app.post('/token', (req, res) => {
 		global.io.emit('iserver', Debug('MKAUTH').client_link);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
 		global.io.emit('uptodate', Debug('RELEASE').isupdate);
-
+		global.io.emit('ismonth', (DateTime().split('-')[1]));
+		global.io.emit('issearch', 'all');
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
-
 			Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
 				if (TARGET.status == 'pending') {
 					Dataset('TARGET', '*', TARGET.id, 'DELETE');
@@ -943,10 +1036,12 @@ app.post('/token', (req, res) => {
 		} else {
 			global.io.emit('getlog', false);
 		}
+
 		res.json({
 			Status: "Success",
 			Return: Debug('CONSOLE').right
 		});
+
 
 	} else {
 		res.json({
@@ -995,6 +1090,8 @@ app.post('/getdata', (req, res) => {
 				debugger: Debug('OPTIONS').debugger,
 				uptodate: Debug('RELEASE').isupdate,
 				iserver: Debug('MKAUTH').client_link,
+				ismonth: (DateTime().split('-')[1]),
+				issearch: 'all',
 			});
 
 		}
@@ -1018,6 +1115,57 @@ app.post('/options_mkauth', (req, res) => {
 		});
 	});
 });
+
+
+// Get Clients Mkauth
+app.post('/clients_mkauth', async (req, res) => {
+	const Month = req.body.month;
+	const Payment = req.body.payment;
+
+	const Master = await MkAuth(Month, Payment, 'listagem');
+	var hasTARGET = [];
+
+	if (await Master.Status == "Error") {
+		return res.json({
+			Status: "Fail",
+			Return: Debug('CONSOLE').request
+		});
+	} else {
+		(await Master).someAsync(async (TARGET) => {
+			var Contact = await MkClient(TARGET.Connect);
+			if (await Contact) {
+				TARGET.Contact = await Contact;
+			} else {
+				TARGET.Contact = "00000000000";
+			}
+			GetClients = {
+				"ORDER": TARGET.Order,
+				"TITLE": TARGET.Identifier,
+				"USER": TARGET.Connect,
+				"CLIENT": TARGET.Client,
+				"CONTACT": TARGET.Contact,
+				"REWARD": TARGET.Reward,
+				"PUSH": undefined,
+				"PAYMENT": TARGET.Payment,
+				"STATUS": undefined
+			};
+			hasTARGET.push(GetClients);
+			if (Master.length == hasTARGET.length) {
+				if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+					global.io.emit('getclients', hasTARGET);
+					return res.json({
+						Status: "Success",
+						Return: 'Dados Carregados com Sucesso'
+					});
+
+				}
+			}
+
+		});
+
+	}
+});
+
 
 // Delay Mkauth
 app.post('/delay_mkauth', (req, res) => {
@@ -1313,7 +1461,7 @@ app.post('/link_mkauth', async (req, res) => {
 				"Communication": "" + ResAuth + ""
 			}]
 		};
-		Terminal(JSON.stringify(JDebug));
+		Terminal(JDebug);
 	} else {
 		res.json({
 			Status: "Fail",
@@ -1601,7 +1749,7 @@ app.post('/send-message', [
 						JDebug = {
 							"MkAuth": "Connect was Failed",
 						};
-						Terminal(JSON.stringify(JDebug));
+						Terminal(JDebug);
 					}
 					resolve(Radeon);
 				} else {
@@ -1920,28 +2068,28 @@ app.post('/send-message', [
 														db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 															isTARGET = [];
 															if (TARGET != undefined) {
-											Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-												if (TARGET.status == 'pending') {
-													Dataset('TARGET', '*', TARGET.id, 'DELETE');
-													Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
-												} else {
-													GetLog = {
-														"ID": TARGET.id,
-														"TITLE": TARGET.title,
-														"START": TARGET.start,
-														"END": TARGET.end,
-														"TARGET": TARGET.target,
-														"STATUS": TARGET.status,
-													};
-													isTARGET.push(GetLog);
-													if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-															global.io.emit('setlog', isTARGET);
-														}
-													}
-												}
+																Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+																	if (TARGET.status == 'pending') {
+																		Dataset('TARGET', '*', TARGET.id, 'DELETE');
+																		Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+																	} else {
+																		GetLog = {
+																			"ID": TARGET.id,
+																			"TITLE": TARGET.title,
+																			"START": TARGET.start,
+																			"END": TARGET.end,
+																			"TARGET": TARGET.target,
+																			"STATUS": TARGET.status,
+																		};
+																		isTARGET.push(GetLog);
+																		if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																			if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																				global.io.emit('setlog', isTARGET);
+																			}
+																		}
+																	}
 
-											});
+																});
 															}
 														});
 													});

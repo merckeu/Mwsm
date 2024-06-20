@@ -7664,6 +7664,7 @@ tr {
 	max-width: 100%;
 	margin-bottom: 1rem;
 	background-color: transparent;
+        margin-top:-10px;
 }
 
 .table th,
@@ -7990,6 +7991,10 @@ thead {
 	display: none;
 }
 
+.tbreward{
+      width: 70px;
+}
+
 #inTable {
 	top: 40px;
 	left: 0px;
@@ -8084,3 +8089,55 @@ cursor: context-menu;
         position: absolute;
         top:6px;
         right: 12px;
+}
+
+#isTable {
+	top: 5px;
+	left: 0px;
+	width: 96.5%;
+	height: 238px;
+	background: #FFF;
+	position: absolute;
+	z-index: 9999999999999999999999999999;
+	display: block;
+        margin:7px 10px 10px 12px;
+}
+
+.isWait {
+	background: linear-gradient(currentColor 0 0) 0 100%/0% 3px no-repeat;
+	position: relative;
+	z-index: 999999999999;
+	top: 32%;
+	left: 35%;
+	position: relative;
+	color: #337ab7;
+	padding: 20px;
+	width: 146px;
+	height: 10px;
+	border: 2px solid #337ab7;
+	border-radius: 5px;
+	
+}
+.Fire{
+cursor: pointer;
+text-transform:capitalize;
+}
+
+.Transparent {
+border: none !important;
+outline: none;
+border-bottom:1px;
+margin-top:15px;
+height:20px;
+background:transparent;
+}
+#isControls{
+display:none;
+margin-left:20px;
+height:20px;
+width:160px;
+float:left;
+}
+
+
+
