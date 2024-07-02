@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [20/06/2024 12:49]
+# MkAuth WhatsApp Send Message [02/07/2024 01:30]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -51,6 +51,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.33    | Disparos via Mikrotik ( `/tool fetch` )                                              |                        |  08/06/2024 07:03 ✅  |
 |  2.0.33    | Verificação RegEx no Numero Disparado                                                |                        |  11/06/2024 13:29 ✅  |
 |  2.0.33    | Listagem de Usuarios MkAuth                                                          |                        |  20/06/2024 12:49 ✅  |
+|  2.0.34    | Upgrade da API do WhatsApp                                                           | 02/07/2024 01:30 ✅   |                        |
 
 **OBS:** Listagem de clientes faz parte da função inacabada de disparos automaticos
 
