@@ -1,4 +1,9 @@
 var Slide = false;
+
+$(window).on('load', function() {
+	$("#API").fadeIn("slow", function() {});
+});
+
 $(document).ready(function() {
 	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
@@ -162,9 +167,9 @@ $(document).ready(function() {
 			if ($("#tabs-2E2").is(":visible")) {
 				$("#tabs-2E2").fadeOut("slow", function() {
 					$("#tabs-2E3").fadeIn("slow", function() {
-					$("#isControls").fadeIn("slow", function() {
-                                        $(".isWait").text("Waiting Select Options...");
-					});
+						$("#isControls").fadeIn("slow", function() {
+							$(".isWait").text("Waiting Select Options...");
+						});
 					});
 				});
 			}
@@ -173,68 +178,68 @@ $(document).ready(function() {
 
 
 	$("#003").on('click', function() {
-                $("#isMonth, #isSearch, #003").prop('disabled', true);
-		$("#isTable").fadeIn("slow", function() {				
-		$.ajax({
-			type: "POST",
-			url: "/clients_mkauth",
-			data: {
-				month: $('#isMonth').val(),
-				payment: $('#isSearch').val()
-			},
-			beforeSend: function(data) {
-                                        $(".isWait").text("Loading MkAuth Data...");
+		$("#isMonth, #isSearch, #003").prop('disabled', true);
+		$("#isTable").fadeIn("slow", function() {
+			$.ajax({
+				type: "POST",
+				url: "/clients_mkauth",
+				data: {
+					month: $('#isMonth').val(),
+					payment: $('#isSearch').val()
+				},
+				beforeSend: function(data) {
+					$(".isWait").text("Loading MkAuth Data...");
 					$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-			},
+				},
 
-			success: function(data) {
-				if (data.Status == "Success") {
-					$("#isControls").fadeIn("slow", function() {
+				success: function(data) {
+					if (data.Status == "Success") {
+						$("#isControls").fadeIn("slow", function() {
 							$("#isTable").fadeOut("slow", function() {
 
 							});
 
+						});
+					}
+					if (data.Status == "Fail") {
+						var Icon = "fa-exclamation";
+						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+							life: 2000,
+							theme: 'Mwsm',
+							speed: 'slow',
+							close: function(e, m, o) {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+								$(".isWait").text("Waiting Select Options...");
+								$("#isMonth, #isSearch, #003").prop('disabled', false);
+							}
+						});
+
+					}
+					$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+					$("#isMonth, #isSearch, #003").prop('disabled', false);
+				},
+				error: function(request, status, error) {
+					var Icon = "fa-exclamation";
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+							$(".isWait").text("Waiting Select Options...");
+							$("#isMonth, #isSearch, #003").prop('disabled', false);
+						}
 					});
 				}
-				if (data.Status == "Fail") {
-				var Icon = "fa-exclamation";
-				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
-					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-					life: 2000,
-					theme: 'Mwsm',
-					speed: 'slow',
-					close: function(e, m, o) {
-						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-                                                $(".isWait").text("Waiting Select Options...");
-                                                $("#isMonth, #isSearch, #003").prop('disabled', false);
-					}
-				});
+			});
 
-				}
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-                                $("#isMonth, #isSearch, #003").prop('disabled', false);
-			},
-			error: function(request, status, error) {
-				var Icon = "fa-exclamation";
-				$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
-					header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-					life: 2000,
-					theme: 'Mwsm',
-					speed: 'slow',
-					close: function(e, m, o) {
-						$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-                                                $(".isWait").text("Waiting Select Options...");
-                                                $("#isMonth, #isSearch, #003").prop('disabled', false);
-					}
-				});
-			}
+
+
 		});
 
-
-
 	});
-
-});
 
 });
 
@@ -975,15 +980,7 @@ $(document).ready(function() {
 	});
 
 	socket.on('iserver', function(data) {
-		switch (data) {
-			case 'true':
-				$('#iServer').prop('disabled', true);
-				break;
-			case 'false':
-				$('#iServer').prop('disabled', false);
-				break;
-		}
-
+		$('#iServer').val(data);
 	});
 
 	socket.on('ismonth', function(data) {
