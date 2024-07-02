@@ -1,6 +1,9 @@
-﻿html {
+html {
 	margin 0;
 	padding: 0;
+}
+#API {
+display:none;
 }
 
 body {
