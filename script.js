@@ -975,10 +975,15 @@ $(document).ready(function() {
 	});
 
 	socket.on('iserver', function(data) {
-		$('#iServer').val(data);
-		if (data != "") {
-			$('#iServer').prop('disabled', true);
+		switch (data) {
+			case 'true':
+				$('#iServer').prop('disabled', true);
+				break;
+			case 'false':
+				$('#iServer').prop('disabled', false);
+				break;
 		}
+
 	});
 
 	socket.on('ismonth', function(data) {
