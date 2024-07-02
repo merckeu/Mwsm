@@ -153,6 +153,7 @@ function ArrayPosition(...criteria) {
 
 const GetUpdate = async (GET, SET) => {
 	var Status;
+	var Conclusion = true;
 	const Upgrade = async (GET) => {
 		const Update = await fetch(GET).then(response => {
 			return response.json();
@@ -167,7 +168,6 @@ const GetUpdate = async (GET, SET) => {
 		return Update;
 	};
 	isUpdate = await Upgrade(GET);
-	var Conclusion = true;
 	(isUpdate.version).someAsync(async (Return) => {
 		if ((Return.release == Package.version)) {
 			var isDateTime = Debug('RELEASE').mwsm;
@@ -179,7 +179,7 @@ const GetUpdate = async (GET, SET) => {
 					if (((isUpdate.version)[i].patch) > (isDateTime)) {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
-                                                await global.io.emit('upgrade', false);
+						await global.io.emit('upgrade', false);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
 							const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
 							if (Register) {
@@ -253,6 +253,7 @@ const GetUpdate = async (GET, SET) => {
 
 						}
 					} else {
+
 						if (Conclusion) {
 							Conclusion = false;
 							if (SET == false) {
@@ -380,7 +381,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 	var SEARCH, LIST, STATUS, PUSH = [],
 		JSON = [],
 		Json = undefined,
-                JDebug = undefined
+		JDebug = undefined
 	var Server = Debug('MKAUTH').client_link;
 
 	if (Server == "tunel") {
@@ -561,7 +562,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 						"MkAuth": "Cannot Find the Data > find",
 					};
 
-                                        Terminal(JSON.stringify(JDebug));
+					Terminal(JSON.stringify(JDebug));
 				} else {
 					JDebug = {
 						"Payment": Json.Status,
