@@ -179,6 +179,7 @@ const GetUpdate = async (GET, SET) => {
 					if (((isUpdate.version)[i].patch) > (isDateTime)) {
 						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
 						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
+                                                await global.io.emit('upgrade', false);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
 							const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
 							if (Register) {
