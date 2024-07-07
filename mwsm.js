@@ -665,62 +665,6 @@ function testJSON(text) {
 	}
 }
 
-//Update WhatsApp
-function WwbUpgrade() {
-	delay(0).then(async function() {
-		const Upgrade = async (GET) => {
-			const Update = await fetch(GET).then(response => {
-				return response.json();
-			}).catch(err => {
-				return {
-					'currentVersion': '0.0.0.0'
-				}
-			});
-			return Update;
-		};
-		Update = await Upgrade('https://raw.githubusercontent.com/wppconnect-team/wa-version/main/versions.json');
-		if (Update.currentVersion == '0.0.0.0') {
-			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').fail);
-			global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').fail);
-		} else {
-			if (Update.currentVersion.replace(/\D/g, "") == Debug('RELEASE').webjs.replace(/\D/g, "")) {
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').lastet);
-				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').lastet);
-			} else {
-				if (Update.currentBeta == null) {
-					Update.versions.forEach(function(Return) {
-						if (Return.version.includes(Update.currentVersion)) {
-							if ((Return.version != Debug('RELEASE').webjs)) {
-								db.run("UPDATE release SET webjs=?", [Return.version], (err) => {
-									if (err) {
-										console.log('> Bot-Mwsm : ' + err)
-									}
-									console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updating);
-									global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updating);
-									exec('pm2 restart Bot-Mwsm --update-env');
-								});
-							}
-
-						}
-					});
-				} else {
-					if (Return.version != Debug('RELEASE').webjs) {
-						db.run("UPDATE release SET webjs=?", [Update.currentBeta], (err) => {
-							if (err) {
-								console.log('> Bot-Mwsm : ' + err)
-							}
-							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updating);
-							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updating);
-							exec('pm2 restart Bot-Mwsm --update-env');
-						});
-					}
-				}
-			}
-
-		}
-	});
-}
-
 // WhatsApp-web.js Functions
 const client = new Client({
 	authStrategy: new LocalAuth({
@@ -741,10 +685,6 @@ const client = new Client({
 			'--disable-gpu'
 		]
 	},
-	webVersionCache: {
-		type: 'remote',
-		remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/' + Debug('RELEASE').webjs + '.html',
-	},
 });
 io.on('connection', function(socket) {
 	socket.emit('Version', Package.version);
@@ -764,18 +704,19 @@ io.on('connection', function(socket) {
 	}
 
 	client.on('qr', (qr) => {
-		WwbUpgrade();
-		qrcode.toDataURL(qr, (err, url) => {
-			try {
-				socket.emit('qr', url);
-			} catch (err) {
-				console.log('> Bot-Mwsm : ' + err);
-				socket.emit('message', '> Bot-Mwsm : ' + err);
-			} finally {
-				socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').received);
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').received);
-			}
-		});
+		if (!Session) {
+			qrcode.toDataURL(qr, (err, url) => {
+				try {
+					socket.emit('qr', url);
+				} catch (err) {
+					console.log('> Bot-Mwsm : ' + err);
+					socket.emit('message', '> Bot-Mwsm : ' + err);
+				} finally {
+					socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').received);
+					console.log('> Bot-Mwsm : ' + Debug('CONSOLE').received);
+				}
+			});
+		}
 	});
 
 	client.on('ready', async () => {
@@ -847,7 +788,6 @@ io.on('connection', function(socket) {
 				});
 			}
 		});
-
 	});
 
 
@@ -906,13 +846,40 @@ app.post('/shutdown', (req, res) => {
 		res.json({
 			Status: "Success"
 		});
+		client.logout()
 		global.io.emit('getlog', true);
-		client.logout();
+		delay(3000).then(async function() {
+			try {
+				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+				global.io.emit('qr', Debug('RESOURCES').disconnected);
+				db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
+					if (err) {
+						console.log('> Bot-Mwsm : ' + err)
+					}
+					global.io.emit('Reset', true);
+					Session = false;
+				});
+				await client.destroy();
+			} catch (err) {
+				console.log('> Bot-Mwsm : ' + err);
+				global.io.emit('message', '> Bot-Mwsm : ' + err);
+			} finally {
+				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				global.io.emit('qr', Debug('RESOURCES').connection);
+				global.io.emit('Reset', true);
+				delay(2000).then(async function() {
+					exec('pm2 restart Bot-Mwsm --update-env');
+				});
+			}
+		});
 	} else {
 		res.json({
 			Status: "Fail",
 			Return: Debug('CONSOLE').wrong
 		});
+		console.log("OFF");
 	}
 });
 
