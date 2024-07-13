@@ -913,7 +913,12 @@ $(document).ready(function() {
 				$('#WhatsApp').mask("(00) 0 0000-0000");
 				data.d[i].TARGET = $("#WhatsApp").masked(Numero.substr(0, 2) + "9" + Numero.substr(2, 8));
 			}
-			html += '<tr data-toggle="tooltip" data-placement="right" title="' + data.d[i].TITLE + '">';
+			if (data.d[i].NAME == undefined) {
+				data.d[i].NAME = '';
+			} else {
+				data.d[i].NAME = ' - ' + data.d[i].NAME;
+			}
+			html += '<tr data-toggle="tooltip" data-placement="right" title="' + data.d[i].TITLE + data.d[i].NAME + '">';
 			html += '<td class="text-center tbajust">' + data.d[i].ID + '</td>';
 			html += '<td class="text-center">' + new Date(data.d[i].START).toLocaleString("pt-br").replace(",", "") + '</td>';
 			html += '<td class="text-center">' + new Date(data.d[i].END).toLocaleString("pt-br").replace(",", "") + '</td>';

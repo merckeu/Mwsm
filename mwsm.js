@@ -421,8 +421,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 			} else {
 				SEARCH = MkSync;
 			}
-
-			(SEARCH).some(function(Send, index) {
+			(SEARCH).someAsync(async (Send) => {
 				if (EXT == 'titulos') {
 					if ((Send.titulo == FIND.replace(/^0+/, '') || parseInt(Send.titulo) == parseInt(FIND)) || Send.linhadig == FIND) {
 						var Bolix = '';
@@ -480,9 +479,11 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							} else {
 								STATUS = Send.status;
 							}
+
 							Json = {
 								"Status": STATUS,
 								"ID": Send.titulo,
+								"Name": Send.nome,
 								"Payments": [{
 										"value": Send.linhadig,
 										"caption": "Bar",
@@ -566,6 +567,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 				} else {
 					JDebug = {
 						"Payment": Json.Status,
+						"Client": Json.Name,
 						"MkAuth": [{
 								"Module": "Bar",
 								"Available": Json["Payments"][0].status,
@@ -986,6 +988,7 @@ app.post('/token', async (req, res) => {
 					GetLog = {
 						"ID": TARGET.id,
 						"TITLE": TARGET.title,
+						"NAME": TARGET.client,
 						"START": TARGET.start,
 						"END": TARGET.end,
 						"TARGET": TARGET.target,
@@ -1579,7 +1582,7 @@ app.post('/send-message', [
 			var Caption, Send, Register, Renner;
 			var RETURNS = [];
 			Radeon['Title'] = 'xxx';
-
+			Radeon['Name'] = 'xxx';
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 
 				Mensagem.some(function(Send, index) {
@@ -1620,7 +1623,7 @@ app.post('/send-message', [
 							}
 							if (Synchronization.ID != undefined) {
 								Radeon['Title'] = Synchronization.ID;
-
+								Radeon['Name'] = Synchronization.Name;
 								db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, uID], (err) => {
 									if (err) throw err;
 								});
@@ -1764,7 +1767,6 @@ app.post('/send-message', [
 			if (Debug('MKAUTH').delay >= 3) {
 				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
 			}
-
 			if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
 
 				for (let i = 0; i < Retorno[0].Message.length; i++) {
@@ -1923,10 +1925,8 @@ app.post('/send-message', [
 									Retorno[0].Message = "Fail";
 								}
 
-
 								db.serialize(() => {
-									db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
-
+									db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
 										if (err) throw err;
 									});
 									db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
@@ -1940,6 +1940,7 @@ app.post('/send-message', [
 													GetLog = {
 														"ID": TARGET.id,
 														"TITLE": TARGET.title,
+														"NAME": TARGET.client,
 														"START": TARGET.start,
 														"END": TARGET.end,
 														"TARGET": TARGET.target,
@@ -2030,7 +2031,7 @@ app.post('/send-message', [
 
 
 													db.serialize(() => {
-														db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
+														db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
 
 															if (err) throw err;
 														});
@@ -2045,6 +2046,7 @@ app.post('/send-message', [
 																		GetLog = {
 																			"ID": TARGET.id,
 																			"TITLE": TARGET.title,
+																			"NAME": TARGET.client,
 																			"START": TARGET.start,
 																			"END": TARGET.end,
 																			"TARGET": TARGET.target,
@@ -2179,6 +2181,7 @@ app.post('/send-message', [
 														GetLog = {
 															"ID": TARGET.id,
 															"TITLE": TARGET.title,
+															"NAME": TARGET.client,
 															"START": TARGET.start,
 															"END": TARGET.end,
 															"TARGET": TARGET.target,
@@ -2230,6 +2233,7 @@ app.post('/send-message', [
 															GetLog = {
 																"ID": TARGET.id,
 																"TITLE": TARGET.title,
+																"NAME": TARGET.client,
 																"START": TARGET.start,
 																"END": TARGET.end,
 																"TARGET": TARGET.target,
@@ -2308,6 +2312,7 @@ app.post('/send-message', [
 														GetLog = {
 															"ID": TARGET.id,
 															"TITLE": TARGET.title,
+															"NAME": TARGET.client,
 															"START": TARGET.start,
 															"END": TARGET.end,
 															"TARGET": TARGET.target,
