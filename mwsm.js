@@ -1259,6 +1259,7 @@ app.get('/mikrotik/:to/:msg', async (req, res) => {
 
 // Force Message
 app.post('/force-message', [
+        body('p').notEmpty(),
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
 ], async (req, res) => {
@@ -1275,6 +1276,7 @@ app.post('/force-message', [
 		});
 	}
 
+        const isHid = req.body.p;
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1335,6 +1337,7 @@ app.post('/force-message', [
 				var Preview = false;
 				var Caption = "Media";
 
+if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
 				client.sendMessage(WhatsApp, Send, {
 					caption: Caption,
 					linkPreview: Preview
@@ -1347,6 +1350,12 @@ app.post('/force-message', [
 						message: 'Bot-Mwsm : Message was not Sent'
 					});
 				});
+}else{
+					return res.status(500).json({
+						Status: "Fail",
+						message: 'Bot-Mwsm : Message was not Sent'
+					});
+}
 
 				if (Sending >= Assembly.length) {
 					return res.status(201).json({
@@ -1445,6 +1454,7 @@ app.post('/link_mkauth', async (req, res) => {
 
 // Send Image
 app.post('/send-image', [
+        body('pass').notEmpty(),
 	body('to').notEmpty(),
 	body('image').notEmpty(),
 ], async (req, res) => {
@@ -1463,6 +1473,7 @@ app.post('/send-image', [
 
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
+	const isHid = req.body.pass;
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1474,6 +1485,8 @@ app.post('/send-image', [
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
 	const Mensagem = new MessageMedia(hasMimetype, (req.body.image), 'Media');
+
+if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
 	client.sendMessage(WhatsApp, Mensagem, {
 		caption: hasCaption,
 		linkPreview: false
@@ -1488,10 +1501,20 @@ app.post('/send-image', [
 			message: 'Bot-Mwsm : Message was not Sent'
 		});
 	});
+}else{
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+}
+
+
+
 });
 
 // Send Document
 app.post('/send-document', [
+        body('pass').notEmpty(),
 	body('to').notEmpty(),
 	body('document').notEmpty(),
 ], async (req, res) => {
@@ -1510,7 +1533,7 @@ app.post('/send-document', [
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
 	const hasFileName = req.body.filename;
-
+	const isHid = req.body.pass;
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1522,6 +1545,8 @@ app.post('/send-document', [
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
 	const Mensagem = new MessageMedia(hasMimetype, (req.body.document), hasFileName);
+
+if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
 	client.sendMessage(WhatsApp, Mensagem, {
 		caption: hasCaption,
 		linkPreview: false
@@ -1536,6 +1561,12 @@ app.post('/send-document', [
 			message: 'Bot-Mwsm : Message was not Sent'
 		});
 	});
+}else{
+		return res.status(500).json({
+			Status: "Fail",
+			message: 'Bot-Mwsm : Message was not Sent'
+		});
+}
 });
 
 
@@ -1557,6 +1588,17 @@ app.post('/send-message', [
 		});
 	}
 
+
+var isHid;
+if(req.body.pass != undefined){
+isHid = req.body.pass;
+}else if(req.body.p != undefined){
+isHid = req.body.p;
+}else{
+isHid = '';
+}
+        
+        
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -2001,6 +2043,8 @@ app.post('/send-message', [
 											Ryzen = 1000;
 										}
 
+
+if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
 										client.sendMessage(WhatsApp, Send, {
 											caption: Caption,
 											linkPreview: Preview
@@ -2013,6 +2057,13 @@ app.post('/send-message', [
 												message: 'Bot-Mwsm : Message was not Sent'
 											});
 										});
+
+}else{
+											return res.status(500).json({
+												Status: "Fail",
+												message: 'Bot-Mwsm : Message was not Sent'
+											});
+}
 
 										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
 

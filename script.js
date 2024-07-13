@@ -2,6 +2,9 @@ var Slide = false;
 
 $(window).on('load', function() {
 	$("#API").fadeIn("slow", function() {});
+	setTimeout(function() {
+		$('#token').val('').attr('type', 'password');
+	}, 420);
 });
 
 $(document).ready(function() {
@@ -543,12 +546,14 @@ $(document).ready(function() {
 							contentType: 'application/x-www-form-urlencoded',
 							headers: {
 								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
-								msg: $("#Message").val()
+								msg: $("#Message").val(),
+								p: $("#token").val()
 							},
 							url: Simulator,
 							data: {
 								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
-								msg: $("#Message").val()
+								msg: $("#Message").val(),
+								p: $("#token").val()
 							},
 							success: function(data) {
 								if (data.Status == "Success") {
