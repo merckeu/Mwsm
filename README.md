@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [07/07/2024 00:04]
+# MkAuth WhatsApp Send Message [13/07/2024 04:42]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -53,8 +53,9 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.33    | Listagem de Usuarios MkAuth                                                          |                        |  20/06/2024 12:49 ✅  |
 |  2.0.34    | Upgrade da API do WhatsApp                                                           | 02/07/2024 01:30 ✅   |                        |
 |  2.0.34    | Correção da função Logout                                                            |                        |  07/07/2024 00:04 ✅  |
+|  2.0.35    | Proteção contra acesso não Autorizado por senha + Melhoria do Log                    | 13/07/2024 04:42 ✅   |                        |
 
-**OBS:** Listagem de clientes faz parte da função inacabada de disparos automaticos
+**OBS:** Para Utilizar as Melhorias do Log é Necessario Substituir a API do MkAuth Pela Versão Adaptada Desse [Link](https://github.com/MKCodec/MkAuth-API).
 
 Habilite o Endpoint em `Provedor > Controle de Usuarios > API > cliente.api GET`
 
@@ -274,7 +275,7 @@ Token:SENHA
 <b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
 
 <b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
-
+> **Senha :** Insira o `Token Fixo` de Acesso ao Aplicativo no Campo Senha no MkAuth 
 <details>
 <summary>MkAuth até Versão 24.02</summary>
 ** `Opções > Servidor de SMS > Servidor`
