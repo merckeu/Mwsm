@@ -1259,7 +1259,7 @@ app.get('/mikrotik/:to/:msg', async (req, res) => {
 
 // Force Message
 app.post('/force-message', [
-        body('p').notEmpty(),
+	body('p').notEmpty(),
 	body('to').notEmpty(),
 	body('msg').notEmpty(),
 ], async (req, res) => {
@@ -1276,7 +1276,7 @@ app.post('/force-message', [
 		});
 	}
 
-        const isHid = req.body.p;
+	const isHid = req.body.p;
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1337,25 +1337,25 @@ app.post('/force-message', [
 				var Preview = false;
 				var Caption = "Media";
 
-if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-				client.sendMessage(WhatsApp, Send, {
-					caption: Caption,
-					linkPreview: Preview
-				}).then(response => {
-					Wait = WhatsApp;
-					Sending = (Sending + 1);
-				}).catch(err => {
+				if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+					client.sendMessage(WhatsApp, Send, {
+						caption: Caption,
+						linkPreview: Preview
+					}).then(response => {
+						Wait = WhatsApp;
+						Sending = (Sending + 1);
+					}).catch(err => {
+						return res.status(500).json({
+							Status: "Fail",
+							message: 'Bot-Mwsm : Message was not Sent'
+						});
+					});
+				} else {
 					return res.status(500).json({
 						Status: "Fail",
 						message: 'Bot-Mwsm : Message was not Sent'
 					});
-				});
-}else{
-					return res.status(500).json({
-						Status: "Fail",
-						message: 'Bot-Mwsm : Message was not Sent'
-					});
-}
+				}
 
 				if (Sending >= Assembly.length) {
 					return res.status(201).json({
@@ -1454,7 +1454,7 @@ app.post('/link_mkauth', async (req, res) => {
 
 // Send Image
 app.post('/send-image', [
-        body('pass').notEmpty(),
+	body('pass').notEmpty(),
 	body('to').notEmpty(),
 	body('image').notEmpty(),
 ], async (req, res) => {
@@ -1486,27 +1486,27 @@ app.post('/send-image', [
 	}
 	const Mensagem = new MessageMedia(hasMimetype, (req.body.image), 'Media');
 
-if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-	client.sendMessage(WhatsApp, Mensagem, {
-		caption: hasCaption,
-		linkPreview: false
-	}).then(response => {
-		return res.json({
-			Status: "Success",
-			message: 'Bot-Mwsm : Message Sent'
+	if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+		client.sendMessage(WhatsApp, Mensagem, {
+			caption: hasCaption,
+			linkPreview: false
+		}).then(response => {
+			return res.json({
+				Status: "Success",
+				message: 'Bot-Mwsm : Message Sent'
+			});
+		}).catch(err => {
+			return res.status(500).json({
+				Status: "Fail",
+				message: 'Bot-Mwsm : Message was not Sent'
+			});
 		});
-	}).catch(err => {
+	} else {
 		return res.status(500).json({
 			Status: "Fail",
 			message: 'Bot-Mwsm : Message was not Sent'
 		});
-	});
-}else{
-		return res.status(500).json({
-			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
-		});
-}
+	}
 
 
 
@@ -1514,7 +1514,7 @@ if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
 
 // Send Document
 app.post('/send-document', [
-        body('pass').notEmpty(),
+	body('pass').notEmpty(),
 	body('to').notEmpty(),
 	body('document').notEmpty(),
 ], async (req, res) => {
@@ -1546,27 +1546,27 @@ app.post('/send-document', [
 	}
 	const Mensagem = new MessageMedia(hasMimetype, (req.body.document), hasFileName);
 
-if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-	client.sendMessage(WhatsApp, Mensagem, {
-		caption: hasCaption,
-		linkPreview: false
-	}).then(response => {
-		return res.json({
-			Status: "Success",
-			message: 'Bot-Mwsm : Message Sent'
+	if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+		client.sendMessage(WhatsApp, Mensagem, {
+			caption: hasCaption,
+			linkPreview: false
+		}).then(response => {
+			return res.json({
+				Status: "Success",
+				message: 'Bot-Mwsm : Message Sent'
+			});
+		}).catch(err => {
+			return res.status(500).json({
+				Status: "Fail",
+				message: 'Bot-Mwsm : Message was not Sent'
+			});
 		});
-	}).catch(err => {
+	} else {
 		return res.status(500).json({
 			Status: "Fail",
 			message: 'Bot-Mwsm : Message was not Sent'
 		});
-	});
-}else{
-		return res.status(500).json({
-			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
-		});
-}
+	}
 });
 
 
@@ -1588,17 +1588,15 @@ app.post('/send-message', [
 		});
 	}
 
+	var isHid;
+	if (req.body.pass != undefined) {
+		isHid = req.body.pass;
+	} else if (req.body.p != undefined) {
+		isHid = req.body.p;
+	} else {
+		isHid = '';
+	}
 
-var isHid;
-if(req.body.pass != undefined){
-isHid = req.body.pass;
-}else if(req.body.p != undefined){
-isHid = req.body.p;
-}else{
-isHid = '';
-}
-        
-        
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1624,7 +1622,7 @@ isHid = '';
 			var Caption, Send, Register, Renner;
 			var RETURNS = [];
 			Radeon['Title'] = 'xxx';
-			Radeon['Name'] = 'xxx';
+			Radeon['Name'] = 'Mwsm';
 			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 
 				Mensagem.some(function(Send, index) {
@@ -2044,26 +2042,26 @@ isHid = '';
 										}
 
 
-if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-										client.sendMessage(WhatsApp, Send, {
-											caption: Caption,
-											linkPreview: Preview
-										}).then(response => {
-											Wait = WhatsApp;
-											Sending = (Sending + 1);
-										}).catch(err => {
-											return res.status(500).json({
-												Status: "Fail",
-												message: 'Bot-Mwsm : Message was not Sent'
+										if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+											client.sendMessage(WhatsApp, Send, {
+												caption: Caption,
+												linkPreview: Preview
+											}).then(response => {
+												Wait = WhatsApp;
+												Sending = (Sending + 1);
+											}).catch(err => {
+												return res.status(500).json({
+													Status: "Fail",
+													message: 'Bot-Mwsm : Message was not Sent'
+												});
 											});
-										});
 
-}else{
+										} else {
 											return res.status(500).json({
 												Status: "Fail",
 												message: 'Bot-Mwsm : Message was not Sent'
 											});
-}
+										}
 
 										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
 
