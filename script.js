@@ -918,7 +918,7 @@ $(document).ready(function() {
 				$('#WhatsApp').mask("(00) 0 0000-0000");
 				data.d[i].TARGET = $("#WhatsApp").masked(Numero.substr(0, 2) + "9" + Numero.substr(2, 8));
 			}
-			if (data.d[i].NAME == undefined) {
+			if (data.d[i].NAME == undefined || data.d[i].NAME == 'Mwsm') {
 				data.d[i].NAME = '';
 			} else {
 				data.d[i].NAME = ' - ' + data.d[i].NAME;
