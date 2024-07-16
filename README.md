@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [13/07/2024 04:42]
+# MkAuth WhatsApp Send Message [16/07/2024 03:05]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -53,7 +53,8 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.33    | Listagem de Usuarios MkAuth                                                          |                        |  20/06/2024 12:49 ✅  |
 |  2.0.34    | Upgrade da API do WhatsApp                                                           | 02/07/2024 01:30 ✅   |                        |
 |  2.0.34    | Correção da função Logout                                                            |                        |  07/07/2024 00:04 ✅  |
-|  2.0.35    | Inclusão de senha + Melhoria do Log                    | 13/07/2024 04:42 ✅   |                        |
+|  2.0.35    | Inclusão de senha + Melhoria do Log                                                  | 13/07/2024 04:42 ✅   |                        |
+|  2.0.35    | Correção da função Logout                                                            |                        |  16/07/2024 03:05 ✅  |
 
 **OBS:** Para Utilizar as Melhorias do Log é Necessario Substituir a API do MkAuth Pela Versão Adaptada Desse [Link](https://github.com/MKCodec/MkAuth-API).
 
@@ -326,15 +327,15 @@ Token:SENHA
 > As mensagens via Mikrotik podem ser enviadas via Script com o comando Abaixo:
 > 
 > ```sh
-> /tool fetch "http://IP-API/mikrotik/DDI+DDD+NUMERO/MENSAGEM"
+> /tool fetch "http://IP-API/mikrotik/TOKEN/DDI+DDD+NUMERO/MENSAGEM"
 > ```
 >
 > **OBS:** Subistitua os Espaços por `%20` ao Inserir uma Mensage no Toll Fetch
 > 
-> **Ex:** Para `/tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem de Teste"` :
+> **Ex:** Para `/tool fetch "http://192.168.3.250:8000/mikrotik/1234567/5511988888888/Mensagem de Teste"` :
 > 
 > ```sh
-> /tool fetch "http://192.168.3.250:8000/mikrotik/5511988888888/Mensagem%20de%20Teste"
+> /tool fetch "http://192.168.3.250:8000/mikrotik/1234567/5511988888888/Mensagem%20de%20Teste"
 > ```
 
 ### Testando
