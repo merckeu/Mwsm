@@ -54,7 +54,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 |  2.0.34    | Upgrade da API do WhatsApp                                                           | 02/07/2024 01:30 ✅   |                        |
 |  2.0.34    | Correção da função Logout                                                            |                        |  07/07/2024 00:04 ✅  |
 |  2.0.35    | Inclusão de senha + Melhoria do Log                                                  | 13/07/2024 04:42 ✅   |                        |
-|  2.0.35    | Correção da função Logout                                                            |                        |  16/07/2024 03:05 ✅  |
+|  2.0.35    | Proteção por token no acesso Mikrotik                                                |                        |  16/07/2024 03:05 ✅  |
 
 **OBS:** Para Utilizar as Melhorias do Log é Necessario Substituir a API do MkAuth Pela Versão Adaptada Desse [Link](https://github.com/MKCodec/MkAuth-API).
 
