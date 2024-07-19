@@ -317,7 +317,7 @@ Token:SENHA
 > ```
 
 ### Exemplo De Mensagem Para Utilização no MkAuth
-> ** `Opções > Servidor de SMS > Mensagens`
+> ** `Opções > Servidor de SMS > Mensagens` ou `Opções > Servidor de WhatsApp > Mensagens > Interação 01` 
 > 
 > ```sh
 > Olá %nomeresumido%, sua fatura %numerotitulo% vence no dia %vencimento%, para sua comodidade estamos enviado os dados para pagamento: ##{"uid":"%logincliente%","find":"%numerotitulo%"}##desconsidere esse aviso caso tenha feito o pagamento.
