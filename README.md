@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [16/07/2024 03:05]
+# MkAuth WhatsApp Send Message [31/07/2024 11:13]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -45,20 +45,9 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 ### Novidades V2.0.33++
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
-|  2.0.33    | Alternativa de conexão com API do MkAuth                                             | 04/06/2024 12:42 ✅   |                        |
-|  2.0.33    | Correção do Bug Tunel Dev do Mkauth                                                  |                        |  04/06/2024 17:00 ✅  |
-|  2.0.33    | Correção do sistema de log                                                           |                        |  06/06/2024 11:45 ✅  |
-|  2.0.33    | Disparos via Mikrotik ( `/tool fetch` )                                              |                        |  08/06/2024 07:03 ✅  |
-|  2.0.33    | Verificação RegEx no Numero Disparado                                                |                        |  11/06/2024 13:29 ✅  |
-|  2.0.33    | Listagem de Usuarios MkAuth                                                          |                        |  20/06/2024 12:49 ✅  |
-|  2.0.34    | Upgrade da API do WhatsApp                                                           | 02/07/2024 01:30 ✅   |                        |
-|  2.0.34    | Correção da função Logout                                                            |                        |  07/07/2024 00:04 ✅  |
-|  2.0.35    | Inclusão de senha + Melhoria do Log                                                  | 13/07/2024 04:42 ✅   |                        |
-|  2.0.35    | Proteção por token no acesso Mikrotik                                                |                        |  16/07/2024 03:05 ✅  |
+|  2.0.36    | Inclusão de Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 
-**OBS:** Para Utilizar as Melhorias do Log é Necessario Substituir a API do MkAuth Pela Versão Adaptada Desse [Link](https://github.com/MKCodec/MkAuth-API).
-
-Habilite o Endpoint em `Provedor > Controle de Usuarios > API > cliente.api GET`
+**OBS:** As notificações Podem ser lançadas na Tela 3 do menu API ( Agendamneto de disparos Automaticos ainda não esta disponivel ).
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
