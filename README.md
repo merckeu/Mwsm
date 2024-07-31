@@ -45,7 +45,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 ### Novidades V2.0.33++
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
-|  2.0.36    | Inclusão de Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
+|  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 
 **OBS:** As notificações Podem ser lançadas na Tela 3 do menu API ( Agendamneto de disparos Automaticos ainda não esta disponivel ).
 
