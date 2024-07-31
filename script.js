@@ -8,6 +8,130 @@ $(window).on('load', function() {
 });
 
 $(document).ready(function() {
+	$(".close, #Exit").click(function() {
+		$('.modal').delay(200).fadeOut('slow');
+	});
+});
+
+$(document).ready(function() {
+	$("#MSG_001").emojioneArea({
+		pickerPosition: "left",
+		tonesStyle: "bullet"
+	});
+});
+
+$(document).ready(function() {
+	var Turno = $('#Turno').val();
+	$(".MSG_Box").hide();
+	switch (Turno) {
+		case "before":
+			$("#Placeholder_001").text("Days Before");
+			$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+			});
+			break;
+		case "day":
+			$("#Placeholder_002").text("In Day");
+			$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+			});
+			break;
+		case "later":
+			$("#Placeholder_003").text("Days Later");
+			$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+			});
+			break;
+		case "Pay":
+			$("#Placeholder_004").text("Payment Received");
+			$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+			});
+			break;
+
+		case "Lock":
+			$("#Placeholder_005").text("Locked User");
+			$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+			});
+			break;
+		case "Unlock":
+			$("#Placeholder_006").text("Unlocked User");
+			$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+			});
+			break;
+		case "Maintenance":
+			$("#Placeholder_007").text("Maintenance");
+			$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+			});
+			break;
+		case "Unistall":
+			$("#Placeholder_008").text("Unistall Device");
+			$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+			});
+			break;
+
+	}
+	$("#Turno").on('change', function() {
+		var Turno = $('#Turno').val();
+		$(".MSG_Box").hide();
+		switch (Turno) {
+			case "before":
+				$("#Placeholder_001").text("Days Before");
+				$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+				});
+				break;
+			case "day":
+				$("#Placeholder_002").text("In Day");
+				$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+				});
+				break;
+			case "later":
+				$("#Placeholder_003").text("Days Later");
+				$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Pay":
+				$("#Placeholder_004").text("Payment Received");
+				$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+				});
+				break;
+
+			case "Lock":
+				$("#Placeholder_005").text("Locked User");
+				$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Unlock":
+				$("#Placeholder_006").text("Unlocked User");
+				$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Maintenance":
+				$("#Placeholder_007").text("Maintenance");
+				$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Unistall":
+				$("#Placeholder_008").text("Unistall Device");
+				$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+				});
+				break;
+
+		}
+	});
+
 	$("#TABLE").tooltip({
 		selector: '[data-toggle=tooltip]',
 		position: {
@@ -39,12 +163,70 @@ function toCapitalize(str) {
 
 $(document).ready(function() {
 	$("tbody.onClick").delegate('tr', 'click', function() {
-		var User = $(this).attr('data-user');
-		var Title = $(this).attr('data-title');
-		var Status = $(this).attr('data-status');
-		var Payment = $(this).attr('data-payment');
-		var Contact = $(this).attr('data-contact');
-		alert(Title + " - " + User + " - " + Payment + " - " + Status + " - " + Contact);
+		const uID_Push = "#push_" + $(this).attr('data-code') + "";
+		const uID_Status = "#status_" + $(this).attr('data-code') + "";
+		if (($(uID_Status).text()).toLowerCase() != "finished") {
+			$.ajax({
+				type: "POST",
+				url: "/send-mkauth",
+				data: {
+					client: $(this).attr('data-client'),
+					user: $(this).attr('data-user'),
+					code: $(this).attr('data-code'),
+					status: $(this).attr('data-status'),
+					payment: $(this).attr('data-payment'),
+					contact: $(this).attr('data-contact'),
+					reward: $(this).attr('data-reward'),
+					push: $(this).attr('data-push'),
+					token: $("#token").val()
+				},
+				beforeSend: function(data) {
+					$("#MkSend").fadeIn("slow", function() {
+						$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+					});
+				},
+
+				success: function(data) {
+					if (data.Status == "Success") {
+						var Icon = "fa-check";
+						$(uID_Push).text(new Date(data.RPush).toLocaleString("pt-br").replace(",", ""));
+						$(uID_Status).text(data.RStatus);
+					}
+					if (data.Status == "Fail") {
+						var Icon = "fa-exclamation";
+						$(uID_Push).text(new Date(data.RPush).toLocaleString("pt-br").replace(",", ""));
+						$(uID_Status).text(data.Status);
+					}
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							$("#MkSend").fadeOut("slow", function() {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+							});
+						}
+					});
+
+				},
+				error: function(request, status, error) {
+					var Icon = "fa-exclamation";
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							$("#MkSend").fadeOut("slow", function() {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+							});
+						}
+					});
+				}
+			});
+		}
+
 	});
 });
 
@@ -136,6 +318,73 @@ $(document).ready(function() {
 		if (inGET > Min) {
 			inGET = inGET - 1;
 			$("#SleepCall").val(inGET);
+		}
+	});
+
+	$("#InSave").on('click', function() {
+		if ((($("." + $('#Turno').val().toLowerCase()).val() != "") && ($("." + $('#Turno').val().toLowerCase()).val()).length >= 30) || ($("." + $('#Turno').val().toLowerCase()).val() == "xxx".toLowerCase())) {
+			$.ajax({
+				type: "POST",
+				url: "/message_mkauth",
+				data: {
+					database: $('#Turno').val().toLowerCase(),
+					message: $("." + $('#Turno').val().toLowerCase()).val(),
+					token: $("#token").val()
+				},
+				beforeSend: function(data) {
+					$("#inLoad").fadeIn("slow", function() {
+						$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+						$(".MSG_Box").prop('disabled', true);
+					});
+				},
+
+				success: function(data) {
+					if (data.Status == "Success") {
+						var Icon = "fa-check";
+					}
+					if (data.Status == "Fail") {
+						var Icon = "fa-exclamation";
+					}
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							$("#inLoad").fadeOut("slow", function() {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+								$(".MSG_Box, #Turno").prop('disabled', false);
+							});
+						}
+					});
+
+				},
+				error: function(request, status, error) {
+					var Icon = "fa-exclamation";
+					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+						life: 2000,
+						theme: 'Mwsm',
+						speed: 'slow',
+						close: function(e, m, o) {
+							$("#inLoad").fadeOut("slow", function() {
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+								$(".MSG_Box, #Turno").prop('disabled', false);
+							});
+						}
+					});
+				}
+			});
+		} else {
+			$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			$(".MSG_Box, #Turno").prop('disabled', true);
+			setTimeout(function() {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$(".MSG_Box, #Turno").prop('disabled', false);
+				$("." + $('#Turno').val().toLowerCase()).val("").focus();
+			}, 700);
+
+
 		}
 	});
 
@@ -243,7 +492,6 @@ $(document).ready(function() {
 		});
 
 	});
-
 });
 
 $(document).ready(function() {
@@ -295,6 +543,240 @@ $(document).ready(function() {
 		MkAuth("#pdf", Enable);
 	});
 
+	$("#monday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#monday", Enable);
+	});
+
+	$("#tuesday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#tuesday", Enable);
+	});
+
+	$("#wednesday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#wednesday", Enable);
+	});
+
+	$("#thursday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#thursday", Enable);
+	});
+
+	$("#friday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#friday", Enable);
+	});
+
+	$("#saturday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#saturday", Enable);
+	});
+
+	$("#sunday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#sunday", Enable);
+	});
+
+	$("#morning").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#morning", Enable);
+	});
+
+	$("#afternoon").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#afternoon", Enable);
+	});
+
+	$("#night").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#night", Enable);
+	});
+
+	$("#bfive").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#bfive", Enable);
+	});
+
+	$("#inday").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#inday", Enable);
+	});
+
+
+	$("#lfive").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lfive", Enable);
+	});
+
+
+	$("#lten").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lten", Enable);
+	});
+
+
+	$("#lfifteen").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lfifteen", Enable);
+	});
+
+
+	$("#ltwenty").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#ltwenty", Enable);
+	});
+
+
+	$("#ltwentyfive").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#ltwentyfive", Enable);
+	});
+
+
+	$("#lthirty").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lthirty", Enable);
+	});
+
+	$("#lthirtyfive").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lthirtyfive", Enable);
+	});
+
+
+	$("#lforty").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#lforty", Enable);
+	});
+
+
+	$("#OnPay").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnPay", Enable);
+	});
+
+	$("#OnLock").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnLock", Enable);
+	});
+
+	$("#OnUnlock").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnUnlock", Enable);
+	});
+
+	$("#OnMaintenance").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnMaintenance", Enable);
+	});
+
+	$("#OnUnistall").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnUnistall", Enable);
+	});
+
+
 	$("#inject").on('change', function() {
 		var Range = $("#ranger").val();
 		$.ajax({
@@ -326,6 +808,32 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+
+	function Scheduler(OPTION, SET) {
+		$.ajax({
+			type: "POST",
+			url: "/scheduler",
+			data: {
+				define: OPTION.replace(/[^a-zA-Z]+/g, ''),
+				enable: SET
+			},
+
+			success: function(data) {
+				if (data.Status == "Fail") {
+					$(OPTION).prop("checked", data.Return);
+				}
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				if (SET) {
+					$(OPTION).prop("checked", false);
+				} else {
+					$(OPTION).prop("checked", true);
+				}
+			}
+		});
+	}
 
 
 	function MkAuth(OPTION, SET) {
@@ -394,6 +902,82 @@ $(document).ready(function() {
 		}
 	});
 
+
+	$("#Scheduler").on("click", function() {
+		$(".modal").show();
+	});
+
+
+
+	$("#Zero").on("click", function() {
+		var Turno = $('#Turno').val();
+		$("#Turno, .MSG_Box").prop('disabled', true);
+		switch (Turno) {
+			case "before":
+				$("#Placeholder_001").text("Days Before");
+				$("#MSG_001").val("");
+				$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+				});
+				break;
+			case "day":
+				$("#Placeholder_002").text("In Day");
+				$("#MSG_002").val("");
+				$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+				});
+				break;
+			case "later":
+				$("#Placeholder_003").text("Days Later");
+				$("#MSG_003").val("");
+				$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Pay":
+				$("#Placeholder_004").text("Payment Received");
+				$("#MSG_004").val("");
+				$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+				});
+				break;
+
+			case "Lock":
+				$("#Placeholder_005").text("Locked User");
+				$("#MSG_005").val("");
+				$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Unlock":
+				$("#Placeholder_006").text("Unlocked User");
+				$("#MSG_006").val("");
+				$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Maintenance":
+				$("#Placeholder_007").text("Maintenance");
+				$("#MSG_007").val("");
+				$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+				});
+				break;
+			case "Unistall":
+				$("#Placeholder_008").text("Unistall Device");
+				$("#MSG_008").val("");
+				$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+				});
+				break;
+
+		}
+		setTimeout(function() {
+			$("#Turno, .MSG_Box").prop('disabled', false);
+		}, 500);
+	});
+
+
 	function ModuleOff() {
 		$.ajax({
 			type: "POST",
@@ -430,30 +1014,30 @@ $(document).ready(function() {
 		var Tunel = $("#tunel").val();
 		var Server = $("#iServer").val();
 		if ($(this).is(":checked")) {
-			if (User == "" || !User.includes("Client_Id_")) {
+			if (Tunel == "") {
 				setTimeout(() => {
 					$("#module").prop("checked", false);
-					$("#username").focus().val("");
+					$("#tunel").focus().val("");
 				}, "500");
 			} else {
-				if (Pass == "" || !Pass.includes("Client_Secret_")) {
+				if (User == "" || !User.includes("Client_Id_")) {
 					setTimeout(() => {
 						$("#module").prop("checked", false);
-						$("#password").focus().val("");
+						$("#username").focus().val("");
 					}, "500");
 
 				} else {
-					if (Domain == "") {
+					if (Pass == "" || !Pass.includes("Client_Secret_")) {
 						setTimeout(() => {
 							$("#module").prop("checked", false);
-							$("#domain").focus().val("");
+							$("#password").focus().val("");
 						}, "500");
 
 					} else {
-						if (Tunel == "") {
+						if (Domain == "") {
 							setTimeout(() => {
 								$("#module").prop("checked", false);
-								$("#tunel").focus().val("");
+								$("#domain").focus().val("");
 							}, "500");
 						} else {
 
@@ -689,6 +1273,158 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	$("#Clear_001").on("click", function() {
+		$("#MSG_001").val("").focus();
+	});
+
+
+	$("#MSG_001").on('focusin', function() {
+		$("#Clear_001").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_001").on('focusout', function() {
+		if ($("#MSG_001").val() == "") {
+			$("#Clear_001").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_002").on("click", function() {
+		$("#MSG_002").val("").focus();
+	});
+
+
+	$("#MSG_002").on('focusin', function() {
+		$("#Clear_002").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_002").on('focusout', function() {
+		if ($("#MSG_002").val() == "") {
+			$("#Clear_002").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_003").on("click", function() {
+		$("#MSG_003").val("").focus();
+	});
+
+
+	$("#MSG_003").on('focusin', function() {
+		$("#Clear_003").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_003").on('focusout', function() {
+		if ($("#MSG_003").val() == "") {
+			$("#Clear_003").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_004").on("click", function() {
+		$("#MSG_004").val("").focus();
+	});
+
+
+	$("#MSG_004").on('focusin', function() {
+		$("#Clear_004").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_004").on('focusout', function() {
+		if ($("#MSG_004").val() == "") {
+			$("#Clear_004").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_005").on("click", function() {
+		$("#MSG_005").val("").focus();
+	});
+
+
+	$("#MSG_005").on('focusin', function() {
+		$("#Clear_005").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_005").on('focusout', function() {
+		if ($("#MSG_001").val() == "") {
+			$("#Clear_005").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_006").on("click", function() {
+		$("#MSG_006").val("").focus();
+	});
+
+
+	$("#MSG_006").on('focusin', function() {
+		$("#Clear_006").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_006").on('focusout', function() {
+		if ($("#MSG_006").val() == "") {
+			$("#Clear_006").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+	$("#Clear_007").on("click", function() {
+		$("#MSG_007").val("").focus();
+	});
+
+	$("#MSG_007").on('focusin', function() {
+		$("#Clear_007").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_007").on('focusout', function() {
+		if ($("#MSG_007").val() == "") {
+			$("#Clear_007").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
+
+	$("#Clear_008").on("click", function() {
+		$("#MSG_008").val("").focus();
+	});
+
+	$("#MSG_008").on('focusin', function() {
+		$("#Clear_008").fadeIn("slow", function() {
+
+		});
+	});
+
+	$("#MSG_008").on('focusout', function() {
+		if ($("#MSG_008").val() == "") {
+			$("#Clear_008").fadeOut("slow", function() {
+
+			});
+		}
+	});
+
 
 	$("#domain").on('focusout', function() {
 		var Dominio = $("#domain").val().split('//')[1].split('/')[0];
@@ -959,13 +1695,13 @@ $(document).ready(function() {
 				data.d[i].STATUS = "pending";
 			}
 
-			html += '<tr class="Fire" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-title="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '">';
+			html += '<tr class="Fire" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-code="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '" data-reward="' + data.d[i].REWARD + '" data-client="' + data.d[i].CLIENT + '" data-push="' + data.d[i].PUSH + '">';
 			html += '<td class="text-center tbajust">' + data.d[i].TITLE + '</td>';
 			html += '<td class="text-center">' + data.d[i].USER + '</td>';
 			html += '<td class="text-center tbreward">' + new Date(data.d[i].REWARD).toLocaleString("pt-br").split(",")[0] + '</td>';
-			html += '<td class="text-center">' + data.d[i].PUSH + '</td>';
+			html += '<td class="text-center" id="push_' + data.d[i].TITLE + '">' + data.d[i].PUSH + '</td>';
 			html += '<td class="text-center tbajust">' + data.d[i].PAYMENT + '</td>';
-			html += '<td class="text-center tbajust">' + data.d[i].STATUS + '</td>';
+			html += '<td class="text-center tbajust" id="status_' + data.d[i].TITLE + '">' + data.d[i].STATUS + '</td>';
 			html += '</tr>';
 		}
 		$('#HASHTABLE tr').first().after(html);
@@ -974,6 +1710,31 @@ $(document).ready(function() {
 		});
 	});
 
+
+	socket.on('before', function(data) {
+		$('.before').val(data);
+	});
+	socket.on('day', function(data) {
+		$('.day').val(data);
+	});
+	socket.on('later', function(data) {
+		$('.later').val(data);
+	});
+	socket.on('pay', function(data) {
+		$('.Pay').val(data);
+	});
+	socket.on('lock', function(data) {
+		$('.Lock').val(data);
+	});
+	socket.on('unlock', function(data) {
+		$('.Unlock').val(data);
+	});
+	socket.on('maintenance', function(data) {
+		$('.Maintenance').val(data);
+	});
+	socket.on('unistall', function(data) {
+		$('.Unistall').val(data);
+	});
 
 
 	socket.on('domain', function(data) {
@@ -1105,6 +1866,192 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('protected', function(data) {
+		switch (data) {
+			case 'true':
+				$("#protected").prop("checked", true);
+				break;
+			case 'false':
+				$("#protected").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('bfive', function(data) {
+		switch (data) {
+			case 'true':
+				$("#bfive").prop("checked", true);
+				break;
+			case 'false':
+				$("#bfive").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('inday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#inday").prop("checked", true);
+				break;
+			case 'false':
+				$("#inday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('lfive', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lfive").prop("checked", true);
+				break;
+			case 'false':
+				$("#lfive").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('lten', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lten").prop("checked", true);
+				break;
+			case 'false':
+				$("#lten").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('lfifteen', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lfifteen").prop("checked", true);
+				break;
+			case 'false':
+				$("#lfifteen").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('ltwenty', function(data) {
+		switch (data) {
+			case 'true':
+				$("#ltwenty").prop("checked", true);
+				break;
+			case 'false':
+				$("#ltwenty").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('ltwentyfive', function(data) {
+		switch (data) {
+			case 'true':
+				$("#ltwentyfive").prop("checked", true);
+				break;
+			case 'false':
+				$("#ltwentyfive").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('lthirty', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lthirty").prop("checked", true);
+				break;
+			case 'false':
+				$("#lthirty").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('lthirtyfive', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lthirtyfive").prop("checked", true);
+				break;
+			case 'false':
+				$("#lthirtyfive").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('lforty', function(data) {
+		switch (data) {
+			case 'true':
+				$("#lforty").prop("checked", true);
+				break;
+			case 'false':
+				$("#lforty").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnPay', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnPay").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnPay").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnLock', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnLock").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnLock").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnUnlock', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnUnlock").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnUnlock").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnMaintenance', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnMaintenance").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnMaintenance").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('OnUnistall', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnUnistall").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnUnistall").prop("checked", false);
+				break;
+		}
+	});
 
 
 	socket.on('module', function(data) {
@@ -1178,6 +2125,121 @@ $(document).ready(function() {
 	});
 
 
+
+	socket.on('monday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#monday").prop("checked", true);
+				break;
+			case 'false':
+				$("#monday").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('tuesday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#tuesday").prop("checked", true);
+				break;
+			case 'false':
+				$("#tuesday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('wednesday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#wednesday").prop("checked", true);
+				break;
+			case 'false':
+				$("#wednesday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('thursday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#thursday").prop("checked", true);
+				break;
+			case 'false':
+				$("#thursday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('friday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#friday").prop("checked", true);
+				break;
+			case 'false':
+				$("#friday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('saturday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#saturday").prop("checked", true);
+				break;
+			case 'false':
+				$("#saturday").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('sunday', function(data) {
+		switch (data) {
+			case 'true':
+				$("#sunday").prop("checked", true);
+				break;
+			case 'false':
+				$("#sunday").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('morning', function(data) {
+		switch (data) {
+			case 'true':
+				$("#morning").prop("checked", true);
+				break;
+			case 'false':
+				$("#morning").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('afternoon', function(data) {
+		switch (data) {
+			case 'true':
+				$("#afternoon").prop("checked", true);
+				break;
+			case 'false':
+				$("#afternoon").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('night', function(data) {
+		switch (data) {
+			case 'true':
+				$("#night").prop("checked", true);
+				break;
+			case 'false':
+				$("#night").prop("checked", false);
+				break;
+		}
+	});
 
 	socket.on('replyes', function(data) {
 		switch (data) {
@@ -1455,6 +2517,25 @@ $(document).ready(function() {
 			url: "/update",
 			data: {
 				uptodate: $("#uptodate").prop('checked')
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+	});
+
+	$("#protected").on('change', function() {
+		$.ajax({
+			type: "POST",
+			url: "/protected",
+			data: {
+				protect: $("#protected").prop('checked')
 			},
 			beforeSend: function(data) {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);

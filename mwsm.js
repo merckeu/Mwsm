@@ -56,7 +56,7 @@ function delay(t, v) {
 }
 
 //Search DataBase
-function Debug(Select, Search = '*', Mode = 'single') {
+function Debug(Select, Search = '*', Mode = 'single', Find = undefined) {
 	switch (Mode.toLowerCase()) {
 		case "single":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').get();
@@ -66,6 +66,9 @@ function Debug(Select, Search = '*', Mode = 'single') {
 			break;
 		case "all":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').all();
+			break;
+		case "direct":
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' WHERE title = ?').get(Find);
 			break;
 	}
 	return Select;
@@ -177,16 +180,16 @@ const GetUpdate = async (GET, SET) => {
 			for (let i = 1; i < (isUpdate.version).length; i++) {
 				if ((isUpdate.version)[i].patch >= Return.patch) {
 					if (((isUpdate.version)[i].patch) > (isDateTime)) {
-						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
-						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isfound);
+						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
 						await global.io.emit('upgrade', false);
 						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
 							const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
 							if (Register) {
 								await global.io.emit('upgrade', true);
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupfiles);
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
-								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isupdated);
+								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
+								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
+								await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
 								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
@@ -200,8 +203,8 @@ const GetUpdate = async (GET, SET) => {
 							if (Conclusion && ((isUpdate.version)[i].patch) == (Debug('RELEASE').mwsm)) {
 								Conclusion = false;
 								if (SET == false) {
-									await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-									await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+									await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+									await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 								}
 								await global.io.emit('upgrade', true);
 								Status = false;
@@ -231,8 +234,8 @@ const GetUpdate = async (GET, SET) => {
 										Status = true;
 										await global.io.emit('upgrade', false);
 										if (SET == false) {
-											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-											await console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+											await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+											await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 										}
 
 									}
@@ -240,8 +243,8 @@ const GetUpdate = async (GET, SET) => {
 									if (Conclusion) {
 										Conclusion = false;
 										if (SET == false) {
-											await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-											console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+											await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+											console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 										}
 										await global.io.emit('upgrade', true);
 										Status = false;
@@ -257,8 +260,8 @@ const GetUpdate = async (GET, SET) => {
 						if (Conclusion) {
 							Conclusion = false;
 							if (SET == false) {
-								await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isalready);
+								await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 							}
 							await global.io.emit('upgrade', true);
 							Status = false;
@@ -269,8 +272,8 @@ const GetUpdate = async (GET, SET) => {
 					Status = true;
 					await global.io.emit('upgrade', false);
 					if (SET == false) {
-						await global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
-						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').isneeds);
+						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 					}
 				}
 			}
@@ -328,6 +331,55 @@ function DateTime() {
 	return strDateTime;
 };
 
+
+Date.prototype.addHours = function(h) {
+	this.setHours(this.getHours() + h);
+	return this;
+}
+
+Date.prototype.addMinutes = function(m) {
+	this.setHours(this.getMinutes() + m);
+	return this;
+}
+
+
+Date.prototype.addDays = function(days) {
+	var date = new Date(this.valueOf());
+	date.setDate(date.getDate() + days);
+	return date;
+}
+
+function isWeek(Sysdate) {
+	var CountDown = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"][Sysdate.getDay()];
+	switch (CountDown) {
+		case 'sunday':
+			inDay = Debug('SCHEDULER').sunday;
+			break;
+		case 'monday':
+			inDay = Debug('SCHEDULER').monday;
+			break;
+		case 'tuesday':
+			inDay = Debug('SCHEDULER').tuesday;
+			break;
+		case 'wednesday':
+			inDay = Debug('SCHEDULER').wednesday;
+			break;
+		case 'thursday':
+			inDay = Debug('SCHEDULER').thursday;
+			break;
+		case 'friday':
+			inDay = Debug('SCHEDULER').friday;
+			break;
+		case 'saturday':
+			inDay = Debug('SCHEDULER').saturday;
+			break;
+	}
+	if ((inDay == 1 || inDay == "true")) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 const MkClient = async (FIND) => {
 	var Server = Debug('MKAUTH').client_link;
@@ -523,7 +575,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
 						UID = "0" + UID;
 					}
-
 					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's') {
 						switch (Send.status) {
 							case 'aberto':
@@ -670,7 +721,7 @@ function testJSON(text) {
 // WhatsApp-web.js Functions
 const client = new Client({
 	authStrategy: new LocalAuth({
-		clientId: 'Bot-Mwsm'
+		clientId: Debug('OPTIONS').appname
 	}),
 
 	puppeteer: {
@@ -692,16 +743,16 @@ io.on('connection', function(socket) {
 	socket.emit('Version', Package.version);
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').authenticated);
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').ready);
 		Session = true;
 	} else {
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 		socket.emit('qr', Debug('RESOURCES').connection);
 	}
 
@@ -711,11 +762,11 @@ io.on('connection', function(socket) {
 				try {
 					socket.emit('qr', url);
 				} catch (err) {
-					console.log('> Bot-Mwsm : ' + err);
-					socket.emit('message', '> Bot-Mwsm : ' + err);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
+					socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
 				} finally {
-					socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').received);
-					console.log('> Bot-Mwsm : ' + Debug('CONSOLE').received);
+					socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
 				}
 			});
 		}
@@ -726,12 +777,12 @@ io.on('connection', function(socket) {
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			db.run("UPDATE options SET auth=?", [true], (err) => {
 				if (err) {
-					console.log('> Bot-Mwsm : ' + err)
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 				}
 			});
 		}
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').ready);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').ready);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').ready);
 		Session = true;
 		if (!Permission) {
@@ -742,19 +793,19 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('authenticated', (data) => {
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		socket.emit('qr', Debug('RESOURCES').authenticated);
 	});
 
 
 	client.on('auth_failure', () => {
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').auth_failure);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').auth_failure);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').auth_failure);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').auth_failure);
 		socket.emit('qr', Debug('RESOURCES').auth_failure);
 		db.run("UPDATE options SET auth=?", [false], (err) => {
 			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 			}
 			socket.emit('Reset', true);
 			Session = false;
@@ -764,12 +815,12 @@ io.on('connection', function(socket) {
 
 
 	client.on('disconnected', (reason) => {
-		socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
-		console.log('> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
 		socket.emit('qr', Debug('RESOURCES').disconnected);
 		db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
 			if (err) {
-				console.log('> Bot-Mwsm : ' + err)
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 			}
 			socket.emit('Reset', true);
 			Session = false;
@@ -778,15 +829,15 @@ io.on('connection', function(socket) {
 			try {
 				await client.destroy();
 			} catch (err) {
-				console.log('> Bot-Mwsm : ' + err);
-				socket.emit('message', '> Bot-Mwsm : ' + err);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
+				socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
 			} finally {
-				socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 				socket.emit('qr', Debug('RESOURCES').connection);
 				socket.emit('Reset', true);
 				delay(2000).then(async function() {
-					exec('pm2 restart Bot-Mwsm --update-env');
+					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
 				});
 			}
 		});
@@ -794,16 +845,16 @@ io.on('connection', function(socket) {
 
 
 	client.on('loading_screen', (percent, message) => {
-		console.log('> Bot-Mwsm : Loading application', percent + '%');
-		socket.emit('message', '> Bot-Mwsm : Connecting Application ' + percent + '%');
+		console.log('> ' + Debug('OPTIONS').appname + ' : Loading application', percent + '%');
+		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : Connecting Application ' + percent + '%');
 		if (percent >= "100") {
-			socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
-			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').authenticated);
+			socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 			socket.emit('qr', Debug('RESOURCES').authenticated);
 		} else {
 			WwbUpgrade();
-			socket.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
-			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+			socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 			socket.emit('qr', Debug('RESOURCES').connection);
 			socket.emit('Reset', true);
 
@@ -826,7 +877,7 @@ io.on('connection', function(socket) {
 app.post('/reset', (req, res) => {
 	db.run("UPDATE options SET auth=?", [false], (err) => {
 		if (err) {
-			console.log('> Bot-Mwsm : ' + err)
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 		}
 		global.io.emit('qr', Debug('RESOURCES').connection);
 	});
@@ -836,7 +887,7 @@ app.post('/reset', (req, res) => {
 			Status: "Success"
 		});
 		global.io.emit('getlog', true);
-		exec('pm2 restart Bot-Mwsm --update-env');
+		exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
 	}
 });
 
@@ -852,27 +903,27 @@ app.post('/shutdown', (req, res) => {
 		global.io.emit('getlog', true);
 		delay(3000).then(async function() {
 			try {
-				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').disconnected);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
 				global.io.emit('qr', Debug('RESOURCES').disconnected);
 				db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
 					if (err) {
-						console.log('> Bot-Mwsm : ' + err)
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 					}
 					global.io.emit('Reset', true);
 					Session = false;
 				});
 				await client.destroy();
 			} catch (err) {
-				console.log('> Bot-Mwsm : ' + err);
-				global.io.emit('message', '> Bot-Mwsm : ' + err);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
 			} finally {
-				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').connection);
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').connection);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 				global.io.emit('qr', Debug('RESOURCES').connection);
 				global.io.emit('Reset', true);
 				delay(2000).then(async function() {
-					exec('pm2 restart Bot-Mwsm --update-env');
+					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
 				});
 			}
 		});
@@ -920,6 +971,85 @@ app.post('/debug', (req, res) => {
 });
 
 
+// MkAuth Set Message
+app.post('/send-mkauth', (req, res) => {
+	const User = req.body.user;
+	const Client = req.body.client;
+	const Code = req.body.code;
+	const Status = req.body.status;
+	const Payment = req.body.payment;
+	const Contact = req.body.contact;
+	const Reward = req.body.reward;
+	const Push = req.body.push;
+	const Token = req.body.token;
+	var Process;
+	var Pulse = DateTime();
+	switch (Payment) {
+		case 'paid':
+			Message = Debug('MESSAGE').pay;
+			if (Status.toLowerCase() != "finished") {
+				Process = "Finished";
+			}
+			break;
+		case 'due':
+			Message = Debug('MESSAGE').later;
+			if (Status.toLowerCase() == "pending" || Status.toLowerCase() == "fail") {
+				Process = "Sent";
+			} else if (Status.toLowerCase() == "sent") {
+				Process = "Resent";
+			}
+			break;
+		case 'open':
+			if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0]) {
+				Message = Debug('MESSAGE').day;
+			} else {
+				Message = Debug('MESSAGE').before;
+			}
+			Process = "Sent";
+			break;
+	}
+
+	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0]+" as "+(Pulse.split(" ")[1]).split(":")[0]+":"+(Pulse.split(" ")[1]).split(":")[1]);
+	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
+		const data = {
+			to: '55' + Contact,
+			msg: Mensagem,
+			pass: Token
+		};
+		axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-message", data).then((response) => {
+			try {
+				Debug("STORANGE", "*", "DIRECT", Code).title;
+			} catch (e) {
+				Dataset('STORANGE', 'TITLE', Code, 'INSERT');
+			}
+			if ((Debug("STORANGE", "*", "DIRECT", Code).title) == Code) {
+				db.run("UPDATE storange SET push=?, status=? WHERE title=?", [Pulse, Process, Code], (err) => {
+					if (err) throw err;
+				});
+			}
+			res.json({
+				Status: response.data.Status,
+				Return: response.data.message,
+				RPush: Pulse,
+				RStatus: Process,
+				RCode: Code
+			});
+		}).catch((err) => {
+			res.status(500).json({
+				Status: "Fail",
+				Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+			});
+		});
+	} else {
+		res.status(500).json({
+			Status: "Fail",
+			Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+		});
+	}
+});
+
+
+
 // API Update
 app.post('/update', (req, res) => {
 	const UP = req.body.uptodate;
@@ -936,8 +1066,26 @@ app.post('/update', (req, res) => {
 				Return: UP
 			});
 		});
+	}
+});
 
 
+// API Protect
+app.post('/protected', (req, res) => {
+	const Protect = req.body.protect;
+	if (Debug('OPTIONS').protect != Protect) {
+		db.run("UPDATE options SET protect=?", [Protect], (err) => {
+			if (err) {
+				res.json({
+					Status: "Fail",
+					Return: Debug('OPTIONS').protect
+				});
+			}
+			res.json({
+				Status: "Success",
+				Return: Protect
+			});
+		});
 	}
 });
 
@@ -976,8 +1124,48 @@ app.post('/token', async (req, res) => {
 		global.io.emit('iserver', Debug('MKAUTH').client_link);
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
 		global.io.emit('uptodate', Debug('RELEASE').isupdate);
+		global.io.emit('protected', Debug('OPTIONS').protect);
 		global.io.emit('ismonth', (DateTime().split('-')[1]));
 		global.io.emit('issearch', 'all');
+
+		global.io.emit('bfive', Debug('SCHEDULER').bfive);
+		global.io.emit('inday', Debug('SCHEDULER').inday);
+		global.io.emit('lfive', Debug('SCHEDULER').lfive);
+		global.io.emit('lten', Debug('SCHEDULER').lten);
+		global.io.emit('lfifteen', Debug('SCHEDULER').lfifteen);
+		global.io.emit('ltwenty', Debug('SCHEDULER').ltwenty);
+		global.io.emit('ltwentyfive', Debug('SCHEDULER').ltwentyfive);
+		global.io.emit('lthirty', Debug('SCHEDULER').lthirty);
+		global.io.emit('lthirtyfive', Debug('SCHEDULER').lthirtyfive);
+		global.io.emit('lforty', Debug('SCHEDULER').lforty);
+
+		global.io.emit('sunday', Debug('SCHEDULER').sunday);
+		global.io.emit('monday', Debug('SCHEDULER').monday);
+		global.io.emit('tuesday', Debug('SCHEDULER').tuesday);
+		global.io.emit('wednesday', Debug('SCHEDULER').wednesday);
+		global.io.emit('thursday', Debug('SCHEDULER').thursday);
+		global.io.emit('friday', Debug('SCHEDULER').friday);
+		global.io.emit('saturday', Debug('SCHEDULER').saturday);
+		global.io.emit('morning', Debug('SCHEDULER').morning);
+		global.io.emit('afternoon', Debug('SCHEDULER').afternoon);
+		global.io.emit('night', Debug('SCHEDULER').night);
+
+		global.io.emit('OnPay', Debug('SCHEDULER').onpay);
+		global.io.emit('OnLock', Debug('SCHEDULER').onlock);
+		global.io.emit('OnUnlock', Debug('SCHEDULER').onunlock);
+		global.io.emit('OnMaintenance', Debug('SCHEDULER').onmaintenance);
+		global.io.emit('OnUnistall', Debug('SCHEDULER').onunistall);
+
+		global.io.emit('before', Debug('MESSAGE').before);
+		global.io.emit('day', Debug('MESSAGE').day);
+		global.io.emit('later', Debug('MESSAGE').later);
+		global.io.emit('pay', Debug('MESSAGE').pay);
+		global.io.emit('lock', Debug('MESSAGE').lock);
+		global.io.emit('unlock', Debug('MESSAGE').unlock);
+		global.io.emit('maintenance', Debug('MESSAGE').maintenance);
+		global.io.emit('unistall', Debug('MESSAGE').unistall);
+
+
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
 			Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
@@ -1023,53 +1211,6 @@ app.post('/token', async (req, res) => {
 	}
 });
 
-
-// Get Data
-app.post('/getdata', (req, res) => {
-	db.get("SELECT * FROM options", (err, GET) => {
-		if (err) {
-			res.json({
-				Status: "Fail"
-			});
-		} else {
-			res.json({
-				Status: "Success",
-				interval: Debug('OPTIONS').interval,
-				sleep: Debug('OPTIONS').sleep,
-				sendwait: Debug('OPTIONS').sendwait,
-				response: Debug('OPTIONS').response,
-				call: Debug('OPTIONS').call,
-				access: Debug('OPTIONS').access,
-				port: Debug('OPTIONS').access,
-				pixfail: Debug('OPTIONS').pixfail,
-				replyes: Debug('OPTIONS').replyes,
-				alert: Debug('OPTIONS').alert,
-				count: Debug('OPTIONS').count,
-				onbot: Debug('OPTIONS').onbot,
-				reject: Debug('OPTIONS').reject,
-				limiter: Debug('OPTIONS').limiter,
-				domain: Debug('MKAUTH').domain,
-				tunel: Debug('MKAUTH').tunel,
-				username: Debug('MKAUTH').client_id,
-				password: Debug('MKAUTH').client_secret,
-				module: Debug('MKAUTH').module,
-				bar: Debug('MKAUTH').bar,
-				pix: Debug('MKAUTH').pix,
-				qrpix: Debug('MKAUTH').qrpix,
-				qrlink: Debug('MKAUTH').qrlink,
-				pdf: Debug('MKAUTH').pdf,
-				delay: Debug('MKAUTH').delay,
-				debugger: Debug('OPTIONS').debugger,
-				uptodate: Debug('RELEASE').isupdate,
-				iserver: Debug('MKAUTH').client_link,
-				ismonth: (DateTime().split('-')[1]),
-				issearch: 'all',
-			});
-
-		}
-	});
-});
-
 // Set Options Mkauth
 app.post('/options_mkauth', (req, res) => {
 	const define = req.body.define;
@@ -1088,6 +1229,25 @@ app.post('/options_mkauth', (req, res) => {
 	});
 });
 
+// Set Scheduler Mkauth
+app.post('/scheduler', (req, res) => {
+	const define = (req.body.define).toLowerCase();
+	const enable = req.body.enable;
+	db.run("UPDATE scheduler SET " + define + "=?", [enable], (err) => {
+		if (err) {
+			res.json({
+				Status: "Fail",
+				Return: Debug('SCHEDULER').define
+			});
+		}
+		res.json({
+			Status: "Success",
+			Return: enable
+		});
+	});
+});
+
+
 
 // Get Clients Mkauth
 app.post('/clients_mkauth', async (req, res) => {
@@ -1096,6 +1256,7 @@ app.post('/clients_mkauth', async (req, res) => {
 
 	const Master = await MkAuth(Month, Payment, 'listagem');
 	var hasTARGET = [];
+	var PUSH, STATUS;
 
 	if (await Master.Status == "Error") {
 		return res.json({
@@ -1110,6 +1271,17 @@ app.post('/clients_mkauth', async (req, res) => {
 			} else {
 				TARGET.Contact = "00000000000";
 			}
+			try {
+				TARGET.status = Debug("STORANGE", "*", "DIRECT", TARGET.Identifier).status;
+			} catch (e) {
+				TARGET.status = undefined;
+			}
+
+			try {
+				TARGET.push = Debug("STORANGE", "*", "DIRECT", TARGET.Identifier).push;
+			} catch (e) {
+				TARGET.push = undefined;
+			}
 			GetClients = {
 				"ORDER": TARGET.Order,
 				"TITLE": TARGET.Identifier,
@@ -1117,9 +1289,9 @@ app.post('/clients_mkauth', async (req, res) => {
 				"CLIENT": TARGET.Client,
 				"CONTACT": TARGET.Contact,
 				"REWARD": TARGET.Reward,
-				"PUSH": undefined,
+				"PUSH": TARGET.push,
 				"PAYMENT": TARGET.Payment,
-				"STATUS": undefined
+				"STATUS": TARGET.status
 			};
 			hasTARGET.push(GetClients);
 			if (Master.length == hasTARGET.length) {
@@ -1127,7 +1299,7 @@ app.post('/clients_mkauth', async (req, res) => {
 					global.io.emit('getclients', hasTARGET);
 					return res.json({
 						Status: "Success",
-						Return: 'Dados Carregados com Sucesso'
+						Return: Debug('CONSOLE').successfully
 					});
 
 				}
@@ -1156,6 +1328,39 @@ app.post('/delay_mkauth', (req, res) => {
 			});
 		});
 	}
+});
+
+// Save Mkauth Messages
+app.post('/message_mkauth', (req, res) => {
+	const define = req.body.database
+	const message = req.body.message
+	const token = req.body.token
+	if ([Debug('OPTIONS').token, Password[1]].includes(token)) {
+		if (server != "" && message != "") {
+			db.run("UPDATE message SET " + define + "=?", [message], (err) => {
+				if (err) {
+					res.json({
+						Status: "Fail",
+						Return: Debug('CONSOLE').datafail
+					});
+				}
+				res.json({
+					Status: "Success",
+					Return: Debug('CONSOLE').datasave
+				});
+			});
+		} else {
+			res.json({
+				Status: "Fail"
+			});
+
+		}
+	} else {
+		res.json({
+			Status: "Fail"
+		});
+	}
+
 });
 
 
@@ -1193,8 +1398,8 @@ app.post('/sqlite-options', (req, res) => {
 						Return: Debug('CONSOLE').failed
 					});
 				}
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').settings);
-				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').settings);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').settings);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').settings);
 				res.json({
 					Status: "Success",
 					Return: Debug('CONSOLE').settings,
@@ -1203,7 +1408,7 @@ app.post('/sqlite-options', (req, res) => {
 				session = false;
 				if (Reboot) {
 					global.io.emit('Reset', true);
-					exec('pm2 restart Bot-Mwsm --update-env');
+					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
 
 				}
 			});
@@ -1230,7 +1435,17 @@ app.get('/mikrotik/:pass/:to/:msg', async (req, res) => {
 		msg,
 		pass
 	} = req.params;
-	const isHid = (pass);
+
+	var isHid;
+	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		isHid = (pass);
+	} else {
+		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+			isHid = Password[1];
+		} else {
+			isHid = (Debug('OPTIONS').token);
+		}
+	}
 	const isWid = (to);
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1248,12 +1463,12 @@ app.get('/mikrotik/:pass/:to/:msg', async (req, res) => {
 			client.sendMessage(WhatsApp, Mensagem).then(response => {
 				return res.json({
 					Status: "Success",
-					message: 'Bot-Mwsm : Message Sent'
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
 				});
 			}).catch(err => {
 				return res.status(500).json({
 					Status: "Fail",
-					message: 'Bot-Mwsm : Message was not Sent'
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 				});
 			});
 
@@ -1261,7 +1476,7 @@ app.get('/mikrotik/:pass/:to/:msg', async (req, res) => {
 	} else {
 		return res.status(500).json({
 			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 		});
 	}
 
@@ -1287,7 +1502,22 @@ app.post('/force-message', [
 		});
 	}
 
-	const isHid = req.body.p;
+	var isHid;
+	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (req.body.pass != undefined) {
+			isHid = req.body.pass;
+		} else if (req.body.p != undefined) {
+			isHid = req.body.p;
+		} else {
+			isHid = '';
+		}
+	} else {
+		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+			isHid = Password[1];
+		} else {
+			isHid = (Debug('OPTIONS').token);
+		}
+	}
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1305,7 +1535,7 @@ app.post('/force-message', [
 			var Array = {};
 			Mensagem.some(function(Send, index) {
 				if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-					const Cloud = async (Url) => {
+					const Cloud = async () => {
 						let mimetype;
 						const attachment = await axios.get(Url, {
 							responseType: 'arraybuffer'
@@ -1358,20 +1588,20 @@ app.post('/force-message', [
 					}).catch(err => {
 						return res.status(500).json({
 							Status: "Fail",
-							message: 'Bot-Mwsm : Message was not Sent'
+							message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 						});
 					});
 				} else {
 					return res.status(500).json({
 						Status: "Fail",
-						message: 'Bot-Mwsm : Message was not Sent'
+						message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 					});
 				}
 
 				if (Sending >= Assembly.length) {
 					return res.status(201).json({
 						Status: "Success",
-						message: 'Bot-Mwsm : Message Sent'
+						message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
 					});
 				}
 			}, index * Debug('OPTIONS').interval);
@@ -1484,7 +1714,22 @@ app.post('/send-image', [
 
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
-	const isHid = req.body.pass;
+	var isHid;
+	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (req.body.pass != undefined) {
+			isHid = req.body.pass;
+		} else if (req.body.p != undefined) {
+			isHid = req.body.p;
+		} else {
+			isHid = '';
+		}
+	} else {
+		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+			isHid = Password[1];
+		} else {
+			isHid = (Debug('OPTIONS').token);
+		}
+	}
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1504,23 +1749,20 @@ app.post('/send-image', [
 		}).then(response => {
 			return res.json({
 				Status: "Success",
-				message: 'Bot-Mwsm : Message Sent'
+				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
 			});
 		}).catch(err => {
 			return res.status(500).json({
 				Status: "Fail",
-				message: 'Bot-Mwsm : Message was not Sent'
+				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
 		});
 	} else {
 		return res.status(500).json({
 			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 		});
 	}
-
-
-
 });
 
 // Send Document
@@ -1544,7 +1786,22 @@ app.post('/send-document', [
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
 	const hasFileName = req.body.filename;
-	const isHid = req.body.pass;
+	var isHid;
+	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (req.body.pass != undefined) {
+			isHid = req.body.pass;
+		} else if (req.body.p != undefined) {
+			isHid = req.body.p;
+		} else {
+			isHid = '';
+		}
+	} else {
+		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+			isHid = Password[1];
+		} else {
+			isHid = (Debug('OPTIONS').token);
+		}
+	}
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1564,18 +1821,18 @@ app.post('/send-document', [
 		}).then(response => {
 			return res.json({
 				Status: "Success",
-				message: 'Bot-Mwsm : Message Sent'
+				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
 			});
 		}).catch(err => {
 			return res.status(500).json({
 				Status: "Fail",
-				message: 'Bot-Mwsm : Message was not Sent'
+				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
 		});
 	} else {
 		return res.status(500).json({
 			Status: "Fail",
-			message: 'Bot-Mwsm : Message was not Sent'
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 		});
 	}
 });
@@ -1598,16 +1855,22 @@ app.post('/send-message', [
 			message: errors.mapped()
 		});
 	}
-
 	var isHid;
-	if (req.body.pass != undefined) {
-		isHid = req.body.pass;
-	} else if (req.body.p != undefined) {
-		isHid = req.body.p;
+	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (req.body.pass != undefined) {
+			isHid = req.body.pass;
+		} else if (req.body.p != undefined) {
+			isHid = req.body.p;
+		} else {
+			isHid = '';
+		}
 	} else {
-		isHid = '';
+		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+			isHid = Password[1];
+		} else {
+			isHid = (Debug('OPTIONS').token);
+		}
 	}
-
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1619,7 +1882,6 @@ app.post('/send-message', [
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
 	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
-
 	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
 		const uID = await Dataset('TARGET', 'START', DateTime(), 'INSERT');
@@ -2063,14 +2325,14 @@ app.post('/send-message', [
 											}).catch(err => {
 												return res.status(500).json({
 													Status: "Fail",
-													message: 'Bot-Mwsm : Message was not Sent'
+													message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 												});
 											});
 
 										} else {
 											return res.status(500).json({
 												Status: "Fail",
-												message: 'Bot-Mwsm : Message was not Sent'
+												message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 											});
 										}
 
@@ -2129,7 +2391,7 @@ app.post('/send-message', [
 
 											return res.json({
 												Status: "Success",
-												message: 'Bot-Mwsm : Message Sent'
+												message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
 											});
 										}
 									}, ((Debug('MKAUTH').delay + index) * Ryzen));
@@ -2486,13 +2748,13 @@ client.on('message', async msg => {
 		if (msg.body.includes(":") && (msg.body.split(":")[1].length == 7)) {
 			db.run("UPDATE options SET token=?", [msg.body.split(":")[1]], (err) => {
 				if (err) throw err;
-				console.log('> Bot-Mwsm : ' + Debug('CONSOLE').saved);
-				global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').saved);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').saved);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').saved);
 				msg.reply(Debug('CONSOLE').saved);
 			});
 		} else {
-			console.log('> Bot-Mwsm : ' + Debug('CONSOLE').wrong);
-			global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').wrong);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').wrong);
+			global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').wrong);
 			msg.reply(Debug('CONSOLE').wrong);
 		}
 	} else {
@@ -2501,10 +2763,10 @@ client.on('message', async msg => {
 				if (REPLIES == undefined) {
 					db.run("INSERT INTO replies(whats,date,count) VALUES(?, ?, ?)", [isWhatsApp, register, 1], (err) => {
 						if (err) {
-							console.log('> Bot-Mwsm : ' + err)
+							console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 						}
-						console.log('> Bot-Mwsm : ' + Debug('CONSOLE').inserted);
-						global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').inserted);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+						global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
 						MsgBox = true;
 					});
 
@@ -2513,10 +2775,10 @@ client.on('message', async msg => {
 					if (register.toString() > REPLIES.date) {
 						db.run("UPDATE replies SET date=?, count=? WHERE whats=?", [register, 1, isWhatsApp], (err) => {
 							if (err) {
-								console.log('> Bot-Mwsm : ' + err)
+								console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 							}
-							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
-							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
+							console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').updated);
+							global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').updated);
 							MsgBox = true;
 						});
 					} else {
@@ -2524,13 +2786,13 @@ client.on('message', async msg => {
 							COUNT = REPLIES.count + 1;
 							db.run("UPDATE replies SET count=? WHERE whats=?", [COUNT, isWhatsApp], (err) => {
 								if (err) throw err;
-								console.log('> Bot-Mwsm : ' + Debug('CONSOLE').updated);
-								global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').updated);
+								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').updated);
+								global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').updated);
 								MsgBox = true;
 							});
 						} else {
-							console.log('> Bot-Mwsm : ' + Debug('CONSOLE').found);
-							global.io.emit('message', '> Bot-Mwsm : ' + Debug('CONSOLE').found);
+							console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').found);
+							global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').found);
 							MsgBox = false;
 
 						}
@@ -2540,7 +2802,7 @@ client.on('message', async msg => {
 
 			db.get("SELECT * FROM replies WHERE whats='" + msg.from.replaceAll('@c.us', '') + "'", (err, REPLIES) => {
 				if (err) {
-					console.log('> Bot-Mwsm : ' + err)
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 				}
 				if (REPLIES != undefined) {
 					if (MsgBox && (Debug('OPTIONS').onbot == 1 || Debug('OPTIONS').onbot == "true") && (msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia)) {
@@ -2599,7 +2861,6 @@ client.on('call', async (call) => {
 							});
 
 						}, Math.floor(Delay + Math.random() * 1000));
-
 					});
 				}
 			}).catch(err => {

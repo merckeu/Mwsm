@@ -8,603 +8,956 @@
 		<script type="text/javascript" src="jquery.js"></script>
 		<script type="text/javascript" src="socket.io.js"></script>
 		<script type="text/javascript" src="script.js"></script>
-		<style>
-		</style>
 	</head>
 	
 	<body>
-<div id="API">
-		<div id="tabs" style="margin:10px;width:690px;height:326;">
-			<ul>
-				<li><a href="#tabs-1"><i class="fa fa-terminal" aria-hidden="true" style="margin-right:5px;"></i>Terminal</a></li>
-				<li><a href="#tabs-2"><i class="fa fa-cogs" aria-hidden="true" style="margin-right:5px;"></i>Settings</a></li>
-				<li><a href="#tabs-6"><i class="fa fa-list-alt" aria-hidden="true" style="margin-right:5px;"></i>Log</a></li>
-				<li><a href="#tabs-7"><i class="fa fa-comment-o" aria-hidden="true" style="margin-right:5px;"></i>About</a></li>
-				<div style="width:130px;position:absolute;right:0px;padding:0px 10px;height:20px;">
-					<div style="float:right;" id="Reset">
-						<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i></button>
+		<div id="API">
+			<div id="tabs" style="margin:10px;width:690px;height:326;">
+				<ul>
+					<li><a href="#tabs-1"><i class="fa fa-terminal" aria-hidden="true" style="margin-right:5px;"></i>Terminal</a></li>
+					<li><a href="#tabs-2"><i class="fa fa-cogs" aria-hidden="true" style="margin-right:5px;"></i>Settings</a></li>
+					<li><a href="#tabs-6"><i class="fa fa-list-alt" aria-hidden="true" style="margin-right:5px;"></i>Log</a></li>
+					<li><a href="#tabs-7"><i class="fa fa-comment-o" aria-hidden="true" style="margin-right:5px;"></i>About</a></li>
+					<div style="width:130px;position:absolute;right:0px;padding:0px 10px;height:20px;">
+						<div style="float:right;" id="Reset">
+							<button class="btn btn-light Copy" type="button"><i class="fa fa-refresh fa-spin Reset" aria-hidden="true"></i></button>
+						</div>
+						<div style="float:left;" Class="Version IsDefault">
+							<input type="password" id="Version" class="form-control" placeholder="v0.0.0" disabled>
+						</div>
 					</div>
-					<div style="float:left;" Class="Version IsDefault">
-						<input type="password" id="Version" class="form-control" placeholder="v0.0.0" disabled>
-					</div>
+				</ul>
+				<div id="Waiting">
+					<div class="loader"></div>
 				</div>
-			</ul>
-			<div id="Waiting">
-				<div class="loader"></div>
-			</div>
-			<div id="Preload">
-				<div class="loader"></div>
-			</div>
-			<div id="tabs-1" style="margin-left:0px;padding-left:6px;padding-top:2px;z-index:1;">
-				<div class="row">
-					<div class="col-75">
-						<div class="row" style="padding-top:10px;">
-							<div class="col-50">
-								<div id="Scroll" style="overflow-y: auto;background:#000;width: 100%;border-radius:5px;height:266px;">
-									<p class="logs" style="padding-left:20px;color:#FFF;"></p>
+				<div id="Preload">
+					<div class="loader"></div>
+				</div>
+				<div id="tabs-1" style="margin-left:0px;padding-left:6px;padding-top:2px;z-index:1;">
+					<div class="row">
+						<div class="col-75">
+							<div class="row" style="padding-top:10px;">
+								<div class="col-50">
+									<div id="Scroll" style="overflow-y: auto;background:#000;width: 100%;border-radius:5px;height:266px;">
+										<p class="logs" style="padding-left:20px;color:#FFF;"></p>
+									</div>
+								</div>
+								<div class="col-25">
+									<div class="row">
+										<div id="background" style='margin-top:-10px;position:absolute;width: 276px;height: 276px;background-image: url("");'>
+											<img id="qrcode">
+										</div>
+									</div>
 								</div>
 							</div>
-							<div class="col-25">
+						</div>
+					</div>
+				</div>
+				<div id="tabs-2" style="z-index:1;">
+					<div id="Locked" style="display:block;">
+						<div class="Protect"></div>
+						<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:30px;margin-top:170px;background:#FFF;">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
+							</div>
+							<span class='Password'><i class="fa fa-refresh fa-spin Token"></i></span>
+							<input type="password" id="token" class="form-control" placeholder="Token" style="height:40px;">
+						</div>
+					</div>
+					<div id="tabs2" style="position:absolute;margin-left:-17px;margin-top:-12px;padding:0px 0px 0px 0px;width:690px;height:296px;border:none;">
+						<div class="container" style="margin: 10px;padding:0;height:245px;">
+							<div id="tabs-2A">
 								<div class="row">
-									<div id="background" style='margin-top:-10px;position:absolute;width: 276px;height: 276px;background-image: url("");'>
-										<img id="qrcode">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="tabs-2" style="z-index:1;">
-				<div id="Locked" style="display:block;">
-					<div class="Protect"></div>
-					<div class="input-group mb-3" style="height:40px;width:166px;float:right;right:30px;margin-top:170px;background:#FFF;">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
-						</div>
-						<span class='Password'><i class="fa fa-refresh fa-spin Token"></i></span>
-						<input type="password" id="token" class="form-control" placeholder="Token" style="height:40px;">
-					</div>
-				</div>
-				<div id="tabs2" style="position:absolute;margin-left:-17px;margin-top:-12px;padding:0px 0px 0px 0px;width:690px;height:296px;border:none;">
-					<div class="container" style="margin: 10px;padding:0;height:245px;">
-						<div id="tabs-2A">
-							<div class="row">
-								<form>
-									<div class="col-50" style="height:50px;width:635px;">
-										<div style="float:left;">
-											<label for="call" style="height:15px;width:380px;padding-bottom:-3px;">
-												<c style="float:left;">Call Response</c>
-												<c style="float:right;">Wait</c>
-											</label>
-											<div class="input-group mb-3">
-												<div class="input-group-prepend">
-													<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-phone-square" aria-hidden="true"></i></span>
-												</div>
-												<input type="password" id="Call" placeholder="WhatsApp Controlado por Inteligencia Artificial" style="border-radius:0px;width:315px;">
-												<div class="input-group-append">
-													<div class="input-group mb-3" style="height:40px;">
-														<div class="quantity">
-															<input type="number" id="SleepCall" placeholder="0" style="width:55px;font-size:14px;" min="0" max="10" step="1" value="1" readonly>
-															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SleepCallUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SleepCallDown"></div>
+									<form>
+										<div class="col-50" style="height:50px;width:635px;">
+											<div style="float:left;">
+												<label for="call" style="height:15px;width:380px;padding-bottom:-3px;">
+													<c style="float:left;">Call Response</c>
+													<c style="float:right;">Wait</c>
+												</label>
+												<div class="input-group mb-3">
+													<div class="input-group-prepend">
+														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-phone-square" aria-hidden="true"></i></span>
+													</div>
+													<input type="password" id="Call" placeholder="WhatsApp Controlado por Inteligencia Artificial" style="border-radius:0px;width:315px;">
+													<div class="input-group-append">
+														<div class="input-group mb-3" style="height:40px;">
+															<div class="quantity">
+																<input type="number" id="SleepCall" placeholder="0" style="width:55px;font-size:14px;" min="0" max="10" step="1" value="1" readonly>
+																<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SleepCallUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SleepCallDown"></div>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-										<div style="float:right;width:210px;height:50px;">
-											<div class="col-15" style="float:left;">
-												<label for="interval">Break</label>
-												<div class="input-group mb-3" style="height:40px;width:95px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-													</div>
-													<div class="quantity">
-														<input type="number" id="interval" placeholder="1" style="width:55px;font-size:14px;" min="1" max="10" step="1" value="1" readonly>
-														<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="IntervalUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="IntervalDown"></div>
-													</div>
-												</div>
-											</div>
-											<div class="col-15" style="float:right;margin-left:-10px;">
-												<label for="sendwait">Sleep</label>
-												<div class="input-group mb-3" style="height:40px;width:105px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
-													</div>
-													<div class="quantity">
-														<input type="number" id="sendwait" placeholder="1" style="width:60px;font-size:14px;" min="10" max="99" step="1" value="30" readonly>
-														<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SendwaitUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SendwaitDown"></div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-								<form>
-									<div class="col-50" style="height:50px;width:635px;margin-top:-15px;">
-										<div style="float:left;">
-											<label for="call" style="height:12px;width:375px;">
-												<c style="float:left;">Message Response</c>
-												<c style="float:right;">Count</c>
-											</label>
-											<div class="input-group mb-3">
-												<div class="input-group-prepend">
-													<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
-												</div>
-												<input type="password" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="border-radius:0px;width:300px;">
-												<div class="input-group-append">
-													<div class="input-group mb-3" style="height:40px;">
-														<div class="quantity">
-															<input type="number" id="count" placeholder="1" style="width:70px;font-size:14px;" min="1" max="999" step="1" value="1">
-															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="CountUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="CountDown"></div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div style="float:right;width:210px;height:50px;">
-											<div class="col-15" style="float:left;">
-												<div style="display:none;">
-													<label for="count">Limiter</label>
-													<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
+											<div style="float:right;width:210px;height:50px;">
+												<div class="col-15" style="float:left;">
+													<label for="interval">Break</label>
+													<div class="input-group mb-3" style="height:40px;width:95px;">
 														<div class="input-group-prepend">
-															<span class="input-group-text" style="height:25px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+															<span class="input-group-text" style="height:25px;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
 														</div>
-														<input type="tel" id="limiter" placeholder="100" style="width:55px;" disabled>
+														<div class="quantity">
+															<input type="number" id="interval" placeholder="1" style="width:55px;font-size:14px;" min="1" max="10" step="1" value="1" readonly>
+															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="IntervalUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="IntervalDown"></div>
+														</div>
 													</div>
 												</div>
-												<label for="access">Access</label>
-												<input type="tel" id="port" placeholder="8000" hidden>
-												<div class="input-group mb-3" style="height:40px;width:105px;">
+												<div class="col-15" style="float:right;margin-left:-10px;">
+													<label for="sendwait">Sleep</label>
+													<div class="input-group mb-3" style="height:40px;width:105px;">
+														<div class="input-group-prepend">
+															<span class="input-group-text" style="height:25px;"><i class="fa fa-hourglass-end" aria-hidden="true"></i></span>
+														</div>
+														<div class="quantity">
+															<input type="number" id="sendwait" placeholder="1" style="width:60px;font-size:14px;" min="10" max="99" step="1" value="30" readonly>
+															<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SendwaitUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="SendwaitDown"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+									<form>
+										<div class="col-50" style="height:50px;width:635px;margin-top:-15px;">
+											<div style="float:left;">
+												<label for="call" style="height:12px;width:375px;">
+													<c style="float:left;">Message Response</c>
+													<c style="float:right;">Count</c>
+												</label>
+												<div class="input-group mb-3">
 													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
+														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-comments-o" aria-hidden="true"></i></span>
 													</div>
-													<input type="tel" id="access" placeholder="8000" style="width:55px;">
-												</div>
-											</div>
-											<div class="col-15" style="float:right;margin-left:-10px;">
-												<div style="width:97px;background:#000;">
-													<label for="port" style="float:left;width:40px;">Stop</label>
-													<label for="port" style="float:right;width:53px;">Reload</label>
-												</div>
-												<div class="input-group mb-3" style="height:40px;width:103px;padding:0px;">
-													<div class="input-group-prepend" style="padding:0px;">
-														<button type="button" class="btn btn-success" id="ShutDown" style="height:40px;width:40px;margin-right:5px;margin-top:0px;"><i class="fa fa-power-off fa-lg" aria-hidden="true"></i></button>
-													</div>
-													<button type="button" class="btn btn-primary" id="Save_Options" style="height:40px;width:53px;border-radius:0px 3px 3px 0px;margin-top:0px;"><i class="fa fa-retweet fa-lg" aria-hidden="true"></i></button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-								<form>
-									<div class="col-50" style="height:60px;width:640px;margin-top:-30px;padding:0px 10px 0px 12px;">
-										<div style="float:left;width:320px;padding:0px;">
-											<fieldset>
-												<legend>Call Response</legend>
-												<div style="width:245px;height:20px;">
-													<div style="float:left;">
-														<div class="col-20">
-															<label class="switch">
-																<input type="checkbox" class="switch-input" id="Reject"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Reject</b>
-																<span class="switch-label" data-on="On" data-off="Off"></span>
-																<span class="switch-handle"></span>
-															</label>
-														</div>
-													</div>
-													<div style="float:right;">
-														<div class="col-20">
-															<label class="switch switch-green">
-																<input type="checkbox" class="switch-input" id="Alert">
-																<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Alert</c>
-																<span class="switch-label" data-on="On" data-off="Off"></span>
-																<span class="switch-handle"></span>
-															</label>
+													<input type="password" id="response" placeholder="WhatsApp exclusivo para uso do sistema" style="border-radius:0px;width:300px;">
+													<div class="input-group-append">
+														<div class="input-group mb-3" style="height:40px;">
+															<div class="quantity">
+																<input type="number" id="count" placeholder="1" style="width:70px;font-size:14px;" min="1" max="999" step="1" value="1">
+																<div class="quantity-nav"><input type="button" class="quantity-button quantity-up" value="&#xf106;" id="CountUP"><input type="button" class="quantity-button quantity-down" value="&#xf107" id="CountDown"></div>
+															</div>
 														</div>
 													</div>
 												</div>
-											</fieldset>
-										</div>
-										<div style="float:right;width:320px;padding:0px;">
-											<fieldset>
-												<legend>Message Response</legend>
-												<div style="width:245px;height:20px;">
-													<div style="float:left;">
-														<div class="col-20">
-															<label class="switch">
-																<input type="checkbox" class="switch-input" id="onbot"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Response</b>
-																<span class="switch-label" data-on="On" data-off="Off"></span>
-																<span class="switch-handle"></span>
-															</label>
+											</div>
+											<div style="float:right;width:210px;height:50px;">
+												<div class="col-15" style="float:left;">
+													<div style="display:none;">
+														<label for="count">Limiter</label>
+														<div class="input-group mb-3" style="height:40px;width:100px;margin-left:-2px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+															</div>
+															<input type="tel" id="limiter" placeholder="100" style="width:55px;" disabled>
 														</div>
 													</div>
-													<div style="float:right;">
-														<div class="col-20">
-															<label class="switch switch-green">
-																<input type="checkbox" class="switch-input" id="replyes">
-																<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Reply</c>
-																<span class="switch-label" data-on="On" data-off="Off"></span>
-																<span class="switch-handle"></span>
-															</label>
+													<label for="access">Access</label>
+													<input type="tel" id="port" placeholder="8000" hidden>
+													<div class="input-group mb-3" style="height:40px;width:105px;">
+														<div class="input-group-prepend">
+															<span class="input-group-text" style="height:25px;"><i class="fa fa-internet-explorer" aria-hidden="true"></i></span>
 														</div>
+														<input type="tel" id="access" placeholder="8000" style="width:55px;">
 													</div>
 												</div>
-											</fieldset>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-						<div id="tabs-2B" style="z-index:1;">
-							<div class="row" style="padding:0px 10px;height:220px;">
-								<div class="col-75">
-									<div class="row">
-										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
-											<div class="col-15">
-												<label class="switch">
-													<input type="checkbox" class="switch-input" id="debugger"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Debugger</b>
-													<span class="switch-label" data-on="On" data-off="Off"></span>
-													<span class="switch-handle"></span>
-												</label>
+												<div class="col-15" style="float:right;margin-left:-10px;">
+													<div style="width:97px;background:#000;">
+														<label for="port" style="float:left;width:40px;">Stop</label>
+														<label for="port" style="float:right;width:53px;">Reload</label>
+													</div>
+													<div class="input-group mb-3" style="height:40px;width:103px;padding:0px;">
+														<div class="input-group-prepend" style="padding:0px;">
+															<button type="button" class="btn btn-success" id="ShutDown" style="height:40px;width:40px;margin-right:5px;margin-top:0px;"><i class="fa fa-power-off fa-lg" aria-hidden="true"></i></button>
+														</div>
+														<button type="button" class="btn btn-primary" id="Save_Options" style="height:40px;width:53px;border-radius:0px 3px 3px 0px;margin-top:0px;"><i class="fa fa-retweet fa-lg" aria-hidden="true"></i></button>
+													</div>
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
-											<div class="col-15">
-												<label class="switch">
-													<input type="checkbox" class="switch-input" id="uptodate"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Update</b>
-													<span class="switch-label" data-on="On" data-off="Off"></span>
-													<span class="switch-handle"></span>
-												</label>
+									</form>
+									<form>
+										<div class="col-50" style="height:60px;width:640px;margin-top:-30px;padding:0px 10px 0px 12px;">
+											<div style="float:left;width:320px;padding:0px;">
+												<fieldset>
+													<legend>Call Response</legend>
+													<div style="width:245px;height:20px;">
+														<div style="float:left;">
+															<div class="col-20">
+																<label class="switch">
+																	<input type="checkbox" class="switch-input" id="Reject"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Reject</b>
+																	<span class="switch-label" data-on="On" data-off="Off"></span>
+																	<span class="switch-handle"></span>
+																</label>
+															</div>
+														</div>
+														<div style="float:right;">
+															<div class="col-20">
+																<label class="switch switch-green">
+																	<input type="checkbox" class="switch-input" id="Alert">
+																	<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Alert</c>
+																	<span class="switch-label" data-on="On" data-off="Off"></span>
+																	<span class="switch-handle"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</fieldset>
+											</div>
+											<div style="float:right;width:320px;padding:0px;">
+												<fieldset>
+													<legend>Message Response</legend>
+													<div style="width:245px;height:20px;">
+														<div style="float:left;">
+															<div class="col-20">
+																<label class="switch">
+																	<input type="checkbox" class="switch-input" id="onbot"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto-Response</b>
+																	<span class="switch-label" data-on="On" data-off="Off"></span>
+																	<span class="switch-handle"></span>
+																</label>
+															</div>
+														</div>
+														<div style="float:right;">
+															<div class="col-20">
+																<label class="switch switch-green">
+																	<input type="checkbox" class="switch-input" id="replyes">
+																	<c style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Reply</c>
+																	<span class="switch-label" data-on="On" data-off="Off"></span>
+																	<span class="switch-handle"></span>
+																</label>
+															</div>
+														</div>
+													</div>
+												</fieldset>
 											</div>
 										</div>
-									</div>
+									</form>
 								</div>
 							</div>
-						</div>
-						<div id="tabs-2C" style="z-index:1;">
-							<div class="row">
-								<div class="col-75">
-									<div class="row" style="padding:0px 10px;height:220px;"> under construction </div>
-								</div>
-							</div>
-						</div>
-						<div id="tabs-2D" style="z-index:1;">
-							<div class="row">
-								<div class="col-75">
-									<div class="row" style="padding:0px 10px;height:220px;">
-										<div class="Msg-floating" style="width:100%;height:175px;">
-											<textarea class="Msg-control" placeholder="" id="Message" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;" disabled></textarea>
-											<label for="Message">Message</label>
-											<i class="fa fa-times" id="SendClear" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
-										</div>
-										<div style="width:100%;height:35px;padding:0px;">
-											<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
-												<div class="col-20">
+							<div id="tabs-2B" style="z-index:1;">
+								<div class="row" style="padding:0px 10px;height:220px;">
+									<div class="col-75">
+										<div class="row">
+											<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+												<div class="col-15">
 													<label class="switch">
-														<input type="checkbox" class="switch-input" id="Simulator"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Mkauth Simulator</b>
+														<input type="checkbox" class="switch-input" id="debugger"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Debugger</b>
 														<span class="switch-label" data-on="On" data-off="Off"></span>
 														<span class="switch-handle"></span>
 													</label>
 												</div>
 											</div>
-											<div class="input-group mb-3" style="height:35px;width:330px;float:right;margin-left:15px;margin-top:-5px;padding:0px;">
-												<div class="input-group mb-3" style="height:40px;width:170px;margin-right:5px;margin-top:7px;">
-													<div class="input-group-prepend">
-														<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
-													</div>
-													<input type="password" id="WhatsApp" placeholder="" style="width:125px;">
+										</div>
+										<div class="row">
+											<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+												<div class="col-15">
+													<label class="switch">
+														<input type="checkbox" class="switch-input" id="uptodate"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Update</b>
+														<span class="switch-label" data-on="On" data-off="Off"></span>
+														<span class="switch-handle"></span>
+													</label>
 												</div>
-												<div class="input-group-prepend">
-													<button type="button" class="btn btn-primary" id="Clear" style="height:35px;width:75px;margin-right:5px;"><i class="fa fa-eraser" aria-hidden="true" style="margin-right:5px;"></i>Clear</button>
+											</div>
+										</div>
+										<div class="row">
+											<div class="row" style="margin-top:10px;margin-bottom:-10px;padding-left:20px;z-index:9999999;">
+												<div class="col-15">
+													<label class="switch">
+														<input type="checkbox" class="switch-input" id="protected"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Protect</b>
+														<span class="switch-label" data-on="On" data-off="Off"></span>
+														<span class="switch-handle"></span>
+													</label>
 												</div>
-												<button type="button" class="btn btn-primary" id="Send" style="height:35px;width:75px;border-radius:0px 3px 3px 0px;"><i class="fa fa-paper-plane-o" aria-hidden="true" style="margin-right:5px;"></i>Send</button>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div id="tabs-2E" style="z-index:1;">
-							<div id="tabs-2E1" class="row" style="padding:0px 10px;height:220px;">
+							<div id="tabs-2C" style="z-index:1;">
 								<div class="row">
 									<div class="col-75">
-										<form>
-											<div class="row" style="padding-top:-5px;">
-												<div class="col-50">
-													<label for="Username"> API Connection</label>
-													<div class="input-group mb-3" style="height:40px;width:540px;">
+										<div class="row" style="padding:0px 10px;height:220px;"> under construction </div>
+									</div>
+								</div>
+							</div>
+							<div id="tabs-2D" style="z-index:1;">
+								<div class="row">
+									<div class="col-75">
+										<div class="row" style="padding:0px 10px;height:220px;">
+											<div class="Msg-floating" style="width:100%;height:175px;">
+												<textarea class="Msg-control" placeholder="" id="Message" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;" disabled></textarea>
+												<label for="Message">Message</label>
+												<i class="fa fa-times" id="SendClear" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+											</div>
+											<div style="width:100%;height:35px;padding:0px;">
+												<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
+													<div class="col-20">
+														<label class="switch">
+															<input type="checkbox" class="switch-input" id="Simulator"><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Mkauth Simulator</b>
+															<span class="switch-label" data-on="On" data-off="Off"></span>
+															<span class="switch-handle"></span>
+														</label>
+													</div>
+												</div>
+												<div class="input-group mb-3" style="height:35px;width:330px;float:right;margin-left:15px;margin-top:-5px;padding:0px;">
+													<div class="input-group mb-3" style="height:40px;width:170px;margin-right:5px;margin-top:7px;">
 														<div class="input-group-prepend">
-															<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-link" aria-hidden="true"></i></i></span>
+															<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-whatsapp" aria-hidden="true"></i></span>
 														</div>
-														<input type="password" id="tunel" placeholder="TUNEL" style="width:91%;">
+														<input type="password" id="WhatsApp" placeholder="" style="width:125px;">
 													</div>
-													<div class="row" style="margin-top:10px;">
-														<div class="col-50">
-															<div class="input-group mb-3" style="height:40px;width:540x;">
-																<div class="input-group-prepend">
-																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+													<div class="input-group-prepend">
+														<button type="button" class="btn btn-primary" id="Clear" style="height:35px;width:75px;margin-right:5px;"><i class="fa fa-eraser" aria-hidden="true" style="margin-right:5px;"></i>Clear</button>
+													</div>
+													<button type="button" class="btn btn-primary" id="Send" style="height:35px;width:75px;border-radius:0px 3px 3px 0px;"><i class="fa fa-paper-plane-o" aria-hidden="true" style="margin-right:5px;"></i>Send</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="tabs-2E" style="z-index:1;">
+								<div id="tabs-2E1" class="row" style="padding:0px 10px;height:220px;">
+									<div class="row">
+										<div class="col-75">
+											<form>
+												<div class="row" style="padding-top:-5px;">
+													<div class="col-50">
+														<label for="Username"> API Connection</label>
+														<div class="input-group mb-3" style="height:40px;width:540px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-link" aria-hidden="true"></i></i></span>
+															</div>
+															<input type="password" id="tunel" placeholder="TUNEL" style="width:91%;">
+														</div>
+														<div class="row" style="margin-top:10px;">
+															<div class="col-50">
+																<div class="input-group mb-3" style="height:40px;width:540x;">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+																	</div>
+																	<input type="password" id="username" placeholder="CLIENT" style="width:91%">
 																</div>
-																<input type="password" id="username" placeholder="CLIENT" style="width:91%">
 															</div>
 														</div>
-													</div>
-													<div class="row" style="margin-top:10px;">
-														<div class="col-50">
-															<div class="input-group mb-3" style="height:40px;width:540x;">
-																<div class="input-group-prepend">
-																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
+														<div class="row" style="margin-top:10px;">
+															<div class="col-50">
+																<div class="input-group mb-3" style="height:40px;width:540x;">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-key" aria-hidden="true"></i></i></span>
+																	</div>
+																	<input type="password" id="password" placeholder="SECRET" style="width:91%;">
 																</div>
-																<input type="password" id="password" placeholder="SECRET" style="width:91%;">
 															</div>
 														</div>
-													</div>
-													<div class="row" style="margin-top:10px;">
-														<div class="col-50">
-															<div class="input-group mb-3" style="height:40px;width:480px">
-																<div class="input-group-prepend">
-																	<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-server" aria-hidden="true"></i></i></span>
+														<div class="row" style="margin-top:10px;">
+															<div class="col-50">
+																<div class="input-group mb-3" style="height:40px;width:480px">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text" style="height:25px;width:17px;"><i class="fa fa-server" aria-hidden="true"></i></i></span>
+																	</div>
+																	<input type="password" id="domain" placeholder="MKAUTH-IP/DOMAIN" style="width:280px;">
+																	<div class="input-group-append">
+																		<div class="form-group">
+																			<select class="form-control" style="height:40px;width:100px" id="iServer">
+																				<option value="tunel">TUNEL DEV</option>
+																				<option value="domain">DOMAIN SSL</option>
+																			</select>
+																		</div>
+																	</div>
 																</div>
-																<input type="password" id="domain" placeholder="MKAUTH-IP/DOMAIN" style="width:280px;">
-																<div class="input-group-append">
-																	<div class="form-group">
-																		<select class="form-control" style="height:40px;width:100px" id="iServer">
-																			<option value="tunel">TUNEL DEV</option>
-																			<option value="domain">DOMAIN SSL</option>
-																		</select>
+															</div>
+															<div class="col-15" style="margin-left:-60px;">
+																<label for="Server">Delay</label>
+																<div class="input-group mb-3" style="height:40px;width:120px;margin-top:-20px;">
+																	<form>
+																		<input type="range" id="inject" name="amountRange" min="0" max="10" value="0" oninput="this.form.amountInput.value=this.value" style="width:80px;" />
+																		<input type="number" id="ranger" name="amountInput" min="0" max="10" value="0" oninput="this.form.amountRange.value=this.value" style="width:30px;border:none;padding:0px;color:#0f90dc;" disabled>
+																	</form>
+																</div>
+															</div>
+														</div>
+														<div style="width:100%;height:35px;padding:0px;position:absolute;float:right:">
+															<div style="width:100%;height:35px;padding:0px;margin=left:20px;">
+																<div class="row" style="margin-top:-22px;padding-left:20px;z-index:9999999;float:right;width:150px;">
+																	<label><b style="margin-top:-20px;position:absolute;margin-left:5px;">MkAuth Link</b></label>
+																	<div class="col-20" style="padding-left:12px;margin-top:-5px;">
+																		<label class="switch switch-green">
+																			<input type="checkbox" class="switch-input" id="module">
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-15" style="margin-left:-60px;">
-															<label for="Server">Delay</label>
-															<div class="input-group mb-3" style="height:40px;width:120px;margin-top:-20px;">
-																<form>
-																	<input type="range" id="inject" name="amountRange" min="0" max="10" value="0" oninput="this.form.amountInput.value=this.value" style="width:80px;" />
-																	<input type="number" id="ranger" name="amountInput" min="0" max="10" value="0" oninput="this.form.amountRange.value=this.value" style="width:30px;border:none;padding:0px;color:#0f90dc;" disabled>
-																</form>
-															</div>
-														</div>
 													</div>
-													<div style="width:100%;height:35px;padding:0px;position:absolute;float:right:">
-														<div style="width:100%;height:35px;padding:0px;margin=left:20px;">
-															<div class="row" style="margin-top:-22px;padding-left:20px;z-index:9999999;float:right;width:150px;">
-																<label><b style="margin-top:-20px;position:absolute;margin-left:5px;">MkAuth Link</b></label>
-																<div class="col-20" style="padding-left:12px;margin-top:-5px;">
-																	<label class="switch switch-green">
-																		<input type="checkbox" class="switch-input" id="module">
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
+													<div class="col-75" style="height:160px;width:90px;position:absolute;right:10px;margin-top:7px;">
+														<div class="row">
+															<div class="col-75">
+																<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																	<div class="col-20">
+																		<label class="switch">
+																			<input type="checkbox" class="switch-input" id="bar"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Bar</b>
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
+																	</div>
+																</div>
+															</div>
+															<div class="col-75">
+																<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																	<div class="col-20">
+																		<label class="switch">
+																			<input type="checkbox" class="switch-input" id="pix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Pix</b>
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
+																	</div>
+																</div>
+															</div>
+															<div class="col-75">
+																<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																	<div class="col-20">
+																		<label class="switch">
+																			<input type="checkbox" class="switch-input" id="qrpix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QR</b>
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
+																	</div>
+																</div>
+															</div>
+															<div class="col-75">
+																<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																	<div class="col-20">
+																		<label class="switch">
+																			<input type="checkbox" class="switch-input" id="qrlink"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QRL</b>
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
+																	</div>
+																</div>
+															</div>
+															<div class="col-75">
+																<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
+																	<div class="col-20">
+																		<label class="switch">
+																			<input type="checkbox" class="switch-input" id="pdf"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">PDF</b>
+																			<span class="switch-label" data-on="On" data-off="Off"></span>
+																			<span class="switch-handle"></span>
+																		</label>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-												<div class="col-75" style="height:160px;width:90px;position:absolute;right:10px;margin-top:7px;">
-													<div class="row">
-														<div class="col-75">
-															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label class="switch">
-																		<input type="checkbox" class="switch-input" id="bar"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Bar</b>
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div id="tabs-2E2" class="row Under" style="padding:0px 10px;height:220px;">
+                                                                    <div id="inLoad"></div>
+									<div class="row">
+										<div class="col-75">
+											<div class="row" style="padding:0px 10px;height:220px;">
+												<div style="width:100%;height:100px;">
+													<div class="Msg-floating MSG_Box" id="MSG_Box_001" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box before" placeholder="" id="MSG_001" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_001" id="Placeholder_001" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_001" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_002" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box day" placeholder="" id="MSG_002" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_002" id="Placeholder_002" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_002" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_003" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box later" placeholder="" id="MSG_003" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_003" id="Placeholder_003" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_003" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_004" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box Pay" placeholder="" id="MSG_004" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_004" id="Placeholder_004" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_004" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_005" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box Lock" placeholder="" id="MSG_005" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_005" id="Placeholder_005" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_005" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_006" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box Unlock" placeholder="" id="MSG_006" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_006" id="Placeholder_006" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_006" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+													<div class="Msg-floating MSG_Box" id="MSG_Box_007" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box Maintenance" placeholder="" id="MSG_007" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_007" id="Placeholder_007" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_007" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+
+													<div class="Msg-floating MSG_Box" id="MSG_Box_008" style="width:100%;height:100px;">
+														<textarea class="Msg-control MSG_Box Unistall" placeholder="" id="MSG_008" style="width:100%;resize: none;height:100%;border-radius:5px;padding:20px;border-color:#0f90dc;background:#FFF;"></textarea>
+														<label for="Messages_008" id="Placeholder_008" class="MSG_Box">Message</label>
+														<i class="fa fa-times" id="Clear_008" aria-hidden="true" style="position:absolute;right:10px;top:10px;cursor:pointer;display:none;"></i>
+													</div>
+
+												</div>
+												<div style="width:100%;height:45px;">
+													<div class="col-20">
+														<div style="width:100%;padding:0px;margin-top:-10px;">
+															<fieldset>
+																<div style="width:100%;height:40px;padding-top:5px;margin-left:-5px;float:left">
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="sunday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Sun</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+
+																	<div style="display: inline-block;">
+																		<div style="width:60px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="monday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Mon</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="tuesday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Tue</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="wednesday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Wed</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="thursday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Thu</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="friday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Fri</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch">
+																				<input type="checkbox" class="switch-input" id="saturday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Sat</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
 																</div>
+																<div style="width:194px;height:40px;padding-top:5px;margin-top:-45px;margin-right:-10px;float:right;">
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch switch-green">
+																				<input type="checkbox" class="switch-input" id="morning"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Morn</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch switch-green">
+																				<input type="checkbox" class="switch-input" id="afternoon"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">After</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																	<div style="display: inline-block;">
+																		<div style="width:60px;margin-top:-36px;">
+																			<label class="switch switch-green">
+																				<input type="checkbox" class="switch-input" id="night"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:30px;">Night</b>
+																				<span class="switch-label" data-on="On" data-off="Off"></span>
+																				<span class="switch-handle"></span>
+																			</label>
+																		</div>
+																	</div>
+																</div>
+															</fieldset>
+														</div>
+													</div>
+												</div>
+												<div style="width:100%;height:35px;padding:0px;">
+													<div class="row" style="margin-top:5px;margin-bottom:-10px;padding-left:20px;z-index:9999999;float:left;">
+														<div class="col-20">
+															<label class="switch switch-green">
+																<input type="checkbox" class="switch-input" id="AutoBot" disabled><b style="margin-top:5px;position:absolute;margin-left:10px;width:200px;">Auto Messages</b>
+																<span class="switch-label" data-on="On" data-off="Off"></span>
+																<span class="switch-handle"></span>
+															</label>
+														</div>
+													</div>
+													<div class="input-group mb-3" style="height:40px;width:415px;float:right;margin-left:15px;margin-top:-5px;padding:0px;">
+														<div class="input-group mb-3" style="height:45px;width:235px;margin-right:5px;margin-top:7px;">
+															<div class="input-group-prepend">
+																<span class="input-group-text" style="height:26px;width:17px;"><i class="fa fa-comments" aria-hidden="true"></i></span>
+															</div>
+															<div class="input-group-append">
+																<div class="form-group">
+																	<select class="form-control" style="height:40px;width:150px;border-radius:0px;" id="Turno">
+																		<option value="before">&#xf053; &nbsp; Days Before</option>
+																		<option value="day">&#xf00c; &nbsp; In Day</option>
+																		<option value="later">&#xf054; &nbsp; Days Later</option>
+																		<option value="Pay">&#xf155; &nbsp; Payment Received</option>
+																		<option value="Lock">&#xf023; &nbsp; Locked User</option>
+																		<option value="Unlock">&#xf09c;  &nbsp; Unlocked User</option>
+																		<option value="Maintenance">&#xf085; &nbsp; Maintenance</option>
+                                                                                                                                                <option value="Unistall">&#xf05e; &nbsp; Unistall Device</option>
+																	</select>
+																</div>
+																<button type="button" class="btn btn-primary" id="Scheduler" style="height:40px;width:40px;border-radius:0px 5px 5px 0px;padding:0px;margin-top:0px;color:#FFF;"><i class="fa fa-calendar-check-o" aria-hidden="true" style="margin-right:5px;"></i></button>
 															</div>
 														</div>
-														<div class="col-75">
-															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label class="switch">
-																		<input type="checkbox" class="switch-input" id="pix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">Pix</b>
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
-																</div>
-															</div>
+														<div class="input-group-prepend">
+															<button type="button" class="btn btn-primary" id="Zero" style="height:35px;width:75px;margin-right:5px;border-radius:5px 0px 0px 5px;"><i class="fa fa-eraser" aria-hidden="true" style="margin-right:5px;"></i>Clear</button>
 														</div>
-														<div class="col-75">
-															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label class="switch">
-																		<input type="checkbox" class="switch-input" id="qrpix"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QR</b>
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
-																</div>
-															</div>
-														</div>
-														<div class="col-75">
-															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label class="switch">
-																		<input type="checkbox" class="switch-input" id="qrlink"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">QRL</b>
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
-																</div>
-															</div>
-														</div>
-														<div class="col-75">
-															<div class="row" style="margin-top:7px;margin-bottom:-13px;padding-left:20px;z-index:9999999;">
-																<div class="col-20">
-																	<label class="switch">
-																		<input type="checkbox" class="switch-input" id="pdf"><b style="margin-top:5px;position:absolute;margin-left:10px;width:50px;">PDF</b>
-																		<span class="switch-label" data-on="On" data-off="Off"></span>
-																		<span class="switch-handle"></span>
-																	</label>
-																</div>
-															</div>
-														</div>
+														<button type="button" class="btn btn-primary" id="InSave" style="height:35px;width:75px;border-radius:0px 5px 5px 0px;"><i class="fa fa-floppy-o" aria-hidden="true" style="margin-right:5px;"></i>Save</button>
 													</div>
 												</div>
 											</div>
-										</form>
+										</div>
+									</div>
+								</div>
+								<div id="tabs-2E3" class="row Under" style="padding:0px 10px;height:220px;">
+									<div id="isTable">
+										<div class="isWait">Waiting Select Options...</div>
+									</div>
+									<div id="MkSend">
+                                                                          <div class="loader"></div>
+                                                                        </div>
+
+									<div class="table-responsive table-hover" style="float: left; width: 100%;">
+										<table class="table">
+											<thead>
+												<tr>
+													<th class="tbajust">TITLE</th>
+													<th>USER</th>
+													<th class="tbreward">REWARD</th>
+													<th class="">PUSH</th>
+													<th class="tbajust">PAYMENT</th>
+													<th class="tbajust">STATUS</th>
+												</tr>
+											</thead>
+											<tbody class="tbody-scroll onClick" id="HASHTABLE">
+												<tr class="Home">
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-							<div id="tabs-2E2" class="row Under" style="padding:0px 10px;height:220px;">
-								<div class="col-75"> under construction 2 </div>
-							</div>
-							<div id="tabs-2E3" class="row Under" style="padding:0px 10px;height:220px;">
-								<div id="isTable">
-									<div class="isWait">Waiting Select Options...</div>
-								</div>
-								<div class="table-responsive table-hover" style="float: left; width: 100%;">
-									<table class="table">
-										<thead>
-											<tr>
-												<th class="tbajust">TITLE</th>
-												<th>USER</th>
-												<th class="tbreward">REWARD</th>
-												<th class="">PUSH</th>
-												<th class="tbajust">PAYMENT</th>
-												<th class="tbajust">STATUS</th>
-											</tr>
-										</thead>
-										<tbody class="tbody-scroll onClick" id="HASHTABLE">
-											<tr class="Home">
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
 						</div>
-					</div>
-					<ul>
-						<li><a href="#tabs-2A">Options</a></li>
-						<li><a href="#tabs-2B">Extras</a></li>
-						<li><a href="#tabs-2C">Hotkeys</a></li>
-						<li><a href="#tabs-2D">Run</a></li>
-						<li><a href="#tabs-2E">API</a></li>
-						<ul id="Control">
-
-
-
-<div id="isControls">
-<li class="Transparent">
-<select class="form-control Transparent" id="isMonth" style="width:45px;">
-<option value="01">01</option>
-<option value="02">02</option>
-<option value="03">03</option>
-<option value="04">04</option>
-<option value="05">05</option>
-<option value="06">06</option>
-<option value="07">07</option>
-<option value="08">08</option>
-<option value="09">09</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select>
-</li>
-
-
-<li class="Transparent" style="margin-right:10px;">
-<select class="form-control Transparent" id="isSearch">
-<option value="all">ALL</option>
-<option value="pago">PAID</option>
-<option value="vencido">DUE</option>
-<option value="aberto">OPEN</option>
-</select>
-</li>
-
-<li><button class="btn btn-light Next" type="button" id="003"><i class="fa fa-retweet" aria-hidden="true"></i></button></li>
-</div>
-
-							<li><button class="btn btn-light Next" type="button" id="001"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button></li>
-							<li><button class="btn btn-light Next" type="button" id="002"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button></li>
+						<ul>
+							<li><a href="#tabs-2A">Options</a></li>
+							<li><a href="#tabs-2B">Extras</a></li>
+							<li><a href="#tabs-2C">Hotkeys</a></li>
+							<li><a href="#tabs-2D">Run</a></li>
+							<li><a href="#tabs-2E">API</a></li>
+							<ul id="Control">
+								<div id="isControls">
+									<li class="Transparent">
+										<select class="form-control Transparent" id="isMonth" style="width:45px;">
+											<option value="01">01</option>
+											<option value="02">02</option>
+											<option value="03">03</option>
+											<option value="04">04</option>
+											<option value="05">05</option>
+											<option value="06">06</option>
+											<option value="07">07</option>
+											<option value="08">08</option>
+											<option value="09">09</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+										</select>
+									</li>
+									<li class="Transparent" style="margin-right:10px;">
+										<select class="form-control Transparent" id="isSearch">
+											<option value="all">ALL</option>
+											<option value="pago">PAID</option>
+											<option value="vencido">DUE</option>
+											<option value="aberto">OPEN</option>
+										</select>
+									</li>
+									<li><button class="btn btn-light Next" type="button" id="003"><i class="fa fa-retweet" aria-hidden="true"></i></button></li>
+								</div>
+								<li><button class="btn btn-light Next" type="button" id="001"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button></li>
+								<li><button class="btn btn-light Next" type="button" id="002"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button></li>
+							</ul>
 						</ul>
-					</ul>
+					</div>
 				</div>
-			</div>
-			<div id="tabs-6" style="z-index:1;">
-				<div class="row" style="height:100px;">
-					<div class="col-75" style="margin:-3px -10px -10px -10px;">
-						<div class="container">
-							<div class="row" style="padding-top:10px;height:245px;">
-								<div id="inTable">
-									<div class="inWait">Waiting for Authentication...</div>
-								</div>
-								<div class="table-responsive table-hover" style="float: left; width: 100%;">
-									<table class="table">
-										<thead>
-											<tr>
-												<th class="tbajust">ID</th>
-												<th>START</th>
-												<th>FINISH</th>
-												<th>TARGET</th>
-												<th class="tbajust">STATUS</th>
-											</tr>
-										</thead>
-										<tbody class="tbody-scroll" id="TABLE">
-											<tr class="Home">
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-												<td class="Home"></td>
-											</tr>
-										</tbody>
-									</table>
+				<div id="tabs-6" style="z-index:1;">
+					<div class="row" style="height:100px;">
+						<div class="col-75" style="margin:-3px -10px -10px -10px;">
+							<div class="container">
+								<div class="row" style="padding-top:10px;height:245px;">
+									<div id="inTable">
+										<div class="inWait">Waiting for Authentication...</div>
+									</div>
+									<div class="table-responsive table-hover" style="float: left; width: 100%;">
+										<table class="table">
+											<thead>
+												<tr>
+													<th class="tbajust">ID</th>
+													<th>START</th>
+													<th>FINISH</th>
+													<th>TARGET</th>
+													<th class="tbajust">STATUS</th>
+												</tr>
+											</thead>
+											<tbody class="tbody-scroll" id="TABLE">
+												<tr class="Home">
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+													<td class="Home"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div id="tabs-7" style="z-index:1;">
-				<div class="container" style="padding:0px;margin:-3px -10px -10px -10px;">
-					<div class="col-75">
-						<div style="width: 100%;height: 256px;border-radius:5px;max-height:256px;">
-                                                        <p style="padding-left:20px;color:#000;">Mwsm &#233; um projeto desenvolvido e mantido por voluntarios, sua principal fun&#231;&#227;o &#233; manipular notifica&#231;&#245;es via whatsapp integrado ao mkauth e/ou mikrotik.</p>
-                                                        <p style="padding-left:20px;color:#000;"><b>Distribui&#231;&#227;o e Utiliza&#231;&#227;o 100% gratuita.</b></p>
-                                                        <p style="padding-left:20px;color:#000;">Contribua com ideias e/ou Sugest&#245;es:</b></i><br><a href="https://github.com/MKCodec/Mwsm/discussions" target="_blank" style="color:blue;">https://github.com/MKCodec/Mwsm/discussions</a></p>
-                                                        <p style="padding-left:20px;color:#000;">Ajude a manter o projeto vivo:</p>&#10;&#10;							<p style="padding-left:20px;color:#000;">
-							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Chave Aleatoria:</div>
-							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;z-index:2;">
-								<input type="password" id="PixKey" class="form-control" value="e9b9d669-4412-4dec-994c-310005904088" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
-								<div class="input-group-append" style="margin:0px;padding:0px;">
-									<button class="btn btn-light Copy" type="button" id="ButtonKey"><i class="fa fa-clone PixKey" aria-hidden="true"></i></button>
+				<div id="tabs-7" style="z-index:1;">
+					<div class="container" style="padding:0px;margin:-3px -10px -10px -10px;">
+						<div class="col-75">
+							<div style="width: 100%;height: 256px;border-radius:5px;max-height:256px;">
+								<p style="padding-left:20px;color:#000;">Mwsm &#233; um projeto desenvolvido e mantido por voluntarios, sua principal fun&#231;&#227;o &#233; manipular notifica&#231;&#245;es via whatsapp integrado ao mkauth e/ou mikrotik.</p>
+								<p style="padding-left:20px;color:#000;"><b>Distribui&#231;&#227;o e Utiliza&#231;&#227;o 100% gratuita.</b></p>
+								<p style="padding-left:20px;color:#000;">Contribua com ideias e/ou Sugest&#245;es:</b></i><br><a href="https://github.com/MKCodec/Mwsm/discussions" target="_blank" style="color:blue;">https://github.com/MKCodec/Mwsm/discussions</a></p>
+								<p style="padding-left:20px;color:#000;">Ajude a manter o projeto vivo:</p>&#10;&#10; <p style="padding-left:20px;color:#000;">
+								<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Chave Aleatoria:</div>
+								<div class="input-group" style="margin-left:10px;width:310px;padding:0px;z-index:2;">
+									<input type="password" id="PixKey" class="form-control" value="e9b9d669-4412-4dec-994c-310005904088" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+									<div class="input-group-append" style="margin:0px;padding:0px;">
+										<button class="btn btn-light Copy" type="button" id="ButtonKey"><i class="fa fa-clone PixKey" aria-hidden="true"></i></button>
+									</div>
 								</div>
-							</div>
-							</p>
-							<p style="padding-left:20px;color:#000;">
-							<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Copia & Cola:</div>
-							<div class="input-group" style="margin-left:10px;width:310px;padding:0px;">
-								<input type="password" id="PixCode" type="password" class="form-control" value="00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
-								<div class="input-group-append" style="margin:0px;padding:0px;">
-									<button class="btn btn-light Copy" type="button" id="ButtonCode"><i class="fa fa-clone PixCode" aria-hidden="true"></i></button>
+								</p>
+								<p style="padding-left:20px;color:#000;">
+								<div style="margin-bottom:-0px;margin-left:20px;font-weight: normal;font-size:11px;">Copia & Cola:</div>
+								<div class="input-group" style="margin-left:10px;width:310px;padding:0px;">
+									<input type="password" id="PixCode" type="password" class="form-control" value="00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854" style="height:25px;border-color: inherit;-webkit-box-shadow: none;box-shadow: none;border:none;border-bottom:1px solid #ddd;border-radius:0px;" disabled>
+									<div class="input-group-append" style="margin:0px;padding:0px;">
+										<button class="btn btn-light Copy" type="button" id="ButtonCode"><i class="fa fa-clone PixCode" aria-hidden="true"></i></button>
+									</div>
 								</div>
+								</p>
 							</div>
-							</p>
+						</div>
+						<div class="col-25" style="position: absolute;top:100px;left:430px;">
+							<div class="row">
+								<img src="" alt="QR Code" id="donation" style="max-width:200px;max-height:200px;width: auto;height: auto;">
+							</div>
 						</div>
 					</div>
-					<div class="col-25" style="position: absolute;top:100px;left:430px;">
-						<div class="row">
-							<img src="" alt="QR Code" id="donation" style="max-width:200px;max-height:200px;width: auto;height: auto;">
+				</div>
+			</div>
+			<div id="tabs-8" style="margin:10px;width:696px;height:326;color:#222;">
+				<div class="row">
+					<div class="col-50">
+						<div class="container"> MkAuth > Options > Server<BR><BR>APP : <i>PlaySMS POST</i><BR>SERVER : <i class="host"></i><BR>USER : <i>admin</i><BR>PASS : <i>*****</i><BR>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="tabs-8" style="margin:10px;width:696px;height:326;color:#222;">
-			<div class="row">
-				<div class="col-50">
-					<div class="container"> MkAuth > Options > Server<BR><BR>APP : <i>PlaySMS POST</i><BR>SERVER : <i class="host"></i><BR>USER : <i>admin</i><BR>PASS : <i>*****</i><BR>
+		<div class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="close" style="margin-top:-10px;">&times;</span>
+					<h3>
+						<h3>
+				</div>
+				<div class="modal-body">
+					<div style="display: inline-block;">
+						<div style="width:60px;margin-top:-36px;">
+							<label class="switch">
+								<input type="checkbox" class="switch-input" id="bfive"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-left" aria-hidden="true"></i> 5</b>
+										<span class="switch-label" data-on="On" data-off="Off"></span>
+										<span class="switch-handle"></span>
+							</label>
+						</div>
 					</div>
+					<div style="display: inline-block;">
+						<div style="width:60px;margin-top:-36px;">
+							<label class="switch switch-green">
+								<input type="checkbox" class="switch-input" id="inday"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-check" aria-hidden="true"></i> 0</b>
+								<span class="switch-label" data-on="On" data-off="Off"></span>
+								<span class="switch-handle"></span>
+							</label>
+						</div>
+					</div>
+					<div style="display: inline-block;">
+						<div style="width:60px;margin-top:-36px;">
+							<label class="switch">
+								<input type="checkbox" class="switch-input" id="lfive"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 5</b>
+								<span class="switch-label" data-on="On" data-off="Off"></span>
+								<span class="switch-handle"></span>
+							</label>
+						</div>
+					</div>
+					<div style="display: inline-block;">
+						<div style="width:60px;margin-top:-36px;">
+							<label class="switch">
+								<input type="checkbox" class="switch-input" id="lten"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 10</b>
+								<span class="switch-label" data-on="On" data-off="Off"></span>
+								<span class="switch-handle"></span>
+							</label>
+						</div>
+					</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="lfifteen"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 15</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+
+					<div style="margin-top:10px;">
+
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="ltwenty"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 20</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="ltwentyfive"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 25</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="lthirty"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 30</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="lthirtyfive"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 35</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch">
+									<input type="checkbox" class="switch-input" id="lforty"><b style="margin-top:-20px;position:absolute;margin-left:-40px;width:35px;"><i class="fa fa-chevron-right" aria-hidden="true"></i> 40</b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div style="margin-top:15px;">
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch switch-green">
+									<input type="checkbox" class="switch-input" id="OnPay"><b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;"><i class="fa fa-usd" aria-hidden="true"></i></b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch switch-green">
+									<input type="checkbox" class="switch-input" id="OnLock"><b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;"><i class="fa fa-lock" aria-hidden="true"></i></b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch switch-green">
+									<input type="checkbox" class="switch-input" id="OnUnlock"><b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;"><i class="fa fa-unlock" aria-hidden="true"></i></b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch switch-green">
+									<input type="checkbox" class="switch-input" id="OnMaintenance"><b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;"><i class="fa fa-cogs" aria-hidden="true"></i></b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+
+						<div style="display: inline-block;">
+							<div style="width:60px;margin-top:-36px;">
+								<label class="switch switch-green">
+									<input type="checkbox" class="switch-input" id="OnUnistall"><b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;"><i class="fa fa-ban" aria-hidden="true"></i></b>
+									<span class="switch-label" data-on="On" data-off="Off"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
-		</div>
 		</div>
 	</body>
 	
