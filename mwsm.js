@@ -1639,6 +1639,7 @@ app.post('/link_mkauth', async (req, res) => {
 			return false;
 		});
 		ConnAuth = false;
+		ResAuth = false;
 		if (Authentication) {
 			ConnAuth = true;
 			const MkSync = await axios.get('https://' + iServer + '/api/titulo/listar/limite=1&pagina=1', {
@@ -1650,7 +1651,6 @@ app.post('/link_mkauth', async (req, res) => {
 			}).catch(err => {
 				return false;
 			});
-			ResAuth = false;
 			if ((MkSync.error == undefined)) {
 				ResAuth = true;
 				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?, client_link=?", [User, Pass, Domain, Tunel, Module, Server], (err) => {
