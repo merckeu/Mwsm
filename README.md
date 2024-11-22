@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [31/07/2024 11:13]
+# MkAuth WhatsApp Send Message [21/11/2024 22:57]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -46,6 +46,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
+|  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
 
 **OBS:** As notificações Podem ser lançadas na Tela 3 do menu API ( Agendamneto de disparos Automaticos ainda não esta disponivel ).
 
