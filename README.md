@@ -1,4 +1,4 @@
-# MkAuth WhatsApp Send Message [21/11/2024 22:57]
+# MkAuth WhatsApp Send Message [17/12/2024 22:00]
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
@@ -47,8 +47,10 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
+|  2.0.37    | Auto Mensagens + Notificação de Pagamento + Limpeza de Logs  | 17/12/2024 22:00 ✅   |                        |
 
-**OBS:** As notificações Podem ser lançadas na Tela 3 do menu API ( Agendamneto de disparos Automaticos ainda não esta disponivel ).
+
+**OBS:** As notificações Podem ser lançadas na Tela 3 do menu API.
 
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
@@ -268,17 +270,52 @@ Token:SENHA
 <b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
 > **Senha :** Insira o `Token Fixo` de Acesso ao Aplicativo no Campo Senha no MkAuth 
 <details>
-<summary>MkAuth até Versão 24.02</summary>
+<summary>Gerenciamento Pelo MkAUth</summary>
+ 
+> MkAuth até Versão 24.02
+> 
 ** `Opções > Servidor de SMS > Servidor`
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/mkauth.png)](#)
-</details>
 
-<details>
-<summary>MkAuth Versão 24.03 ou Superior</summary>
+> MkAuth Versão 24.03 ou Superior
+> 
 ** `Opções > Servidor de WhatsApp > Servidor`
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/whatsapp.png)](#)
+</details>
+
+<details>
+<summary>Gerenciamento Pela API</summary>
+
+ ** `Settings > API > Tela 2`
+ 
+<b>OBS:</b> Nessa tela vc irá configurar a forma como a API irá disparar as Mensagens de cobranças e notificações de pagamentos
+ 
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/autobot.png)](#)
+
+| Nome            |  Função                                                         |
+| --------------  |   --------------------------------------------------------------|
+| `Sun` a `Sat`   | Dias permitidos para Disparo das Mensagens. ( Domingo a Sabado )          |
+| `Morn` a `Night`| Turnos Permitos Para Disparos das Mensagens. ( manha, tarde, noite )  |
+| `Morn` a `Night`| Turnos Permitos Para Disparos das Mensagens. ( manha, tarde, noite )  |
+| `Auto Messages` | Habilita a API como Gerente de Disparos                                   |
+| `Agenda` | Intervalo de Cobrança entre 5 dias antes até 40 dias do vencimento                                   |
+
+<b>OBS:</b> Ao Habilitar a opção `Auto Messages` a aplicação vai para de responder requisições vindas do MkAuth mesmo estando configuradas
+
+> Por Padrão as mensagens são enviadas dentro de um Range entre 8:00 e 22:00 respeitando os parametros ( Dias e Turnos) Permitidos, para alterar esse intervalo Habilite a Opção `Shift` em `Settings > Extras` e configure seu Proprio Intervalo
+
+> As notificações de pagamentos não seguem a mesma regra das mensagens de cobrança e podem ser enviadas entre 03:00 e 23:00, vai depende da hora que o cliente fez o pagamento pois o monitoramente é feito minuto a minuto, por padrão o monitoramento é feito em cima das cobranças ja enviadas pela API, para ter um monitoramento mais efetivo é possivel ampliar carregando todos os titulos do mês vigente na memoria da API Habilitando a Opção `Sync` em `Settings > Extras`.
+
+> Por Padrão a montagem da fila de agendamento é construida diariamente entre 00:00 e 02:59.
+
+
+ <b>OBS:</b> Como medida de proteção adicional a fim de evitar bloqueios por spam aplicados pelo Whatsapp, Disponibilizamos a opção `Anti-Spam` em `Settings > Extras` onde vc pode habilitar um sistema de variação de mensagens com seleções ordenadas ou aleatorias e uma vez que a opção for habilitada sera possivel configurar as variações em `Settings > API > tela 2`
+ 
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/spam.png)](#)
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/spam2.png)](#)
+
 </details>
 
 
@@ -327,6 +364,14 @@ Token:SENHA
 > ```sh
 > /tool fetch "http://192.168.3.250:8000/mikrotik/1234567/5511988888888/Mensagem%20de%20Teste"
 > ```
+
+### Como Limpar o Log De Mensagem
+> Para Limpar o Log de Mensagens Registradas no API siga os Passos Abaixo:
+> 
+> `Settings > Extras > Eraser` e Clique em Reset
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/reset.png)](#)
+
+
 
 ### Testando
 <b>1 - </b>Envie uma mensagem pelo Sumulador `settings > Options > Run` ou MkAuth `Opções > Servidor de SMS > Mensagens`
