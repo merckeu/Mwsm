@@ -47,7 +47,7 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
-|  2.0.37    | Auto Mensagens + Notificação de Pagamento + Limpeza de Logs  | 17/12/2024 22:00 ✅   |                        |
+|  2.0.37    | Gerenciamento de Mensagens Direto na API  | 17/12/2024 22:00 ✅   |                        |
 
 
 **OBS:** As notificações Podem ser lançadas na Tela 3 do menu API.
