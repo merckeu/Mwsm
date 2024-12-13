@@ -2,6 +2,8 @@
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
+# LANÇAMENTO DIA 17 as 22:00
+
  > ### Mantenha sua aplicação sempre atualizada ###
 <details>
 <summary>Upgrade v1 => v2</summary>
