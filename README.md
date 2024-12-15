@@ -44,6 +44,17 @@ cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~
 >
 No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
 
+# IMPORTANTE!
+> Será Necessario Atualizar a API do MkAuth Para Utilizar o Mwsm
+> 
+> Acesse seu MkAuth via Putty e insira o Codigo Abaixo no Prompt de Comando.
+> 
+> OBS: Sempre que o Mkauth for atualizado deve-se repetir esse Procedimento.
+```sh
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
+```
+
 ### Novidades V2.0.33++
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
