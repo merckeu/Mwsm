@@ -264,8 +264,10 @@ Token:SENHA
 
 <details>
 <summary>Gerenciamento Pelo MkAUth</summary>
+ <br>
  
  <b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+ 
 > **Senha :** Insira o `Token Fixo` de Acesso ao Aplicativo no Campo Senha no MkAuth
 <br>
 
@@ -284,7 +286,8 @@ Token:SENHA
 
 <details>
 <summary>Gerenciamento Pela API</summary>
-
+<br>
+ 
  ** `Settings > API > Tela 2`
 
 > O Sistema de Agendamento será carregado sempre das 00:00 até 2:59 e os disparos de cobranças será feito conforme configurados na API ( Hora, Dia, Turno ) .
@@ -351,7 +354,6 @@ Token:SENHA
 | `7:00 > 10:00`| Hora Base para inicio da lista de Agendamento  |
 | `20:00 > 22:00`| Hora Base para fim da lista de Agendamento        |
 </details>
-
 
 
 # UTILIZAÇÃO
