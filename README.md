@@ -10,7 +10,7 @@
 |  2.0.37    | Notificações Automaticas + Log Cleaner | 17/12/2024 22:00 ✅   |                        |
 
 # SOBRE
-* O Mwsm é uma API que integra um sistema de notificações automatizadas por whatsapp integrado ao MkAuth.,
+* O Mwsm é uma API que integra um sistema de notificações automatizadas por whatsapp ao MkAuth.,
 
 # COMPATIBILIDADE
 |                 | BAR | PIX | QR | QRL | PDF  |
