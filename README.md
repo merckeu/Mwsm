@@ -1,110 +1,18 @@
-# MkAuth WhatsApp Send Message [17/12/2024 22:00]
+# MkAuth WhatsApp Send Message
 
 ![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
 
-# LANÇAMENTO DIA 17 as 22:00
-
- > ### Mantenha sua aplicação sempre atualizada ###
-<details>
-<summary>Upgrade v1 => v2</summary>
- <br> 
-<details>
-<summary>ProxMox</summary>
-  
-```sh
-sudo apt-get install build-essential && cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
-```
-
-</details>
-<details>
-<summary>MkAuth</summary>
-  
-```sh
-cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || apt-get remove nodejs -y && rm -vrf ~/.pm2/node_modules /var/api/Mwsm && apt-get install -y ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils git curl build-essential && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs && cd ~ && mkdir -p /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm  && cd /var/api/Mwsm && npm i git+https://github.com/MKCodec/WhatsApp-API && npm install github:MKCodec/WhatsApp-API && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
-```
-</details>
-<br>
-</details>
-<details>
-<summary>Update v2 => v2 Beta++</summary>
- 
-> ### Após rodar o comando reconfigure as opções no menu settings ###
-
-```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
-
-```
-
-</details>
-
- > ### ERROS ###
-> Em Caso de Erros Habilite o Debbuger e Siga as Dicas do Guia de Utilização `Debugger` no Final da Pagina
->
-> ** `Mwsm > Settings > Extras > Debugger`
->
-No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
-
-# IMPORTANTE!
-> Será Necessario Atualizar a API do MkAuth Para Utilizar o Mwsm
-> 
-> Acesse seu MkAuth via Putty e insira o Codigo Abaixo no Prompt de Comando.
-> 
-```sh
-wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api
-wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
-```
-**OBS:** Sempre que o Mkauth for atualizado deve-se repetir esse Procedimento.
-
-### Novidades V2.0.33++
+# BUILD: 2.0.37 / UPDATE: 17/12/2024 22:00
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
-|  2.0.37    | Gerenciamento de Mensagens Direto na API  | 17/12/2024 22:00 ✅   |                        |
+|  2.0.37    | Notificações Automaticas + Log Cleaner | 17/12/2024 22:00 ✅   |                        |
 
+# SOBRE
+* O Mwsm é uma API que integra um sistema de noticiações automatizadas por whatsapp integrado ao MkAuth.,
 
-**OBS:** As notificações Podem ser lançadas na Tela 3 do menu API.
-
-> **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
->
-> **Patch :** Utilize quando a sua versão instalada for igual ao do Release
-
-### Atualização:
-
-<details>
-<summary>Manual</summary>
-<b>1 - </b>Insira um dos codigos no prompt de comando onde o mwsm esta instalado. 
- 
-> Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
-
-Update
-```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
-
-```
-
-Patch
-```sh
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
-wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
-cd ~ && cd /var/api/Mwsm && pm2 log 0
-```
-
-</details>
-
-<details>
-<summary>Automática</summary>
-
-<b>1 - </b>Habilite a função no webadmin do mwsm. 
-> as atualizações serão instaladas entre 00:00 e 05:00 am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual
-
-** `Extras > Update`
-
-</details>
-
-### Compatibilidade [ MkAuth API ]
+# COMPATIBILIDADE
 |                 | BAR | PIX | QR | QRL | PDF  |
 | --------------------  | --- | --- | -- | --- | ---- |
 |  Gerencianet     | ✅ | ✅  | ✅ | ✅ | ✅  | 
@@ -112,17 +20,16 @@ cd ~ && cd /var/api/Mwsm && pm2 log 0
 |  Galaxpay     | ✅ | ✅  | ✅ | ✅ | ✅  | 
 |  Santander     | ✅ | ❌  | ❌ | ❌ | ✅  | 
 
-OBS: Compatibilidade Relatada por Usuarios Podendo Funcionar em Bancos/Gateways Ausentes Dessa Lista
+ > **OBS:** Compatibilidade Relatada por Usuarios Podendo Funcionar em Bancos/Gateways Ausentes Dessa Lista
 
-### Funcionalidade:
-* Enviar mensagens de texto e/ou anexos via whatsapp para clientes cadastrados no mkauth
-
-### Requisitos :
+# REQUISITOS
 * Servidor Linux ( Container ubuntu ) Proxmox ou Mkauth
 
-### Instalação :
+# INSTALAÇÃO
+
 <details>
 <summary>Proxmox</summary>
+<br> 
   <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
 <br><br>
   
@@ -152,12 +59,11 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```sh
 npm install --silent && npm run start:mwsm
 ```
-
 </details>
 
 <details>
 <summary>Mkauth</summary>
-<br><br>
+<br>
   
 <b>1 - </b>Atualize seu sistema
 ```sh
@@ -198,8 +104,79 @@ sudo npm run start:mwsm
 
 </details>
 
+# REINSTALAÇÃO
+<details>
+<summary>ProxMox</summary>
+  
+```sh
+sudo apt-get install build-essential && cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && npm remove pm2 -g && mkdir -p ~/.pm2/node_modules/ && cd ~ && rm -r /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+```
 
-### Configuração :
+</details>
+<details>
+<summary>MkAuth</summary>
+  
+```sh
+cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || apt-get remove nodejs -y && rm -vrf ~/.pm2/node_modules /var/api/Mwsm && apt-get install -y ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils git curl build-essential && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs && cd ~ && mkdir -p /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm  && cd /var/api/Mwsm && npm i git+https://github.com/MKCodec/WhatsApp-API && npm install github:MKCodec/WhatsApp-API && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+```
+</details>
+</details>
+
+# ATUALIZAÇÃO
+<details>
+<summary>Manual</summary>
+ <br>
+
+  * Insira um dos codigos no prompt de comando onde o mwsm esta instalado.
+   
+ 
+> **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
+>
+> **Patch :** Utilize quando a sua versão instalada for igual ao do Release
+<br>
+
+> Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
+
+**Update:**
+```sh
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
+
+```
+
+**Patch:**
+```sh
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
+wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
+cd ~ && cd /var/api/Mwsm && pm2 log 0
+```
+
+</details>
+
+<details>
+<summary>Automática</summary>
+<br>
+<b>1 - </b>Habilite a função no webadmin do mwsm. 
+
+ 
+ ** `Extras > Update`**
+
+ > as atualizações serão instaladas entre 00:00 e 05:00 am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual.
+</details>
+
+
+# CONFIGURAÇÃO
+> Será Necessario Atualizar a API do MkAuth Para Utilizar o Mwsm
+> 
+> Acesse seu MkAuth via Putty e insira o Codigo Abaixo no Prompt de Comando.
+> 
+```sh
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
+```
+**OBS:** Sempre que o Mkauth for atualizado deve-se repetir esse Procedimento.
+
 <details>
 <summary>Tutorial</summary>
 <br>
@@ -265,6 +242,8 @@ Token:SENHA
 | `CLIENT`  | Insira o Codigo encontrado em Client no passo 2 desse tutorial |
 | `SECRET`  | Insira o Codigo encontrado em Secret no passo 2 desse tutorial |
 | `DOMAIN`  | Insira o Dominio ou IP do seu mkauth                        |
+| `VERSION` | Alterne entre v1 ou v2 caso ocorra falhas no PDF do Boleto  |
+| `MODE`    | Escolha o tipo de conexão, Tunel MkAuth ou via Dominio      |
 
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/sync.png)](#)
 
@@ -279,20 +258,27 @@ Token:SENHA
 | `PDF`          | Envia Boleto em PDF                                             |
 
 <b>OBS:</b> Por padrão o delay ideal é 2s porem se sua API disparar de forma desordenada considere elevar esse valor.
+</details>
 
-<b>9 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
-> **Senha :** Insira o `Token Fixo` de Acesso ao Aplicativo no Campo Senha no MkAuth 
+# GERENCIAMENTO
+> Escolha qual vai ser seu gerenciador de mensagens, o Mkauth ou o Mwsm.
+<br>
+
 <details>
 <summary>Gerenciamento Pelo MkAUth</summary>
  
-> MkAuth até Versão 24.02
-> 
-** `Opções > Servidor de SMS > Servidor`
+ <b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
+> **Senha :** Insira o `Token Fixo` de Acesso ao Aplicativo no Campo Senha no MkAuth
+<br>
+
+* MkAuth até Versão 24.02
+  
+ ** `Opções > Servidor de SMS > Servidor`
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/mkauth.png)](#)
 
-> MkAuth Versão 24.03 ou Superior
-> 
+* MkAuth Versão 24.03 ou Superior
+ 
 ** `Opções > Servidor de WhatsApp > Servidor`
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/whatsapp.png)](#)
@@ -302,39 +288,75 @@ Token:SENHA
 <summary>Gerenciamento Pela API</summary>
 
  ** `Settings > API > Tela 2`
- 
-<b>OBS:</b> Nessa tela vc irá configurar a forma como a API irá disparar as Mensagens de cobranças e notificações de pagamentos
+
+> O Sistema de Agendamento será carregado sempre das 00:00 até 2:59 e os disparos de cobranças será feito conforme configurados na API ( Hora, Dia, Turno ) .
+  
+<b>OBS:</b> Definia como o sistema de disparos vai se comportar
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/autobot.png)](#)
 
 | Nome            |  Função                                                         |
 | --------------  |   --------------------------------------------------------------|
+| `Messages`| Mensagens Recebidas pelo cliente  |
 | `Sun` a `Sat`   | Dias permitidos para Disparo das Mensagens. ( Domingo a Sabado )          |
 | `Morn` a `Night`| Turnos Permitos Para Disparos das Mensagens. ( manha, tarde, noite )  |
-| `Morn` a `Night`| Turnos Permitos Para Disparos das Mensagens. ( manha, tarde, noite )  |
 | `Auto Messages` | Habilita a API como Gerente de Disparos                                   |
-| `Agenda` | Intervalo de Cobrança entre 5 dias antes até 40 dias do vencimento                                   |
+| `Select Message` | Seleciona Qual mensagem será editada                                   |
+| `Variant` | Seleciona Qual variação de mensagem será editada                                   |
+| `Schedule` | Intervalo de Cobrança entre 5 dias antes até 40 dias do vencimento                                   |
 
-<b>OBS:</b> Ao Habilitar a opção `Auto Messages` a aplicação vai para de responder requisições vindas do MkAuth mesmo estando configuradas
-
-> Por Padrão as mensagens são enviadas dentro de um Range entre 8:00 e 22:00 respeitando os parametros ( Dias e Turnos) Permitidos, para alterar esse intervalo Habilite a Opção `Shift` em `Settings > Extras` e configure seu Proprio Intervalo
-
-> As notificações de pagamentos não seguem a mesma regra das mensagens de cobrança e podem ser enviadas entre 03:00 e 23:00, vai depende da hora que o cliente fez o pagamento pois o monitoramente é feito minuto a minuto, por padrão o monitoramento é feito em cima das cobranças ja enviadas pela API, para ter um monitoramento mais efetivo é possivel ampliar carregando todos os titulos do mês vigente na memoria da API Habilitando a Opção `Sync` em `Settings > Extras`.
-
+<b>OBS:</b> Ao Habilitar a opção `Auto Messages` a aplicação vai para de responder requisições vindas do MkAuth.
+<br>
 > Por Padrão a montagem da fila de agendamento é construida diariamente entre 00:00 e 02:59.
+<br>
 
+* Evite problemas com bloqueios do algoritimo do whatsapp configurando variações de mensagens.
 
- <b>OBS:</b> Como medida de proteção adicional a fim de evitar bloqueios por spam aplicados pelo Whatsapp, Disponibilizamos a opção `Anti-Spam` em `Settings > Extras` onde vc pode habilitar um sistema de variação de mensagens com seleções ordenadas ou aleatorias e uma vez que a opção for habilitada sera possivel configurar as variações em `Settings > API > tela 2`
+`Settings > Extras > Anti-Spam`
+
+* Defina como o sistema anti-spam vai ser ativado
+  
  
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/spam.png)](#)
+<br>
+| Nome            |  Função                                                         |
+| --------------  |   --------------------------------------------------------------|
+| `Order`| Envia as variações conforme sua ordem 1-2-3  |
+| `Random`| Envia as variações de forma aleatoria        |
+<br>
+
+* Alterne entre as Variações para configurar cada mensagem
+ 
+`Settings > API > Tela 2 > 1-2-3`
+
 [![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/spam2.png)](#)
 
+
+* Habilite a sincronização de Titulos entre MkAuth e Mwsm
+
+`Settings > Extras > Sync`
+> Por padrão o Mwsm vai monitorar pagamentos baseados nas cobranças ja enviadas pela API, para refinar esse monitoramento Habilite a sincronização.
+
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/resync.png)](#)
+
+
+* Defina uma faixa de horario para ativação da lista de agendamento.
+
+`Settings > Extras > Shif`
+
+> Por padrão a lista de agendamento funciona entre 8:00 e 22:00 respeitando a configuração do turno.
+   
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/shifts.png)](#)
+<br>
+| Nome            |  Função                                                         |
+| --------------  |   --------------------------------------------------------------|
+| `7:00 > 10:00`| Hora Base para inicio da lista de Agendamento  |
+| `20:00 > 22:00`| Hora Base para fim da lista de Agendamento        |
 </details>
 
 
-</details>
 
-### Utilização :
+# UTILIZAÇÃO
 <details>
 <summary>Tutorial</summary>
 <br>
@@ -466,8 +488,6 @@ O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
 
 </details>
 
-### Extras :
-
 <details>
 <summary>Tags</summary>
 <br>
@@ -480,11 +500,17 @@ O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
 
 </details>
 
-### DOAÇÕES PIX :
-Contribua com a sobrevivência desse projeto estimulando melhorias e atualizações.
+# ERROS
+> Em Caso de Erros Habilite o Debbuger e Siga as Dicas do Guia de Utilização `Debugger` no Final da Pagina
+>
+> ** `Mwsm > Settings > Extras > Debugger`
+>
+No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.br/forum/topics/envio-de-mensagem-via-whatsapp-100-gratuito)
+
+# DOAÇÕES PIX :
+Contribua com a gratuidade, sobrevivência e manutenção desse projeto estimulando melhorias e atualizações.
 
 ![Pix](https://github.com/MKCodec/Mwsm/assets/143403919/24660f85-17d0-4de4-94e7-de85828a9265)
-
 
 ```sh
 e9b9d669-4412-4dec-994c-310005904088
@@ -493,6 +519,3 @@ e9b9d669-4412-4dec-994c-310005904088
 ```sh
 00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854
 ```
-
-
-
