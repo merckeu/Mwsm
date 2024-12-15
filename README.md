@@ -133,9 +133,8 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
-<br>
 
-> Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
+ * Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
 
 **Update:**
 ```sh
