@@ -49,11 +49,11 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 > 
 > Acesse seu MkAuth via Putty e insira o Codigo Abaixo no Prompt de Comando.
 > 
-> OBS: Sempre que o Mkauth for atualizado deve-se repetir esse Procedimento.
 ```sh
 wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api
 wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
 ```
+**OBS:** Sempre que o Mkauth for atualizado deve-se repetir esse Procedimento.
 
 ### Novidades V2.0.33++
 | Release    | Recurso                                                                              | Update                | Patch                  |
