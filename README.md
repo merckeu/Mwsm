@@ -261,7 +261,6 @@ Token:SENHA
 
 # GERENCIAMENTO
 > Escolha qual vai ser seu gerenciador de mensagens, o Mkauth ou o Mwsm.
-<br>
 
 <details>
 <summary>Gerenciamento Pelo MkAUth</summary>
