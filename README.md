@@ -263,7 +263,7 @@ Token:SENHA
 > Escolha qual vai ser seu gerenciador de mensagens, o Mkauth ou o Mwsm.
 
 <details>
-<summary>Gerenciamento Pelo MkAUth</summary>
+<summary>MkAuth</summary>
  <br>
  
  <b>1 - </b>Configure seu servidor no MKAuth seguindo as instruções do servidor Web
@@ -285,7 +285,7 @@ Token:SENHA
 </details>
 
 <details>
-<summary>Gerenciamento Pela API</summary>
+<summary>Mwsm</summary>
 <br>
  
  ** `Settings > API > Tela 2`
