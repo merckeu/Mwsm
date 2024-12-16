@@ -510,12 +510,16 @@ No Caso do Erro Persistir Contate-nos no Forum do [mkauth](https://mk-auth.com.b
 # DOAÇÕES PIX :
 Contribua com a gratuidade, sobrevivência e manutenção desse projeto estimulando melhorias e atualizações.
 
+QRCode
+
 ![Pix](https://github.com/MKCodec/Mwsm/assets/143403919/24660f85-17d0-4de4-94e7-de85828a9265)
 
+Chave Aleatoria
 ```sh
 e9b9d669-4412-4dec-994c-310005904088
 ```
 
+Copia e Cola
 ```sh
 00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854
 ```
