@@ -358,7 +358,7 @@ Token:SENHA
 
 # UTILIZAÇÃO
 <details>
-<summary>Tutorial</summary>
+<summary>Funções</summary>
 <br>
  
 > Utilize o simulador do mkauth antes de colocar em produção : `settings > Options > Run`.
