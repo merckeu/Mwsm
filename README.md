@@ -1,6 +1,6 @@
 # MkAuth WhatsApp Send Message
 
-![Mikrotik](https://mikrotik.com/img/mtv2/newlogo.svg)
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
 # BUILD: 2.0.37 / UPDATE: 17/12/2024 22:00
 | Release    | Recurso                                                                              | Update                | Patch                  |
