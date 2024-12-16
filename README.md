@@ -325,7 +325,7 @@ Token:SENHA
  
  ** `Settings > API > Tela 2`
 
-> O Sistema de Agendamento será carregado sempre das 00:00 até 2:59 e os disparos de cobranças serão feitos conforme configurados na API ( Hora, Dia, Turno ) .
+> Os disparos das cobranças serão feitos conforme configurados na API ( Hora, Dia, Turno ) .
   
 <b>OBS:</b> Definia como o sistema de disparos vai se comportar
  
