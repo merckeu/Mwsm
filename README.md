@@ -9,6 +9,42 @@
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
 |  2.0.37    | Notificações Automaticas + Log Cleaner | 17/12/2024 22:00 ✅   |                        |
 
+### ATENÇÃO DESENVOLVEDORES
+> Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
+> 
+<details>
+ 
+<summary>Exemplo</summary>
+
+ ```sh
+<?php
+$Whatsapp = "819xxxxxxxx"; // Telefone Com DDD
+$Mensagem = "Mensagem De Teste";
+$Token = "xxxxxxx"; //Token Mwsm de 7 Digitos
+$URL = "http://192.168.3.250:8000/send-message"; //Url da API
+
+    $Data = http_build_query([
+    'to' => '55'.$Whatsapp,
+    'msg' => $Mensagem,
+    'pass' => $Token,
+	'auth' => 'true'
+    ]);
+
+    $CURL = curl_init();
+    curl_setopt($CURL, CURLOPT_URL, $URL);
+    curl_setopt($CURL, CURLOPT_POST, true);
+    curl_setopt($CURL, CURLOPT_POSTFIELDS, $Data);
+    curl_setopt($CURL, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($CURL, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($CURL, CURLOPT_HEADER, false);
+$Response = curl_exec($CURL);
+curl_close($CURL);
+print($Response);
+?>
+```
+
+</details>
+
 # SOBRE
 * O Mwsm é uma API que integra um sistema de notificações automatizadas por whatsapp ao MkAuth.,
 
