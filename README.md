@@ -123,27 +123,31 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
 </details>
 
 # ATUALIZAÇÃO
-<details>
-<summary>Manual</summary>
- <br>
 
-  * Insira um dos codigos no prompt de comando onde o mwsm esta instalado.
-   
+ * Insira um dos codigos no prompt de comando onde o mwsm esta instalado.
  
+ * Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
+
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
+   
+<details>
+<summary>Update</summary>
+ <br>
 
- * Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
-
-**Update:**
 ```sh
 cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
 
 ```
-
-**Patch:**
-```sh
+<br>
+</details>
+<details>
+<summary>Patch</summary>
+<br>
+ 
+**Atualização Manual:**
+ ```sh
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/Mwsm/style.css
@@ -151,17 +155,13 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/
 cd ~ && cd /var/api/Mwsm && pm2 log 0
 ```
 
-</details>
+**Atualização Automatica:**
 
-<details>
-<summary>Automática</summary>
-<br>
-<b>1 - </b>Habilite a função no webadmin do mwsm. 
+* Habilite a função no webadmin do mwsm. 
 
- 
- ** `Extras > Update`**
+**`Extras > Update`**
 
- > as atualizações serão instaladas entre 00:00 e 05:00 am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual.
+ > as atualizações serão instaladas entre 00:00 e 05:00am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual.
 </details>
 
 
