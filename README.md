@@ -535,3 +535,6 @@ Copia e Cola
 ```sh
 00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854
 ```
+
+# DESENVOLVIMENTO :
+Pretendemos incluir varias funcionalidades quem vão de forma progressiva aperfeiçoar essa incrivel ferramenta, entre algumas delas está a inclusão de um gateway gratuito ( banco cora ou inter ) e um bot com inteligencia artifical capaz de entender e resolver a demanda de cada cliente.
