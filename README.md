@@ -21,7 +21,7 @@
 $Whatsapp = "819xxxxxxxx"; // Telefone Com DDD
 $Mensagem = "Mensagem De Teste";
 $Token = "xxxxxxx"; //Token Mwsm de 7 Digitos
-$URL = "http://192.168.3.250:8000/send-message"; //Url da API
+$IP = "192.168.3.250:8000"; //IP-Porta do Mwsm
 
     $Data = http_build_query([
     'to' => '55'.$Whatsapp,
@@ -31,7 +31,7 @@ $URL = "http://192.168.3.250:8000/send-message"; //Url da API
     ]);
 
     $CURL = curl_init();
-    curl_setopt($CURL, CURLOPT_URL, $URL);
+    curl_setopt($CURL, CURLOPT_URL, "http://".$IP."/send-message");
     curl_setopt($CURL, CURLOPT_POST, true);
     curl_setopt($CURL, CURLOPT_POSTFIELDS, $Data);
     curl_setopt($CURL, CURLOPT_FOLLOWLOCATION, true);
