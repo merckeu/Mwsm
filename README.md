@@ -536,4 +536,4 @@ Copia e Cola
 ```
 
 # DESENVOLVIMENTO :
-Pretendemos incluir varias funcionalidades quem vão de forma progressiva aperfeiçoar essa incrivel ferramenta, entre algumas delas está a inclusão de um gateway gratuito ( banco cora ou inter ) e um bot com inteligencia artifical capaz de entender e resolver a demanda de cada cliente.
+Pretendemos incluir varias funcionalidades que vão de forma progressiva aperfeiçoar essa incrivel ferramenta, entre algumas delas está a inclusão de um gateway gratuito ( banco cora ou inter ) e um bot com inteligencia artifical capaz de entender e resolver a demanda de cada cliente.
