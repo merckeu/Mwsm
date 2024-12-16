@@ -406,7 +406,19 @@ Token:SENHA
 > `Settings > Extras > Eraser` e Clique em Reset
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/reset.png)](#)
 
+### Como Rennviar uma Mensagens com Falhas no Log
+> `Settings > API > Tela 3`
+> 
+> Selecione o Mes, Status e Clique em Carregar
+> 
+> Clique sobre o Titulo, ao passar o Cursor sobre cada um vai aparecer o nome do cliente
 
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/resent.png)](#)
+| Opção            |  Função                                                                              |
+| -----------------|--------------------------------------------------------------------------------------|
+| `Month`           | Mês de Referencia Entre 1 e 12                                                         |
+| `Status`          | Status da Assinatura ( ALL = Todos, DUE = Atrasados, Open = Abertos, Pay = Pagos )              |
+| `Reload`          | Recarregar Lista com Parametros escolhidos                                                            |
 
 ### Testando
 <b>1 - </b>Envie uma mensagem pelo Sumulador `settings > Options > Run` ou MkAuth `Opções > Servidor de SMS > Mensagens`
