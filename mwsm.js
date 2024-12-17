@@ -60,18 +60,102 @@ function Debug(Select, Search = '*', Mode = 'single', Find = undefined) {
 	switch (Mode.toLowerCase()) {
 		case "single":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').get();
+			if (!Select) {
+				Select = false;
+			}
 			break;
 		case "multiple":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase()).pluck().all();
+			if (!Select) {
+				Select = false;
+			}
 			break;
 		case "all":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' ORDER BY ID DESC').all();
+			if (!Select) {
+				Select = false;
+			}
 			break;
 		case "direct":
 			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' WHERE title = ?').get(Find);
+			if (!Select) {
+				Select = false;
+			}
+			break;
+		case "id":
+			Select = link.prepare('SELECT ' + Search.toLowerCase() + ' FROM ' + Select.toLowerCase() + ' WHERE id = ?').get(Find);
+			if (!Select) {
+				Select = false;
+			}
 			break;
 	}
 	return Select;
+}
+
+
+function DebugMsg(Selector) {
+	var Last = Debug('MKAUTH').count,
+		Return, Mode = Debug('MKAUTH').level,
+		Message;
+	switch (Mode.toLowerCase()) {
+		case "direct":
+			Return = 1;
+			break;
+		case "random":
+			Return = Math.floor(Math.random() * (3 - 1 + 1) + 1);
+			break;
+		case "order":
+			switch (Last) {
+				case 1:
+					Return = 2;
+					break;
+
+				case 2:
+					Return = 3;
+					break;
+
+				case 3:
+					Return = 1;
+					break;
+			}
+			break;
+	}
+	switch (Selector.toLowerCase()) {
+		case "before":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').before;
+			break;
+
+		case "day":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').day;
+			break;
+
+		case "later":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').later;
+			break;
+
+		case "pay":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').pay;
+			break;
+
+		case "lock":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').lock;
+			break;
+
+		case "unlock":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').unlock;
+			break;
+
+		case "maintenance":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').maintenance;
+			break;
+
+		case "unistall":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').unistall;
+			break;
+	}
+
+	Dataset('MKAUTH', 'COUNT', Return, 'UPDATE');
+	return Message;
 }
 
 //Manipulation DataBase
@@ -123,7 +207,6 @@ Array.prototype.someAsync = function(callbackfn) {
 		resolve(false)
 	})
 }
-
 
 function wget(url, dest) {
 	return new Promise((res) => {
@@ -282,12 +365,310 @@ const GetUpdate = async (GET, SET) => {
 	return Status;
 }
 
-cron.schedule('*/2 00-05 * * *', async () => {
+//Set Debugger
+function Terminal(Value) {
+	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
+		console.error(Value);
+	}
+}
+
+const SetSchedule = async () => {
+	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
+		var hasDays = [],
+			MsgSET = true;
+		if ((Debug('SCHEDULER').bfive == 1 || Debug('SCHEDULER').bfive == "true")) {
+			GetDays = {
+				"Mode": "Later",
+				"Set": 5
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').inday == 1 || Debug('SCHEDULER').inday == "true")) {
+			GetDays = {
+				"Mode": "Now",
+				"Set": 0
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lfive == 1 || Debug('SCHEDULER').lfive == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 5
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lten == 1 || Debug('SCHEDULER').lten == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 10
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lfifteen == 1 || Debug('SCHEDULER').lfifteen == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 15
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').ltwenty == 1 || Debug('SCHEDULER').ltwenty == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 20
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').ltwentyfive == 1 || Debug('SCHEDULER').ltwentyfive == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 25
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lthirty == 1 || Debug('SCHEDULER').lthirty == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 30
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lthirtyfive == 1 || Debug('SCHEDULER').lthirtyfive == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 35
+			};
+			hasDays.push(GetDays);
+		}
+		if ((Debug('SCHEDULER').lforty == 1 || Debug('SCHEDULER').lforty == "true")) {
+			GetDays = {
+				"Mode": "Before",
+				"Set": 40
+			};
+			hasDays.push(GetDays);
+		}
+		var Index = 0,
+			hasReady = [];
+		(hasDays).someAsync(async (Days) => {
+			Index = Index + 1;
+			const Master = await Scheduller(Days.Set, Days.Mode);
+			if (await Master) {
+				(await Master).someAsync(async (Send) => {
+					var Contact = await MkClient(Send.login);
+					if (await Contact) {
+						Send.contact = await Contact;
+					} else {
+						Send.contact = "00000000000";
+					}
+					switch (Send.status) {
+						case 'aberto':
+							Send.status = 'open';
+							break;
+						case 'pago':
+							Send.status = 'paid';
+							break;
+						case 'vencido':
+							Send.status = 'due';
+							break;
+						case 'cancelado':
+							Send.status = 'cancel';
+							break;
+					}
+
+					if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid' && (Send.status) != 'cancel') {
+						Send.status = 'open';
+					}
+					if (Send.cli_ativado == "s" && (Send.status) != 'paid' && (Send.status) != 'cancel') {
+						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.titulo);
+						if (Replies == undefined) {
+							const Insert = await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status) VALUES(?, ?, ?, ?, ?, ?)').run(Send.titulo, Send.login, Send.nome, Send.contact, Send.datavenc, Send.status);
+							if (Insert) {
+								Hwid = {
+									"ID": Send.login
+								};
+								hasReady.push(Hwid);
+							}
+						} else {
+							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Send.titulo, "wait");
+							if (exUpdate == undefined) {
+								const Update = await link.prepare('UPDATE scheduling SET status=?, process=? WHERE title=?').run(Send.status, "wait", Send.titulo);
+								if (await Update) {
+									Hwid = {
+										"ID": Send.login
+									};
+									hasReady.push(Hwid);
+								}
+							}
+
+						}
+
+					} else {
+						//Client Disable
+					}
+					if ((hasDays.length == Index) && (hasReady.length >= Master.length) && MsgSET) {
+						global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
+						MsgSET = false;
+					}
+				});
+			} else {
+				Hwid = {
+					"ID": "false"
+				};
+				hasReady.push(Hwid);
+				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && hasDays.length == hasReady.length) {
+					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
+					const Master = await MkAuth(Month, "all", 'listagem');
+					(await Master).someAsync(async (Send) => {
+						if (Send.Payment != "paid") {
+							var Contact = await MkClient(Send.Connect);
+							if (await Contact) {
+								Send.Contact = await Contact;
+							} else {
+								Send.Contact = "00000000000";
+							}
+							if (Send.Contact != "00000000000") {
+								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
+								if (Replies == undefined) {
+									await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process) VALUES(?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load');
+								}
+							}
+						} else {
+							(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
+								if (Shoot.process == "success" && Shoot.status == "paid") {
+									await link.prepare('DELETE FROM scheduling WHERE title=?').get(Send.Identifier);
+								}
+							});
+						}
+					});
+				}
+			}
+		});
+	}
+
+}
+
+const GetSchedule = async () => {
+	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
+		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
+			const Payment = await MkList(isTarget, "pago")[0];
+			if (Payment != undefined) {
+				switch (Payment.status) {
+					case 'aberto':
+						Payment.status = 'open';
+						break;
+					case 'pago':
+						Payment.status = 'paid';
+						break;
+					case 'vencido':
+						Payment.status = 'due';
+						break;
+					case 'cancelado':
+						Payment.status = 'cancel';
+						break;
+				}
+				const isResolve = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(isTarget);
+				if (isResolve.status != "paid" && isResolve.process != "success") {
+					data = {
+						client: isResolve.client,
+						user: isResolve.user,
+						code: isTarget,
+						status: "pending",
+						payment: Payment.status,
+						contact: isResolve.contact,
+						reward: isResolve.reward,
+						push: DateTime(0),
+						token: Debug('OPTIONS').token
+					};
+					await link.prepare('UPDATE scheduling SET status=? WHERE title=?').run(Payment.status, isTarget);
+				}
+			}
+		});
+		if ((Debug('SCHEDULER').onpay == 1 || Debug('SCHEDULER').onpay == "true")) {
+			const Target = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
+			if (Target != undefined) {
+				const isSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Target.title);
+				if (isSend != undefined) {
+					if (isSend.status == "paid") {
+						data = {
+							client: isSend.client,
+							user: isSend.user,
+							code: isSend.title,
+							status: "pending",
+							payment: isSend.status,
+							contact: isSend.contact,
+							reward: isSend.reward,
+							push: DateTime(0),
+							token: Debug('OPTIONS').token
+						};
+						try {
+							await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
+						} catch (error) {
+
+						} finally {
+							await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('success', Target.title);
+						}
+
+					}
+				}
+			} else {
+				if ((isWeek(DateTime(0))) && (isShift((DateTime(0).split(" ")[1]).split(":")[0]))) {
+					const Shoot = await link.prepare('SELECT * FROM scheduling WHERE NOT status=? AND process=?').get('paid', 'wait');
+					if (Shoot != undefined) {
+						const hasSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Shoot.title);
+						if (hasSend != undefined) {
+							if (hasSend.status != "paid") {
+								data = {
+									client: hasSend.client,
+									user: hasSend.user,
+									code: hasSend.title,
+									status: "pending",
+									payment: hasSend.status,
+									contact: hasSend.contact,
+									reward: hasSend.reward,
+									push: DateTime(0),
+									token: Debug('OPTIONS').token
+								};
+								try {
+									await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
+								} catch (error) {
+
+								} finally {
+									await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('load', Shoot.title);
+								}
+							}
+						}
+					}
+				}
+			}
+
+		}
+
+	}
+
+}
+
+//Scheduller
+cron.schedule('*/2 1-3 * * *', async () => {
 	await GetUpdate(WServer, true);
 }, {
 	scheduled: true,
 	timezone: "America/Sao_Paulo"
 });
+
+cron.schedule('0 0 * * *', async () => {
+	await SetSchedule();
+}, {
+	scheduled: true,
+	timezone: "America/Sao_Paulo"
+});
+
+cron.schedule('*/1 3-23 * * *', async () => {
+	await GetSchedule();
+}, {
+	scheduled: true,
+	timezone: "America/Sao_Paulo"
+});
+
 
 app.use(express.json({
 	limit: '500mb'
@@ -299,13 +680,6 @@ app.use(express.urlencoded({
 app.use(express.text({
 	limit: '500mb'
 }));
-
-//Set Debugger
-function Terminal(Value) {
-	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
-		console.error(Value);
-	}
-}
 
 app.use("/", express.static(__dirname + "/"))
 
@@ -321,8 +695,16 @@ function AddZero(num) {
 	return (num >= 0 && num < 10) ? "0" + num : num + "";
 }
 
-function DateTime() {
+function DateTime(Days = 0, Mode) {
 	isDate = new Date();
+	switch (Mode) {
+		case 'some':
+			isDate.setDate(isDate.getDate() + Days);
+			break;
+		case 'subtract':
+			isDate.setDate(isDate.getDate() - Days);
+			break;
+	}
 	UTC = isDate.getTime() + (isDate.getTimezoneOffset() * 60000);
 	now = new Date(UTC + (3600000 * -3));
 	var strDateTime = [
@@ -331,26 +713,48 @@ function DateTime() {
 	return strDateTime;
 };
 
+const MkList = async (FIND, REFINE = "titulos") => {
+	var Server = Debug('MKAUTH').client_link;
 
-Date.prototype.addHours = function(h) {
-	this.setHours(this.getHours() + h);
-	return this;
-}
-
-Date.prototype.addMinutes = function(m) {
-	this.setHours(this.getMinutes() + m);
-	return this;
-}
-
-
-Date.prototype.addDays = function(days) {
-	var date = new Date(this.valueOf());
-	date.setDate(date.getDate() + days);
-	return date;
-}
+	if (Server == "tunel") {
+		Server = Debug('MKAUTH').tunel;
+	} else if (Server == "domain") {
+		Server = Debug('MKAUTH').domain;
+	}
+	const Authentication = await axios.get('https://' + Server + '/api/', {
+		auth: {
+			username: Debug('MKAUTH').client_id,
+			password: Debug('MKAUTH').client_secret
+		}
+	}).then(response => {
+		return response.data;
+	}).catch(err => {
+		return false;
+	});
+	if (Authentication) {
+		const MkSync = await axios.get('https://' + Server + '/api/titulo/' + REFINE + '/' + FIND, {
+			headers: {
+				'Authorization': 'Bearer ' + Authentication
+			}
+		}).then(response => {
+			if ((typeof response.data !== "object") && ((response.data).slice(-1) != '}')) {
+				return JSON.parse((response.data).substring(0, (response.data).length - 1));
+			} else {
+				return response.data;
+			}
+		}).catch(err => {
+			return false;
+		});
+		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
+			return await MkSync.titulos;
+		} else {
+			return false;
+		}
+	}
+};
 
 function isWeek(Sysdate) {
-	var CountDown = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"][Sysdate.getDay()];
+	var CountDown = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"][new Date(Sysdate).getDay()]
 	switch (CountDown) {
 		case 'sunday':
 			inDay = Debug('SCHEDULER').sunday;
@@ -380,6 +784,7 @@ function isWeek(Sysdate) {
 		return false;
 	}
 }
+
 
 const MkClient = async (FIND) => {
 	var Server = Debug('MKAUTH').client_link;
@@ -426,8 +831,58 @@ const MkClient = async (FIND) => {
 	}
 };
 
+const Scheduller = async (DAYS, MODE) => {
+	var Date;
+	if (MODE.toLowerCase() == "now" && DAYS == 0) {
+		Date = [(DateTime(0)).split(" ")[0],
+			[AddZero(0), AddZero(0), AddZero(0)].join(":")
+		].join(" ");
+	} else if (MODE.toLowerCase() == "before") {
+		Date = [(DateTime(DAYS, "subtract")).split(" ")[0],
+			[AddZero(0), AddZero(0), AddZero(0)].join(":")
+		].join(" ");
+	} else if (MODE.toLowerCase() == "later") {
+		Date = [(DateTime(DAYS, "some")).split(" ")[0],
+			[AddZero(0), AddZero(0), AddZero(0)].join(":")
+		].join(" ");
+	}
+	return await MkList(Date);
+};
+
+function inRange(x, min, max) {
+	return ((x - min) * (x - max) <= 0);
+}
+
+function isShift(Turno) {
+	var Return = false;
+	if (inRange(Turno, AddZero(Debug('SCHEDULER').min), 11)) {
+		if ((Debug('SCHEDULER').morning == 1 || Debug('SCHEDULER').morning == "true")) {
+			Return = true;
+		}
+	} else if (inRange(Turno, 12, 17)) {
+		if ((Debug('SCHEDULER').afternoon == 1 || Debug('SCHEDULER').afternoon == "true")) {
+			Return = true;
+		}
+	} else if (inRange(Turno, 18, Debug('SCHEDULER').max)) {
+		if ((Debug('SCHEDULER').night == 1 || Debug('SCHEDULER').night == "true")) {
+			Return = true;
+		}
+	} else {
+		Return = false;
+	}
+	return Return;
+}
 
 
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Test
+delay(0).then(async function() {
+
+});
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Search MkAUth API
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
@@ -481,8 +936,14 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							Send.linhadig = '';
 							Json_Bar = "false";
 						} else {
-							//Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
-							Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.titulo + "&contrato=" + Send.login;
+							switch (Debug('MKAUTH').mode) {
+								case 'v1':
+									Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.uuid;
+									break;
+								case 'v2':
+									Bolix = "http://" + Debug('MKAUTH').domain + "/boleto/boleto.hhvm?titulo=" + Send.titulo + "&contrato=" + Send.login;
+									break;
+							}
 							Json_Bar = "true";
 						}
 						if (Send.pix == undefined || Send.pix == null) {
@@ -526,6 +987,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 						if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
 							SEND.push(Send.uuid);
 						}
+
 						if (SEND.length >= 1) {
 							if (SEND.some(Row => Row == '')) {
 								STATUS = "Null";
@@ -564,6 +1026,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 									}
 								]
 							};
+
 						}
 					}
 				}
@@ -576,7 +1039,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
 						UID = "0" + UID;
 					}
-					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's') {
+					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's' && Send.status != 'cancelado') {
 						switch (Send.status) {
 							case 'aberto':
 								Send.status = 'open';
@@ -588,6 +1051,12 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 								Send.status = 'due';
 								break;
 						}
+
+
+						if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid') {
+							Send.status = 'open'
+						}
+
 						Json = {
 							"Order": (new Date(Send.datavenc)).getDate(),
 							"Identifier": Send.titulo,
@@ -699,11 +1168,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 	}
 };
 
-//Test
-delay(0).then(async function() {
-	//const Master = await MkAuth('7', 'vencido', 'listagem');
-});
-
 //Check is Json
 function testJSON(text) {
 	text = text.toString().replace(/"/g, "").replace(/'/g, "");
@@ -800,18 +1264,15 @@ io.on('connection', function(socket) {
 	});
 
 
-	client.on('auth_failure', () => {
+	client.on('auth_failure', async () => {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').auth_failure);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').auth_failure);
 		socket.emit('qr', Debug('RESOURCES').auth_failure);
-		db.run("UPDATE options SET auth=?", [false], (err) => {
-			if (err) {
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
-			}
+		const unLoad = await link.prepare('UPDATE options SET auth=?').run(0);
+		if (await unLoad) {
 			socket.emit('Reset', true);
 			Session = false;
-		});
-
+		}
 	});
 
 
@@ -875,20 +1336,47 @@ io.on('connection', function(socket) {
 });
 
 // Reset
-app.post('/reset', (req, res) => {
-	db.run("UPDATE options SET auth=?", [false], (err) => {
-		if (err) {
-			console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
-		}
-		global.io.emit('qr', Debug('RESOURCES').connection);
-	});
+app.post('/reset', async (req, res) => {
 	const Reset = req.body.reset;
-	if (Reset == "true") {
-		res.json({
-			Status: "Success"
-		});
+	const Clear = req.body.erase;
+	const unLoad = await link.prepare('UPDATE options SET auth=?').run(0);
+	if (await unLoad) {
+		global.io.emit('qr', Debug('RESOURCES').connection);
 		global.io.emit('getlog', true);
-		exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
+		if (Clear == 'true') {
+			const Eraser = await link.prepare('DELETE FROM target').run();
+			if (await Eraser) {
+				const FLUSH = await Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+				res.json({
+					Status: "Success"
+				});
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').cleanon);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').cleanon);
+				if (await FLUSH) {
+					delay(2000).then(async function() {
+						exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
+					});
+				}
+			} else {
+				res.json({
+					Status: "Fail"
+				});
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').cleanoff);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').cleanoff);
+				delay(2000).then(async function() {
+					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
+				});
+			}
+		} else {
+			if (Reset == "true") {
+				res.json({
+					Status: undefined
+				});
+				global.io.emit('getlog', true);
+				exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
+
+			}
+		}
 	}
 });
 
@@ -971,51 +1459,60 @@ app.post('/debug', (req, res) => {
 	}
 });
 
-
 // MkAuth Set Message
 app.post('/send-mkauth', (req, res) => {
 	const User = req.body.user;
 	const Client = req.body.client;
 	const Code = req.body.code;
 	const Status = req.body.status;
-	const Payment = req.body.payment;
-	const Contact = req.body.contact;
+	const Contact = req.body.contact; //req.body.contact
 	const Reward = req.body.reward;
 	const Push = req.body.push;
 	const Token = req.body.token;
-	var Process;
+	var Process, Direct;
 	var Pulse = DateTime();
+	var Payment = req.body.payment;
+	if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0] && Payment != "paid") {
+		Payment = "open";
+	}
 	switch (Payment) {
 		case 'paid':
-			Message = Debug('MESSAGE').pay;
+			Message = DebugMsg("PAY");
 			if (Status.toLowerCase() != "finished") {
 				Process = "Finished";
 			}
+			Direct = "Pay";
 			break;
 		case 'due':
-			Message = Debug('MESSAGE').later;
+			if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0]) {
+				Message = DebugMsg("DAY");
+			} else {
+				Message = DebugMsg("LATER");
+			}
 			if (Status.toLowerCase() == "pending" || Status.toLowerCase() == "fail") {
 				Process = "Sent";
 			} else if (Status.toLowerCase() == "sent") {
-				Process = "Resent";
+				Process = "Resend";
 			}
 			break;
 		case 'open':
 			if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0]) {
-				Message = Debug('MESSAGE').day;
+				Message = DebugMsg("DAY");
 			} else {
-				Message = Debug('MESSAGE').before;
+				Message = DebugMsg("BEFORE");
 			}
 			Process = "Sent";
 			break;
 	}
-
-	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0]+" as "+(Pulse.split(" ")[1]).split(":")[0]+":"+(Pulse.split(" ")[1]).split(":")[1]);
+	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		const data = {
 			to: '55' + Contact,
 			msg: Mensagem,
-			pass: Token
+			pass: Token,
+			send: Direct,
+			user: Client,
+			auth: Debug('MKAUTH').aimbot
 		};
 		axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-message", data).then((response) => {
 			try {
@@ -1023,12 +1520,23 @@ app.post('/send-mkauth', (req, res) => {
 			} catch (e) {
 				Dataset('STORANGE', 'TITLE', Code, 'INSERT');
 			}
+			if (response.data.Status == "Fail") {
+				Process = response.data.Status;
+			}
 			if ((Debug("STORANGE", "*", "DIRECT", Code).title) == Code) {
 				db.run("UPDATE storange SET push=?, status=? WHERE title=?", [Pulse, Process, Code], (err) => {
 					if (err) throw err;
 				});
+			} else if (Debug("STORANGE", "*", "DIRECT", Code).id == undefined || Debug("STORANGE", "*", "DIRECT", Code).id == false) {
+				db.run("INSERT INTO storange(title, user, client, contact, reward, status, push) VALUES(?, ?, ?, ?, ?, ?, ?)", [Code, User, Client, Contact, Reward, Process, Pulse], (err) => {
+					if (err) {
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
+					}
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+					global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+				});
 			}
-			res.json({
+			return res.json({
 				Status: response.data.Status,
 				Return: response.data.message,
 				RPush: Pulse,
@@ -1036,20 +1544,18 @@ app.post('/send-mkauth', (req, res) => {
 				RCode: Code
 			});
 		}).catch((err) => {
-			res.status(500).json({
+			return res.status(500).json({
 				Status: "Fail",
 				Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
 		});
 	} else {
-		res.status(500).json({
+		return res.status(500).json({
 			Status: "Fail",
 			Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 		});
 	}
 });
-
-
 
 // API Update
 app.post('/update', (req, res) => {
@@ -1090,7 +1596,112 @@ app.post('/protected', (req, res) => {
 	}
 });
 
+// Backup
+app.post('/backup', (req, res) => {
+	const Backup = req.body.backup;
+	if (Debug('MKAUTH').backup != Backup) {
+		db.run("UPDATE mkauth SET backup=?", [Backup], (err) => {
+			if (err) {
+				res.json({
+					Status: "Fail",
+					Return: Debug('MKAUTH').backup
+				});
+			}
+			res.json({
+				Status: "Success",
+				Return: Backup
+			});
+		});
+	}
+});
 
+
+
+// Spam
+app.post('/spam', (req, res) => {
+	const Level = req.body.level;
+	if (Debug('MKAUTH').level != Level) {
+		db.run("UPDATE mkauth SET level=?", [Level], (err) => {
+			if (err) {
+				res.json({
+					Status: "Fail",
+					Return: Debug('MKAUTH').level
+				});
+			}
+			res.json({
+				Status: "Success",
+				Return: Level
+			});
+		});
+	}
+});
+
+
+// Shift
+app.post('/shift', async (req, res) => {
+	const Shift = req.body.shift;
+	const Min = req.body.min;
+	const Max = req.body.max;
+	const hasShift = await Dataset('SCHEDULER', 'shift', Shift, 'UPDATE');
+	if (await hasShift) {
+		if ((Debug('SCHEDULER').shift == 1 || Debug('SCHEDULER').shift == "true")) {
+			const hasMin = await Dataset('SCHEDULER', 'min', Min, 'UPDATE');
+			const hasMax = await Dataset('SCHEDULER', 'max', Max, 'UPDATE');
+			if (await hasMin && await hasMax) {
+				res.json({
+					Status: "Success",
+					Return: true
+				});
+			} else {
+				res.json({
+					Status: "Fail",
+					Return: false
+				});
+
+			}
+		} else {
+			const hasMin = await Dataset('SCHEDULER', 'min', '08', 'UPDATE');
+			const hasMax = await Dataset('SCHEDULER', 'max', '22', 'UPDATE');
+			if (await hasMin && await hasMax) {
+				res.json({
+					Status: "Success",
+					Return: false
+				});
+			} else {
+				res.json({
+					Status: "Fail",
+					Return: false
+				});
+
+			}
+		}
+	}
+});
+
+// Aimbot
+app.post('/aimbot', async (req, res) => {
+	const Aimbot = req.body.aimbot;
+	const Base = await Dataset('MKAUTH', 'AIMBOT', Aimbot, 'UPDATE');
+	if (await Base) {
+		if ((Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
+			res.json({
+				Status: "Success",
+				Return: true
+			});
+
+		} else {
+			res.json({
+				Status: "Success",
+				Return: false
+			});
+		}
+	} else {
+		res.json({
+			Status: "Fail",
+			Return: false
+		});
+	}
+});
 
 
 // Token
@@ -1123,9 +1734,14 @@ app.post('/token', async (req, res) => {
 		global.io.emit('pdf', Debug('MKAUTH').pdf);
 		global.io.emit('delay', Debug('MKAUTH').delay);
 		global.io.emit('iserver', Debug('MKAUTH').client_link);
+		global.io.emit('imode', Debug('MKAUTH').mode);
+
 		global.io.emit('debugger', Debug('OPTIONS').debugger);
 		global.io.emit('uptodate', Debug('RELEASE').isupdate);
 		global.io.emit('protected', Debug('OPTIONS').protect);
+		global.io.emit('spam', Debug('MKAUTH').level);
+		global.io.emit('aimbot', Debug('MKAUTH').aimbot);
+		global.io.emit('backup', Debug('MKAUTH').backup);
 		global.io.emit('ismonth', (DateTime().split('-')[1]));
 		global.io.emit('issearch', 'all');
 
@@ -1139,6 +1755,10 @@ app.post('/token', async (req, res) => {
 		global.io.emit('lthirty', Debug('SCHEDULER').lthirty);
 		global.io.emit('lthirtyfive', Debug('SCHEDULER').lthirtyfive);
 		global.io.emit('lforty', Debug('SCHEDULER').lforty);
+		global.io.emit('shift', Debug('SCHEDULER').shift);
+		global.io.emit('min', AddZero(Debug('SCHEDULER').min));
+		global.io.emit('max', Debug('SCHEDULER').max);
+
 
 		global.io.emit('sunday', Debug('SCHEDULER').sunday);
 		global.io.emit('monday', Debug('SCHEDULER').monday);
@@ -1157,15 +1777,32 @@ app.post('/token', async (req, res) => {
 		global.io.emit('OnMaintenance', Debug('SCHEDULER').onmaintenance);
 		global.io.emit('OnUnistall', Debug('SCHEDULER').onunistall);
 
-		global.io.emit('before', Debug('MESSAGE').before);
-		global.io.emit('day', Debug('MESSAGE').day);
-		global.io.emit('later', Debug('MESSAGE').later);
-		global.io.emit('pay', Debug('MESSAGE').pay);
-		global.io.emit('lock', Debug('MESSAGE').lock);
-		global.io.emit('unlock', Debug('MESSAGE').unlock);
-		global.io.emit('maintenance', Debug('MESSAGE').maintenance);
-		global.io.emit('unistall', Debug('MESSAGE').unistall);
+		global.io.emit('A001', Debug('MESSAGE', '*', 'ID', '1').before);
+		global.io.emit('A002', Debug('MESSAGE', '*', 'ID', '1').day);
+		global.io.emit('A003', Debug('MESSAGE', '*', 'ID', '1').later);
+		global.io.emit('A004', Debug('MESSAGE', '*', 'ID', '1').pay);
+		global.io.emit('A005', Debug('MESSAGE', '*', 'ID', '1').lock);
+		global.io.emit('A006', Debug('MESSAGE', '*', 'ID', '1').unlock);
+		global.io.emit('A007', Debug('MESSAGE', '*', 'ID', '1').maintenance);
+		global.io.emit('A008', Debug('MESSAGE', '*', 'ID', '1').unistall);
 
+		global.io.emit('B001', Debug('MESSAGE', '*', 'ID', '2').before);
+		global.io.emit('B002', Debug('MESSAGE', '*', 'ID', '2').day);
+		global.io.emit('B003', Debug('MESSAGE', '*', 'ID', '2').later);
+		global.io.emit('B004', Debug('MESSAGE', '*', 'ID', '2').pay);
+		global.io.emit('B005', Debug('MESSAGE', '*', 'ID', '2').lock);
+		global.io.emit('B006', Debug('MESSAGE', '*', 'ID', '2').unlock);
+		global.io.emit('B007', Debug('MESSAGE', '*', 'ID', '2').maintenance);
+		global.io.emit('B008', Debug('MESSAGE', '*', 'ID', '2').unistall);
+
+		global.io.emit('C001', Debug('MESSAGE', '*', 'ID', '3').before);
+		global.io.emit('C002', Debug('MESSAGE', '*', 'ID', '3').day);
+		global.io.emit('C003', Debug('MESSAGE', '*', 'ID', '3').later);
+		global.io.emit('C004', Debug('MESSAGE', '*', 'ID', '3').pay);
+		global.io.emit('C005', Debug('MESSAGE', '*', 'ID', '3').lock);
+		global.io.emit('C006', Debug('MESSAGE', '*', 'ID', '3').unlock);
+		global.io.emit('C007', Debug('MESSAGE', '*', 'ID', '3').maintenance);
+		global.io.emit('C008', Debug('MESSAGE', '*', 'ID', '3').unistall);
 
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
@@ -1174,6 +1811,10 @@ app.post('/token', async (req, res) => {
 					Dataset('TARGET', '*', TARGET.id, 'DELETE');
 					Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
 				} else {
+					if (TARGET.target == "900000000") {
+						TARGET.target = "(00) 0 0000-0000";
+					}
+
 					GetLog = {
 						"ID": TARGET.id,
 						"TITLE": TARGET.title,
@@ -1336,9 +1977,10 @@ app.post('/message_mkauth', (req, res) => {
 	const define = req.body.database
 	const message = req.body.message
 	const token = req.body.token
+	const select = req.body.select
 	if ([Debug('OPTIONS').token, Password[1]].includes(token)) {
 		if (server != "" && message != "") {
-			db.run("UPDATE message SET " + define + "=?", [message], (err) => {
+			db.run("UPDATE message SET " + define + "=? WHERE id=?", [message, select], (err) => {
 				if (err) {
 					res.json({
 						Status: "Fail",
@@ -1547,6 +2189,9 @@ app.post('/force-message', [
 						return new MessageMedia(mimetype, attachment, 'Media');
 					};
 
+
+					console.log(WhatsApp + " - " + Mensagem);
+
 					Cloud(Send).then(Return => {
 						Array[Send] = Return;
 						resolve(Array);
@@ -1619,6 +2264,7 @@ app.post('/link_mkauth', async (req, res) => {
 	const Module = req.body.module;
 	const Token = req.body.token;
 	const Server = req.body.server;
+	const Mode = req.body.mode;
 	var iServer;
 
 	if (Server == "tunel") {
@@ -1652,9 +2298,10 @@ app.post('/link_mkauth', async (req, res) => {
 			}).catch(err => {
 				return false;
 			});
+
 			if ((MkSync.error == undefined)) {
 				ResAuth = true;
-				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, module=?, client_link=?", [User, Pass, Domain, Tunel, Module, Server], (err) => {
+				db.run("UPDATE mkauth SET client_id=?, client_secret=?, domain=?, tunel=?, mode=?, module=?, client_link=?", [User, Pass, Domain, Tunel, Mode, Module, Server], (err) => {
 					if (err) {
 						res.json({
 							Status: "Fail",
@@ -1716,52 +2363,65 @@ app.post('/send-image', [
 	const hasCaption = req.body.caption;
 	const hasMimetype = req.body.mimetype;
 	var isHid;
-	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
-		if (req.body.pass != undefined) {
-			isHid = req.body.pass;
-		} else if (req.body.p != undefined) {
-			isHid = req.body.p;
-		} else {
-			isHid = '';
-		}
-	} else {
-		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
-			isHid = Password[1];
-		} else {
-			isHid = (Debug('OPTIONS').token);
-		}
-	}
-	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const Mensagem = new MessageMedia(hasMimetype, (req.body.image), 'Media');
 
-	if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-		client.sendMessage(WhatsApp, Mensagem, {
-			caption: hasCaption,
-			linkPreview: false
-		}).then(response => {
-			return res.json({
-				Status: "Success",
-				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
+	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+
+		if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+			if (req.body.pass != undefined) {
+				isHid = req.body.pass;
+			} else if (req.body.p != undefined) {
+				isHid = req.body.p;
+			} else {
+				isHid = '';
+			}
+		} else {
+			if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+				isHid = Password[1];
+			} else {
+				isHid = (Debug('OPTIONS').token);
+			}
+		}
+		const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
+		const isDDI = isWid.substr(0, 2);
+		const isDDD = isWid.substr(2, 2);
+		const isCall = isWid.slice(-8);
+		var WhatsApp = isWid + '@c.us';
+		if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+			WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+		} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+			WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+		}
+		const Mensagem = new MessageMedia(hasMimetype, (req.body.image), 'Media');
+
+		if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+			client.sendMessage(WhatsApp, Mensagem, {
+				caption: hasCaption,
+				linkPreview: false
+			}).then(response => {
+				return res.json({
+					Status: "Success",
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
+				});
+			}).catch(err => {
+				return res.status(500).json({
+					Status: "Fail",
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+				});
 			});
-		}).catch(err => {
+		} else {
 			return res.status(500).json({
 				Status: "Fail",
 				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
-		});
+		}
+
 	} else {
+		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+
 		return res.status(500).json({
 			Status: "Fail",
-			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger
 		});
 	}
 });
@@ -1788,53 +2448,67 @@ app.post('/send-document', [
 	const hasMimetype = req.body.mimetype;
 	const hasFileName = req.body.filename;
 	var isHid;
-	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
-		if (req.body.pass != undefined) {
-			isHid = req.body.pass;
-		} else if (req.body.p != undefined) {
-			isHid = req.body.p;
-		} else {
-			isHid = '';
-		}
-	} else {
-		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
-			isHid = Password[1];
-		} else {
-			isHid = (Debug('OPTIONS').token);
-		}
-	}
-	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
-	const isDDI = isWid.substr(0, 2);
-	const isDDD = isWid.substr(2, 2);
-	const isCall = isWid.slice(-8);
-	var WhatsApp = isWid + '@c.us';
-	if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
-		WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
-	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
-		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
-	}
-	const Mensagem = new MessageMedia(hasMimetype, (req.body.document), hasFileName);
 
-	if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-		client.sendMessage(WhatsApp, Mensagem, {
-			caption: hasCaption,
-			linkPreview: false
-		}).then(response => {
-			return res.json({
-				Status: "Success",
-				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
+	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+
+		if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+			if (req.body.pass != undefined) {
+				isHid = req.body.pass;
+			} else if (req.body.p != undefined) {
+				isHid = req.body.p;
+			} else {
+				isHid = '';
+			}
+		} else {
+			if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
+				isHid = Password[1];
+			} else {
+				isHid = (Debug('OPTIONS').token);
+			}
+		}
+		const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
+		const isDDI = isWid.substr(0, 2);
+		const isDDD = isWid.substr(2, 2);
+		const isCall = isWid.slice(-8);
+		var WhatsApp = isWid + '@c.us';
+		if ((isDDI == '55') && (parseInt(isDDD) <= 30)) {
+			WhatsApp = isWid.substr(0, 4) + '9' + isCall + '@c.us';
+		} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
+			WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
+		}
+		const Mensagem = new MessageMedia(hasMimetype, (req.body.document), hasFileName);
+
+		if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+			client.sendMessage(WhatsApp, Mensagem, {
+				caption: hasCaption,
+				linkPreview: false
+			}).then(response => {
+				return res.json({
+					Status: "Success",
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
+				});
+			}).catch(err => {
+				return res.status(500).json({
+					Status: "Fail",
+					message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+				});
 			});
-		}).catch(err => {
+		} else {
 			return res.status(500).json({
 				Status: "Fail",
 				message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
-		});
+		}
+
 	} else {
+		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+
 		return res.status(500).json({
 			Status: "Fail",
-			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger
 		});
+
 	}
 });
 
@@ -1872,6 +2546,9 @@ app.post('/send-message', [
 			isHid = (Debug('OPTIONS').token);
 		}
 	}
+	var isAuth = req.body.auth;
+	const isUser = req.body.user;
+	const isSend = req.body.send;
 	const isWid = (req.body.to).replace(/[^0-9\\.]+/g, '');
 	const isDDI = isWid.substr(0, 2);
 	const isDDD = isWid.substr(2, 2);
@@ -1882,131 +2559,37 @@ app.post('/send-message', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
-	if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
-		var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
-		const uID = await Dataset('TARGET', 'START', DateTime(), 'INSERT');
-		if (uID == false) {
-			uID = Debug('TARGET').id;
-		}
-		const Constructor = new Promise((resolve, reject) => {
-			var Array = [];
-			var Radeon = {};
-			var Preview = false;
-			var Caption, Send, Register, Renner;
-			var RETURNS = [];
-			Radeon['Title'] = 'xxx';
-			Radeon['Name'] = 'Mwsm';
-			if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+		isAuth = true;
+	}
 
-				Mensagem.some(function(Send, index) {
-					if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-						var Json = Send.toString().replace('"', '').split(',');
-						isUid = Json[0].replace(/[{\}\\"]/g, '');
-						if (isUid.split(':').length == 2) {
-							isUid = isUid.split(':')[1];
-						} else {
-							isUid = (isUid).replace(isUid.split(':')[0], '');
-							isUid = isUid.replace(/^:+/, '');
-						}
-						isFind = Json[1].replace(/[^0-9]/g, '');
-						Json = {
-							uid: isUid,
-							find: isFind
-						};
-						Terminal(JSON.stringify(Json));
-						MkAuth(Json.uid, Json.find).then(Synchronization => {
-							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
-								RETURNS.push('Bar');
-							}
+	if (isAuth || (isAuth == 1 || isAuth == "true")) {
+		const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
+		if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
+			var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
+			const uID = await Dataset('TARGET', 'START', DateTime(), 'INSERT');
+			if (uID == false) {
+				uID = Debug('TARGET').id;
+			}
+			const Constructor = new Promise((resolve, reject) => {
+				var Array = [];
+				var Radeon = {};
+				var Preview = false;
+				var Caption, Send, Register, Renner;
+				var RETURNS = [];
+				Radeon['Title'] = 'xxx';
+				Radeon['Name'] = 'Mwsm';
+				if (isUser != undefined) {
+					Radeon['Name'] = isUser;
+				}
+				if (isSend != undefined) {
+					Radeon['Title'] = isSend;
+				}
 
-							if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
-								RETURNS.push('Pix');
-							}
+				if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
 
-							if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
-								RETURNS.push('QRCode');
-							}
-
-							if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
-								RETURNS.push('Link');
-							}
-
-							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
-								RETURNS.push('Boleto');
-							}
-							if (Synchronization.ID != undefined) {
-								Radeon['Title'] = Synchronization.ID;
-								Radeon['Name'] = Synchronization.Name;
-								db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, uID], (err) => {
-									if (err) throw err;
-								});
-							}
-							if (Synchronization.Status != "pago" && Synchronization.Status != "Error" && Synchronization.Status != "Null") {
-								(Synchronization.Payments).forEach(function(GET, index) {
-									if (RETURNS.includes(GET.caption)) {
-										switch (GET.caption) {
-											case 'Bar':
-												Send = GET.value;
-												Caption = GET.caption;
-												break;
-											case 'Pix':
-												Send = GET.value;
-												Caption = GET.caption;
-												break;
-											case 'QRCode':
-												Send = new MessageMedia('image/png', GET.value, GET.caption);
-												Caption = GET.caption;
-												break;
-											case 'Link':
-												Send = GET.value;
-												Caption = GET.caption;
-												break;
-											case 'Boleto':
-												Send = GET.value;
-												Caption = GET.caption;
-												break;
-										}
-										if (Send != '') {
-											Array.push(Send);
-										}
-									}
-									if (((Synchronization.Payments).length == (index + 1))) {
-										Radeon['Message'] = Array;
-										resolve(Radeon);
-									}
-								});
-							} else {
-								if (Synchronization.Status == "Error") {
-									Radeon['Message'] = "Error";
-									resolve(Radeon);
-
-								} else {
-									if (Synchronization.Status == "Null") {
-										Radeon['Message'] = "Null";
-										resolve(Radeon);
-
-									} else {
-										Radeon['Message'] = "Fail";
-										resolve(Radeon);
-
-									}
-								}
-							}
-						}).catch(err => {
-							Radeon['Message'] = false;
-							resolve(Radeon);
-
-						});
-
-
-					}
-				});
-			} else {
-
-				if (Mensagem.some(Row => testJSON(Row))) {
 					Mensagem.some(function(Send, index) {
-						if (testJSON(Send)) {
+						if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 							var Json = Send.toString().replace('"', '').split(',');
 							isUid = Json[0].replace(/[{\}\\"]/g, '');
 							if (isUid.split(':').length == 2) {
@@ -2021,389 +2604,251 @@ app.post('/send-message', [
 								find: isFind
 							};
 							Terminal(JSON.stringify(Json));
-						}
-					});
+							MkAuth(Json.uid, Json.find).then(Synchronization => {
+								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+									RETURNS.push('Bar');
+								}
 
-					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-						if ((FUNCTION.includes('true') || FUNCTION.includes('1'))) {
-							Radeon['Message'] = undefined;
-						} else {
-							Radeon['Message'] = "False";
-						}
-					} else {
-						Radeon['Message'] = "Fatal";
-						JDebug = {
-							"MkAuth": "Connect was Failed",
-						};
-						Terminal(JDebug);
-					}
-					resolve(Radeon);
-				} else {
-					Radeon['Message'] = undefined;
-					resolve(Radeon);
-				}
-			}
-		});
+								if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+									RETURNS.push('Pix');
+								}
 
-		const Reconstructor = new Promise((resolve, reject) => {
-			if (Mensagem.some(Row => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Rows => Row.includes(Rows)))) {
-				var isArray = {};
-				(Mensagem).someAsync(async (Send) => {
-					if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-						const isCloud = async (Url) => {
-							let isMimetype;
-							const isAttachment = await axios.get(Url, {
-								responseType: 'arraybuffer'
-							}).then(response => {
-								isMimetype = response.headers['content-type'];
-								return response.data.toString('base64');
-							});
-							return await new MessageMedia(isMimetype, isAttachment, 'Media');
-						};
+								if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+									RETURNS.push('QRCode');
+								}
 
-						await isCloud(Send).then(Return => {
-							isArray[Send] = Return;
-							resolve(isArray);
-						}).catch(err => {
-							resolve(undefined);
-						});
+								if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+									RETURNS.push('Link');
+								}
 
-					}
-				});
-			} else {
-				resolve(undefined);
-			}
-		});
-
-		delay(0).then(async function() {
-			const Retorno = await Promise.all([Constructor, Reconstructor]);
-			var Boleto, PDF2Base64, Sleep = 0;
-			if (Debug('MKAUTH').delay >= 3) {
-				Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
-			}
-			if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
-
-				for (let i = 0; i < Retorno[0].Message.length; i++) {
-					if (typeof Retorno[0].Message[i] === 'string') {
-						if ((Retorno[0].Message[i].indexOf("boleto.hhvm") > -1)) {
-							const UID = Retorno[0].Message[i].split("=")[1];
-							Boleto = await Build(Retorno[0].Message[i]);
-							PDF2Base64 = await new Promise((resolve, reject) => {
-								if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Boleto.includes(Row))) {
-									const Cloud = async (Url) => {
-										let mimetype;
-										const attachment = await axios.get(Url, {
-											responseType: 'arraybuffer'
-										}).then(response => {
-											mimetype = response.headers['content-type'];
-											return response.data.toString('base64');
-										});
-										return new MessageMedia(mimetype, attachment, 'Fatura');
-									};
-									Cloud(Boleto).then(Return => {
-										resolve(Return);
-									}).catch(err => {
-										resolve(undefined);
+								if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+									RETURNS.push('Boleto');
+								}
+								if (Synchronization.ID != undefined) {
+									Radeon['Title'] = Synchronization.ID;
+									Radeon['Name'] = Synchronization.Name;
+									db.run("UPDATE target SET title=? WHERE id=?", [Synchronization.ID, uID], (err) => {
+										if (err) throw err;
 									});
 								}
+								if (Synchronization.Status != "pago" && Synchronization.Status != "Error" && Synchronization.Status != "Null") {
+									(Synchronization.Payments).forEach(function(GET, index) {
+										if (RETURNS.includes(GET.caption)) {
+											switch (GET.caption) {
+												case 'Bar':
+													Send = GET.value;
+													Caption = GET.caption;
+													break;
+												case 'Pix':
+													Send = GET.value;
+													Caption = GET.caption;
+													break;
+												case 'QRCode':
+													Send = new MessageMedia('image/png', GET.value, GET.caption);
+													Caption = GET.caption;
+													break;
+												case 'Link':
+													Send = GET.value;
+													Caption = GET.caption;
+													break;
+												case 'Boleto':
+													Send = GET.value;
+													Caption = GET.caption;
+													break;
+											}
+											if (Send != '') {
+												Array.push(Send);
+											}
+										}
+										if (((Synchronization.Payments).length == (index + 1))) {
+											Radeon['Message'] = Array;
+											resolve(Radeon);
+										}
+									});
+								} else {
+									if (Synchronization.Status == "Error") {
+										Radeon['Message'] = "Error";
+										resolve(Radeon);
+
+									} else {
+										if (Synchronization.Status == "Null") {
+											Radeon['Message'] = "Null";
+											resolve(Radeon);
+
+										} else {
+											Radeon['Message'] = "Fail";
+											resolve(Radeon);
+
+										}
+									}
+								}
+							}).catch(err => {
+								Radeon['Message'] = false;
+								resolve(Radeon);
+
 							});
-							Boleto = await PDF2Base64;
-							if (fs.existsSync(__dirname + "/" + UID + ".pdf")) {
-								fs.unlinkSync(__dirname + "/" + UID + ".pdf");
+
+
+						}
+					});
+				} else {
+
+					if (Mensagem.some(Row => testJSON(Row))) {
+						Mensagem.some(function(Send, index) {
+							if (testJSON(Send)) {
+								var Json = Send.toString().replace('"', '').split(',');
+								isUid = Json[0].replace(/[{\}\\"]/g, '');
+								if (isUid.split(':').length == 2) {
+									isUid = isUid.split(':')[1];
+								} else {
+									isUid = (isUid).replace(isUid.split(':')[0], '');
+									isUid = isUid.replace(/^:+/, '');
+								}
+								isFind = Json[1].replace(/[^0-9]/g, '');
+								Json = {
+									uid: isUid,
+									find: isFind
+								};
+								Terminal(JSON.stringify(Json));
+							}
+						});
+
+						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+							if ((FUNCTION.includes('true') || FUNCTION.includes('1'))) {
+								Radeon['Message'] = undefined;
+							} else {
+								Radeon['Message'] = "False";
+							}
+						} else {
+							Radeon['Message'] = "Fatal";
+							JDebug = {
+								"MkAuth": "Connect was Failed",
+							};
+							Terminal(JDebug);
+						}
+						resolve(Radeon);
+					} else {
+						Radeon['Message'] = undefined;
+						resolve(Radeon);
+					}
+				}
+			});
+
+			const Reconstructor = new Promise((resolve, reject) => {
+				if (Mensagem.some(Row => Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Rows => Row.includes(Rows)))) {
+					var isArray = {};
+					(Mensagem).someAsync(async (Send) => {
+						if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+							const isCloud = async (Url) => {
+								let isMimetype;
+								const isAttachment = await axios.get(Url, {
+									responseType: 'arraybuffer'
+								}).then(response => {
+									isMimetype = response.headers['content-type'];
+									return response.data.toString('base64');
+								});
+								return await new MessageMedia(isMimetype, isAttachment, 'Media');
+							};
+
+							await isCloud(Send).then(Return => {
+								isArray[Send] = Return;
+								resolve(isArray);
+							}).catch(err => {
+								resolve(undefined);
+							});
+
+						}
+					});
+				} else {
+					resolve(undefined);
+				}
+			});
+
+			delay(0).then(async function() {
+				const Retorno = await Promise.all([Constructor, Reconstructor]);
+				var Boleto, PDF2Base64, Sleep = 0;
+				if (Debug('MKAUTH').delay >= 3) {
+					Sleep = (Sleep + (Debug('MKAUTH').delay * 1000));
+				}
+				if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != "False") && (Retorno[0].Message != "Fatal") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null")) {
+
+					for (let i = 0; i < Retorno[0].Message.length; i++) {
+						if (typeof Retorno[0].Message[i] === 'string') {
+							if ((Retorno[0].Message[i].indexOf("boleto.hhvm") > -1)) {
+								const UID = Retorno[0].Message[i].split("=")[1];
+								Boleto = await Build(Retorno[0].Message[i]);
+								PDF2Base64 = await new Promise((resolve, reject) => {
+									if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Boleto.includes(Row))) {
+										const Cloud = async (Url) => {
+											let mimetype;
+											const attachment = await axios.get(Url, {
+												responseType: 'arraybuffer'
+											}).then(response => {
+												mimetype = response.headers['content-type'];
+												return response.data.toString('base64');
+											});
+											return new MessageMedia(mimetype, attachment, 'Fatura');
+										};
+										Cloud(Boleto).then(Return => {
+											resolve(Return);
+										}).catch(err => {
+											resolve(undefined);
+										});
+									}
+								});
+								Boleto = await PDF2Base64;
+								if (fs.existsSync(__dirname + "/" + UID + ".pdf")) {
+									fs.unlinkSync(__dirname + "/" + UID + ".pdf");
+								}
 							}
 						}
 					}
 				}
-			}
-			delay(Sleep).then(async function() {
-				var Assembly = [];
-				var Sending = 1;
-				var Ryzen = 0;
-				var PrevERROR = false;
-				Mensagem.someAsync(async (Send) => {
-					if (testJSON(Send)) {
-						if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null") || (Retorno[0].Message != "Fatal") || (Retorno[0].Message != "False")) {
-							for (let i = 0; i < Retorno[0].Message.length; i++) {
-								Assembly.push(Retorno[0].Message[i]);
+				delay(Sleep).then(async function() {
+					var Assembly = [];
+					var Sending = 1;
+					var Ryzen = 0;
+					var PrevERROR = false;
+					Mensagem.someAsync(async (Send) => {
+						if (testJSON(Send)) {
+							if ((Retorno[0].Message != undefined) && (Retorno[0].Message != "Fail") && (Retorno[0].Message != false) && (Retorno[0].Message != "Error") && (Retorno[0].Message != "Null") || (Retorno[0].Message != "Fatal") || (Retorno[0].Message != "False")) {
+								for (let i = 0; i < Retorno[0].Message.length; i++) {
+									Assembly.push(Retorno[0].Message[i]);
+								}
 							}
-						}
-					} else {
-						if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
-							if (typeof Send === 'string') {
-								if ((Send.indexOf("http") > -1)) {
+						} else {
+							if (Debug('ATTACHMENTS', 'SUFFIXES', 'MULTIPLE').some(Row => Send.includes(Row))) {
+								if (typeof Send === 'string') {
+									if ((Send.indexOf("http") > -1)) {
+										if (Retorno[1][Send] != undefined) {
+											if (Retorno[1].hasOwnProperty(Send)) {
+												Assembly.push(Retorno[1][Send]);
+											}
+
+										}
+									} else {
+										Assembly.push(Send);
+									}
+								} else {
 									if (Retorno[1][Send] != undefined) {
 										if (Retorno[1].hasOwnProperty(Send)) {
 											Assembly.push(Retorno[1][Send]);
 										}
-
-									}
-								} else {
-									Assembly.push(Send);
-								}
-							} else {
-								if (Retorno[1][Send] != undefined) {
-									if (Retorno[1].hasOwnProperty(Send)) {
-										Assembly.push(Retorno[1][Send]);
 									}
 								}
-							}
-						} else {
-							Assembly.push(Send);
-						}
-					}
-				});
-
-				if (WhatsApp == Wait || Wait == undefined) {
-					Delay = 300;
-				} else {
-					Delay = Debug('OPTIONS').sendwait;
-				}
-				if (Assembly.length >= 1) {
-					if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
-						if (Retorno[0].Message == "Fail") {
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').unavailable
-							});
-						}
-						if (Retorno[0].Message == "Error") {
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').request
-							});
-						}
-						if (Retorno[0].Message == "Null") {
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').missing
-							});
-						}
-
-						if (Retorno[0].Message == "Fatal") {
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').mkfail
-							});
-						}
-
-						if (Retorno[0].Message == "False") {
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').mkunselect
-							});
-						}
-
-						if (Retorno[0].Message == false) {
-							var SELECTOR = false;
-							if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
-								SELECTOR = true;
-							}
-
-							if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
-								SELECTOR = true;
-							}
-
-							if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
-								SELECTOR = true;
-							}
-
-							if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
-								SELECTOR = true;
-							}
-
-							if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
-								SELECTOR = true;
-							}
-							Retorno[0].Message = "Fail";
-							if (SELECTOR) {
-								res.json({
-									Status: "Fail",
-									message: Debug('CONSOLE').refused
-								});
 							} else {
-								return res.json({
-									Status: "Fail",
-									message: Debug('CONSOLE').mkunselect
-								});
+								Assembly.push(Send);
 							}
 						}
-						db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-							if (TARGET != undefined) {
-								if (Retorno[0].Title == "xxx") {
-									Retorno[0].Title = uID;
-								}
-								if (Retorno[0].Message == undefined) {
-									Retorno[0].Message = "Null";
-								}
-								if (Retorno[0].Message == "False") {
-									Retorno[0].Message = "Fail";
-								}
+					});
 
-								db.serialize(() => {
-									db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
-										if (err) throw err;
-									});
-									db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-										isTARGET = [];
-										if (TARGET != undefined) {
-											Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-												if (TARGET.status == 'pending') {
-													Dataset('TARGET', '*', TARGET.id, 'DELETE');
-													Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
-												} else {
-													GetLog = {
-														"ID": TARGET.id,
-														"TITLE": TARGET.title,
-														"NAME": TARGET.client,
-														"START": TARGET.start,
-														"END": TARGET.end,
-														"TARGET": TARGET.target,
-														"STATUS": TARGET.status,
-													};
-													isTARGET.push(GetLog);
-													if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-														if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-															global.io.emit('setlog', isTARGET);
-														}
-													}
-												}
-
-											});
-										}
-									});
-								});
-							}
-						});
+					if (WhatsApp == Wait || Wait == undefined) {
+						Delay = 300;
 					} else {
-
-						Terminal(Assembly);
-						setTimeout(function() {
-							Assembly.some(function(Send, index) {
-								const PIXFAIL = [undefined, "XXX", null, ""];
-								if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
-									Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
-								}
-								setTimeout(function() {
-									setTimeout(function() {
-										if (typeof Send === 'string') {
-											if ((Send.indexOf("boleto.hhvm") > -1)) {
-												if (Boleto != undefined) {
-													if (typeof Boleto !== 'string') {
-														Send = Boleto;
-													}
-												}
-												Caption = "Boleto";
-												Preview = true;
-												Ryzen = 1000;
-											} else {
-												if ((Send.indexOf("http") > -1)) {
-													Caption = undefined;
-													Preview = true;
-												} else {
-													Caption = undefined;
-													Preview = false;
-												}
-											}
-										} else {
-											if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
-												Caption = JSON.parse(JSON.stringify(Send)).filename;
-												Preview = false;
-											} else {
-												Caption = undefined;
-												Preview = false;
-											}
-											Ryzen = 1000;
-										}
-
-
-										if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
-											client.sendMessage(WhatsApp, Send, {
-												caption: Caption,
-												linkPreview: Preview
-											}).then(response => {
-												Wait = WhatsApp;
-												Sending = (Sending + 1);
-											}).catch(err => {
-												return res.status(500).json({
-													Status: "Fail",
-													message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
-												});
-											});
-
-										} else {
-											return res.status(500).json({
-												Status: "Fail",
-												message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
-											});
-										}
-
-										if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
-
-											db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-												if (TARGET != undefined) {
-
-													if (Retorno[0].Title == "xxx") {
-														Retorno[0].Title = Debug('TARGET').id;
-													}
-													if (Retorno[0].Message == undefined) {
-														Retorno[0].Message = "Null";
-													}
-													if (Retorno[0].Message == "False") {
-														Retorno[0].Message = "Fail";
-													}
-
-
-													db.serialize(() => {
-														db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
-
-															if (err) throw err;
-														});
-														db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-															isTARGET = [];
-															if (TARGET != undefined) {
-																Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-																	if (TARGET.status == 'pending') {
-																		Dataset('TARGET', '*', TARGET.id, 'DELETE');
-																		Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
-																	} else {
-																		GetLog = {
-																			"ID": TARGET.id,
-																			"TITLE": TARGET.title,
-																			"NAME": TARGET.client,
-																			"START": TARGET.start,
-																			"END": TARGET.end,
-																			"TARGET": TARGET.target,
-																			"STATUS": TARGET.status,
-																		};
-																		isTARGET.push(GetLog);
-																		if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																			if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-																				global.io.emit('setlog', isTARGET);
-																			}
-																		}
-																	}
-
-																});
-															}
-														});
-													});
-												}
-											});
-
-											return res.json({
-												Status: "Success",
-												message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
-											});
-										}
-									}, ((Debug('MKAUTH').delay + index) * Ryzen));
-								}, (index) * Debug('OPTIONS').interval);
-							});
-						}, Math.floor(Delay + Math.random() * 1000));
+						Delay = Debug('OPTIONS').sendwait;
 					}
-				} else {
-					if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
-
-						if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
+					if (Assembly.length >= 1) {
+						if ((Retorno[0].Message == "Fail") || (Retorno[0].Message == false) || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 							if (Retorno[0].Message == "Fail") {
 								res.json({
 									Status: "Fail",
@@ -2437,8 +2882,6 @@ app.post('/send-message', [
 								});
 							}
 
-
-
 							if (Retorno[0].Message == false) {
 								var SELECTOR = false;
 								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
@@ -2467,18 +2910,16 @@ app.post('/send-message', [
 										message: Debug('CONSOLE').refused
 									});
 								} else {
-									res.json({
+									return res.json({
 										Status: "Fail",
 										message: Debug('CONSOLE').mkunselect
 									});
 								}
 							}
-
-							db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
+							db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
 								if (TARGET != undefined) {
-
 									if (Retorno[0].Title == "xxx") {
-										Retorno[0].Title = Debug('TARGET').id;
+										Retorno[0].Title = uID;
 									}
 									if (Retorno[0].Message == undefined) {
 										Retorno[0].Message = "Null";
@@ -2487,10 +2928,8 @@ app.post('/send-message', [
 										Retorno[0].Message = "Fail";
 									}
 
-
 									db.serialize(() => {
-										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
-
+										db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
 											if (err) throw err;
 										});
 										db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
@@ -2501,6 +2940,9 @@ app.post('/send-message', [
 														Dataset('TARGET', '*', TARGET.id, 'DELETE');
 														Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
 													} else {
+														if (TARGET.target == "900000000") {
+															TARGET.target = "(00) 0 0000-0000";
+														}
 														GetLog = {
 															"ID": TARGET.id,
 															"TITLE": TARGET.title,
@@ -2525,17 +2967,355 @@ app.post('/send-message', [
 								}
 							});
 						} else {
-							if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 
-								db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+							Terminal(Assembly);
+							setTimeout(function() {
+								Assembly.some(function(Send, index) {
+									const PIXFAIL = [undefined, "XXX", null, ""];
+									if (!PIXFAIL.includes(Debug('OPTIONS').pixfail) && Send == "CodigoIndisponivel") {
+										Send = Send.replace("CodigoIndisponivel", Debug('OPTIONS').pixfail);
+									}
+									setTimeout(function() {
+										setTimeout(function() {
+											if (typeof Send === 'string') {
+												if ((Send.indexOf("boleto.hhvm") > -1)) {
+													if (Boleto != undefined) {
+														if (typeof Boleto !== 'string') {
+															Send = Boleto;
+														}
+													}
+													Caption = "Boleto";
+													Preview = true;
+													Ryzen = 1000;
+												} else {
+													if ((Send.indexOf("http") > -1)) {
+														Caption = undefined;
+														Preview = true;
+													} else {
+														Caption = undefined;
+														Preview = false;
+													}
+												}
+											} else {
+												if (JSON.parse(JSON.stringify(Send)).filename != "Media") {
+													Caption = JSON.parse(JSON.stringify(Send)).filename;
+													Preview = false;
+												} else {
+													Caption = undefined;
+													Preview = false;
+												}
+												Ryzen = 1000;
+											}
+
+
+											if ([Debug('OPTIONS').token, Password[1]].includes(isHid)) {
+												client.sendMessage(WhatsApp, Send, {
+													caption: Caption,
+													linkPreview: Preview
+												}).then(response => {
+													Wait = WhatsApp;
+													Sending = (Sending + 1);
+												}).catch(err => {
+													return res.status(500).json({
+														Status: "Fail",
+														message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+													});
+												});
+
+											} else {
+												return res.status(500).json({
+													Status: "Fail",
+													message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
+												});
+											}
+
+											if ((Sending == Assembly.length) || (Assembly.length == (index + 1))) {
+
+												db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+													if (TARGET != undefined) {
+
+														if (Retorno[0].Title == "xxx") {
+															Retorno[0].Title = Debug('TARGET').id;
+														}
+														if (Retorno[0].Message == undefined) {
+															Retorno[0].Message = "Null";
+														}
+														if (Retorno[0].Message == "False") {
+															Retorno[0].Message = "Fail";
+														}
+
+
+														db.serialize(() => {
+															db.run("UPDATE target SET end=?, status=?, target=?, title=?, client=? WHERE id=?", [DateTime(), 'Sent', WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, Retorno[0].Name, uID], (err) => {
+
+																if (err) throw err;
+															});
+															db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+																isTARGET = [];
+																if (TARGET != undefined) {
+																	Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+																		if (TARGET.status == 'pending') {
+																			Dataset('TARGET', '*', TARGET.id, 'DELETE');
+																			Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+																		} else {
+																			if (TARGET.target == "900000000") {
+																				TARGET.target = "(00) 0 0000-0000";
+																			}
+																			GetLog = {
+																				"ID": TARGET.id,
+																				"TITLE": TARGET.title,
+																				"NAME": TARGET.client,
+																				"START": TARGET.start,
+																				"END": TARGET.end,
+																				"TARGET": TARGET.target,
+																				"STATUS": TARGET.status,
+																			};
+																			isTARGET.push(GetLog);
+																			if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																				if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																					global.io.emit('setlog', isTARGET);
+																				}
+																			}
+																		}
+
+																	});
+																}
+															});
+														});
+													}
+												});
+
+												return res.json({
+													Status: "Success",
+													message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').success
+												});
+											}
+										}, ((Debug('MKAUTH').delay + index) * Ryzen));
+									}, (index) * Debug('OPTIONS').interval);
+								});
+							}, Math.floor(Delay + Math.random() * 1000));
+						}
+					} else {
+						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+
+							if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
+								if (Retorno[0].Message == "Fail") {
+									res.json({
+										Status: "Fail",
+										message: Debug('CONSOLE').unavailable
+									});
+								}
+								if (Retorno[0].Message == "Error") {
+									res.json({
+										Status: "Fail",
+										message: Debug('CONSOLE').request
+									});
+								}
+								if (Retorno[0].Message == "Null") {
+									res.json({
+										Status: "Fail",
+										message: Debug('CONSOLE').missing
+									});
+								}
+
+								if (Retorno[0].Message == "Fatal") {
+									res.json({
+										Status: "Fail",
+										message: Debug('CONSOLE').mkfail
+									});
+								}
+
+								if (Retorno[0].Message == "False") {
+									res.json({
+										Status: "Fail",
+										message: Debug('CONSOLE').mkunselect
+									});
+								}
+
+
+
+								if (Retorno[0].Message == false) {
+									var SELECTOR = false;
+									if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+										SELECTOR = true;
+									}
+
+									if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+										SELECTOR = true;
+									}
+
+									if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+										SELECTOR = true;
+									}
+
+									if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+										SELECTOR = true;
+									}
+
+									if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+										SELECTOR = true;
+									}
+									Retorno[0].Message = "Fail";
+									if (SELECTOR) {
+										res.json({
+											Status: "Fail",
+											message: Debug('CONSOLE').refused
+										});
+									} else {
+										res.json({
+											Status: "Fail",
+											message: Debug('CONSOLE').mkunselect
+										});
+									}
+								}
+
+								db.get("SELECT * FROM target WHERE id='" + Debug('TARGET').id + "'", (err, TARGET) => {
 									if (TARGET != undefined) {
 
 										if (Retorno[0].Title == "xxx") {
-											Retorno[0].Title = uID;
+											Retorno[0].Title = Debug('TARGET').id;
 										}
 										if (Retorno[0].Message == undefined) {
 											Retorno[0].Message = "Null";
 										}
+										if (Retorno[0].Message == "False") {
+											Retorno[0].Message = "Fail";
+										}
+
+
+										db.serialize(() => {
+											db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
+
+												if (err) throw err;
+											});
+											db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+												isTARGET = [];
+												if (TARGET != undefined) {
+													Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+														if (TARGET.status == 'pending') {
+															Dataset('TARGET', '*', TARGET.id, 'DELETE');
+															Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+														} else {
+															if (TARGET.target == "900000000") {
+																TARGET.target = "(00) 0 0000-0000";
+															}
+															GetLog = {
+																"ID": TARGET.id,
+																"TITLE": TARGET.title,
+																"NAME": TARGET.client,
+																"START": TARGET.start,
+																"END": TARGET.end,
+																"TARGET": TARGET.target,
+																"STATUS": TARGET.status,
+															};
+															isTARGET.push(GetLog);
+															if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																	global.io.emit('setlog', isTARGET);
+																}
+															}
+														}
+
+													});
+												}
+											});
+										});
+									}
+								});
+							} else {
+								if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
+
+									db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+										if (TARGET != undefined) {
+
+											if (Retorno[0].Title == "xxx") {
+												Retorno[0].Title = uID;
+											}
+											if (Retorno[0].Message == undefined) {
+												Retorno[0].Message = "Null";
+											}
+											if (Retorno[0].Message == "False") {
+												Retorno[0].Message = "Fail";
+											}
+
+											db.serialize(() => {
+												db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
+
+													if (err) throw err;
+												});
+												db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+													isTARGET = [];
+													if (TARGET != undefined) {
+														Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
+															if (TARGET.status == 'pending') {
+																Dataset('TARGET', '*', TARGET.id, 'DELETE');
+																Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
+															} else {
+																if (TARGET.target == "900000000") {
+																	TARGET.target = "(00) 0 0000-0000";
+																}
+																GetLog = {
+																	"ID": TARGET.id,
+																	"TITLE": TARGET.title,
+																	"NAME": TARGET.client,
+																	"START": TARGET.start,
+																	"END": TARGET.end,
+																	"TARGET": TARGET.target,
+																	"STATUS": TARGET.status,
+																};
+																isTARGET.push(GetLog);
+																if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
+																	if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																		global.io.emit('setlog', isTARGET);
+																	}
+																}
+															}
+
+														});
+													}
+												});
+											});
+										}
+									});
+
+								} else {
+									global.io.emit('getlog', true);
+
+								}
+
+								return res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').mkunselect
+								});
+							}
+						} else {
+
+							if ((Debug('MKAUTH').module == 0 || Debug('MKAUTH').module == "false")) {
+								Retorno[0].Message = "Fail";
+								res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').mkfail
+								});
+
+							} else {
+								return res.json({
+									Status: "Fail",
+									message: Debug('CONSOLE').unnamed
+								});
+							}
+
+							if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
+								db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
+									if (TARGET != undefined) {
+
+										if (Retorno[0].Title == "xxx") {
+											Retorno[0].Title = Debug('TARGET').id;
+										}
+
+										if (Retorno[0].Message == undefined) {
+											Retorno[0].Message = "Null";
+										}
+
 										if (Retorno[0].Message == "False") {
 											Retorno[0].Message = "Fail";
 										}
@@ -2553,6 +3333,9 @@ app.post('/send-message', [
 															Dataset('TARGET', '*', TARGET.id, 'DELETE');
 															Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
 														} else {
+															if (TARGET.target == "900000000") {
+																TARGET.target = "(00) 0 0000-0000";
+															}
 															GetLog = {
 																"ID": TARGET.id,
 																"TITLE": TARGET.title,
@@ -2582,91 +3365,21 @@ app.post('/send-message', [
 
 							}
 
-							return res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').mkunselect
-							});
 						}
-					} else {
-
-						if ((Debug('MKAUTH').module == 0 || Debug('MKAUTH').module == "false")) {
-							Retorno[0].Message = "Fail";
-							res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').mkfail
-							});
-
-						} else {
-							return res.json({
-								Status: "Fail",
-								message: Debug('CONSOLE').unnamed
-							});
-						}
-
-						if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
-							db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-								if (TARGET != undefined) {
-
-									if (Retorno[0].Title == "xxx") {
-										Retorno[0].Title = Debug('TARGET').id;
-									}
-
-									if (Retorno[0].Message == undefined) {
-										Retorno[0].Message = "Null";
-									}
-
-									if (Retorno[0].Message == "False") {
-										Retorno[0].Message = "Fail";
-									}
-
-									db.serialize(() => {
-										db.run("UPDATE target SET end=?, status=?, target=?, title=? WHERE id=?", [DateTime(), Retorno[0].Message, WhatsApp.replace(/^55+/, '').replace(/\D/g, ''), Retorno[0].Title, uID], (err) => {
-
-											if (err) throw err;
-										});
-										db.get("SELECT * FROM target WHERE id='" + uID + "'", (err, TARGET) => {
-											isTARGET = [];
-											if (TARGET != undefined) {
-												Debug('TARGET', '*', 'ALL').some(function(TARGET, index) {
-													if (TARGET.status == 'pending') {
-														Dataset('TARGET', '*', TARGET.id, 'DELETE');
-														Dataset('SQLITE_SEQUENCE', 'SEQ', 'TARGET', 'FLUSH');
-													} else {
-														GetLog = {
-															"ID": TARGET.id,
-															"TITLE": TARGET.title,
-															"NAME": TARGET.client,
-															"START": TARGET.start,
-															"END": TARGET.end,
-															"TARGET": TARGET.target,
-															"STATUS": TARGET.status,
-														};
-														isTARGET.push(GetLog);
-														if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
-																global.io.emit('setlog', isTARGET);
-															}
-														}
-													}
-
-												});
-											}
-										});
-									});
-								}
-							});
-
-						} else {
-							global.io.emit('getlog', true);
-
-						}
-
 					}
-				}
+				});
 			});
-		});
+		} else {
+			console.log("Mensagem Agendada");
+		}
 	} else {
-		console.log("Mensagem Agendada");
+		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger);
+
+		return res.status(500).json({
+			Status: "Fail",
+			message: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').trigger
+		});
 	}
 });
 

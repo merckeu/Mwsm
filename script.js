@@ -8,6 +8,7 @@ $(window).on('load', function() {
 });
 
 $(document).ready(function() {
+	$(".Disabled").prop('disabled', true);
 	$(".close, #Exit").click(function() {
 		$('.modal').delay(200).fadeOut('slow');
 	});
@@ -22,111 +23,349 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	var Turno = $('#Turno').val();
+	var Select = $('#Select').val();
 	$(".MSG_Box").hide();
 	switch (Turno) {
 		case "before":
 			$("#Placeholder_001").text("Days Before");
-			$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
 
-			});
+			switch (Select) {
+				case "1":
+					$("#MSG_A01, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+					});
+					break;
+				case "2":
+					$("#MSG_A02, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_A03, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+					});
+					break;
+			}
+
 			break;
 		case "day":
 			$("#Placeholder_002").text("In Day");
-			$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_B01, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
 
-			});
+					});
+
+					break;
+				case "2":
+					$("#MSG_B02, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+					});
+
+					break;
+				case "3":
+					$("#MSG_B03, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+					});
+
+					break;
+			}
 			break;
 		case "later":
 			$("#Placeholder_003").text("Days Later");
-			$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_C01, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
 
-			});
+					});
+					break;
+				case "2":
+					$("#MSG_C02, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_C03, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 		case "Pay":
 			$("#Placeholder_004").text("Payment Received");
-			$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_D01, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
 
-			});
+					});
+					break;
+				case "2":
+					$("#MSG_D02, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_D03, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 
 		case "Lock":
 			$("#Placeholder_005").text("Locked User");
-			$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_E01, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
 
-			});
+					});
+
+					break;
+				case "2":
+					$("#MSG_E02, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_E03, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 		case "Unlock":
 			$("#Placeholder_006").text("Unlocked User");
-			$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_F01, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
 
-			});
+					});
+					break;
+				case "2":
+					$("#MSG_F02, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_F03, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 		case "Maintenance":
 			$("#Placeholder_007").text("Maintenance");
-			$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_G01, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
 
-			});
+					});
+					break;
+				case "2":
+					$("#MSG_G02, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_G03, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 		case "Unistall":
 			$("#Placeholder_008").text("Unistall Device");
-			$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+			switch (Select) {
+				case "1":
+					$("#MSG_H01, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
 
-			});
+					});
+					break;
+				case "2":
+					$("#MSG_H02, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_H03, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+					});
+					break;
+			}
 			break;
 
 	}
-	$("#Turno").on('change', function() {
+	$("#Turno, #Select").on('change', function() {
 		var Turno = $('#Turno').val();
+		var Select = $('#Select').val();
 		$(".MSG_Box").hide();
 		switch (Turno) {
 			case "before":
 				$("#Placeholder_001").text("Days Before");
-				$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
 
-				});
+				switch (Select) {
+					case "1":
+						$("#MSG_A01, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+						});
+						break;
+					case "2":
+						$("#MSG_A02, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_A03, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+
+						});
+						break;
+				}
+
 				break;
 			case "day":
 				$("#Placeholder_002").text("In Day");
-				$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_B01, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
 
-				});
+						});
+
+						break;
+					case "2":
+						$("#MSG_B02, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+						});
+
+						break;
+					case "3":
+						$("#MSG_B03, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+
+						});
+
+						break;
+				}
 				break;
 			case "later":
 				$("#Placeholder_003").text("Days Later");
-				$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_C01, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
 
-				});
+						});
+						break;
+					case "2":
+						$("#MSG_C02, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_C03, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 			case "Pay":
 				$("#Placeholder_004").text("Payment Received");
-				$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_D01, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
 
-				});
+						});
+						break;
+					case "2":
+						$("#MSG_D02, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_D03, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 
 			case "Lock":
 				$("#Placeholder_005").text("Locked User");
-				$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_E01, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
 
-				});
+						});
+
+						break;
+					case "2":
+						$("#MSG_E02, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_E03, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 			case "Unlock":
 				$("#Placeholder_006").text("Unlocked User");
-				$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_F01, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
 
-				});
+						});
+						break;
+					case "2":
+						$("#MSG_F02, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_F03, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 			case "Maintenance":
 				$("#Placeholder_007").text("Maintenance");
-				$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_G01, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
 
-				});
+						});
+						break;
+					case "2":
+						$("#MSG_G02, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_G03, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 			case "Unistall":
 				$("#Placeholder_008").text("Unistall Device");
-				$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+				switch (Select) {
+					case "1":
+						$("#MSG_H01, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
 
-				});
+						});
+						break;
+					case "2":
+						$("#MSG_H02, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_H03, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+						});
+						break;
+				}
 				break;
 
 		}
@@ -165,6 +404,8 @@ $(document).ready(function() {
 	$("tbody.onClick").delegate('tr', 'click', function() {
 		const uID_Push = "#push_" + $(this).attr('data-code') + "";
 		const uID_Status = "#status_" + $(this).attr('data-code') + "";
+		const uID_Code = "#" + $(this).attr('data-code') + "";
+		var Cursor = "default";
 		if (($(uID_Status).text()).toLowerCase() != "finished") {
 			$.ajax({
 				type: "POST",
@@ -197,6 +438,13 @@ $(document).ready(function() {
 						$(uID_Push).text(new Date(data.RPush).toLocaleString("pt-br").replace(",", ""));
 						$(uID_Status).text(data.Status);
 					}
+					if ((data.RStatus).toLowerCase() == "finished") {
+						Cursor = "no-drop";
+					} else {
+						Cursor = "pointer";
+					}
+					$(uID_Code).attr('style', 'cursor: ' + Cursor);
+
 					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
 						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
 						life: 2000,
@@ -218,6 +466,13 @@ $(document).ready(function() {
 						theme: 'Mwsm',
 						speed: 'slow',
 						close: function(e, m, o) {
+							if ((data.RStatus).toLowerCase() == "finished") {
+								Cursor = "no-drop";
+							} else {
+								Cursor = "pointer";
+							}
+							$(uID_Code).attr('style', 'cursor: ' + Cursor);
+
 							$("#MkSend").fadeOut("slow", function() {
 								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 							});
@@ -234,7 +489,7 @@ $(document).ready(function() {
 $(document).ready(function() {
 	$("#tabs2").tabs({
 		activate: function(event, ui) {
-			if (ui.newTab.find(".ui-tabs-anchor").attr('href') == "#tabs-2E") {
+			if (ui.newTab.find(".ui-tabs-anchor").attr('href') == "#tabs-2E" && $("#module").is(":checked")) {
 				$("#Control").show("fast");
 			} else {
 				$("#Control").hide("fast");
@@ -322,69 +577,73 @@ $(document).ready(function() {
 	});
 
 	$("#InSave").on('click', function() {
-		if ((($("." + $('#Turno').val().toLowerCase()).val() != "") && ($("." + $('#Turno').val().toLowerCase()).val()).length >= 30) || ($("." + $('#Turno').val().toLowerCase()).val() == "xxx".toLowerCase())) {
-			$.ajax({
-				type: "POST",
-				url: "/message_mkauth",
-				data: {
-					database: $('#Turno').val().toLowerCase(),
-					message: $("." + $('#Turno').val().toLowerCase()).val(),
-					token: $("#token").val()
-				},
-				beforeSend: function(data) {
-					$("#inLoad").fadeIn("slow", function() {
-						$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-						$(".MSG_Box").prop('disabled', true);
-					});
-				},
+		if ($("#AutoBot").is(":checked") == false) {
+			var MsgBox = $("." + $('#Turno').val().toLowerCase() + '_00' + $("#Select").val()).val();
+			if ((MsgBox != "") && (MsgBox.length >= 30) || MsgBox == "xxx".toLowerCase()) {
+				$.ajax({
+					type: "POST",
+					url: "/message_mkauth",
+					data: {
+						database: $('#Turno').val().toLowerCase(),
+						message: MsgBox,
+						select: $("#Select").val(),
+						token: $("#token").val()
+					},
+					beforeSend: function(data) {
+						$("#inLoad").fadeIn("slow", function() {
+							$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+							$(".MSG_Box").prop('disabled', true);
+						});
+					},
 
-				success: function(data) {
-					if (data.Status == "Success") {
-						var Icon = "fa-check";
-					}
-					if (data.Status == "Fail") {
+					success: function(data) {
+						if (data.Status == "Success") {
+							var Icon = "fa-check";
+						}
+						if (data.Status == "Fail") {
+							var Icon = "fa-exclamation";
+						}
+						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
+							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+							life: 2000,
+							theme: 'Mwsm',
+							speed: 'slow',
+							close: function(e, m, o) {
+								$("#inLoad").fadeOut("slow", function() {
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+									$(".MSG_Box, #Turno").prop('disabled', false);
+								});
+							}
+						});
+
+					},
+					error: function(request, status, error) {
 						var Icon = "fa-exclamation";
+						$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
+							header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
+							life: 2000,
+							theme: 'Mwsm',
+							speed: 'slow',
+							close: function(e, m, o) {
+								$("#inLoad").fadeOut("slow", function() {
+									$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+									$(".MSG_Box, #Turno").prop('disabled', false);
+								});
+							}
+						});
 					}
-					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + data.Return, {
-						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-						life: 2000,
-						theme: 'Mwsm',
-						speed: 'slow',
-						close: function(e, m, o) {
-							$("#inLoad").fadeOut("slow", function() {
-								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-								$(".MSG_Box, #Turno").prop('disabled', false);
-							});
-						}
-					});
-
-				},
-				error: function(request, status, error) {
-					var Icon = "fa-exclamation";
-					$.jGrowl('<i class="fa ' + Icon + '" aria-hidden="true"></i> ' + 'Failed: Server connection error', {
-						header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
-						life: 2000,
-						theme: 'Mwsm',
-						speed: 'slow',
-						close: function(e, m, o) {
-							$("#inLoad").fadeOut("slow", function() {
-								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-								$(".MSG_Box, #Turno").prop('disabled', false);
-							});
-						}
-					});
-				}
-			});
-		} else {
-			$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-			$(".MSG_Box, #Turno").prop('disabled', true);
-			setTimeout(function() {
-				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-				$(".MSG_Box, #Turno").prop('disabled', false);
-				$("." + $('#Turno').val().toLowerCase()).val("").focus();
-			}, 700);
+				});
+			} else {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+				$(".MSG_Box, #Turno").prop('disabled', true);
+				setTimeout(function() {
+					$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+					$(".MSG_Box, #Turno").prop('disabled', false);
+					$("." + $('#Turno').val().toLowerCase()).val("").focus();
+				}, 700);
 
 
+			}
 		}
 	});
 
@@ -904,77 +1163,214 @@ $(document).ready(function() {
 
 
 	$("#Scheduler").on("click", function() {
-		$(".modal").show();
+			$(".modal").show();
 	});
 
 
 
 	$("#Zero").on("click", function() {
-		var Turno = $('#Turno').val();
-		$("#Turno, .MSG_Box").prop('disabled', true);
-		switch (Turno) {
-			case "before":
-				$("#Placeholder_001").text("Days Before");
-				$("#MSG_001").val("");
-				$("#MSG_001, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
+		if ($("#AutoBot").is(":checked") == false) {
+			var Turno = $('#Turno').val();
+			var Select = $('#Select').val();
+			$("#Turno, .MSG_Box").prop('disabled', true);
+			switch (Turno) {
+				case "before":
+					$("#Placeholder_001").text("Days Before");
+					switch (Select) {
+						case "1":
+							$("#MSG_A01").val("");
+							$("#MSG_A01, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
 
-				});
-				break;
-			case "day":
-				$("#Placeholder_002").text("In Day");
-				$("#MSG_002").val("");
-				$("#MSG_002, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
+							});
 
-				});
-				break;
-			case "later":
-				$("#Placeholder_003").text("Days Later");
-				$("#MSG_003").val("");
-				$("#MSG_003, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+							break;
+						case "2":
+							$("#MSG_A02").val("");
+							$("#MSG_A02, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
 
-				});
-				break;
-			case "Pay":
-				$("#Placeholder_004").text("Payment Received");
-				$("#MSG_004").val("");
-				$("#MSG_004, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+							});
+							break;
+						case "3":
+							$("#MSG_A03").val("");
+							$("#MSG_A06, #Placeholder_001, #MSG_Box_001").fadeIn("slow", function() {
 
-				});
-				break;
+							});
+							break;
+					}
+					break;
+				case "day":
+					$("#Placeholder_002").text("In Day");
+					switch (Select) {
+						case "1":
+							$("#MSG_B01").val("");
+							$("#MSG_B01, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
 
-			case "Lock":
-				$("#Placeholder_005").text("Locked User");
-				$("#MSG_005").val("");
-				$("#MSG_005, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+							});
 
-				});
-				break;
-			case "Unlock":
-				$("#Placeholder_006").text("Unlocked User");
-				$("#MSG_006").val("");
-				$("#MSG_006, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+							break;
+						case "2":
+							$("#MSG_B02").val("");
+							$("#MSG_B01, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
 
-				});
-				break;
-			case "Maintenance":
-				$("#Placeholder_007").text("Maintenance");
-				$("#MSG_007").val("");
-				$("#MSG_007, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+							});
+							break;
+						case "3":
+							$("#MSG_B03").val("");
+							$("#MSG_B01, #Placeholder_002, #MSG_Box_002").fadeIn("slow", function() {
 
-				});
-				break;
-			case "Unistall":
-				$("#Placeholder_008").text("Unistall Device");
-				$("#MSG_008").val("");
-				$("#MSG_008, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+							});
+							break;
+					}
+					break;
+				case "later":
+					$("#Placeholder_003").text("Days Later");
+					switch (Select) {
+						case "1":
+							$("#MSG_C01").val("");
+							$("#MSG_C01, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
 
-				});
-				break;
+							});
 
+							break;
+						case "2":
+							$("#MSG_C02").val("");
+							$("#MSG_C02, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_C03").val("");
+							$("#MSG_C03, #Placeholder_003, #MSG_Box_003").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Pay":
+					$("#Placeholder_004").text("Payment Received");
+					switch (Select) {
+						case "1":
+							$("#MSG_D01").val("");
+							$("#MSG_D01, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+							});
+
+							break;
+						case "2":
+							$("#MSG_D02").val("");
+							$("#MSG_D02, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_D03").val("");
+							$("#MSG_D03, #Placeholder_004, #MSG_Box_004").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Lock":
+					$("#Placeholder_005").text("Locked User");
+					switch (Select) {
+						case "1":
+							$("#MSG_E01").val("");
+							$("#MSG_E01, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+							});
+
+							break;
+						case "2":
+							$("#MSG_E02").val("");
+							$("#MSG_E02, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_E03").val("");
+							$("#MSG_E03, #Placeholder_005, #MSG_Box_005").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Unlock":
+					$("#Placeholder_006").text("Unlocked User");
+					switch (Select) {
+						case "1":
+							$("#MSG_F01").val("");
+							$("#MSG_F01, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+							});
+
+							break;
+						case "2":
+							$("#MSG_F02").val("");
+							$("#MSG_F02, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_F03").val("");
+							$("#MSG_F03, #Placeholder_006, #MSG_Box_006").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Maintenance":
+					$("#Placeholder_007").text("Maintenance");
+					switch (Select) {
+						case "1":
+							$("#MSG_G01").val("");
+							$("#MSG_G01, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+							});
+
+							break;
+						case "2":
+							$("#MSG_G02").val("");
+							$("#MSG_G02, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_G03").val("");
+							$("#MSG_G03, #Placeholder_007, #MSG_Box_007").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Unistall":
+					$("#Placeholder_008").text("Unistall Device");
+					switch (Select) {
+						case "1":
+							$("#MSG_H01").val("");
+							$("#MSG_H01, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+							});
+
+							break;
+						case "2":
+							$("#MSG_H02").val("");
+							$("#MSG_H02, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_H03").val("");
+							$("#MSG_H03, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+			}
+			setTimeout(function() {
+				$("#Turno, .MSG_Box").prop('disabled', false);
+			}, 500);
 		}
-		setTimeout(function() {
-			$("#Turno, .MSG_Box").prop('disabled', false);
-		}, 500);
 	});
 
 
@@ -989,23 +1385,43 @@ $(document).ready(function() {
 			success: function(data) {
 				if (data.Status == "Success") {
 					$("#module").prop("checked", false);
-					$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
+					$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', false);
 				}
 				if (data.Status == "Fail") {
 					setTimeout(() => {
 						$("#module").prop("checked", true);
-						$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
+						$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', true);
 					}, "500");
 				}
 			},
 			error: function(request, status, error) {
 				setTimeout(() => {
 					$("#module").prop("checked", true);
-					$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
+					$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', true);
 				}, "500");
 			}
 		});
 	}
+
+
+
+	$("#module").on('change', function() {
+		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift").prop("disabled", true);
+		} else {
+			$("#backup, #Spam, #Shift").prop("disabled", false);
+			if ($("#Spam").is(":checked")) {
+				$("#SpamOut").prop('disabled', false);
+			} else {
+				$("#SpamOut").prop('disabled', true);
+			}
+			if ($("#Shift").is(":checked")) {
+				$("#MinTime, #MaxTime").prop('disabled', false);
+			} else {
+				$("#MinTime, #MaxTime").prop('disabled', true);
+			}
+		}
+	});
 
 	$("#module").on('change', function() {
 		var User = $("#username").val();
@@ -1013,6 +1429,7 @@ $(document).ready(function() {
 		var Domain = $("#domain").val();
 		var Tunel = $("#tunel").val();
 		var Server = $("#iServer").val();
+		var Mode = $("#iPDF").val();
 		if ($(this).is(":checked")) {
 			if (Tunel == "") {
 				setTimeout(() => {
@@ -1051,12 +1468,14 @@ $(document).ready(function() {
 									domain: $("#domain").val(),
 									tunel: $("#tunel").val(),
 									token: $("#token").val(),
-									server: $("#iServer").val()
+									server: $("#iServer").val(),
+									mode: $("#iPDF").val()
 								},
 								beforeSend: function(data) {
+									$("#Control").show("fast");
 									$("#Waiting").fadeIn("slow", function() {
 										$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
-										$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
+										$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', true);
 									});
 								},
 								success: function(data) {
@@ -1076,7 +1495,8 @@ $(document).ready(function() {
 											$("#Waiting").fadeOut("slow", function() {
 												if (data.Status == "Fail") {
 													$("#module").prop("checked", false);
-													$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
+													$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', false);
+													$("#Control").hide("fast");
 												}
 											});
 										}
@@ -1093,7 +1513,7 @@ $(document).ready(function() {
 											$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 											$("#Waiting").fadeOut("slow", function() {
 												$("#module").prop("checked", false);
-												$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
+												$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', false);
 											});
 										}
 									});
@@ -1105,6 +1525,7 @@ $(document).ready(function() {
 				}
 			}
 		} else {
+			$("#Control").hide("fast");
 			ModuleOff();
 		}
 	});
@@ -1131,13 +1552,15 @@ $(document).ready(function() {
 							headers: {
 								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
 								msg: $("#Message").val(),
-								p: $("#token").val()
+								p: $("#token").val(),
+								auth: $("#AutoBot").prop('checked')
 							},
 							url: Simulator,
 							data: {
 								to: '55' + $("#WhatsApp").val().replace(/\D/g, ''),
 								msg: $("#Message").val(),
-								p: $("#token").val()
+								p: $("#token").val(),
+								auth: $("#AutoBot").prop('checked')
 							},
 							success: function(data) {
 								if (data.Status == "Success") {
@@ -1676,6 +2099,7 @@ $(document).ready(function() {
 	socket.on('getclients', function(value) {
 		var data = {};
 		data.d = value;
+		var Cursor = "default";
 		var html = '';
 
 		(data.d).sort(function(a, b) {
@@ -1694,8 +2118,12 @@ $(document).ready(function() {
 			if (data.d[i].STATUS == "" || data.d[i].STATUS == undefined) {
 				data.d[i].STATUS = "pending";
 			}
-
-			html += '<tr class="Fire" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-code="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '" data-reward="' + data.d[i].REWARD + '" data-client="' + data.d[i].CLIENT + '" data-push="' + data.d[i].PUSH + '">';
+			if ((data.d[i].STATUS).toLowerCase() == "finished" && (data.d[i].PAYMENT).toLowerCase() == "paid") {
+				Cursor = "no-drop";
+			} else {
+				Cursor = "pointer";
+			}
+			html += '<tr class="Fire" id="' + data.d[i].TITLE + '" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-code="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '" data-reward="' + data.d[i].REWARD + '" data-client="' + data.d[i].CLIENT + '" data-push="' + data.d[i].PUSH + '" style="cursor: ' + Cursor + ';">';
 			html += '<td class="text-center tbajust">' + data.d[i].TITLE + '</td>';
 			html += '<td class="text-center">' + data.d[i].USER + '</td>';
 			html += '<td class="text-center tbreward">' + new Date(data.d[i].REWARD).toLocaleString("pt-br").split(",")[0] + '</td>';
@@ -1711,41 +2139,91 @@ $(document).ready(function() {
 	});
 
 
-	socket.on('before', function(data) {
-		$('.before').val(data);
+	socket.on('A001', function(data) {
+		$('.before_001').val(data);
 	});
-	socket.on('day', function(data) {
-		$('.day').val(data);
+	socket.on('A002', function(data) {
+		$('.day_001').val(data);
 	});
-	socket.on('later', function(data) {
-		$('.later').val(data);
+	socket.on('A003', function(data) {
+		$('.later_001').val(data);
 	});
-	socket.on('pay', function(data) {
-		$('.Pay').val(data);
+	socket.on('A004', function(data) {
+		$('.Pay_001').val(data);
 	});
-	socket.on('lock', function(data) {
-		$('.Lock').val(data);
+	socket.on('A005', function(data) {
+		$('.Lock_001').val(data);
 	});
-	socket.on('unlock', function(data) {
-		$('.Unlock').val(data);
+	socket.on('A006', function(data) {
+		$('.Unlock_001').val(data);
 	});
-	socket.on('maintenance', function(data) {
-		$('.Maintenance').val(data);
+	socket.on('A007', function(data) {
+		$('.Maintenance_001').val(data);
 	});
-	socket.on('unistall', function(data) {
-		$('.Unistall').val(data);
+	socket.on('A008', function(data) {
+		$('.Unistall_001').val(data);
+	});
+
+	socket.on('B001', function(data) {
+		$('.before_002').val(data);
+	});
+	socket.on('B002', function(data) {
+		$('.day_002').val(data);
+	});
+	socket.on('B003', function(data) {
+		$('.later_002').val(data);
+	});
+	socket.on('B004', function(data) {
+		$('.Pay_002').val(data);
+	});
+	socket.on('B005', function(data) {
+		$('.Lock_002').val(data);
+	});
+	socket.on('B006', function(data) {
+		$('.Unlock_002').val(data);
+	});
+	socket.on('B007', function(data) {
+		$('.Maintenance_002').val(data);
+	});
+	socket.on('B008', function(data) {
+		$('.Unistall_002').val(data);
+	});
+
+	socket.on('C001', function(data) {
+		$('.before_003').val(data);
+	});
+	socket.on('C002', function(data) {
+		$('.day_003').val(data);
+	});
+	socket.on('C003', function(data) {
+		$('.later_003').val(data);
+	});
+	socket.on('C004', function(data) {
+		$('.Pay_003').val(data);
+	});
+	socket.on('C005', function(data) {
+		$('.Lock_003').val(data);
+	});
+	socket.on('C006', function(data) {
+		$('.Unlock_003').val(data);
+	});
+	socket.on('C007', function(data) {
+		$('.Maintenance_003').val(data);
+	});
+	socket.on('C008', function(data) {
+		$('.Unistall_003').val(data);
 	});
 
 
 	socket.on('domain', function(data) {
 		$('#domain').val(data);
-		if (data != "") {
+		if (data.length >= 5) {
 			$('#domain').prop('disabled', true);
 		}
 	});
 	socket.on('tunel', function(data) {
 		$('#tunel').val(data);
-		if (data != "") {
+		if (data.length >= 5) {
 			$('#tunel').prop('disabled', true);
 		}
 	});
@@ -1753,6 +2231,11 @@ $(document).ready(function() {
 	socket.on('iserver', function(data) {
 		$('#iServer').val(data);
 	});
+
+	socket.on('imode', function(data) {
+		$('#iPDF').val(data);
+	});
+
 
 	socket.on('ismonth', function(data) {
 		$('#isMonth').val(data);
@@ -1769,13 +2252,13 @@ $(document).ready(function() {
 
 	socket.on('username', function(data) {
 		$('#username').val(data);
-		if (data != "") {
+		if (data.length >= 5) {
 			$('#username').prop('disabled', true);
 		}
 	});
 	socket.on('password', function(data) {
 		$('#password').val(data);
-		if (data != "") {
+		if (data.length >= 5) {
 			$('#password').prop('disabled', true);
 		}
 	});
@@ -1877,6 +2360,107 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('backup', function(data) {
+		switch (data) {
+			case 'true':
+				$("#backup").prop("checked", true);
+				break;
+			case 'false':
+				$("#backup").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('spam', function(data) {
+		switch (data) {
+			case 'direct':
+				$("#Spam").prop("checked", false);
+				$("#SpamOut, #Select").prop('disabled', true);
+				break;
+			case 'order':
+				$("#Spam").prop("checked", true);
+				$("#SpamOut, #Select").prop('disabled', false);
+				break;
+			case 'random':
+				$("#Spam").prop("checked", true);
+				$("#SpamOut, #Select").prop('disabled', false);
+				break;
+		}
+		if (data != 'direct') {
+			$('#SpamOut').val(data).change();
+		}
+	});
+
+	socket.on('min', function(data) {
+		if ($("#Shift").is(":checked")) {
+			$("#MinTime").val(data).change();
+		} else {
+			$("#MinTime").val("08").change();
+		}
+	});
+
+	socket.on('max', function(data) {
+		if ($("#Shift").is(":checked")) {
+			$('#MaxTime').val(data).change();
+		} else {
+			$("#MaxTime").val("21").change();
+		}
+	});
+
+	socket.on('shift', function(data) {
+		switch (data) {
+			case 'true':
+				$("#Shift").prop("checked", true);
+				$("#MinTime, #MaxTime").prop('disabled', false);
+				break;
+			case 'false':
+				$("#Shift").prop("checked", false);
+				$("#MinTime, #MaxTime").prop('disabled', true);
+				break;
+		}
+		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+			$("#MinTime, #MaxTime, #Shift").prop("disabled", true);
+		} else {
+			$("#Shift").prop("disabled", false);
+			if ($("#Shift").is(":checked")) {
+				$("#MinTime, #MaxTime").prop('disabled', false);
+			} else {
+				$("#MinTime, #MaxTime").prop('disabled', true);
+			}
+		}
+	});
+
+
+	socket.on('aimbot', function(data) {
+		switch (data) {
+			case 'true':
+				$("#AutoBot").prop("checked", true);
+				$(".MSG_Box").prop("disabled", true);
+				$("#Zero, #InSave").css('cursor', 'not-allowed');
+				break;
+			case 'false':
+				$("#AutoBot").prop("checked", false);
+				$(".MSG_Box").prop("disabled", false);
+				$("#Zero, #InSave").css('cursor', 'pointer');
+				break;
+		}
+		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift").prop("disabled", true);
+		} else {
+			$("#backup, #Spam, #Shift").prop("disabled", false);
+			if ($("#Spam").is(":checked")) {
+				$("#SpamOut").prop('disabled', false);
+			} else {
+				$("#SpamOut").prop('disabled', true);
+			}
+			if ($("#Shift").is(":checked")) {
+				$("#MinTime, #MaxTime").prop('disabled', false);
+			} else {
+				$("#MinTime, #MaxTime").prop('disabled', true);
+			}
+		}
+	});
 
 	socket.on('bfive', function(data) {
 		switch (data) {
@@ -2058,12 +2642,28 @@ $(document).ready(function() {
 		switch (data) {
 			case 'true':
 				$("#module").prop("checked", true);
-				$("#domain, #username, #password, #tunel, #iServer").prop('disabled', true);
+				$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', true);
+				$("#backup").prop('disabled', false);
 				break;
 			case 'false':
 				$("#module").prop("checked", false);
-				$("#domain, #username, #password, #tunel, #iServer").prop('disabled', false);
+				$("#backup").prop('disabled', true);
 				break;
+		}
+		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift").prop("disabled", true);
+		} else {
+			$("#backup, #Spam, #Shift").prop("disabled", false);
+			if ($("#Spam").is(":checked")) {
+				$("#SpamOut").prop('disabled', false);
+			} else {
+				$("#SpamOut").prop('disabled', true);
+			}
+			if ($("#Shift").is(":checked")) {
+				$("#MinTime, #MaxTime").prop('disabled', false);
+			} else {
+				$("#MinTime, #MaxTime").prop('disabled', true);
+			}
 		}
 	});
 
@@ -2111,7 +2711,6 @@ $(document).ready(function() {
 				break;
 		}
 	});
-
 
 	socket.on('bar', function(data) {
 		switch (data) {
@@ -2452,16 +3051,34 @@ $(document).ready(function() {
 			type: "POST",
 			url: "/reset",
 			data: {
-				reset: 'true'
+				reset: 'true',
+				erase: $("#logeraser").prop('checked')
 			},
 			beforeSend: function(data) {
 				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
 			},
 			success: function(data) {
 				$('#tabs a[href="#tabs-1"]')[0].click();
-				$("#Locked").fadeIn("slow", function() {
+				$("#tabs-2E1, #tabs-2E2, #tabs-2E3, #isControls").hide();
+				$("#Locked, #tabs-2E1").fadeIn("slow", function() {
+					$('#tabs2 a[href="#tabs-2A"]')[0].click();
 					$("#token").prop('disabled', false).val("");
+					$("#logeraser").prop("checked", false);
 				});
+				if (data.Status != undefined) {
+					switch (data.Status) {
+						case 'Success':
+							$("#inTable").fadeIn("fast", function() {
+
+							});
+							break;
+						case 'Fail':
+							$("#inTable").fadeOut("fast", function() {
+
+							});
+							break;
+					}
+				}
 			},
 			error: function(request, status, error) {
 				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
@@ -2549,6 +3166,156 @@ $(document).ready(function() {
 		});
 	});
 
+	$("#backup").on('change', function() {
+		$.ajax({
+			type: "POST",
+			url: "/backup",
+			data: {
+				backup: $("#backup").prop('checked')
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+	});
+
+
+	$("#Spam, #SpamOut").on('change', function() {
+		var Level = "direct",
+			Spam = $("#Spam").prop('checked');
+		if (Spam) {
+			Level = $("#SpamOut").val();
+		}
+		$.ajax({
+			type: "POST",
+			url: "/spam",
+			data: {
+				level: Level
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				var Status = data.Status;
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				if (data.Return != "direct") {
+					$("#SpamOut, #Select").prop('disabled', false);
+				} else {
+					$("#SpamOut, #Select").prop('disabled', true);
+					$('#Select').val('1').change();
+				}
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+	});
+
+	$("#Shift, #MinTime, #MaxTime").on('change', function() {
+		if ($("#Shift").is(":checked")) {
+			Shift = true;
+		} else {
+			Shift = false;
+		}
+		var Min = $("#MinTime").val(),
+			Max = $("#MaxTime").val();
+		$.ajax({
+			type: "POST",
+			url: "/shift",
+			data: {
+				shift: Shift,
+				min: Min,
+				max: Max
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$("#Shift").prop("checked", data.Return);
+
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$("#Shift").prop("checked", false);
+			}
+		});
+	});
+
+
+	$("#AutoBot").on('change', function() {
+		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .MSG_Box").prop("disabled", true);
+			$("#Zero, #InSave").css('cursor', 'not-allowed');
+			Aimbot = true;
+		} else {
+			$("#Zero, #InSave").css('cursor', 'pointer');
+			$("#backup, #Spam, #Shift, .MSG_Box").prop("disabled", false);
+			if ($("#Spam").is(":checked")) {
+				$("#SpamOut").prop('disabled', false);
+			} else {
+				$("#SpamOut").prop('disabled', true);
+			}
+			if ($("#Shift").is(":checked")) {
+				$("#MinTime, #MaxTime").prop('disabled', false);
+			} else {
+				$("#MinTime, #MaxTime").prop('disabled', true);
+			}
+			Aimbot = false;
+		}
+		$.ajax({
+			type: "POST",
+			url: "/aimbot",
+			data: {
+				aimbot: Aimbot
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+			},
+			success: function(data) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$("#AutoBot").prop("checked", data.Return).prop("disabled", false);
+
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				$("#AutoBot").prop("checked", false);
+				if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
+					$("#AutoBot").prop("checked", false).prop("disabled", false);
+					$("#backup").prop("disabled", false);
+				} else {
+					$("#AutoBot").prop("checked", true);
+					$("#backup").prop("disabled", true);
+				}
+
+			}
+		});
+	});
+
+	$("#Shift").on('change', function() {
+		if ($("#Shift").is(":checked")) {
+			$("#MinTime, #MaxTime").prop('disabled', false);
+		} else {
+			$('#MinTime').val('08').change();
+			$('#MaxTime').val('21').change();
+			$("#MinTime, #MaxTime").prop('disabled', true);
+		}
+	});
+
+
+	$("#Spam").on('change', function() {
+		if ($(this).is(":checked")) {
+			$("#SpamOut, #Select").prop('disabled', false);
+		} else {
+			$("#SpamOut, #Select").prop('disabled', true);
+		}
+	});
 
 
 	$("#Save_Options").on("click", function() {
@@ -2658,7 +3425,7 @@ $(document).ready(function() {
 												$.jGrowl('<i class="fa fa-exclamation" aria-hidden="true"></i> Failed to Insert Data', {
 													header: '<div style="font-size:12px;"><i class="fa fa-cogs" aria-hidden="true"></i> Server:<div/>',
 													life: 2000,
-													theme: 'PMaquinetas',
+													theme: 'Mwsm',
 													speed: 'slow',
 													close: function(e, m, o) {
 														$("#Waiting").fadeOut("slow", function() {
