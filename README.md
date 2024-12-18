@@ -467,7 +467,7 @@ Token:SENHA
 | `Payment Received`           | Envia ao cliente uma notificação de pagamento recebido                                                        |
 | `Locked User`          | Envia ao cliente uma notificação sobre suspensão do serviço             |
 | `Unlocked User`          | Envia ao cliente uma notificação quando uma suspensão é desfeita                                                            |
-| `Maitenance`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
+| `Maintenance`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
 | `Unistall Devide`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
 > as opções desativadas serão liberadas em patchs de atualização conforme forem liberadas
 
