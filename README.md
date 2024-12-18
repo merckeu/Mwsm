@@ -468,7 +468,7 @@ Token:SENHA
 | `Locked User`          | Envia ao cliente uma notificação sobre suspensão do serviço             |
 | `Unlocked User`          | Envia ao cliente uma notificação quando uma suspensão é desfeita                                                            |
 | `Maintenance`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
-| `Unistall Devide`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
+| `Unistall Device`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
 > as opções desativadas serão liberadas em patchs de atualização conforme forem liberadas
 
 ### Testando
