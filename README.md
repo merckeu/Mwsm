@@ -459,15 +459,16 @@ Token:SENHA
 > `Settings > API > Tela 2 > Agenda` ( Botão Antes do Clear )
 > 
 * Ative a opção conforme necessidade
+* Funciona somente com a opção `Auto Messages` ativada
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/paycon.png)](#)
 | Opção            |  Função                                                                              |
 | -----------------|--------------------------------------------------------------------------------------|
-| `Pagamento`           | Envia ao cliente uma notificação de pagamento recebido                                                        |
-| `Bloqueio`          | Envia ao cliente uma notificação sobre suspensão do serviço             |
-| `Desbloqueio`          | Envia ao cliente uma notificação quando uma suspensão é desfeita                                                            |
-| `Manutenção`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
-| `Desinstalação`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
+| `Payment Received`           | Envia ao cliente uma notificação de pagamento recebido                                                        |
+| `Locked User`          | Envia ao cliente uma notificação sobre suspensão do serviço             |
+| `Unlocked User`          | Envia ao cliente uma notificação quando uma suspensão é desfeita                                                            |
+| `Maitenance`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
+| `Unistall Devide`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
 > as opções desativadas serão liberadas em patchs de atualização conforme forem liberadas
 
 ### Testando
