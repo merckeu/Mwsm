@@ -170,11 +170,11 @@ wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /op
 
 * <b>2º - </b>Insira um dos codigos no prompt de comando onde o mwsm esta instalado.
  
-<b>OBS: </b>Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
-
 > **Update :** Utilize quando a sua versão instalada for inferior ao do Release [ Requer Reconfiguração ] 
 >
 > **Patch :** Utilize quando a sua versão instalada for igual ao do Release
+ 
+<b>OBS: </b> Lembre-se de sempre atualizar o navegador (F5) quando realizar uma atualização Manual.
    
 <details>
 <summary>Update</summary>
