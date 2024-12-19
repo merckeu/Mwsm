@@ -551,7 +551,7 @@ O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
 </details>
 
 <details>
-<summary>Tags</summary>
+<summary>Tags e Hotkeys</summary>
 <br>
 
 | Tag            | Efeito         | Exemplo                                                         | MkAuth | Mwsm |
