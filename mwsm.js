@@ -529,7 +529,9 @@ const SetSchedule = async () => {
 							if (Send.Contact != "00000000000") {
 								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
 								if (Replies == undefined) {
-									await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process) VALUES(?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load');
+									await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
+								} else {
+									await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
 								}
 							}
 						} else {
@@ -598,7 +600,9 @@ const GetSchedule = async () => {
 							contact: isSend.contact,
 							reward: isSend.reward,
 							push: DateTime(0),
-							token: Debug('OPTIONS').token
+							token: Debug('OPTIONS').token,
+							cash: isSend.cash,
+							gateway: isSend.gateway
 						};
 						try {
 							await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
@@ -746,7 +750,11 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			return false;
 		});
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			return await MkSync.titulos;
+			if (REFINE == "titulos") {
+				return await MkSync.titulos;
+			} else {
+				return await MkSync;
+			}
 		} else {
 			return false;
 		}
@@ -879,6 +887,7 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
+
 
 });
 
@@ -1051,11 +1060,13 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 								Send.status = 'due';
 								break;
 						}
-
-
+						if (Send.formapag != "dinheiro") {
+							Send.formapag = "banco"
+						}
 						if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid') {
 							Send.status = 'open'
 						}
+
 
 						Json = {
 							"Order": (new Date(Send.datavenc)).getDate(),
@@ -1063,7 +1074,10 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Client": Send.nome,
 							"Reward": Send.datavenc,
 							"Payment": Send.status,
-							"Connect": Send.login
+							"Connect": Send.login,
+							"Cash": Send.valorpag,
+							"Gateway": Send.formapag
+
 						};
 						PUSH.push(Json);
 						Json = (PUSH).sort(function(a, b) {
@@ -1138,7 +1152,9 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Client": Send.Client,
 							"Reward": Send.Reward,
 							"Payment": Send.Payment,
-							"Connect": Send.Connect
+							"Connect": Send.Connect,
+							"Cash": Send.Cash,
+							"Gateway": Send.Gateway
 						};
 						JSON.push(isJson);
 						Json = JSON;
@@ -1469,6 +1485,8 @@ app.post('/send-mkauth', (req, res) => {
 	const Reward = req.body.reward;
 	const Push = req.body.push;
 	const Token = req.body.token;
+	const Cash = req.body.cash;
+	const Gateway = req.body.gateway;
 	var Process, Direct;
 	var Pulse = DateTime();
 	var Payment = req.body.payment;
@@ -1504,7 +1522,8 @@ app.post('/send-mkauth', (req, res) => {
 			Process = "Sent";
 			break;
 	}
-	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
+
+	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%valorpago%', Cash).replaceAll('%metodo%', Gateway).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		const data = {
 			to: '55' + Contact,
@@ -1899,7 +1918,6 @@ app.post('/clients_mkauth', async (req, res) => {
 	const Master = await MkAuth(Month, Payment, 'listagem');
 	var hasTARGET = [];
 	var PUSH, STATUS;
-
 	if (await Master.Status == "Error") {
 		return res.json({
 			Status: "Fail",
@@ -1908,6 +1926,7 @@ app.post('/clients_mkauth', async (req, res) => {
 	} else {
 		(await Master).someAsync(async (TARGET) => {
 			var Contact = await MkClient(TARGET.Connect);
+			var isPay = await MkList(TARGET.Identifier, "show");
 			if (await Contact) {
 				TARGET.Contact = await Contact;
 			} else {
@@ -1933,7 +1952,9 @@ app.post('/clients_mkauth', async (req, res) => {
 				"REWARD": TARGET.Reward,
 				"PUSH": TARGET.push,
 				"PAYMENT": TARGET.Payment,
-				"STATUS": TARGET.status
+				"STATUS": TARGET.status,
+				"CASH": TARGET.Cash,
+				"GATEWAY": TARGET.Gateway
 			};
 			hasTARGET.push(GetClients);
 			if (Master.length == hasTARGET.length) {

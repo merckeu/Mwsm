@@ -419,6 +419,8 @@ $(document).ready(function() {
 					contact: $(this).attr('data-contact'),
 					reward: $(this).attr('data-reward'),
 					push: $(this).attr('data-push'),
+					cash: $(this).attr('data-cash'),
+					gateway: $(this).attr('data-gateway'),
 					token: $("#token").val()
 				},
 				beforeSend: function(data) {
@@ -1163,7 +1165,7 @@ $(document).ready(function() {
 
 
 	$("#Scheduler").on("click", function() {
-			$(".modal").show();
+		$(".modal").show();
 	});
 
 
@@ -2123,7 +2125,7 @@ $(document).ready(function() {
 			} else {
 				Cursor = "pointer";
 			}
-			html += '<tr class="Fire" id="' + data.d[i].TITLE + '" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-code="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '" data-reward="' + data.d[i].REWARD + '" data-client="' + data.d[i].CLIENT + '" data-push="' + data.d[i].PUSH + '" style="cursor: ' + Cursor + ';">';
+			html += '<tr class="Fire" id="' + data.d[i].TITLE + '" data-toggle="tooltip" data-placement="right" title="' + toCapitalize(data.d[i].CLIENT) + '" data-user="' + data.d[i].USER + '" data-contact="' + data.d[i].CONTACT + '" data-code="' + data.d[i].TITLE + '" data-status="' + data.d[i].STATUS + '" data-payment="' + data.d[i].PAYMENT + '" data-reward="' + data.d[i].REWARD + '" data-client="' + data.d[i].CLIENT + '" data-push="' + data.d[i].PUSH + '" data-cash="' + data.d[i].CASH + '" data-gateway="' + data.d[i].GATEWAY + '" style="cursor: ' + Cursor + ';">';
 			html += '<td class="text-center tbajust">' + data.d[i].TITLE + '</td>';
 			html += '<td class="text-center">' + data.d[i].USER + '</td>';
 			html += '<td class="text-center tbreward">' + new Date(data.d[i].REWARD).toLocaleString("pt-br").split(",")[0] + '</td>';
@@ -2647,6 +2649,7 @@ $(document).ready(function() {
 				break;
 			case 'false':
 				$("#module").prop("checked", false);
+				$("#domain, #username, #password, #tunel, #iServer, #iPDF").prop('disabled', false);
 				$("#backup").prop('disabled', true);
 				break;
 		}
