@@ -2,12 +2,13 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.37 / UPDATE: 17/12/2024 22:00
+# BUILD: 2.0.38 / UPDATE: 19/12/2024 01:23
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
 |  2.0.37    | Notificações Automaticas + Log Cleaner | 17/12/2024 22:00 ✅   |                        |
+|  2.0.38    | Hotkeys nas Confirmações de Pagamento | 19/12/2024 01:23 ✅   |                        |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
@@ -324,6 +325,14 @@ Token:SENHA
 <br>
  
  ** `Settings > API > Tela 2`
+
+| Hotkeys          |  Função                                                       |
+| ---------------- | --------------------------------------------------------------|
+| `%nomeresumido%` | Primeiro nome do cliente.                                     |
+| `%metodo%`       | Metodo de pagamento.                                          |
+| `%pagamento%`    | Data/Hora do recebimento da confirmação.                      |
+| `%valorpago%`    | Valor pago pelo cliente.                                       |
+| `%numerotitulo%` | Codigo de referencia da fatura.                               |
 
 > Os disparos das cobranças serão feitos conforme configurados na API ( Hora, Dia, Turno ) .
   
