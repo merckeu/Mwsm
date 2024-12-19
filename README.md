@@ -326,14 +326,6 @@ Token:SENHA
  
  ** `Settings > API > Tela 2`
 
-| Hotkeys          |  Função                                                       |
-| ---------------- | --------------------------------------------------------------|
-| `%nomeresumido%` | Primeiro nome do cliente.                                     |
-| `%metodo%`       | Metodo de pagamento.                                          |
-| `%pagamento%`    | Data/Hora do recebimento da confirmação.                      |
-| `%valorpago%`    | Valor pago pelo cliente.                                       |
-| `%numerotitulo%` | Codigo de referencia da fatura.                               |
-
 > Os disparos das cobranças serão feitos conforme configurados na API ( Hora, Dia, Turno ) .
   
 <b>OBS:</b> Definia como o sistema de disparos vai se comportar
@@ -564,11 +556,21 @@ O Dado inserido no campo find esta incorreto ( não faz parte do uid inserido )
 <summary>Tags</summary>
 <br>
 
-| Tag            | Efeito         | Exemplo                                                         |
-| -------------- | -------------- | --------------------------------------------------------------- |
-| `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                                     |
-| `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                              |
-| `*`    | negrito        | `*`Mensagem`*`                                                          |
+| Tag            | Efeito         | Exemplo                                                         | MkAuth | Mwsm |
+| -------------- | -------------- | --------------------------------------------------------------- |--------|------|
+| `##`   | quebra balão   | Mensagem1`##`Mensagem2`##`Mensagem3                                     |✅|✅|
+| `\n`   | quebra linha   | Linha1`\n`Linha2`\n`Linha3                                              |✅|✅|
+| `*`    | negrito        | `*`Mensagem`*`                                                          |✅|✅|
+
+| Hotkeys          | Mensagem           | Função                                                   | MkAuth | Mwsm |
+| ---------------- | ----------- | --------------------------------------------------------------- |--------|------|
+| `%nomeresumido%` | `Todas`     | Primeiro nome do cliente.  |✅|✅
+| `%metodo%`       | `Pagamento` | Forma de pagamento da fatura.        |❌|✅
+| `%pagamento%`    | `Pagamento` | Data/Hora da confirmação do pagamento.                           |❌|✅
+| `%valorpago%`    | `Pagamento` | Valor recebido.                              |❌|✅
+| `%vencimento%`   | `Todas`     | Data de vencimento da fatura.                                |✅|✅
+| `%logincliente%` | `Cobranças` | Usuario do cliente.                             |✅|✅
+| `%numerotitulo%` | `Todas`     | Numero de referencia da fatura.                                  |✅|✅
 
 </details>
 
