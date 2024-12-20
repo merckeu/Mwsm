@@ -132,7 +132,7 @@ sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/
 
 <b>6 - </b>Instale as dependencias do Mwsn
 ```sh
-sudo npm install --silent
+npm install --ignore-script --silent --save-prod
 ```
 
 <b>7 - </b>Inicialize o Mwsn
@@ -182,7 +182,7 @@ wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /op
  <br>
 
 ```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm run start:mwsm
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --ignore-script --silent --save-prod && npm run start:mwsm
 
 ```
 </details>
