@@ -238,8 +238,8 @@ function ArrayPosition(...criteria) {
 }
 
 const GetUpdate = async (GET, SET) => {
-	var Status;
-	var Conclusion = true;
+	var Status, Conclusion = true,
+		isDateTime = Debug('RELEASE').mwsm;
 	const Upgrade = async (GET) => {
 		const Update = await fetch(GET).then(response => {
 			return response.json();
@@ -253,115 +253,56 @@ const GetUpdate = async (GET, SET) => {
 		});
 		return Update;
 	};
-	isUpdate = await Upgrade(GET);
-	(isUpdate.version).someAsync(async (Return) => {
-		if ((Return.release == Package.version)) {
-			var isDateTime = Debug('RELEASE').mwsm;
-			if (isDateTime == "undefined" || isDateTime == null) {
-				isDateTime = "0000-00-00 00:00:00";
-			}
-			for (let i = 1; i < (isUpdate.version).length; i++) {
-				if ((isUpdate.version)[i].patch >= Return.patch) {
-					if (((isUpdate.version)[i].patch) > (isDateTime)) {
-						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
-						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
-						await global.io.emit('upgrade', false);
-						if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
-							const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
-							if (Register) {
-								await global.io.emit('upgrade', true);
-								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
-								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
-								await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
-								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
-								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
-								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
-								await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
-								await global.io.emit('update', true);
-							} else {
-								await global.io.emit('upgrade', false);
-							}
-							Status = true;
-						} else {
-							if (Conclusion && ((isUpdate.version)[i].patch) == (Debug('RELEASE').mwsm)) {
-								Conclusion = false;
-								if (SET == false) {
-									await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-									await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-								}
-								await global.io.emit('upgrade', true);
-								Status = false;
-							} else {
-								var isUpgrade = true;
-								if ((isDateTime == "0000-00-00 00:00:00") && (Return.patch != "0000-00-00 00:00:00")) {
-									var isDate = (new Date()).toISOString();
-									const RegEx = new Set(".");
-									for (let Return of isDate) {
-										if (RegEx.has(Return)) {
-											isDate = isDate.replace(Return, '%');
-										}
-									}
-									isDate = isDate.split("%")[0].replace('T', ' ');
-									if ((isDate > (isUpdate.version)[i].patch)) {
-										const Register = await Dataset('RELEASE', 'MWSM', ((isUpdate.version)[i].patch), 'UPDATE');
-										if (Register) {
-											isUpgrade = false;
-										} else {
-											isUpgrade = true;
-										}
-									}
-								}
-								if (isUpgrade) {
-									if (Conclusion) {
-										Conclusion = false;
-										Status = true;
-										await global.io.emit('upgrade', false);
-										if (SET == false) {
-											await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-											await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-										}
-
-									}
-								} else {
-									if (Conclusion) {
-										Conclusion = false;
-										if (SET == false) {
-											await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-											console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-										}
-										await global.io.emit('upgrade', true);
-										Status = false;
-									}
-
-								}
-
-							}
-
-						}
-					} else {
-
-						if (Conclusion) {
-							Conclusion = false;
-							if (SET == false) {
-								await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-								console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-							}
-							await global.io.emit('upgrade', true);
-							Status = false;
-						}
-					}
-				} else if (Return.release != '0.0.0' && Conclusion) {
-					Conclusion = false;
-					Status = true;
-					await global.io.emit('upgrade', false);
-					if (SET == false) {
-						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-					}
-				}
-			}
+	const isUpdate = await Upgrade(GET);
+	if (isDateTime == "undefined" || isDateTime == null) {
+		isDateTime = "0000-00-00 00:00:00";
+	}
+	if ((isUpdate['version'][0].release > Package.version)) {
+		if (!SET) {
+			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+			await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 		}
-	});
+		await global.io.emit('upgrade', false);
+	} else {
+		if ((isUpdate['version'][0].patch > isDateTime)) {
+			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+			await global.io.emit('upgrade', false);
+			if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
+				const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
+				if (Register) {
+					await global.io.emit('upgrade', true);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
+					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
+					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
+					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
+					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
+					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
+					await global.io.emit('update', true);
+				} else {
+					await global.io.emit('upgrade', false);
+				}
+				Status = true;
+			} else if (Conclusion) {
+				Conclusion = false;
+				Status = true;
+				if (!SET) {
+					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+					await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+				}
+				await global.io.emit('upgrade', false);
+			}
+		} else if (Conclusion) {
+			Conclusion = false;
+			Status = false;
+			if (!SET) {
+				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+			}
+			await global.io.emit('upgrade', true);
+		}
+	}
 	return Status;
 }
 
@@ -888,7 +829,6 @@ function isShift(Turno) {
 //Test
 delay(0).then(async function() {
 
-
 });
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1230,6 +1170,7 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').ready);
+
 		Session = true;
 	} else {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
@@ -1256,11 +1197,7 @@ io.on('connection', function(socket) {
 	client.on('ready', async () => {
 		await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
-			db.run("UPDATE options SET auth=?", [true], (err) => {
-				if (err) {
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
-				}
-			});
+		     await link.prepare('UPDATE options SET auth=?').run(1);
 		}
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
