@@ -2,13 +2,14 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.38 / UPDATE: 19/12/2024 01:23
+# BUILD: 2.0.38 / UPDATE: 19/12/2024 21:37
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.36    | Notificações Manuais + Controle de Proteção                              | 31/07/2024 11:13 ✅   |                        |
 |  2.0.36    | Alteração do URL de PDF                                                  |                        |  21/11/2024 22:57 ✅  |
 |  2.0.37    | Notificações Automaticas + Log Cleaner | 17/12/2024 22:00 ✅   |                        |
 |  2.0.38    | Hotkeys nas Confirmações de Pagamento | 19/12/2024 01:23 ✅   |                        |
+|  2.0.38    | Correção e Melhoria da função Update                                                  |                        |  19/12/2024 21:37 ✅  |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
