@@ -254,53 +254,64 @@ const GetUpdate = async (GET, SET) => {
 		return Update;
 	};
 	const isUpdate = await Upgrade(GET);
+	const Nowdate = await Upgrade("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/version.json");
 	if (isDateTime == "undefined" || isDateTime == null) {
 		isDateTime = "0000-00-00 00:00:00";
 	}
-	if ((isUpdate['version'][0].release > Package.version)) {
+	if ((isUpdate['version'][0].patch == Nowdate['version'][0].patch) && Conclusion) {
+		Conclusion = false;
+		Status = false;
 		if (!SET) {
-			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-			await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 		}
-		await global.io.emit('upgrade', false);
+		await global.io.emit('upgrade', true);
 	} else {
-		if ((isUpdate['version'][0].patch > isDateTime)) {
-			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
-			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+		if ((isUpdate['version'][0].release > Package.version)) {
+			if (!SET) {
+				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+				await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+			}
 			await global.io.emit('upgrade', false);
-			if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
-				const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
-				if (Register) {
-					await global.io.emit('upgrade', true);
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
-					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
-					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
-					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
-					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
-					await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
-					await global.io.emit('update', true);
-				} else {
+		} else {
+			if ((isUpdate['version'][0].patch > isDateTime)) {
+				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
+				await global.io.emit('upgrade', false);
+				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
+					const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
+					if (Register) {
+						await global.io.emit('upgrade', true);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
+						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
+						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js", "/var/api/Mwsm/script.js");
+						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css", "/var/api/Mwsm/style.css");
+						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
+						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
+						await global.io.emit('update', true);
+					} else {
+						await global.io.emit('upgrade', false);
+					}
+					Status = true;
+				} else if (Conclusion) {
+					Conclusion = false;
+					Status = true;
+					if (!SET) {
+						await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+						await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+					}
 					await global.io.emit('upgrade', false);
 				}
-				Status = true;
 			} else if (Conclusion) {
 				Conclusion = false;
-				Status = true;
+				Status = false;
 				if (!SET) {
-					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
-					await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
+					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 				}
-				await global.io.emit('upgrade', false);
+				await global.io.emit('upgrade', true);
 			}
-		} else if (Conclusion) {
-			Conclusion = false;
-			Status = false;
-			if (!SET) {
-				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-			}
-			await global.io.emit('upgrade', true);
 		}
 	}
 	return Status;
@@ -1197,7 +1208,7 @@ io.on('connection', function(socket) {
 	client.on('ready', async () => {
 		await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
-		     await link.prepare('UPDATE options SET auth=?').run(1);
+			await link.prepare('UPDATE options SET auth=?').run(1);
 		}
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
