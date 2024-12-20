@@ -1011,7 +1011,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 								Send.status = 'due';
 								break;
 						}
-						if (Send.formapag != "dinheiro") {
+						if (Send.formapag != "dinheiro" && Send.formapag != undefined) {
 							Send.formapag = "banco"
 						}
 						if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid') {
