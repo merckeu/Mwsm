@@ -120,22 +120,28 @@ sudo apt-get install ca-certificates fonts-liberation libappindicator3-1 libasou
 ```sh
 sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 ```
-<b>4 - </b>Crie o diretório de instalação do Mwsm
+
+<b>4 - </b>Atualize o NPM
+```sh
+sudo npm install -g npm@latest node-gyp@latest
+```
+
+<b>5 - </b>Crie o diretório de instalação do Mwsm
 ```sh
 sudo mkdir -p /var/api/Mwsm
 ```
 
-<b>5 - </b>Instale o Mwsm
+<b>6 - </b>Instale o Mwsm
 ```sh
 sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 
-<b>6 - </b>Instale as dependencias do Mwsn
+<b>7 - </b>Instale as dependencias do Mwsn
 ```sh
 sudo npm install --silent
 ```
 
-<b>7 - </b>Inicialize o Mwsn
+<b>8 - </b>Inicialize o Mwsn
 ```sh
 sudo npm run start:mwsm
 ```
@@ -155,7 +161,7 @@ sudo apt-get install build-essential && cd ~ && cd /var/api/Mwsm && pm2 delete a
 <summary>MkAuth</summary>
   
 ```sh
-cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || apt-get remove nodejs -y && rm -vrf ~/.pm2/node_modules /var/api/Mwsm && apt-get install -y ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils git curl build-essential && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs && cd ~ && mkdir -p /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm  && cd /var/api/Mwsm && npm i git+https://github.com/MKCodec/WhatsApp-API && npm install github:MKCodec/WhatsApp-API && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
+cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || apt-get remove nodejs -y && rm -vrf ~/.pm2/node_modules /var/api/Mwsm && apt-get install -y ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils git curl build-essential && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs && cd ~ && mkdir -p /var/api/Mwsm && git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm  && cd /var/api/Mwsm && npm i git+https://github.com/MKCodec/WhatsApp-API --silent && npm i git+https://github.com/MKCodec/Url2PDF --silent && npm install --silent && npm i -g pm2 && pm2 update && pm2 flush && pm2 start mwsm.json && pm2 save && pm2 startup && pm2 log 0
 ```
 </details>
 </details>
@@ -182,7 +188,7 @@ wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /op
  <br>
 
 ```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --ignore-script --silent --save-prod && npm run start:mwsm
+cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm i git+https://github.com/MKCodec/WhatsApp-API --silent && npm i git+https://github.com/MKCodec/Url2PDF --silent && npm install --silent && npm run start:mwsm
 
 ```
 </details>
