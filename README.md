@@ -607,12 +607,7 @@ Copia e Cola
 
 <details>
 <summary>Mwsm Update [ MkAuth ]</summary>
-	
+
 [<img src="https://img.youtube.com/vi/LD2aKLgEst8/maxresdefault.jpg" width="50%">](https://youtu.be/LD2aKLgEst8)
 
-
 </details>
- 
-
-# DESENVOLVIMENTO :
-Pretendemos incluir varias funcionalidades que vão de forma progressiva aperfeiçoar essa incrivel ferramenta, entre algumas delas está a inclusão de um gateway gratuito ( banco cora ou inter ) e um bot com inteligencia artifical capaz de entender e resolver a demanda de cada cliente.
