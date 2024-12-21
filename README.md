@@ -98,6 +98,11 @@ git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```sh
 npm install --silent && npm run start:mwsm
 ```
+
+<b>6 - </b>Acesse seu MkAuth via Putty e Atualize a API.
+```sh
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
+```
 </details>
 
 <details>
@@ -127,22 +132,27 @@ sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-ge
 sudo npm install -g npm@latest node-gyp@latest
 ```
 
-<b>5 - </b>Crie o diretório de instalação do Mwsm
+<b>5 - </b>Atualize a API do MkAuth
+```sh
+wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
+```
+
+<b>6 - </b>Crie o diretório de instalação do Mwsm
 ```sh
 sudo mkdir -p /var/api/Mwsm
 ```
 
-<b>6 - </b>Instale o Mwsm
+<b>7 - </b>Instale o Mwsm
 ```sh
 sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/Mwsm
 ```
 
-<b>7 - </b>Instale as dependencias do Mwsn
+<b>8 - </b>Instale as dependencias do Mwsn
 ```sh
 sudo npm install --silent
 ```
 
-<b>8 - </b>Inicialize o Mwsn
+<b>9 - </b>Inicialize o Mwsn
 ```sh
 sudo npm run start:mwsm
 ```
