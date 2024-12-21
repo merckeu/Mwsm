@@ -86,7 +86,7 @@ apt-get install git curl libnss3-dev libgdk-pixbuf2.0-dev libgtk-3-dev libxss-de
 
 <b>3 - </b>Instale o node
 ```sh
-curl -fsSL https://deb.nodesource.com/setup_23.x | sudo -E bash - && apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 ```
 
 <b>4 - </b>Instale o Mwsm
