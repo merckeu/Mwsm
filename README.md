@@ -118,7 +118,7 @@ sudo apt-get install ca-certificates fonts-liberation libappindicator3-1 libasou
 
 <b>3 - </b>Instale o node
 ```sh
-sudo curl -fsSL https://deb.nodesource.com/setup_23.x | sudo -E bash - && apt-get install -y nodejs
+sudo curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && apt-get install -y nodejs
 ```
 <b>4 - </b>Crie o diretório de instalação do Mwsm
 ```sh
