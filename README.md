@@ -132,7 +132,7 @@ sudo git clone https://github.com/MKCodec/Mwsm.git /var/api/Mwsm && cd /var/api/
 
 <b>6 - </b>Instale as dependencias do Mwsn
 ```sh
-sudo npm install -g npm@latest --silent && npm install -g node-gyp@latest --silent && npm install --silent
+sudo npm install --silent
 ```
 
 <b>7 - </b>Inicialize o Mwsn
