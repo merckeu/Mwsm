@@ -188,8 +188,7 @@ wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /op
  <br>
 
 ```sh
-cd ~ && cd /var/api/Mwsm && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm i git+https://github.com/MKCodec/WhatsApp-API --silent && npm i git+https://github.com/MKCodec/Url2PDF --silent && npm install --silent && npm run start:mwsm
-
+cd ~ && cd /var/api/Mwsm && pm2 flush && pm2 delete all && pm2 kill && git reset --hard HEAD~1 && git pull "https://github.com/MKCodec/Mwsm.git" --rebase --autostash && npm install --silent && npm cache clean --force && npm run start:mwsm
 ```
 </details>
 <details>
