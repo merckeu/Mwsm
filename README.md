@@ -602,5 +602,17 @@ Copia e Cola
 00020126580014BR.GOV.BCB.PIX0136e9b9d669-4412-4dec-994c-3100059040885204000053039865802BR5924CLEBER FERREIRA DE SOUZA6007CARUARU62070503***63045854
 ```
 
+# VIDEOS
+> Confira nossa lista de video-tutoriais.
+
+<details>
+<summary>Mwsm Update [ MkAuth ]</summary>
+	
+[<img src="https://img.youtube.com/vi/LD2aKLgEst8/maxresdefault.jpg" width="50%">](https://youtu.be/LD2aKLgEst8)
+
+
+</details>
+ 
+
 # DESENVOLVIMENTO :
 Pretendemos incluir varias funcionalidades que vão de forma progressiva aperfeiçoar essa incrivel ferramenta, entre algumas delas está a inclusão de um gateway gratuito ( banco cora ou inter ) e um bot com inteligencia artifical capaz de entender e resolver a demanda de cada cliente.
