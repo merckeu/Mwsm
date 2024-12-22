@@ -616,8 +616,19 @@ Copia e Cola
 > Confira nossa lista de video-tutoriais.
 
 <details>
-<summary>Mwsm Update [ MkAuth ]</summary>
+<summary>MkAuth</summary>
+<br>
+<details>
+<summary>Instalando</summary>
+
+[<img src="https://img.youtube.com/vi/q3z7p15CQIk/maxresdefault.jpg" width="50%">](https://youtu.be/q3z7p15CQIk)
+
+</details>
+<details>
+<summary>Atualizando</summary>
 
 [<img src="https://img.youtube.com/vi/LD2aKLgEst8/maxresdefault.jpg" width="50%">](https://youtu.be/LD2aKLgEst8)
+
+</details>
 
 </details>
