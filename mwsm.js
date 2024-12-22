@@ -504,7 +504,7 @@ const SetSchedule = async () => {
 const GetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
 		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
-			const Payment = await MkList(isTarget, "pago")[0];
+			var Payment = await MkList(isTarget, "pago");
 			if (Payment != undefined) {
 				switch (Payment.status) {
 					case 'aberto':
@@ -521,86 +521,68 @@ const GetSchedule = async () => {
 						break;
 				}
 				const isResolve = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(isTarget);
-				if (isResolve.status != "paid" && isResolve.process != "success") {
-					data = {
-						client: isResolve.client,
-						user: isResolve.user,
-						code: isTarget,
-						status: "pending",
-						payment: Payment.status,
-						contact: isResolve.contact,
-						reward: isResolve.reward,
-						push: DateTime(0),
-						token: Debug('OPTIONS').token
-					};
-					await link.prepare('UPDATE scheduling SET status=? WHERE title=?').run(Payment.status, isTarget);
+				if (isResolve != undefined) {
+					if (isResolve.status != Payment.status && isResolve.process != "success") {
+						await link.prepare('UPDATE scheduling SET status=?, cash=?, gateway=? WHERE title=?').run(Payment.status, Payment.valorpag, Payment.formapag, isTarget);
+					}
 				}
 			}
 		});
-		if ((Debug('SCHEDULER').onpay == 1 || Debug('SCHEDULER').onpay == "true")) {
-			const Target = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
-			if (Target != undefined) {
-				const isSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Target.title);
-				if (isSend != undefined) {
-					if (isSend.status == "paid") {
-						data = {
-							client: isSend.client,
-							user: isSend.user,
-							code: isSend.title,
-							status: "pending",
-							payment: isSend.status,
-							contact: isSend.contact,
-							reward: isSend.reward,
-							push: DateTime(0),
-							token: Debug('OPTIONS').token,
-							cash: isSend.cash,
-							gateway: isSend.gateway
-						};
-						try {
-							await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
-						} catch (error) {
 
-						} finally {
-							await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('success', Target.title);
-						}
-
+		const Target = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
+		if (Target != undefined && (Debug('SCHEDULER').onpay == 1 || Debug('SCHEDULER').onpay == "true")) {
+			const isSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Target.title);
+			if (isSend != undefined) {
+				if (isSend.status == "paid") {
+					data = {
+						client: isSend.client,
+						user: isSend.user,
+						code: isSend.title,
+						status: "pending",
+						contact: isSend.contact,
+						reward: isSend.reward,
+						push: '00/00/0000 00:00:00',
+						token: Debug('OPTIONS').token,
+						cash: isSend.cash,
+						gateway: isSend.gateway,
+						payment: isSend.status
+					};
+					const SendPay = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
+					if (SendPay) {
+						await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('success', Target.title);
 					}
 				}
-			} else {
-				if ((isWeek(DateTime(0))) && (isShift((DateTime(0).split(" ")[1]).split(":")[0]))) {
-					const Shoot = await link.prepare('SELECT * FROM scheduling WHERE NOT status=? AND process=?').get('paid', 'wait');
-					if (Shoot != undefined) {
-						const hasSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Shoot.title);
-						if (hasSend != undefined) {
-							if (hasSend.status != "paid") {
-								data = {
-									client: hasSend.client,
-									user: hasSend.user,
-									code: hasSend.title,
-									status: "pending",
-									payment: hasSend.status,
-									contact: hasSend.contact,
-									reward: hasSend.reward,
-									push: DateTime(0),
-									token: Debug('OPTIONS').token
-								};
-								try {
-									await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
-								} catch (error) {
-
-								} finally {
-									await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('load', Shoot.title);
-								}
+			}
+		} else {
+			if ((isWeek(DateTime(0))) && (isShift((DateTime(0).split(" ")[1]).split(":")[0]))) {
+				const Shoot = await link.prepare('SELECT * FROM scheduling WHERE NOT status=? AND process=?').get('paid', 'wait');
+				if (Shoot != undefined) {
+					const hasSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Shoot.title);
+					if (hasSend != undefined) {
+						if (hasSend.status != "paid") {
+							data = {
+								client: hasSend.client,
+								user: hasSend.user,
+								code: hasSend.title,
+								status: "pending",
+								contact: hasSend.contact,
+								reward: hasSend.reward,
+								push: '00/00/0000 00:00:00',
+								token: Debug('OPTIONS').token,
+								payment: hasSend.status
+							};
+							const Charge = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
+							if (Charge) {
+								await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('load', Shoot.title);
 							}
 						}
 					}
 				}
 			}
 
+
 		}
-
 	}
-
 }
 
 //Scheduller
@@ -702,10 +684,10 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			return false;
 		});
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			if (REFINE == "titulos") {
+			if (REFINE != "pago") {
 				return await MkSync.titulos;
 			} else {
-				return await MkSync;
+				return await MkSync.titulos[0];
 			}
 		} else {
 			return false;
@@ -839,6 +821,7 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
+
 
 });
 
@@ -1424,7 +1407,7 @@ app.post('/debug', (req, res) => {
 });
 
 // MkAuth Set Message
-app.post('/send-mkauth', (req, res) => {
+app.post('/send-mkauth', async (req, res) => {
 	const User = req.body.user;
 	const Client = req.body.client;
 	const Code = req.body.code;
@@ -1435,7 +1418,7 @@ app.post('/send-mkauth', (req, res) => {
 	const Token = req.body.token;
 	const Cash = req.body.cash;
 	const Gateway = req.body.gateway;
-	var Process, Direct;
+	var Process, Direct, Storange;
 	var Pulse = DateTime();
 	var Payment = req.body.payment;
 	if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0] && Payment != "paid") {
@@ -1470,7 +1453,6 @@ app.post('/send-mkauth', (req, res) => {
 			Process = "Sent";
 			break;
 	}
-
 	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%valorpago%', Cash).replaceAll('%metodo%', Gateway).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		const data = {
@@ -1481,48 +1463,39 @@ app.post('/send-mkauth', (req, res) => {
 			user: Client,
 			auth: Debug('MKAUTH').aimbot
 		};
-		axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-message", data).then((response) => {
-			try {
-				Debug("STORANGE", "*", "DIRECT", Code).title;
-			} catch (e) {
-				Dataset('STORANGE', 'TITLE', Code, 'INSERT');
+
+		const PostMessage = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-message", data);
+		if (PostMessage) {
+			if (Debug("STORANGE", "*", "DIRECT", Code).title == undefined) {
+				Storange = await link.prepare("INSERT INTO storange(title, user, client, contact, reward, status, push) VALUES(?, ?, ?, ?, ?, ?, ?)").run(Code, User, Client, Contact, Reward, Process, Pulse);
+			} else {
+				Storange = await link.prepare("UPDATE storange SET push=?, status=? WHERE title=?").run(Pulse, Process, Code);
 			}
-			if (response.data.Status == "Fail") {
-				Process = response.data.Status;
-			}
-			if ((Debug("STORANGE", "*", "DIRECT", Code).title) == Code) {
-				db.run("UPDATE storange SET push=?, status=? WHERE title=?", [Pulse, Process, Code], (err) => {
-					if (err) throw err;
-				});
-			} else if (Debug("STORANGE", "*", "DIRECT", Code).id == undefined || Debug("STORANGE", "*", "DIRECT", Code).id == false) {
-				db.run("INSERT INTO storange(title, user, client, contact, reward, status, push) VALUES(?, ?, ?, ?, ?, ?, ?)", [Code, User, Client, Contact, Reward, Process, Pulse], (err) => {
-					if (err) {
-						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
-					}
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
-					global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+			if (Storange) {
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').inserted);
+				res.json({
+					Status: PostMessage.data.Status,
+					Return: PostMessage.data.message,
+					RPush: Pulse,
+					RStatus: Process,
+					RCode: Code
 				});
 			}
-			return res.json({
-				Status: response.data.Status,
-				Return: response.data.message,
-				RPush: Pulse,
-				RStatus: Process,
-				RCode: Code
-			});
-		}).catch((err) => {
-			return res.status(500).json({
+		} else {
+			res.json({
 				Status: "Fail",
 				Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 			});
-		});
+		}
 	} else {
-		return res.status(500).json({
+		res.json({
 			Status: "Fail",
 			Return: Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').error
 		});
 	}
 });
+
 
 // API Update
 app.post('/update', (req, res) => {
