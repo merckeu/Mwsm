@@ -405,45 +405,54 @@ const SetSchedule = async () => {
 			const Master = await Scheduller(Days.Set, Days.Mode);
 			if (await Master) {
 				(await Master).someAsync(async (Send) => {
-					var Contact = await MkClient(Send.login);
+					const Title = await Send.titulo;
+					const User = await Send.login;
+					const Client = await Send.nome;
+					var Contact = await Send.contact;
+					var Status = await Send.status;
+					const Reward = await Send.datavenc;
+					MsgSET = false;
+
+					var Contact = await MkClient(User);
 					if (await Contact) {
-						Send.contact = await Contact;
+						Contact = await Contact;
 					} else {
-						Send.contact = "00000000000";
+						Contact = "00000000000";
 					}
-					switch (Send.status) {
+					switch (Status) {
 						case 'aberto':
-							Send.status = 'open';
+							Status = 'open';
 							break;
 						case 'pago':
-							Send.status = 'paid';
+							Status = 'paid';
 							break;
 						case 'vencido':
-							Send.status = 'due';
+							Status = 'due';
 							break;
 						case 'cancelado':
-							Send.status = 'cancel';
+							Status = 'cancel';
 							break;
 					}
-
-					if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid' && (Send.status) != 'cancel') {
+					if (((Reward).split(" ")[0]) == (DateTime()).split(" ")[0] && (Status) != 'paid' && (Status) != 'cancel') {
 						Send.status = 'open';
 					}
-					if (Send.cli_ativado == "s" && (Send.status) != 'paid' && (Send.status) != 'cancel') {
-						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.titulo);
+					if (Send.cli_ativado == "s" && Status != 'paid' && Status != 'cancel') {
+						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Title);
 						if (Replies == undefined) {
-							const Insert = await link.prepare('INSERT INTO scheduling(title, user, client, contact, reward, status) VALUES(?, ?, ?, ?, ?, ?)').run(Send.titulo, Send.login, Send.nome, Send.contact, Send.datavenc, Send.status);
-							if (await Insert) {
+							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status) VALUES(?, ?, ?, ?, ?, ?)").run(Title, User, Client, Contact, Reward, Status);
+							if (ShedInsert) {
+								MsgSET = true;
 								Hwid = {
 									"ID": Send.login
 								};
 								hasReady.push(Hwid);
 							}
 						} else {
-							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Send.titulo, "wait");
+							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Title, "wait");
 							if (exUpdate == undefined) {
-								const Update = await link.prepare('UPDATE scheduling SET status=?, process=? WHERE title=?').run(Send.status, "wait", Send.titulo);
-								if (await Update) {
+								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run("wait", Title);
+								if (ShedUpdate) {
+									MsgSET = true;
 									Hwid = {
 										"ID": Send.login
 									};
@@ -456,17 +465,13 @@ const SetSchedule = async () => {
 					} else {
 						//Client Disable
 					}
-					if ((hasDays.length == Index) && (hasReady.length >= Master.length) && MsgSET) {
+					if ((hasDays.length == Index) && MsgSET) {
 						global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
 						MsgSET = false;
 					}
 				});
 			} else {
-				Hwid = {
-					"ID": "false"
-				};
-				hasReady.push(Hwid);
 				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && hasDays.length == hasReady.length) {
 					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
 					const Master = await MkAuth(Month, "all", 'listagem');
@@ -505,7 +510,7 @@ const GetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
 		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
 			var Payment = await MkList(isTarget, "pago");
-			if (Payment != undefined) {
+			if (Payment) {
 				switch (Payment.status) {
 					case 'aberto':
 						Payment.status = 'open';
@@ -821,8 +826,6 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-
-
 
 });
 
