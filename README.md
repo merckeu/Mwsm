@@ -69,7 +69,9 @@ print($Response);
 <details>
 <summary>Proxmox</summary>
 <br> 
-  <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
+<b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
+	
+> No final da Pagina na Guia Videos tem um Tutorial de como fazer isso.
 <br><br>
   
 <b>1 - </b>Atualize seu sistema
@@ -635,6 +637,18 @@ Copia e Cola
 <summary>Reinstalando</summary>
 
 [<img src="https://img.youtube.com/vi/XDpRwiAz7is/maxresdefault.jpg" width="50%">](https://youtu.be/XDpRwiAz7is)
+
+</details>
+<br>
+</details>
+
+<details>
+<summary>ProxMox</summary>
+<br>
+<details>
+<summary>Criando um CT Ubuntu</summary>
+
+[<img src="https://img.youtube.com/vi/ND-heMzZvXE/maxresdefault.jpg" width="50%">](https://youtu.be/ND-heMzZvXE)
 
 </details>
 
