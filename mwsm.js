@@ -432,8 +432,8 @@ const SetSchedule = async () => {
 					if (Send.cli_ativado == "s" && (Send.status) != 'paid' && (Send.status) != 'cancel') {
 						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.titulo);
 						if (Replies == undefined) {
-							const Insert = await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status) VALUES(?, ?, ?, ?, ?, ?)').run(Send.titulo, Send.login, Send.nome, Send.contact, Send.datavenc, Send.status);
-							if (Insert) {
+							const Insert = await link.prepare('INSERT INTO scheduling(title, user, client, contact, reward, status) VALUES(?, ?, ?, ?, ?, ?)').run(Send.titulo, Send.login, Send.nome, Send.contact, Send.datavenc, Send.status);
+							if (await Insert) {
 								Hwid = {
 									"ID": Send.login
 								};
@@ -822,6 +822,7 @@ function isShift(Turno) {
 //Test
 delay(0).then(async function() {
 
+await SetSchedule();
 
 });
 
