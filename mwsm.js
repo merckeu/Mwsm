@@ -822,7 +822,7 @@ function isShift(Turno) {
 //Test
 delay(0).then(async function() {
 
-await SetSchedule();
+
 
 });
 
