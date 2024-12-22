@@ -621,20 +621,20 @@ Copia e Cola
 <summary>MkAuth</summary>
 <br>
 <details>
-<summary>Instalando</summary>
+<summary>Instalando o Mwsm</summary>
 
 [<img src="https://img.youtube.com/vi/q3z7p15CQIk/maxresdefault.jpg" width="50%">](https://youtu.be/q3z7p15CQIk)
 
 </details>
 <details>
-<summary>Atualizando</summary>
+<summary>Atualizando o Mwsm</summary>
 
 [<img src="https://img.youtube.com/vi/LD2aKLgEst8/maxresdefault.jpg" width="50%">](https://youtu.be/LD2aKLgEst8)
 
 </details>
 
 <details>
-<summary>Reinstalando</summary>
+<summary>Reinstalando o Mwsm</summary>
 
 [<img src="https://img.youtube.com/vi/XDpRwiAz7is/maxresdefault.jpg" width="50%">](https://youtu.be/XDpRwiAz7is)
 
@@ -649,6 +649,13 @@ Copia e Cola
 <summary>Criando um CT Ubuntu</summary>
 
 [<img src="https://img.youtube.com/vi/ND-heMzZvXE/maxresdefault.jpg" width="50%">](https://youtu.be/ND-heMzZvXE)
+
+</details>
+
+<details>
+<summary>Instalando o Mwsm</summary>
+
+[<img src="https://img.youtube.com/vi/dI55jmYEg5s/maxresdefault.jpg" width="50%">](https://youtu.be/dI55jmYEg5s)
 
 </details>
 
