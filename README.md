@@ -631,4 +631,11 @@ Copia e Cola
 
 </details>
 
+<details>
+<summary>Reinstalando</summary>
+
+[<img src="https://img.youtube.com/vi/XDpRwiAz7is/maxresdefault.jpg" width="50%">](https://youtu.be/XDpRwiAz7is)
+
+</details>
+
 </details>
