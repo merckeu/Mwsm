@@ -2,7 +2,7 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.39 / UPDATE: 22/12/2024 08:16
+# BUILD: 2.0.39 / UPDATE: 22/12/2024 17:25
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.39    | Correção de Erros de atualização no MkAuth                                           | 20/12/2024 21:51 ✅   |                        |
