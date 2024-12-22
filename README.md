@@ -6,7 +6,7 @@
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.39    | Correção de Erros de atualização no MkAuth                                           | 20/12/2024 21:51 ✅   |                        |
-|  2.0.39    | Correção do sistema de agendamento                                                   |                       |  22/12/2024 08:16 ✅   |
+|  2.0.39    | Correção do sistema de agendamento                                                   |                       |  22/12/2024 17:25 ✅   |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
