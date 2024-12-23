@@ -472,7 +472,7 @@ const SetSchedule = async () => {
 					}
 				});
 			} else {
-				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && hasDays.length == hasReady.length) {
+				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && (hasDays.length == Index)) {
 					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
 					const Master = await MkAuth(Month, "all", 'listagem');
 					(await Master).someAsync(async (Send) => {
