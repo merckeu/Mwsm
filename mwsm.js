@@ -55,6 +55,7 @@ function delay(t, v) {
 	});
 }
 
+
 //Search DataBase
 function Debug(Select, Search = '*', Mode = 'single', Find = undefined) {
 	switch (Mode.toLowerCase()) {
@@ -91,7 +92,6 @@ function Debug(Select, Search = '*', Mode = 'single', Find = undefined) {
 	}
 	return Select;
 }
-
 
 function DebugMsg(Selector) {
 	var Last = Debug('MKAUTH').count,
@@ -658,7 +658,6 @@ function DateTime(Days = 0, Mode) {
 
 const MkList = async (FIND, REFINE = "titulos") => {
 	var Server = Debug('MKAUTH').client_link;
-
 	if (Server == "tunel") {
 		Server = Debug('MKAUTH').tunel;
 	} else if (Server == "domain") {
@@ -689,8 +688,8 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			return false;
 		});
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			if (REFINE != "pago") {
-				return await MkSync.titulos;
+			if (REFINE == "show") {
+				return await MkSync;
 			} else {
 				return await MkSync.titulos[0];
 			}
@@ -3533,6 +3532,6 @@ client.on('call', async (call) => {
 client.initialize();
 console.log("\nAPI is Ready!\n");
 const Port = process.env.PORT || Debug('OPTIONS').access;
-server.listen(Port, function() {
+server.listen(Port, ip.address(), function() {
 	console.log('Server Running on *' + ip.address() + ':' + Port);
 });
