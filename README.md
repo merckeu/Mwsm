@@ -179,7 +179,6 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
 
 # ATUALIZAÇÃO
 * <b>1º - </b>Acesse seu MkAuth via Putty e insira o Codigo Abaixo no Prompt de Comando.
- > Sempre que o Mkauth ou Mwsm for atualizado deve-se repetir esse Procedimento.
 
 ```sh
 cd ~ && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
