@@ -2,10 +2,11 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.40 / UPDATE: 24/12/2024 01:33
+# BUILD: 2.0.40 / UPDATE: 24/12/2024 09:49
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
+|  2.0.40    | Atualização da confirmação de Pagamento                                           |    | 24/12/2024 09:49 ✅                       |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
