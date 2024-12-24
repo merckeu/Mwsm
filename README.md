@@ -486,7 +486,7 @@ Token:SENHA
 > as opções desativadas serão liberadas em patchs de atualização conforme forem liberadas
 
 ### Testando
-<b>1 - </b>Envie uma mensagem pelo Sumulador `settings > Options > Run` ou MkAuth `Opções > Servidor de SMS > Mensagens`
+<b>1 - </b>Envie uma mensagem pelo Sumulador `settings > Options > Run` com MkAuth Simulator Habilitado
 
 <b>2 - </b>Verifique o Status do envio no Log `Mwsm > Log`.
 
