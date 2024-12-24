@@ -510,6 +510,9 @@ const GetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
 		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
 			var Payment = await MkList(isTarget, "pago");
+			if (Payment.length >= 1) {
+				Payment = Payment[0];
+			}
 			if (Payment) {
 				switch (Payment.status) {
 					case 'aberto':
@@ -691,7 +694,7 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			if (REFINE == "show") {
 				return await MkSync;
 			} else {
-				return await MkSync.titulos[0];
+				return await MkSync.titulos;
 			}
 		} else {
 			return false;
