@@ -2357,12 +2357,14 @@ $(document).ready(function() {
 	socket.on('uptodate', function(data) {
 		switch (data) {
 			case 'true':
+                         case 1:
 				$("#uptodate").prop("checked", true);
-				$("#FUpdate").prop('disabled', true).attr('disabled');
+				$("#FUpdate").prop("disabled", true).attr('disabled');
 				break;
 			case 'false':
+                        case 0:
 				$("#uptodate").prop("checked", false);
-				$("#FUpdate").prop('disabled', false).removeAttr('disabled');
+				$("#FUpdate").prop("disabled", false).removeAttr('disabled');
 				break;
 		}
 	});
