@@ -2,12 +2,10 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.39 / UPDATE: 23/12/2024 23:07
+# BUILD: 2.0.40 / UPDATE: 24/12/2024 01:33
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
-|  2.0.39    | Correção de Erros de atualização no MkAuth                                           | 20/12/2024 21:51 ✅   |                        |
-|  2.0.39    | Correção do sistema de agendamento                                                   |                       |  22/12/2024 17:25 ✅   |
-|  2.0.39    | Ajuste no sistema de agendamento                                                     |                       |  23/12/2024 23:07 ✅   |
+|  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
