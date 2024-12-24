@@ -637,7 +637,7 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 cron.schedule('*/1 3-23 * * *', async () => {
-	if ((Debug('RELEASE').update == 0 || Debug('RELEASE').update == "false")) {
+	if ((Debug('RELEASE').reload == 0 || Debug('RELEASE').reload == "false")) {
 		await GetSchedule();
 	}
 }, {
