@@ -264,6 +264,7 @@ const GetUpdate = async (GET, SET) => {
 		if (!SET) {
 			const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
 			if (Register) {
+				socket.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 			}
@@ -284,6 +285,7 @@ const GetUpdate = async (GET, SET) => {
 				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
 					const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
 					if (Register) {
+						socket.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
 						await global.io.emit('upgrade', true);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
