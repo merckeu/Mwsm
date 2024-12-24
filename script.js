@@ -1961,7 +1961,7 @@ $(document).ready(function() {
 
 	});
 
-	$('.host').text($(location).attr('host') + "/send-message");
+	$('.host').text($(location).attr('host'));
 
 	var socket = io();
 
@@ -2249,6 +2249,20 @@ $(document).ready(function() {
 
 	socket.on('Version', function(data) {
 		$('#Version').val('v' + data);
+		$('#Build').text(data);
+	});
+
+
+	socket.on('Manager', function(data) {
+		switch (data) {
+			case 'true':
+				$('#Manager').text("Mwsm");
+				break;
+			case 'false':
+				$('#Manager').text("MkAuth");
+				break;
+		}
+
 	});
 
 
@@ -2440,8 +2454,10 @@ $(document).ready(function() {
 				$("#AutoBot").prop("checked", true);
 				$(".MSG_Box").prop("disabled", true);
 				$("#Zero, #InSave").css('cursor', 'not-allowed');
+				$('#Manager').text("Mwsm");
 				break;
 			case 'false':
+				$('#Manager').text("MkAuth");
 				$("#AutoBot").prop("checked", false);
 				$(".MSG_Box").prop("disabled", false);
 				$("#Zero, #InSave").css('cursor', 'pointer');
@@ -2462,6 +2478,11 @@ $(document).ready(function() {
 				$("#MinTime, #MaxTime").prop('disabled', true);
 			}
 		}
+	});
+
+
+	socket.on('Patched', function(data) {
+		$("#Patched").text(data);
 	});
 
 	socket.on('bfive', function(data) {
@@ -3256,8 +3277,10 @@ $(document).ready(function() {
 		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
 			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .MSG_Box").prop("disabled", true);
 			$("#Zero, #InSave").css('cursor', 'not-allowed');
+			$('#Manager').text("Mwsm");
 			Aimbot = true;
 		} else {
+			$('#Manager').text("MkAuth");
 			$("#Zero, #InSave").css('cursor', 'pointer');
 			$("#backup, #Spam, #Shift, .MSG_Box").prop("disabled", false);
 			if ($("#Spam").is(":checked")) {
@@ -3284,7 +3307,6 @@ $(document).ready(function() {
 			success: function(data) {
 				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 				$("#AutoBot").prop("checked", data.Return).prop("disabled", false);
-
 			},
 			error: function(request, status, error) {
 				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);

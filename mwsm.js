@@ -262,8 +262,11 @@ const GetUpdate = async (GET, SET) => {
 		Conclusion = false;
 		Status = false;
 		if (!SET) {
-			await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+			const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
+			if (Register) {
+				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+			}
 		}
 		await global.io.emit('upgrade', true);
 	} else {
@@ -823,11 +826,11 @@ function isShift(Turno) {
 }
 
 
-
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Test
 delay(0).then(async function() {
+
 
 });
 
@@ -1162,6 +1165,8 @@ const client = new Client({
 });
 io.on('connection', function(socket) {
 	socket.emit('Version', Package.version);
+	socket.emit('Manager', Debug('MKAUTH').aimbot);
+	socket.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
