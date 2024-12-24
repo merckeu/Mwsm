@@ -2,11 +2,12 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.40 / UPDATE: 24/12/2024 09:49
+# BUILD: 2.0.40 / UPDATE: 24/12/2024 14:53
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
 |  2.0.40    | Atualização da confirmação de Pagamento                                           |    | 24/12/2024 09:49 ✅                       |
+|  2.0.41    | Sistema de Atualização de Patch Manual                                          | 24/12/2024 14:53 ✅   |                        |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
@@ -203,7 +204,7 @@ cd ~ && cd /var/api/Mwsm && pm2 flush && pm2 delete all && pm2 kill && git reset
 <summary>Patch</summary>
 <br>
  
-**Atualização Manual:**
+**Atualização Manual CLI:**
  ```sh
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js -O /var/api/Mwsm/mwsm.js
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/script.js -O /var/api/Mwsm/script.js
@@ -211,14 +212,25 @@ wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/style.css -O /var/api/M
 wget https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html -O /var/api/Mwsm/index.html
 cd ~ && cd /var/api/Mwsm && pm2 log 0
 ```
+**Atualização Manual API:**
 
-**Atualização Automatica:**
+* Para forçar uma atualização, desabilite a opção Update e Clique em Force
+ 
+> `Extras > Update > Force`
+
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/update.png)](#)
+
+**Atualização Automatica API:**
 
 * Habilite a função no webadmin do mwsm. 
 
-**`Extras > Update`**
+> `Extras > Update`
 
- > as atualizações serão instaladas entre 00:00 e 05:00am e conterão somente correções de bugs que não interferem no funcionamento da API, atualizações criticas que requerem reconfiguração serão feitas somente de forma manual.
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/autupdate.png)](#)
+
+ > as atualizações serão instaladas entre 00:00 e 05:00am e conterão somente correções de bugs que não interferem no funcionamento da API.
+ > Atualizações criticas que requerem reconfiguração serão feitas somente de forma manual.
+ 
 </details>
 
 
