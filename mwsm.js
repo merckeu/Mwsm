@@ -237,8 +237,9 @@ function ArrayPosition(...criteria) {
 	}
 }
 
-const GetUpdate = async (GET, SET) => {
+const GetUpdate = async (GET, SET, FORCE = false) => {
 	var Status, Conclusion = true,
+		Updated, Response,
 		isDateTime = Debug('RELEASE').mwsm;
 	const Upgrade = async (GET) => {
 		const Update = await fetch(GET).then(response => {
@@ -268,6 +269,7 @@ const GetUpdate = async (GET, SET) => {
 					await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
 					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+		                        await global.io.emit('update', true);
 				}
 			} else {
 				await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
@@ -275,6 +277,7 @@ const GetUpdate = async (GET, SET) => {
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 			}
 		}
+		Updated = "false";
 		await global.io.emit('upgrade', true);
 	} else {
 		if ((isUpdate['version'][0].release > Package.version)) {
@@ -282,13 +285,14 @@ const GetUpdate = async (GET, SET) => {
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 				await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 			}
+			Updated = "false";
 			await global.io.emit('upgrade', false);
 		} else {
 			if ((isUpdate['version'][0].patch > isDateTime)) {
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
 				await global.io.emit('upgrade', false);
-				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
+				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true" || FORCE)) {
 					const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
 					if (Register) {
 						await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
@@ -301,7 +305,9 @@ const GetUpdate = async (GET, SET) => {
 						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/index.html", "/var/api/Mwsm/index.html");
 						await wget("https://raw.githubusercontent.com/MKCodec/Mwsm/main/mwsm.js", "/var/api/Mwsm/mwsm.js");
 						await global.io.emit('update', true);
+						Updated = "true";
 					} else {
+						Updated = "false";
 						await global.io.emit('upgrade', false);
 					}
 					Status = true;
@@ -313,6 +319,7 @@ const GetUpdate = async (GET, SET) => {
 						await console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isneeds);
 					}
 					await global.io.emit('upgrade', false);
+					Updated = "false";
 				}
 			} else if (Conclusion) {
 				Conclusion = false;
@@ -322,10 +329,16 @@ const GetUpdate = async (GET, SET) => {
 					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 				}
 				await global.io.emit('upgrade', true);
+				Updated = "false";
 			}
 		}
 	}
-	return Status;
+	Response = {
+		"Status": Status,
+		"Update": Updated
+	};
+
+	return Response;
 }
 
 //Set Debugger
@@ -624,7 +637,9 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 cron.schedule('*/1 3-23 * * *', async () => {
-	await GetSchedule();
+	if ((Debug('RELEASE').update == 0 || Debug('RELEASE').update == "false")) {
+		await GetSchedule();
+	}
 }, {
 	scheduled: true,
 	timezone: "America/Sao_Paulo"
@@ -1520,21 +1535,22 @@ app.post('/send-mkauth', async (req, res) => {
 
 
 // API Update
-app.post('/update', (req, res) => {
+app.post('/update', async (req, res) => {
 	const UP = req.body.uptodate;
 	if (Debug('RELEASE').isupdate != UP) {
-		db.run("UPDATE release SET isupdate=?", [UP], (err) => {
-			if (err) {
-				res.json({
-					Status: "Fail",
-					Return: Debug('RELEASE').isupdate
-				});
-			}
+		const Update = await Dataset('RELEASE', 'ISUPDATE', UP, 'UPDATE');
+		if (Update) {
 			res.json({
 				Status: "Success",
 				Return: UP
 			});
-		});
+		} else {
+			res.json({
+				Status: "Fail",
+				Return: Debug('RELEASE').isupdate
+			});
+
+		}
 	}
 });
 
@@ -1573,6 +1589,30 @@ app.post('/backup', (req, res) => {
 				Status: "Success",
 				Return: Backup
 			});
+		});
+	}
+});
+
+
+// Force Update
+app.post('/forceupdate', async (req, res) => {
+	const Update = req.body.update;
+	if (Debug('RELEASE').isupdate != Update) {
+		await Dataset('RELEASE', 'reload', 'true', 'UPDATE');
+		const Register = await GetUpdate(WServer, true, true);
+                await Dataset('RELEASE', 'reload', 'false', 'UPDATE');
+		if (Register.Update == "true") {
+			res.json({
+				Status: "Success"
+			});
+		} else {
+			res.json({
+				Status: "Fail"
+			});
+		}
+	} else {
+		res.json({
+			Status: "Fail"
 		});
 	}
 });

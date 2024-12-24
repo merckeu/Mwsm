@@ -2358,9 +2358,11 @@ $(document).ready(function() {
 		switch (data) {
 			case 'true':
 				$("#uptodate").prop("checked", true);
+				$("#FUpdate").prop('disabled', true).attr('disabled');
 				break;
 			case 'false':
 				$("#uptodate").prop("checked", false);
+				$("#FUpdate").prop('disabled', false).removeAttr('disabled');
 				break;
 		}
 	});
@@ -2453,14 +2455,14 @@ $(document).ready(function() {
 			case 'true':
 				$("#AutoBot").prop("checked", true);
 				$(".MSG_Box").prop("disabled", true);
-				$("#Zero, #InSave").css('cursor', 'not-allowed');
+				$("#Zero, #InSave").prop('disabled', true).attr('disabled');
 				$('#Manager').text("Mwsm");
 				break;
 			case 'false':
 				$('#Manager').text("MkAuth");
 				$("#AutoBot").prop("checked", false);
 				$(".MSG_Box").prop("disabled", false);
-				$("#Zero, #InSave").css('cursor', 'pointer');
+				$("#Zero, #InSave").prop('disabled', false).removeAttr('disabled');
 				break;
 		}
 		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
@@ -3153,6 +3155,11 @@ $(document).ready(function() {
 	});
 
 	$("#uptodate").on('change', function() {
+		if ($(this).is(":checked")) {
+			$("#FUpdate").prop('disabled', true).attr('disabled');
+		} else {
+			$("#FUpdate").prop('disabled', false).removeAttr('disabled');
+		}
 		$.ajax({
 			type: "POST",
 			url: "/update",
@@ -3208,6 +3215,53 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$("#FUpdate").on('click', function() {
+		$.ajax({
+			type: "POST",
+			url: "/forceupdate",
+			data: {
+				update: "true"
+			},
+			beforeSend: function(data) {
+				$(".Reset").removeClass("change").addClass("fa-spin").prop('disabled', true);
+				$("#FUpdate").prop('disabled', true).attr('disabled');
+			},
+			success: function(data) {
+				if (data.Status != undefined) {
+					switch (data.Status) {
+						case 'Success':
+							$('#tabs a[href="#tabs-1"]')[0].click();
+							$("#tabs-2E1, #tabs-2E2, #tabs-2E3, #isControls").hide();
+							$("#Locked, #tabs-2E1").fadeIn("slow", function() {
+								$('#tabs2 a[href="#tabs-2A"]')[0].click();
+								$("#token").prop('disabled', false).val("");
+								$("#logeraser").prop("checked", false);
+							});
+							$("#FUpdate").prop('disabled', false).removeAttr('disabled');
+							$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+							$("#inTable").fadeIn("fast", function() {
+
+							});
+							break;
+						case 'Fail':
+							setTimeout(function() {
+								$("#FUpdate").prop('disabled', false).removeAttr('disabled');
+								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+							}, 1000);
+							$("#inTable").fadeOut("fast", function() {
+
+							});
+							break;
+					}
+				}
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+			}
+		});
+	});
+
 
 
 	$("#Spam, #SpamOut").on('change', function() {
@@ -3276,12 +3330,12 @@ $(document).ready(function() {
 	$("#AutoBot").on('change', function() {
 		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
 			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .MSG_Box").prop("disabled", true);
-			$("#Zero, #InSave").css('cursor', 'not-allowed');
+			$("#Zero, #InSave").prop('disabled', true).attr('disabled');
 			$('#Manager').text("Mwsm");
 			Aimbot = true;
 		} else {
 			$('#Manager').text("MkAuth");
-			$("#Zero, #InSave").css('cursor', 'pointer');
+			$("#Zero, #InSave").prop('disabled', false).removeAttr('disabled');
 			$("#backup, #Spam, #Shift, .MSG_Box").prop("disabled", false);
 			if ($("#Spam").is(":checked")) {
 				$("#SpamOut").prop('disabled', false);
