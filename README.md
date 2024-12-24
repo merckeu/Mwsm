@@ -455,7 +455,7 @@ Token:SENHA
 > `Settings > Extras > Eraser` e Clique em Reset
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/reset.png)](#)
 
-### Como Rennviar uma Mensagens com Falhas no Log
+### Como Reenviar uma Mensagens com Falhas no Log
 > `Settings > API > Tela 3`
 > 
 > Selecione o Mes, Status e Clique em Carregar
