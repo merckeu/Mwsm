@@ -258,10 +258,10 @@ const GetUpdate = async (GET, SET) => {
 	if (isDateTime == "undefined" || isDateTime == null) {
 		isDateTime = "0000-00-00 00:00:00";
 	}
-	if ((isUpdate['version'][0].patch == Nowdate['version'][0].patch) && Conclusion) {
-		Conclusion = false;
+	if ((isUpdate['version'][0].patch == Nowdate['version'][0].patch) && !SET) {
 		Status = false;
-		if (!SET) {
+		if (Conclusion) {
+			Conclusion = false;
 			if ((Debug('RELEASE').mwsm != Nowdate['version'][0].patch)) {
 				const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
 				if (Register) {
