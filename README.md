@@ -182,7 +182,7 @@ cd ~ && cd /var/api/Mwsm && pm2 kill && pm2 delete all && npm remove pm2 -g || a
  > Sempre que o Mkauth ou Mwsm for atualizado deve-se repetir esse Procedimento.
 
 ```sh
-wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
+cd ~ && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/cliente.api -O /opt/mk-auth/api/cliente.api && wget https://raw.githubusercontent.com/MKCodec/MkAuth-API/main/titulo.api -O /opt/mk-auth/api/titulo.api
 ```
 
 * <b>2º - </b>Insira um dos codigos no prompt de comando onde o mwsm esta instalado.
