@@ -3233,25 +3233,14 @@ $(document).ready(function() {
 						case 'Success':
 							$('#tabs a[href="#tabs-1"]')[0].click();
 							$("#tabs-2E1, #tabs-2E2, #tabs-2E3, #isControls").hide();
-							$("#Locked, #tabs-2E1").fadeIn("slow", function() {
-								$('#tabs2 a[href="#tabs-2A"]')[0].click();
-								$("#token").prop('disabled', false).val("");
-								$("#logeraser").prop("checked", false);
-							});
 							$("#FUpdate").prop('disabled', false).removeAttr('disabled');
 							$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
-							$("#inTable").fadeIn("fast", function() {
-
-							});
 							break;
 						case 'Fail':
 							setTimeout(function() {
 								$("#FUpdate").prop('disabled', false).removeAttr('disabled');
 								$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 							}, 1000);
-							$("#inTable").fadeOut("fast", function() {
-
-							});
 							break;
 					}
 				}
