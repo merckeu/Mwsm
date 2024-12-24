@@ -262,8 +262,14 @@ const GetUpdate = async (GET, SET) => {
 		Conclusion = false;
 		Status = false;
 		if (!SET) {
-			const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
-			if (Register) {
+			if ((Debug('RELEASE').mwsm != Nowdate['version'][0].patch)) {
+				const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
+				if (Register) {
+					await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
+					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
+				}
+			} else {
 				await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
@@ -837,7 +843,6 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-
 
 });
 
