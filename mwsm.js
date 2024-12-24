@@ -264,7 +264,7 @@ const GetUpdate = async (GET, SET) => {
 		if (!SET) {
 			const Register = await Dataset('RELEASE', 'MWSM', (Nowdate['version'][0].patch), 'UPDATE');
 			if (Register) {
-				await global.io.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
+				await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 			}
@@ -285,7 +285,7 @@ const GetUpdate = async (GET, SET) => {
 				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true")) {
 					const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
 					if (Register) {
-						await global.io.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
+						await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
 						await global.io.emit('upgrade', true);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupfiles);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isupdated);
@@ -327,6 +327,11 @@ function Terminal(Value) {
 	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
 		console.error(Value);
 	}
+}
+
+//Get Release
+function Release(Value) {
+	return (new Date(Value).toLocaleString("pt-br").split(",")[0]) + " " + ((Value).split(" ")[1]).split(":")[0] + ":" + ((Value).split(" ")[1]).split(":")[1]
 }
 
 const SetSchedule = async () => {
@@ -1168,7 +1173,7 @@ const client = new Client({
 io.on('connection', function(socket) {
 	socket.emit('Version', Package.version);
 	socket.emit('Manager', Debug('MKAUTH').aimbot);
-	socket.emit('Patched', (new Date(Debug('RELEASE').mwsm).toLocaleString("pt-br").split(",")[0]) + " " + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[0] + ":" + ((Debug('RELEASE').mwsm).split(" ")[1]).split(":")[1]);
+	socket.emit('Patched', Release(Debug('RELEASE').mwsm));
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
