@@ -69,7 +69,8 @@ print($Response);
 <b>OBS:</b> é necessario instalar uma distribuição linux no proxmox antes de inserir os codigos abaixo
 	
 > No final da Pagina na Guia Videos tem um Tutorial de como fazer isso.
-<br><br>
+ 
+<br>
   
 <b>1 - </b>Atualize seu sistema
 ```sh
