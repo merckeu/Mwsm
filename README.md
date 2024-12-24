@@ -2,7 +2,7 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.40 / UPDATE: 24/12/2024 14:53
+# BUILD: 2.0.41 / UPDATE: 24/12/2024 14:53
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
