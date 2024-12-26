@@ -468,6 +468,33 @@ Token:SENHA
 > `Settings > Extras > Eraser` e Clique em Reset
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/reset.png)](#)
 
+### Como Recuperar o Token Esquecido
+> Não é Possivel Recuperar o token porem é possivel resetar e recriar
+
+* Pelo WhtasApp do Celular Vinculado 
+> `Menu > Dispositivos Conectados`, Selecione a instancia clique nos 3 pontos e em Remover Dispositivo.
+
+* Pelo Mwsm 
+> <b>1º -</b> Acesse o Whatsapp Vinculado.
+> 
+> <b>2º -</b> Entre nas conversas enviadas para si mesmo.
+> 
+> <b>3º -</b> Copie o Ultimo  `Mwsm Token` Recebido.
+> 
+> <b>4º -</b> Entre na API com o Token Provisório `Settings > Options`.
+> 
+> <b>5º -</b> Clique na Opção Stop e Aguarde um Novo QRCode.
+> 
+> <b>6º -</b> Vincule o Whatsapp Novamente `Menu > Dispositivos Conectados`.
+> 
+> <b>7º -</b> Clique na Instancia Desconectada e clique em Conectar.
+> 
+> <b>8º -</b> Envie uma Mensagem para o Whatsapp vinculado de outro Whatsapp com o Comando Ex: `token:1234567`.
+> 
+> <b>9º -</b> Acesse a API  `Settings` com o Token criado no passo anterior.  
+
+[![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/stop.png)](#)
+
 ### Como Reenviar uma Mensagens com Falhas no Log
 > `Settings > API > Tela 3`
 > 
