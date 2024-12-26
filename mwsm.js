@@ -269,7 +269,7 @@ const GetUpdate = async (GET, SET, FORCE = false) => {
 					await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
 					await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
 					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isalready);
-		                        await global.io.emit('update', true);
+					await global.io.emit('update', true);
 				}
 			} else {
 				await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
@@ -1212,15 +1212,22 @@ io.on('connection', function(socket) {
 	client.on('qr', (qr) => {
 		if (!Session) {
 			qrcode.toDataURL(qr, (err, url) => {
-				try {
-					socket.emit('qr', url);
-				} catch (err) {
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
-					socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
-				} finally {
-					socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
-					console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
-				}
+				socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
+				socket.emit('qr', Debug('RESOURCES').connection);
+				socket.emit('Reset', true);
+				delay(1000).then(async function() {
+					try {
+						socket.emit('qr', url);
+					} catch (err) {
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
+						socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
+					} finally {
+						socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
+						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').received);
+					}
+
+				});
 			});
 		}
 	});
@@ -1268,25 +1275,9 @@ io.on('connection', function(socket) {
 			if (err) {
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 			}
-			socket.emit('Reset', true);
 			Session = false;
 		});
-		delay(3000).then(async function() {
-			try {
-				await client.destroy();
-			} catch (err) {
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
-				socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
-			} finally {
-				socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
-				socket.emit('qr', Debug('RESOURCES').connection);
-				socket.emit('Reset', true);
-				delay(2000).then(async function() {
-					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
-				});
-			}
-		});
+		socket.emit('Reset', true);
 	});
 
 
@@ -1374,11 +1365,11 @@ app.post('/shutdown', (req, res) => {
 		});
 		client.logout()
 		global.io.emit('getlog', true);
+		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+		global.io.emit('qr', Debug('RESOURCES').disconnected);
 		delay(3000).then(async function() {
 			try {
-				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-				global.io.emit('qr', Debug('RESOURCES').disconnected);
 				db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
 					if (err) {
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
@@ -1600,7 +1591,7 @@ app.post('/forceupdate', async (req, res) => {
 	if (Debug('RELEASE').isupdate != Update) {
 		await Dataset('RELEASE', 'reload', 'true', 'UPDATE');
 		const Register = await GetUpdate(WServer, true, true);
-                await Dataset('RELEASE', 'reload', 'false', 'UPDATE');
+		await Dataset('RELEASE', 'reload', 'false', 'UPDATE');
 		if (Register.Update == "true") {
 			res.json({
 				Status: "Success"
