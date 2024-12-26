@@ -22875,7 +22875,6 @@ $(document).ready(function() {
 			easing: "swing",
 			closer: !0,
 			closeTemplate: "&times;",
-			closerTemplate: "<div>[ close all ]</div>",
 			log: function() {},
 			beforeOpen: function() {},
 			afterOpen: function() {},
