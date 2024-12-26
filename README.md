@@ -2,12 +2,13 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.41 / UPDATE: 24/12/2024 14:53
+# BUILD: 2.0.41 / UPDATE: 26/12/2024 01:26
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
 |  2.0.40    | Atualização da confirmação de Pagamento                                           |    | 24/12/2024 09:49 ✅                       |
 |  2.0.41    | Sistema de Atualização de Patch Manual                                          | 24/12/2024 14:53 ✅   |                        |
+|  2.0.41    | Correção de Erros de Logout do Whatsapp                                           |    | 26/12/2024 01:26 ✅                       |
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
