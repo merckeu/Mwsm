@@ -721,10 +721,13 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			return false;
 		});
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			if (REFINE == "show") {
+			const Keys = Object.keys(await MkSync).length;
+			if (Keys == 0) {
+				return false
+			} else if (Keys <= 2) {
+				return await MkSync.titulos[0];
+			} else if (Keys >= 3) {
 				return await MkSync;
-			} else {
-				return await MkSync.titulos;
 			}
 		} else {
 			return false;
