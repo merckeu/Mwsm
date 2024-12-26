@@ -428,6 +428,7 @@ const SetSchedule = async () => {
 			hasDays.push(GetDays);
 		}
 		var Index = 0,
+			isIndex = 0,
 			hasReady = [];
 		(hasDays).someAsync(async (Days) => {
 			Index = Index + 1;
@@ -490,7 +491,6 @@ const SetSchedule = async () => {
 							}
 
 						}
-
 					} else {
 						//Client Disable
 					}
@@ -504,6 +504,9 @@ const SetSchedule = async () => {
 				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && (hasDays.length == Index)) {
 					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
 					const Master = await MkAuth(Month, "all", 'listagem');
+					var Register = (Master).filter(function(Send) {
+						return Send.Payment != 'paid';
+					}).length;
 					(await Master).someAsync(async (Send) => {
 						if (Send.Payment != "paid") {
 							var Contact = await MkClient(Send.Connect);
@@ -514,11 +517,18 @@ const SetSchedule = async () => {
 							}
 							if (Send.Contact != "00000000000") {
 								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
-								if (Replies == undefined) {
-									await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
-								} else {
-									await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
+								if (Replies) {
+									isIndex = isIndex + 1;
+									if (isIndex <= Register) {
+										if (Replies == undefined) {
+											await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
+										} else {
+											await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
+										}
+
+									}
 								}
+
 							}
 						} else {
 							(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
@@ -539,9 +549,6 @@ const GetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
 		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
 			var Payment = await MkList(isTarget, "pago");
-			if ((Payment).length >= 1) {
-				Payment = Payment[0];
-			}
 			if (Payment) {
 				switch (Payment.status) {
 					case 'aberto':
@@ -860,7 +867,7 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-
+	await SetSchedule();
 });
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1359,47 +1366,36 @@ app.post('/reset', async (req, res) => {
 });
 
 // Shutdown
-app.post('/shutdown', (req, res) => {
+app.post('/shutdown', async (req, res) => {
 	const Shutdown = req.body.shutdown;
 	const Token = req.body.token;
 	if (Shutdown == "true" && [Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		res.json({
 			Status: "Success"
 		});
-		client.logout()
-		global.io.emit('getlog', true);
-		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-		global.io.emit('qr', Debug('RESOURCES').disconnected);
-		delay(3000).then(async function() {
-			try {
-				db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
-					if (err) {
-						console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
-					}
-					global.io.emit('Reset', true);
-					Session = false;
-				});
-				await client.destroy();
-			} catch (err) {
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + err);
-				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + err);
-			} finally {
-				global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
-				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
-				global.io.emit('qr', Debug('RESOURCES').connection);
+			global.io.emit('getlog', true);
+			global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+			global.io.emit('qr', Debug('RESOURCES').disconnected);
+		const Logout = await client.logout();
+		if (Logout) {
+			db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
+				if (err) {
+					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
+				}
 				global.io.emit('Reset', true);
-				delay(2000).then(async function() {
-					exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
-				});
+				Session = false;
+			});
+			const Destroy = await client.destroy();
+			if (Destroy) {
+				await exec('pm2 restart ' + Debug('OPTIONS').appname + ' --update-env');
 			}
-		});
+		}
 	} else {
 		res.json({
 			Status: "Fail",
 			Return: Debug('CONSOLE').wrong
 		});
-		console.log("OFF");
 	}
 });
 
