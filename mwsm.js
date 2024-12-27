@@ -440,14 +440,16 @@ const SetSchedule = async () => {
 					var Status = await Send.status;
 					const Reward = await Send.datavenc;
 					MsgSET = false;
+					const Resolve = await MkResolve(User);
 					if (Contact != undefined) {
 						Contact = (Contact).replace(/[^0-9\\.]+/g, '');
 					} else {
-						Contact = await MkClient(User);
-						if (await Contact) {
-							Contact = await Contact;
-						} else {
-							Contact = "00000000000";
+						if (await Resolve) {
+							if ((Resolve).celular != undefined) {
+								Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
+							} else {
+								Contact = "00000000000";
+							}
 						}
 					}
 					switch (Status) {
@@ -467,7 +469,7 @@ const SetSchedule = async () => {
 					if (((Reward).split(" ")[0]) == (DateTime()).split(" ")[0] && (Status) != 'paid' && (Status) != 'cancel') {
 						Send.status = 'open';
 					}
-					if (Send.cli_ativado == "s" && Status != 'paid' && Status != 'cancel') {
+					if (Send.cli_ativado == "s" && Status != 'paid' && Status != 'cancel' && (Resolve).zap == 'sim') {
 						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Title);
 						if (Replies == undefined) {
 							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status) VALUES(?, ?, ?, ?, ?, ?)").run(Title, User, Client, Contact, Reward, Status);
@@ -512,14 +514,17 @@ const SetSchedule = async () => {
 						}).length;
 						(await Master).someAsync(async (Send) => {
 							if (Send.Payment != "paid") {
+								const Resolve = await MkResolve(Send.Connect);
 								if (Send.Contact != undefined) {
 									Send.Contact = (Send.Contact).replace(/[^0-9\\.]+/g, '');
 								} else {
-									var Contact = await MkClient(Send.Connect);
-									if (await Contact) {
-										Send.Contact = await Contact;
-									} else {
-										Send.Contact = "00000000000";
+									if (await Resolve) {
+										if ((Resolve).celular != undefined) {
+											Send.Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
+										} else {
+											Send.Contact = "00000000000";
+										}
+
 									}
 								}
 								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
@@ -788,7 +793,7 @@ function isWeek(Sysdate) {
 }
 
 
-const MkClient = async (FIND) => {
+const MkResolve = async (FIND) => {
 	var Server = Debug('MKAUTH').client_link;
 
 	if (Server == "tunel") {
@@ -821,29 +826,10 @@ const MkClient = async (FIND) => {
 		}).catch(err => {
 			return false;
 		});
-		const Month = ((DateTime()).split(" ")[0]).split("-")[1];
-		const inPhone = await MkAuth(Month, FIND, 'listagem');
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			if (await MkSync.celular != undefined) {
-				return (await MkSync.celular).replace(/[^0-9\\.]+/g, '');
-			} else {
-				if (await inPhone) {
-					if (inPhone != undefined) {
-						return inPhone.Contact;
-					} else {
-						return false;
-					}
-				}
-			}
+			return await MkSync;
 		} else {
-			if (await inPhone) {
-				if (inPhone != undefined) {
-					return inPhone.Contact;
-				} else {
-					return false;
-				}
-			}
-
+			return false;
 		}
 	}
 };
@@ -895,7 +881,7 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-
+	await SetSchedule();
 });
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1459,7 +1445,7 @@ app.post('/send-mkauth', async (req, res) => {
 	const Client = req.body.client;
 	const Code = req.body.code;
 	const Status = req.body.status;
-	const Contact = req.body.contact; //req.body.contact
+	const Contact = "81994235408"; //req.body.contact
 	const Reward = req.body.reward;
 	const Push = req.body.push;
 	const Token = req.body.token;
@@ -1918,12 +1904,19 @@ app.post('/clients_mkauth', async (req, res) => {
 		});
 	} else {
 		(await Master).someAsync(async (TARGET) => {
-			var Contact = await MkClient(TARGET.Connect);
 			var isPay = await MkList(TARGET.Identifier, "show");
-			if (await Contact) {
-				TARGET.Contact = await Contact;
+			const Resolve = await MkResolve(TARGET.Connect);
+			if (TARGET.Contact != undefined) {
+				TARGET.Contact = (TARGET.Contact).replace(/[^0-9\\.]+/g, '');
 			} else {
-				TARGET.Contact = "00000000000";
+				if (await Resolve) {
+					if ((Resolve).celular != undefined) {
+						TARGET.Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
+					} else {
+						TARGET.Contact = "00000000000";
+
+					}
+				}
 			}
 			try {
 				TARGET.status = Debug("STORANGE", "*", "DIRECT", TARGET.Identifier).status;
