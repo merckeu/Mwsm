@@ -11,7 +11,7 @@
 |  2.0.41    | Correção de Erros de Logout do Whatsapp                                           |    | 26/12/2024 01:26 ✅                       |
 |  2.0.42    | Atualização da [WhatsApp-API](https://github.com/MKCodec/Whatsapp-API) para Ultima Versão                                          | 26/12/2024 14:16 ✅   |                        |
 |  2.0.42    | Correção do sistema de agendamento                                          |    | 27/12/2024 02:45 ✅                       |
-|  2.0.42    | Inclusão de Autorização de recebimento de mensagens                                          |    | 27/12/2024 10:43 ✅                       |
+|  2.0.42    | Inclusão de Autorização de recebimento de msgs                                          |    | 27/12/2024 10:43 ✅                       |
 
 ### IMPORTANTE
 Atualize a API do MkAuth antes de instalar a Atualização 2.0.42 Patch 27/12/2024 10:43
