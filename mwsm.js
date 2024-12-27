@@ -436,16 +436,19 @@ const SetSchedule = async () => {
 					const Title = await Send.titulo;
 					const User = await Send.login;
 					const Client = await Send.nome;
-					var Contact = await Send.contact;
+					var Contact = await Send.celular;
 					var Status = await Send.status;
 					const Reward = await Send.datavenc;
 					MsgSET = false;
-
-					var Contact = await MkClient(User);
-					if (await Contact) {
-						Contact = await Contact;
+					if (Contact != undefined) {
+						Contact = (Contact).replace(/[^0-9\\.]+/g, '');
 					} else {
-						Contact = "00000000000";
+						Contact = await MkClient(User);
+						if (await Contact) {
+							Contact = await Contact;
+						} else {
+							Contact = "00000000000";
+						}
 					}
 					switch (Status) {
 						case 'aberto':
@@ -478,7 +481,7 @@ const SetSchedule = async () => {
 						} else {
 							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Title, "wait");
 							if (exUpdate == undefined) {
-								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run("wait", Title);
+								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=?, contact=? WHERE title=?').run("wait", Contact, Title);
 								if (ShedUpdate) {
 									MsgSET = true;
 									Hwid = {
@@ -509,29 +512,30 @@ const SetSchedule = async () => {
 						}).length;
 						(await Master).someAsync(async (Send) => {
 							if (Send.Payment != "paid") {
-								var Contact = await MkClient(Send.Connect);
-								if (await Contact) {
-									Send.Contact = await Contact;
+								if (Send.Contact != undefined) {
+									Send.Contact = (Send.Contact).replace(/[^0-9\\.]+/g, '');
 								} else {
-									Send.Contact = "00000000000";
-								}
-								if (Send.Contact != "00000000000") {
-									const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
-									if (Replies) {
-										Index = Index + 1;
-										if (Index <= Register) {
-											console.log("002 " + Index + " - " + Register);
-											if (Replies == undefined) {
-												await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
-											} else {
-												await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
-											}
-										} else if (Index == Register) {
-											global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
-											console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
-										}
+									var Contact = await MkClient(Send.Connect);
+									if (await Contact) {
+										Send.Contact = await Contact;
+									} else {
+										Send.Contact = "00000000000";
 									}
-
+								}
+								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
+								if (Replies) {
+									Index = Index + 1;
+									if (Index <= Register) {
+										console.log("002 " + Index + " - " + Register);
+										if (Replies == undefined) {
+											await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
+										} else {
+											await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
+										}
+									} else if (Index == Register) {
+										global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
+										console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
+									}
 								}
 							} else {
 								(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
@@ -817,14 +821,29 @@ const MkClient = async (FIND) => {
 		}).catch(err => {
 			return false;
 		});
+		const Month = ((DateTime()).split(" ")[0]).split("-")[1];
+		const inPhone = await MkAuth(Month, FIND, 'listagem');
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
 			if (await MkSync.celular != undefined) {
 				return (await MkSync.celular).replace(/[^0-9\\.]+/g, '');
 			} else {
-				return false;
+				if (await inPhone) {
+					if (inPhone != undefined) {
+						return inPhone.Contact;
+					} else {
+						return false;
+					}
+				}
 			}
 		} else {
-			return false;
+			if (await inPhone) {
+				if (inPhone != undefined) {
+					return inPhone.Contact;
+				} else {
+					return false;
+				}
+			}
+
 		}
 	}
 };
@@ -1036,7 +1055,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
 						UID = "0" + UID;
 					}
-					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => Send.status.includes(Row)) && Send.cli_ativado == 's' && Send.status != 'cancelado') {
+					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => (Send.status.includes(Row) || Send.login.includes(Row) || Send.titulo.includes(Row))) && Send.cli_ativado == 's' && Send.status != 'cancelado') {
 						switch (Send.status) {
 							case 'aberto':
 								Send.status = 'open';
@@ -1054,8 +1073,9 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 						if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid') {
 							Send.status = 'open'
 						}
-
-
+						if (Send.celular != undefined) {
+							Send.celular = (Send.celular).replace(/[^0-9\\.]+/g, '');
+						}
 						Json = {
 							"Order": (new Date(Send.datavenc)).getDate(),
 							"Identifier": Send.titulo,
@@ -1063,6 +1083,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Reward": Send.datavenc,
 							"Payment": Send.status,
 							"Connect": Send.login,
+							"Contact": Send.celular,
 							"Cash": Send.valorpag,
 							"Gateway": Send.formapag
 
@@ -1141,6 +1162,7 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Reward": Send.Reward,
 							"Payment": Send.Payment,
 							"Connect": Send.Connect,
+							"Contact": Send.Contact,
 							"Cash": Send.Cash,
 							"Gateway": Send.Gateway
 						};
