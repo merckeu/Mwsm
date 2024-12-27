@@ -2,7 +2,7 @@
 
 [![Node](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/Mwsm.png)](#)
 
-# BUILD: 2.0.42 / UPDATE: 27/12/2024 02:45
+# BUILD: 2.0.42 / UPDATE: 27/12/2024 10:43
 | Release    | Recurso                                                                              | Update                | Patch                  |
 | ---------- | ------------------------------------------------------------------------------------ | --------------------- | ---------------------- | 
 |  2.0.40    | Correção de Bugs                                           | 24/12/2024 01:33 ✅   |                        |
@@ -11,6 +11,10 @@
 |  2.0.41    | Correção de Erros de Logout do Whatsapp                                           |    | 26/12/2024 01:26 ✅                       |
 |  2.0.42    | Atualização da [WhatsApp-API](https://github.com/MKCodec/Whatsapp-API) para Ultima Versão                                          | 26/12/2024 14:16 ✅   |                        |
 |  2.0.42    | Correção do sistema de agendamento                                          |    | 27/12/2024 02:45 ✅                       |
+|  2.0.42    | Inclusão de Autorização de recebimento de mensagens                                          |    | 27/12/2024 10:43 ✅                       |
+
+### IMPORTANTE
+Atualize a API do MkAuth antes de instalar a Atualização 2.0.42 Patch 27/12/2024 10:43
 
 ### ATENÇÃO DESENVOLVEDORES
 > Para continuar utilizando nossa ferramenta em seus projetos adicione a chave auth conforme exemplo
