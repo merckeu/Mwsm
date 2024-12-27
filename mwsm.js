@@ -355,8 +355,7 @@ function Release(Value) {
 
 const SetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
-		var hasDays = [],
-			MsgSET = true;
+		var hasDays = [];
 		if ((Debug('SCHEDULER').bfive == 1 || Debug('SCHEDULER').bfive == "true")) {
 			GetDays = {
 				"Mode": "Later",
@@ -428,7 +427,6 @@ const SetSchedule = async () => {
 			hasDays.push(GetDays);
 		}
 		var Index = 0,
-			isIndex = 0,
 			hasReady = [];
 		(hasDays).someAsync(async (Days) => {
 			Index = Index + 1;
@@ -491,6 +489,7 @@ const SetSchedule = async () => {
 							}
 
 						}
+
 					} else {
 						//Client Disable
 					}
@@ -501,43 +500,49 @@ const SetSchedule = async () => {
 					}
 				});
 			} else {
-				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true") && (hasDays.length == Index)) {
+				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true")) {
 					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
 					const Master = await MkAuth(Month, "all", 'listagem');
-					var Register = (Master).filter(function(Send) {
-						return Send.Payment != 'paid';
-					}).length;
-					(await Master).someAsync(async (Send) => {
-						if (Send.Payment != "paid") {
-							var Contact = await MkClient(Send.Connect);
-							if (await Contact) {
-								Send.Contact = await Contact;
-							} else {
-								Send.Contact = "00000000000";
-							}
-							if (Send.Contact != "00000000000") {
-								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
-								if (Replies) {
-									isIndex = isIndex + 1;
-									if (isIndex <= Register) {
-										if (Replies == undefined) {
-											await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
-										} else {
-											await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
+					if (await Master) {
+						var Register = (Master).filter(function(Send) {
+							return Send.Payment != 'paid';
+						}).length;
+						(await Master).someAsync(async (Send) => {
+							if (Send.Payment != "paid") {
+								var Contact = await MkClient(Send.Connect);
+								if (await Contact) {
+									Send.Contact = await Contact;
+								} else {
+									Send.Contact = "00000000000";
+								}
+								if (Send.Contact != "00000000000") {
+									const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
+									if (Replies) {
+										Index = Index + 1;
+										if (Index <= Register) {
+											console.log("002 " + Index + " - " + Register);
+											if (Replies == undefined) {
+												await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
+											} else {
+												await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
+											}
+										} else if (Index == Register) {
+											global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
+											console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
 										}
-
 									}
-								}
 
-							}
-						} else {
-							(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
-								if (Shoot.process == "success" && Shoot.status == "paid") {
-									await link.prepare('DELETE FROM scheduling WHERE title=?').get(Send.Identifier);
 								}
-							});
-						}
-					});
+							} else {
+								(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
+									if (Shoot.process == "success" && Shoot.status == "paid") {
+										await link.prepare('DELETE FROM scheduling WHERE title=?').get(Send.Identifier);
+									}
+								});
+							}
+						});
+
+					}
 				}
 			}
 		});
@@ -549,7 +554,10 @@ const GetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
 		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
 			var Payment = await MkList(isTarget, "pago");
-			if (Payment) {
+			if (await Payment) {
+				if ((Payment).length >= 1) {
+					Payment = Payment[0];
+				}
 				switch (Payment.status) {
 					case 'aberto':
 						Payment.status = 'open';
@@ -571,6 +579,7 @@ const GetSchedule = async () => {
 					}
 				}
 			}
+
 		});
 
 		const Target = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
@@ -732,7 +741,7 @@ const MkList = async (FIND, REFINE = "titulos") => {
 			if (Keys == 0) {
 				return false
 			} else if (Keys <= 2) {
-				return await MkSync.titulos[0];
+				return await MkSync.titulos;
 			} else if (Keys >= 3) {
 				return await MkSync;
 			}
@@ -1206,13 +1215,10 @@ io.on('connection', function(socket) {
 	socket.emit('Reset', true);
 	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
-		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').authenticated);
-		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').ready);
-
-		Session = true;
+		Session = false;
 	} else {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
@@ -1243,7 +1249,6 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('ready', async () => {
-		await GetUpdate(WServer, false);
 		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
 			await link.prepare('UPDATE options SET auth=?').run(1);
 		}
@@ -1255,6 +1260,7 @@ io.on('connection', function(socket) {
 			Permission = true;
 			await socket.emit('Reset', false);
 			await client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
+			await GetUpdate(WServer, false);
 		}
 	});
 
@@ -1299,7 +1305,6 @@ io.on('connection', function(socket) {
 			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 			socket.emit('qr', Debug('RESOURCES').authenticated);
 		} else {
-			WwbUpgrade();
 			socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').connection);
 			socket.emit('qr', Debug('RESOURCES').connection);
@@ -1311,13 +1316,6 @@ io.on('connection', function(socket) {
 
 	socket.emit('background', Debug('RESOURCES').background);
 	socket.emit('donation', Debug('RESOURCES').about);
-
-	delay(2000).then(async function() {
-		if (Session && Permission) {
-			await GetUpdate(WServer, false);
-			await socket.emit('Reset', false);
-		}
-	});
 });
 
 // Reset
@@ -1373,10 +1371,10 @@ app.post('/shutdown', async (req, res) => {
 		res.json({
 			Status: "Success"
 		});
-			global.io.emit('getlog', true);
-			global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-			console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
-			global.io.emit('qr', Debug('RESOURCES').disconnected);
+		global.io.emit('getlog', true);
+		global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').disconnected);
+		global.io.emit('qr', Debug('RESOURCES').disconnected);
 		const Logout = await client.logout();
 		if (Logout) {
 			db.run("UPDATE options SET auth=?, token=?", [false, null], (err) => {
