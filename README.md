@@ -528,6 +528,9 @@ Token:SENHA
 | `Unlocked User`          | Envia ao cliente uma notificação quando uma suspensão é desfeita                                                            |
 | `Maintenance`          | Envia ao cliente uma notificação sobre manutenção de serviço                                                           |
 | `Unistall Device`          | Envia ao cliente uma notificação sobre recolhimento de equipamentos                                                            |
+| `Low Speed`          | Envia ao cliente uma notificação sobre redução de velocidade                                                            |
+| `Blocked User`          | Envia ao cliente uma notificação sobre suspensão de assinatura                                                            |
+| `Support`          | Envia ao cliente uma notificação sobre chamados abertos                                                            |
 > as opções desativadas serão liberadas em patchs de atualização conforme forem liberadas
 
 ### Testando
