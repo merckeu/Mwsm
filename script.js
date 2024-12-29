@@ -10,15 +10,24 @@ $(window).on('load', function() {
 $(document).ready(function() {
 	$(".Disabled").prop('disabled', true);
 	$(".close, #Exit").click(function() {
-		$('.modal').delay(200).fadeOut('slow');
-	});
-});
+		$(".modal-menu").hide('slide', {
+			direction: 'left'
+		}, 700);
+		setTimeout(() => {
+			$('.modal').delay(200).fadeOut('slow');
+		}, "300");
 
-$(document).ready(function() {
-	$("#MSG_001").emojioneArea({
-		pickerPosition: "left",
-		tonesStyle: "bullet"
 	});
+
+	$("#Scheduler").on("click", function() {
+		$(".modal").show();
+		setTimeout(() => {
+			$(".modal-menu").show('slide', {
+				direction: 'left'
+			}, 700);
+		}, "300");
+	});
+
 });
 
 $(document).ready(function() {
@@ -188,6 +197,69 @@ $(document).ready(function() {
 					break;
 				case "3":
 					$("#MSG_H03, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+					});
+					break;
+			}
+			break;
+
+		case "Speed":
+			$("#Placeholder_009").text("Low Speed");
+			switch (Select) {
+				case "1":
+					$("#MSG_I01, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+					});
+					break;
+				case "2":
+					$("#MSG_I02, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_I03, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+					});
+					break;
+			}
+			break;
+
+		case "Block":
+			$("#Placeholder_010").text("Blocked User");
+			switch (Select) {
+				case "1":
+					$("#MSG_J01, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+					});
+					break;
+				case "2":
+					$("#MSG_J02, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_J03, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+					});
+					break;
+			}
+			break;
+
+		case "Support":
+			$("#Placeholder_011").text("Support Opening");
+			switch (Select) {
+				case "1":
+					$("#MSG_K01, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+					});
+					break;
+				case "2":
+					$("#MSG_K02, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+					});
+					break;
+				case "3":
+					$("#MSG_K03, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
 
 					});
 					break;
@@ -367,6 +439,70 @@ $(document).ready(function() {
 						break;
 				}
 				break;
+
+			case "Speed":
+				$("#Placeholder_009").text("Low Speed");
+				switch (Select) {
+					case "1":
+						$("#MSG_I01, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+						});
+						break;
+					case "2":
+						$("#MSG_I02, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_I03, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+						});
+						break;
+				}
+				break;
+
+			case "Block":
+				$("#Placeholder_010").text("Blocked User");
+				switch (Select) {
+					case "1":
+						$("#MSG_J01, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+						});
+						break;
+					case "2":
+						$("#MSG_J02, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_J03, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+						});
+						break;
+				}
+				break;
+
+			case "Support":
+				$("#Placeholder_011").text("Support Opening");
+				switch (Select) {
+					case "1":
+						$("#MSG_K01, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+						});
+						break;
+					case "2":
+						$("#MSG_K02, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+						});
+						break;
+					case "3":
+						$("#MSG_K03, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+						});
+						break;
+				}
+				break;
+
 
 		}
 	});
@@ -1037,6 +1173,36 @@ $(document).ready(function() {
 		Scheduler("#OnUnistall", Enable);
 	});
 
+	$("#OnSpeed").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnSpeed", Enable);
+	});
+
+
+	$("#OnBlock").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnBlock", Enable);
+	});
+
+
+	$("#OnSupport").on('change', function() {
+		if ($(this).is(":checked")) {
+			Enable = true;
+		} else {
+			Enable = false;
+		}
+		Scheduler("#OnSupport", Enable);
+	});
+
+
 
 	$("#inject").on('change', function() {
 		var Range = $("#ranger").val();
@@ -1083,6 +1249,40 @@ $(document).ready(function() {
 			success: function(data) {
 				if (data.Status == "Fail") {
 					$(OPTION).prop("checked", data.Return);
+				}
+				switch (data.Option) {
+					case 5:
+						ID = "#lfive";
+						break;
+					case 10:
+						ID = "#lten";
+						break;
+					case 15:
+						ID = "#lfifteen";
+						break;
+					case 20:
+						ID = "#ltwenty";
+						break;
+					case 25:
+						ID = "#ltwentyfive";
+						break;
+					case 30:
+						ID = "#lthirty";
+						break;
+					case 35:
+						ID = "#lthirtyfive";
+						break;
+					case 40:
+						ID = "#lforty";
+						break;
+					default:
+						ID = "#lfive, #lten, #lfifteen, #ltwenty, #ltwentyfive, #lthirty, #lthirtyfive, #lforty";
+				}
+
+				if ($("#OnSpeed").is(":checked")) {
+					$(ID).prop('disabled', true);
+				} else {
+					$(ID).prop('disabled', false);
 				}
 			},
 			error: function(request, status, error) {
@@ -1162,13 +1362,6 @@ $(document).ready(function() {
 			Simulator = "/force-message";
 		}
 	});
-
-
-	$("#Scheduler").on("click", function() {
-		$(".modal").show();
-	});
-
-
 
 	$("#Zero").on("click", function() {
 		if ($("#AutoBot").is(":checked") == false) {
@@ -1363,6 +1556,77 @@ $(document).ready(function() {
 						case "3":
 							$("#MSG_H03").val("");
 							$("#MSG_H03, #Placeholder_008, #MSG_Box_008").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+				case "Speed":
+					$("#Placeholder_009").text("Low Speed");
+					switch (Select) {
+						case "1":
+							$("#MSG_I01").val("");
+							$("#MSG_I01, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+							});
+							break;
+						case "2":
+							$("#MSG_I02").val("");
+							$("#MSG_I02, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_I03").val("");
+							$("#MSG_I03, #Placeholder_009, #MSG_Box_009").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+
+				case "Blocked":
+					$("#Placeholder_010").text("Blocked User");
+					switch (Select) {
+						case "1":
+							$("#MSG_J01").val("");
+							$("#MSG_J01, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+							});
+							break;
+						case "2":
+							$("#MSG_J02").val("");
+							$("#MSG_J02, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_J03").val("");
+							$("#MSG_J03, #Placeholder_010, #MSG_Box_010").fadeIn("slow", function() {
+
+							});
+							break;
+					}
+					break;
+
+				case "Support":
+					$("#Placeholder_011").text("Support Opening");
+					switch (Select) {
+						case "1":
+							$("#MSG_K01").val("");
+							$("#MSG_K01, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+							});
+							break;
+						case "2":
+							$("#MSG_K02").val("");
+							$("#MSG_K02, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
+
+							});
+							break;
+						case "3":
+							$("#MSG_K03").val("");
+							$("#MSG_K03, #Placeholder_011, #MSG_Box_011").fadeIn("slow", function() {
 
 							});
 							break;
@@ -1997,7 +2261,6 @@ $(document).ready(function() {
 			});
 			$('.Version').removeClass("IsDefault IsUpdate").addClass("IsUpgrade");
 		}
-		$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
 	});
 
 
@@ -2165,6 +2428,16 @@ $(document).ready(function() {
 	socket.on('A008', function(data) {
 		$('.Unistall_001').val(data);
 	});
+	socket.on('A009', function(data) {
+		$('.Speed_001').val(data);
+	});
+	socket.on('A010', function(data) {
+		$('.Block_001').val(data);
+	});
+	socket.on('A011', function(data) {
+		$('.Support_001').val(data);
+	});
+
 
 	socket.on('B001', function(data) {
 		$('.before_002').val(data);
@@ -2190,6 +2463,16 @@ $(document).ready(function() {
 	socket.on('B008', function(data) {
 		$('.Unistall_002').val(data);
 	});
+	socket.on('B009', function(data) {
+		$('.Speed_002').val(data);
+	});
+	socket.on('B010', function(data) {
+		$('.Block_002').val(data);
+	});
+	socket.on('B011', function(data) {
+		$('.Support_002').val(data);
+	});
+
 
 	socket.on('C001', function(data) {
 		$('.before_003').val(data);
@@ -2214,6 +2497,15 @@ $(document).ready(function() {
 	});
 	socket.on('C008', function(data) {
 		$('.Unistall_003').val(data);
+	});
+	socket.on('C009', function(data) {
+		$('.Speed_003').val(data);
+	});
+	socket.on('C010', function(data) {
+		$('.Block_003').val(data);
+	});
+	socket.on('C011', function(data) {
+		$('.Support_003').val(data);
 	});
 
 
@@ -2357,12 +2649,12 @@ $(document).ready(function() {
 	socket.on('uptodate', function(data) {
 		switch (data) {
 			case 'true':
-                         case 1:
+			case 1:
 				$("#uptodate").prop("checked", true);
 				$("#FUpdate").prop("disabled", true).attr('disabled');
 				break;
 			case 'false':
-                        case 0:
+			case 0:
 				$("#uptodate").prop("checked", false);
 				$("#FUpdate").prop("disabled", false).removeAttr('disabled');
 				break;
@@ -2664,6 +2956,78 @@ $(document).ready(function() {
 		}
 	});
 
+	socket.on('OnSpeed', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnSpeed").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnSpeed").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnBlock', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnBlock").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnBlock").prop("checked", false);
+				break;
+		}
+	});
+
+
+	socket.on('OnSupport', function(data) {
+		switch (data) {
+			case 'true':
+				$("#OnSupport").prop("checked", true);
+				break;
+			case 'false':
+				$("#OnSupport").prop("checked", false);
+				break;
+		}
+	});
+
+	socket.on('Speed', function(data) {
+		var ID;
+		switch (data) {
+			case 5:
+				ID = "#lfive";
+				break;
+			case 10:
+				ID = "#lten";
+				break;
+			case 15:
+				ID = "#lfifteen";
+				break;
+			case 20:
+				ID = "#ltwenty";
+				break;
+			case 25:
+				ID = "#ltwentyfive";
+				break;
+			case 30:
+				ID = "#lthirty";
+				break;
+			case 35:
+				ID = "#lthirtyfive";
+				break;
+			case 40:
+				ID = "#lforty";
+				break;
+			default:
+				ID = "#lfive, #lten, #lfifteen, #ltwenty, #ltwentyfive, #lthirty, #lthirtyfive, #lforty";
+		}
+		if ($("#OnSpeed").is(":checked")) {
+			$(ID).prop('disabled', true);
+		} else {
+			$(ID).prop('disabled', false);
+		}
+	});
+
 
 	socket.on('module', function(data) {
 		switch (data) {
@@ -2897,6 +3261,10 @@ $(document).ready(function() {
 	socket.on('donation', function(src) {
 		$('#donation').attr('src', src);
 		$('#donation').show();
+	});
+	socket.on('developer', function(src) {
+		$('#developer').attr('src', src);
+		$('#developer').show();
 	});
 
 	$("#tabs").tabs({
@@ -3237,6 +3605,7 @@ $(document).ready(function() {
 							$("#tabs-2E1, #tabs-2E2, #tabs-2E3, #isControls").hide();
 							$("#FUpdate").prop('disabled', false).removeAttr('disabled');
 							$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+                                                        location.reload();
 							break;
 						case 'Fail':
 							setTimeout(function() {

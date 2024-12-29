@@ -152,6 +152,19 @@ function DebugMsg(Selector) {
 		case "unistall":
 			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').unistall;
 			break;
+
+		case "speed":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').speed;
+			break;
+
+		case "block":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').block;
+			break;
+
+		case "support":
+			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').support;
+			break;
+
 	}
 
 	Dataset('MKAUTH', 'COUNT', Return, 'UPDATE');
@@ -355,74 +368,128 @@ function Release(Value) {
 
 const SetSchedule = async () => {
 	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
-		var hasDays = [];
+		var hasDays = [],
+			Option;
 		if ((Debug('SCHEDULER').bfive == 1 || Debug('SCHEDULER').bfive == "true")) {
+			Option = undefined;
 			GetDays = {
 				"Mode": "Later",
-				"Set": 5
+				"Set": 5,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
 		if ((Debug('SCHEDULER').inday == 1 || Debug('SCHEDULER').inday == "true")) {
+			Option = undefined;
 			GetDays = {
 				"Mode": "Now",
-				"Set": 0
+				"Set": 0,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lfive == 1 || Debug('SCHEDULER').lfive == "true")) {
+		if ((Debug('SCHEDULER').lfive == 1 || Debug('SCHEDULER').lfive == "true") || (Debug('SCHEDULER').speed == 5)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 5)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 5
+				"Set": 5,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lten == 1 || Debug('SCHEDULER').lten == "true")) {
+		if ((Debug('SCHEDULER').lten == 1 || Debug('SCHEDULER').lten == "true") || (Debug('SCHEDULER').speed == 10)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 10)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 10
+				"Set": 10,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lfifteen == 1 || Debug('SCHEDULER').lfifteen == "true")) {
+		if ((Debug('SCHEDULER').lfifteen == 1 || Debug('SCHEDULER').lfifteen == "true") || (Debug('SCHEDULER').speed == 15)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 15)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 15
+				"Set": 15,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').ltwenty == 1 || Debug('SCHEDULER').ltwenty == "true")) {
+		if ((Debug('SCHEDULER').ltwenty == 1 || Debug('SCHEDULER').ltwenty == "true") || (Debug('SCHEDULER').speed == 20)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 20)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 20
+				"Set": 20,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').ltwentyfive == 1 || Debug('SCHEDULER').ltwentyfive == "true")) {
+		if ((Debug('SCHEDULER').ltwentyfive == 1 || Debug('SCHEDULER').ltwentyfive == "true") || (Debug('SCHEDULER').speed == 25)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 25)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 25
+				"Set": 25,
+				"Option": Option
+			};
+			hasDays.push(GetDays);
+
+		}
+		if ((Debug('SCHEDULER').lthirty == 1 || Debug('SCHEDULER').lthirty == "true") || (Debug('SCHEDULER').speed == 30)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 30)) {
+				Option = "speed";
+			}
+			GetDays = {
+				"Mode": "Before",
+				"Set": 30,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lthirty == 1 || Debug('SCHEDULER').lthirty == "true")) {
+		if ((Debug('SCHEDULER').lthirtyfive == 1 || Debug('SCHEDULER').lthirtyfive == "true") || (Debug('SCHEDULER').speed == 35)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 35)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 30
+				"Set": 35,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lthirtyfive == 1 || Debug('SCHEDULER').lthirtyfive == "true")) {
+		if ((Debug('SCHEDULER').lforty == 1 || Debug('SCHEDULER').lforty == "true") || (Debug('SCHEDULER').speed == 40)) {
+			Option = undefined;
+			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 40)) {
+				Option = "speed";
+			}
 			GetDays = {
 				"Mode": "Before",
-				"Set": 35
+				"Set": 40,
+				"Option": Option
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lforty == 1 || Debug('SCHEDULER').lforty == "true")) {
+		if ((Debug('SCHEDULER').onblock == 1 || Debug('SCHEDULER').onblock == "true")) {
 			GetDays = {
 				"Mode": "Before",
-				"Set": 40
+				"Set": Debug('SCHEDULER').block,
+				"Option": "Block"
 			};
 			hasDays.push(GetDays);
 		}
@@ -433,6 +500,9 @@ const SetSchedule = async () => {
 			const Master = await Scheduller(Days.Set, Days.Mode);
 			if (await Master) {
 				(await Master).someAsync(async (Send) => {
+					const Range = await Days.Mode;
+					const Control = await Days.Set;
+					const Option = await Days.Option;
 					const Title = await Send.titulo;
 					const User = await Send.login;
 					const Client = await Send.nome;
@@ -472,7 +542,7 @@ const SetSchedule = async () => {
 					if (Send.cli_ativado == "s" && Status != 'paid' && Status != 'cancel' && (Resolve).zap == 'sim') {
 						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Title);
 						if (Replies == undefined) {
-							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status) VALUES(?, ?, ?, ?, ?, ?)").run(Title, User, Client, Contact, Reward, Status);
+							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status, range, control, option) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)").run(Title, User, Client, Contact, Reward, Status, Range, Control, Option);
 							if (ShedInsert) {
 								MsgSET = true;
 								Hwid = {
@@ -482,8 +552,8 @@ const SetSchedule = async () => {
 							}
 						} else {
 							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Title, "wait");
-							if (exUpdate == undefined) {
-								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=?, contact=? WHERE title=?').run("wait", Contact, Title);
+							if (exUpdate == undefined || (Option != exUpdate.option)) {
+								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=?, contact=?, option=?, control=? WHERE title=?').run("wait", Contact, Option, Control, Title);
 								if (ShedUpdate) {
 									MsgSET = true;
 									Hwid = {
@@ -604,8 +674,10 @@ const GetSchedule = async () => {
 						contact: isSend.contact,
 						reward: isSend.reward,
 						push: '00/00/0000 00:00:00',
+						option: isSend.option,
 						token: Debug('OPTIONS').token,
 						cash: isSend.cash,
+
 						gateway: isSend.gateway,
 						payment: isSend.status
 					};
@@ -631,6 +703,7 @@ const GetSchedule = async () => {
 								reward: hasSend.reward,
 								push: '00/00/0000 00:00:00',
 								token: Debug('OPTIONS').token,
+								option: hasSend.option,
 								payment: hasSend.status
 							};
 							const Charge = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
@@ -881,7 +954,7 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-
+	//await SetSchedule();
 });
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1263,10 +1336,10 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
 		socket.emit('qr', Debug('RESOURCES').ready);
+		await socket.emit('Reset', false);
 		Session = true;
 		if (!Permission) {
 			Permission = true;
-			await socket.emit('Reset', false);
 			await client.sendMessage(client.info.wid["_serialized"], "*Mwsm Token:*\n" + Password[1]);
 			await GetUpdate(WServer, false);
 		}
@@ -1276,6 +1349,7 @@ io.on('connection', function(socket) {
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		socket.emit('qr', Debug('RESOURCES').authenticated);
+		Session = true;
 	});
 
 
@@ -1306,6 +1380,7 @@ io.on('connection', function(socket) {
 
 
 	client.on('loading_screen', (percent, message) => {
+		Session = false;
 		console.log('> ' + Debug('OPTIONS').appname + ' : Loading application', percent + '%');
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : Connecting Application ' + percent + '%');
 		if (percent >= "100") {
@@ -1321,9 +1396,15 @@ io.on('connection', function(socket) {
 		}
 
 	});
-
 	socket.emit('background', Debug('RESOURCES').background);
 	socket.emit('donation', Debug('RESOURCES').about);
+	socket.emit('developer', Debug('RESOURCES').developer);
+	delay(2000).then(async function() {
+		if (Permission) {
+			await GetUpdate(WServer, false);
+		}
+	});
+
 });
 
 // Reset
@@ -1451,10 +1532,15 @@ app.post('/send-mkauth', async (req, res) => {
 	const Token = req.body.token;
 	const Cash = req.body.cash;
 	const Gateway = req.body.gateway;
+	const Option = req.body.option;
+	const Speed = Debug('SCHEDULER').speed;
+	const Block = Debug('SCHEDULER').block;
 	var Process, Direct, Storange;
 	var Pulse = DateTime();
 	var Payment = req.body.payment;
-	if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0] && Payment != "paid") {
+	if (Option == "support") {
+		Payment = "support";
+	} else if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0] && Payment != "paid") {
 		Payment = "open";
 	}
 	switch (Payment) {
@@ -1468,6 +1554,17 @@ app.post('/send-mkauth', async (req, res) => {
 		case 'due':
 			if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0]) {
 				Message = DebugMsg("DAY");
+			} else if (Option != undefined) {
+
+				switch (Option) {
+					case "speed":
+						Message = DebugMsg("SPEED");
+						break;
+					case "block":
+						Message = DebugMsg("BLOCK");
+						break;
+				}
+
 			} else {
 				Message = DebugMsg("LATER");
 			}
@@ -1485,8 +1582,12 @@ app.post('/send-mkauth', async (req, res) => {
 			}
 			Process = "Sent";
 			break;
+		case 'support':
+			Message = DebugMsg("SUPPORT");
+			break;
+
 	}
-	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%valorpago%', Cash).replaceAll('%metodo%', Gateway).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
+	Mensagem = Message.replaceAll('%nomeresumido%', Client.split(" ")[0]).replaceAll('%vencimento%', new Date(Reward).toLocaleString("pt-br").split(",")[0]).replaceAll('%logincliente%', User).replaceAll('%valorpago%', Cash).replaceAll('%bloqatrazo%', Block).replaceAll('%metodo%', Gateway).replaceAll('%reduzatrazo%', Speed).replaceAll('%numerotitulo%', Code).replaceAll('%pagamento%', new Date(Pulse).toLocaleString("pt-br").split(",")[0] + " as " + (Pulse.split(" ")[1]).split(":")[0] + ":" + (Pulse.split(" ")[1]).split(":")[1]);
 	if ([Debug('OPTIONS').token, Password[1]].includes(Token)) {
 		const data = {
 			to: '55' + Contact,
@@ -1775,6 +1876,11 @@ app.post('/token', async (req, res) => {
 		global.io.emit('OnMaintenance', Debug('SCHEDULER').onmaintenance);
 		global.io.emit('OnUnistall', Debug('SCHEDULER').onunistall);
 
+		global.io.emit('OnSpeed', Debug('SCHEDULER').onspeed);
+		global.io.emit('OnBlock', Debug('SCHEDULER').onblock);
+		global.io.emit('OnSupport', Debug('SCHEDULER').onsupport);
+		global.io.emit('Speed', Debug('SCHEDULER').speed);
+
 		global.io.emit('A001', Debug('MESSAGE', '*', 'ID', '1').before);
 		global.io.emit('A002', Debug('MESSAGE', '*', 'ID', '1').day);
 		global.io.emit('A003', Debug('MESSAGE', '*', 'ID', '1').later);
@@ -1783,6 +1889,10 @@ app.post('/token', async (req, res) => {
 		global.io.emit('A006', Debug('MESSAGE', '*', 'ID', '1').unlock);
 		global.io.emit('A007', Debug('MESSAGE', '*', 'ID', '1').maintenance);
 		global.io.emit('A008', Debug('MESSAGE', '*', 'ID', '1').unistall);
+
+		global.io.emit('A009', Debug('MESSAGE', '*', 'ID', '1').speed);
+		global.io.emit('A010', Debug('MESSAGE', '*', 'ID', '1').block);
+		global.io.emit('A011', Debug('MESSAGE', '*', 'ID', '1').support);
 
 		global.io.emit('B001', Debug('MESSAGE', '*', 'ID', '2').before);
 		global.io.emit('B002', Debug('MESSAGE', '*', 'ID', '2').day);
@@ -1793,6 +1903,10 @@ app.post('/token', async (req, res) => {
 		global.io.emit('B007', Debug('MESSAGE', '*', 'ID', '2').maintenance);
 		global.io.emit('B008', Debug('MESSAGE', '*', 'ID', '2').unistall);
 
+		global.io.emit('B009', Debug('MESSAGE', '*', 'ID', '2').speed);
+		global.io.emit('B010', Debug('MESSAGE', '*', 'ID', '2').block);
+		global.io.emit('B011', Debug('MESSAGE', '*', 'ID', '2').support);
+
 		global.io.emit('C001', Debug('MESSAGE', '*', 'ID', '3').before);
 		global.io.emit('C002', Debug('MESSAGE', '*', 'ID', '3').day);
 		global.io.emit('C003', Debug('MESSAGE', '*', 'ID', '3').later);
@@ -1801,6 +1915,10 @@ app.post('/token', async (req, res) => {
 		global.io.emit('C006', Debug('MESSAGE', '*', 'ID', '3').unlock);
 		global.io.emit('C007', Debug('MESSAGE', '*', 'ID', '3').maintenance);
 		global.io.emit('C008', Debug('MESSAGE', '*', 'ID', '3').unistall);
+
+		global.io.emit('C009', Debug('MESSAGE', '*', 'ID', '3').speed);
+		global.io.emit('C010', Debug('MESSAGE', '*', 'ID', '3').block);
+		global.io.emit('C011', Debug('MESSAGE', '*', 'ID', '3').support);
 
 		if ((Debug('TARGET', '*', 'ALL')).length >= 1) {
 			var isTARGET = [];
@@ -1882,7 +2000,8 @@ app.post('/scheduler', (req, res) => {
 		}
 		res.json({
 			Status: "Success",
-			Return: enable
+			Return: enable,
+			Option: Debug('SCHEDULER').speed
 		});
 	});
 });
