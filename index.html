@@ -282,6 +282,10 @@
               <div id="tabs-2B" style="z-index: 1;" aria-labelledby="ui-id-2" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="false">
                 <div class="row" style="padding:0px 10px;height:220px;">
                   <div class="col-75">
+<div class="row" style="width:650px;height:70px;margin-top:-10px;padding-left:10px;">
+
+<div style="float:left">
+
                     <div class="row">
                       <div style="float: left; width: 150px; padding: 0px; margin-top: 5px;">
                         <div style="margin-bottom:-10px;padding-left:5px;z-index:9999999;">
@@ -334,6 +338,61 @@
                         </div>
                       </div>
                     </div>
+
+
+</div>
+<div style="float:right">
+
+
+
+<div style="width:260px;height:100px;padding:0px;margin-top:-5px;">
+
+    <div style="float:left;width:130px;padding:0px;">
+                        <fieldset style="padding-bottom:10px;">
+                          <legend>Low Speed</legend>
+                          <div class="input-group mb-3" style="height:40px;width:105px;">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" style="height:25px;">
+                                <i class="fa fa-battery-quarter" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                            <div class="quantity">
+                              <input type="number" id="LowSpeedRange" placeholder="1" style="width:55px;font-size:14px;" min="5" max="40" step="5" value="" readonly="" maxlength="2">
+                              <div class="quantity-nav">
+                                <input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SpeedRangeUP">
+                                <input type="button" class="quantity-button quantity-down" value="&#xf107" id="SpeedRangeDown">
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+
+                      <div style="float:right;width:130px;padding:0px;">
+                        <fieldset style="padding-bottom:10px;">
+                          <legend>Blocked User</legend>
+                          <div class="input-group mb-3" style="height:40px;width:105px;">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" style="height:25px;">
+                                <i class="fa fa-user-times" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                            <div class="quantity">
+                              <input type="number" id="BlockRange" placeholder="1" style="width:55px;font-size:14px;" min="45" max="60" step="5" value="" readonly="" maxlength="2">
+                              <div class="quantity-nav">
+                                <input type="button" class="quantity-button quantity-up" value="&#xf106;" id="BlockRangeUP">
+                                <input type="button" class="quantity-button quantity-down" value="&#xf107" id="BlockRangeDown">
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                      </div>
+
+
+
+</div>
+
+</div>
                     <div class="row">
                       <div class="Spam" style="float:left;width:250px;padding:0px;margin-top:2px;">
                         <fieldset>
@@ -862,13 +921,13 @@
                                     <option value="day">&#xf00c; &nbsp; In Day</option>
                                     <option value="later">&#xf054; &nbsp; Days Later</option>
                                     <option value="Pay">&#xf155; &nbsp; Payment Received</option>
-                                    <option value="Lock" class="Disabled">&#xf023; &nbsp; Locked User</option>
-                                    <option value="Unlock" class="Disabled">&#xf09c; &nbsp; Unlocked User</option>
-                                    <option value="Maintenance" class="Disabled">&#xf085; &nbsp; Maintenance</option>
-                                    <option value="Unistall" class="Disabled">&#xf05e; &nbsp; Unistall Device</option>
-                                    <option value="Speed" class="xx">&#xf243; &nbsp; Low Speed</option>
-                                    <option value="Block" class="xx">&#xf235; &nbsp; Blocked User</option>
-                                    <option value="Support" class="xx">&#xf0e0; &nbsp; Support Opening</option>
+                                    <option value="Lock">&#xf023; &nbsp; Locked User</option>
+                                    <option value="Unlock">&#xf09c; &nbsp; Unlocked User</option>
+                                    <option value="Maintenance">&#xf085; &nbsp; Maintenance</option>
+                                    <option value="Unistall">&#xf05e; &nbsp; Unistall Device</option>
+                                    <option value="Speed">&#xf243; &nbsp; Low Speed</option>
+                                    <option value="Block">&#xf235; &nbsp; Blocked User</option>
+                                    <option value="Support">&#xf0e0; &nbsp; Support Opening</option>
                                   </select>
                                 </div>
                                 <div class="form-group">

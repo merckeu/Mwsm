@@ -1880,6 +1880,7 @@ app.post('/token', async (req, res) => {
 		global.io.emit('OnBlock', Debug('SCHEDULER').onblock);
 		global.io.emit('OnSupport', Debug('SCHEDULER').onsupport);
 		global.io.emit('Speed', Debug('SCHEDULER').speed);
+		global.io.emit('Block', Debug('SCHEDULER').block);
 
 		global.io.emit('A001', Debug('MESSAGE', '*', 'ID', '1').before);
 		global.io.emit('A002', Debug('MESSAGE', '*', 'ID', '1').day);

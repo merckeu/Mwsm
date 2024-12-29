@@ -625,6 +625,66 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
+function ReloadRange(OPTION, SET) {
+		$.ajax({
+			type: "POST",
+			url: "/scheduler",
+			data: {
+				define: OPTION.replace(/[^a-zA-Z]+/g, ''),
+				enable: SET
+			},
+
+			success: function(data) {
+				if (data.Option == SET) {
+					ID = "#lfive, #lten, #lfifteen, #ltwenty, #ltwentyfive, #lthirty, #lthirtyfive, #lforty";
+                                        $(ID).prop('disabled', false);
+				}
+				switch (data.Option) {
+					case 5:
+						ID = "#lfive";
+						break;
+					case 10:
+						ID = "#lten";
+						break;
+					case 15:
+						ID = "#lfifteen";
+						break;
+					case 20:
+						ID = "#ltwenty";
+						break;
+					case 25:
+						ID = "#ltwentyfive";
+						break;
+					case 30:
+						ID = "#lthirty";
+						break;
+					case 35:
+						ID = "#lthirtyfive";
+						break;
+					case 40:
+						ID = "#lforty";
+						break;
+					default:
+						ID = "#lfive, #lten, #lfifteen, #ltwenty, #ltwentyfive, #lthirty, #lthirtyfive, #lforty";
+				}
+
+				if ($("#OnSpeed").is(":checked")) {
+					$(ID).prop('disabled', true);
+				} else {
+					$(ID).prop('disabled', false);
+				}
+			},
+			error: function(request, status, error) {
+				$(".Reset").removeClass("fa-spin").addClass("change").prop('disabled', false);
+				if (SET) {
+					$(OPTION).prop("checked", false);
+				} else {
+					$(OPTION).prop("checked", true);
+				}
+			}
+		});
+}
+
 	$("#tabs2").tabs({
 		activate: function(event, ui) {
 			if (ui.newTab.find(".ui-tabs-anchor").attr('href') == "#tabs-2E" && $("#module").is(":checked")) {
@@ -644,6 +704,7 @@ $(document).ready(function() {
 		}
 	});
 
+
 	$("#IntervalDown").on('click', function() {
 		inGET = parseFloat($("#interval").val());
 		Min = parseFloat($("#interval").attr('min'));
@@ -653,6 +714,57 @@ $(document).ready(function() {
 			$("#interval").val(inGET);
 		}
 	});
+
+
+
+	$("#SpeedRangeUP").on('click', function() {
+		inGET = parseFloat($("#LowSpeedRange").val());
+		Min = parseFloat($("#LowSpeedRange").attr('min'));
+		Max = parseFloat($("#LowSpeedRange").attr('max'));
+		if (inGET < Max) {
+			inGET = inGET + 5;
+			$("#LowSpeedRange").val(inGET);
+                        ReloadRange("speed", inGET);
+		}
+	});
+
+
+	$("#SpeedRangeDown").on('click', function() {
+		inGET = parseFloat($("#LowSpeedRange").val());
+		Min = parseFloat($("#LowSpeedRange").attr('min'));
+		Max = parseFloat($("#LowSpeedRange").attr('max'));
+		if (inGET > Min) {
+			inGET = inGET - 5;
+			$("#LowSpeedRange").val(inGET);
+                        ReloadRange("speed", inGET);
+		}
+	});
+
+	$("#BlockRangeUP").on('click', function() {
+		inGET = parseFloat($("#BlockRange").val());
+		Min = parseFloat($("#BlockRange").attr('min'));
+		Max = parseFloat($("#BlockRange").attr('max'));
+		if (inGET < Max) {
+			inGET = inGET + 5;
+			$("#BlockRange").val(inGET);
+                        ReloadRange("block", inGET);
+		}
+	});
+
+
+	$("#BlockRangeDown").on('click', function() {
+		inGET = parseFloat($("#BlockRange").val());
+		Min = parseFloat($("#BlockRange").attr('min'));
+		Max = parseFloat($("#BlockRange").attr('max'));
+		if (inGET > Min) {
+			inGET = inGET - 5;
+			$("#BlockRange").val(inGET);
+                        ReloadRange("block", inGET);
+		}
+	});
+
+
+
 
 	$("#SendwaitUP").on('click', function() {
 		inGET = parseFloat($("#sendwait").val());
@@ -2403,6 +2515,13 @@ $(document).ready(function() {
 		});
 	});
 
+	socket.on('Speed', function(data) {
+		$("#LowSpeedRange").val(data);
+	});
+
+	socket.on('Block', function(data) {
+		$("#BlockRange").val(data);
+	});
 
 	socket.on('A001', function(data) {
 		$('.before_001').val(data);
