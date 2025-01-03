@@ -299,7 +299,7 @@
                           </div>
                         </div>
                       </div>
-                      <div style="float: right; width: 150px; padding: 0px; margin-top: 5px;">
+                      <div style="float: right; width: 130px; padding: 0px; margin-top: 5px;">
                         <div style="margin-bottom:-10px;padding-left:5px;z-index:9999999;">
                           <div class="col-15">
                             <label class="switch">
@@ -325,7 +325,7 @@
                           </div>
                         </div>
                       </div>
-                      <div style="float: right; width: 150px; padding: 0px; margin-top: 5px;">
+                      <div style="float: right; width: 130px; padding: 0px; margin-top: 5px;">
                         <div style="margin-bottom:-10px;padding-left:5px;z-index:9999999;">
                           <div class="col-15">
                             <label class="switch">
@@ -345,7 +345,7 @@
 
 
 
-<div style="width:260px;height:100px;padding:0px;margin-top:-5px;">
+<div style="width:390px;height:100px;padding:0px;margin-top:-5px;">
 
     <div style="float:left;width:130px;padding:0px;">
                         <fieldset style="padding-bottom:10px;">
@@ -357,10 +357,30 @@
                               </span>
                             </div>
                             <div class="quantity">
-                              <input type="number" id="LowSpeedRange" placeholder="1" style="width:55px;font-size:14px;" min="5" max="40" step="5" value="" readonly="" maxlength="2">
+                              <input type="number" class="Control" id="LowSpeedRange" placeholder="1" style="width:55px;font-size:14px;" min="5" max="40" step="5" value="" readonly="" maxlength="2">
                               <div class="quantity-nav">
-                                <input type="button" class="quantity-button quantity-up" value="&#xf106;" id="SpeedRangeUP">
-                                <input type="button" class="quantity-button quantity-down" value="&#xf107" id="SpeedRangeDown">
+                                <input type="button" class="quantity-button quantity-up Control" value="&#xf106;" id="SpeedRangeUP">
+                                <input type="button" class="quantity-button quantity-down Control" value="&#xf107" id="SpeedRangeDown">
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+
+                      <div style="float:right;width:130px;padding:0px;">
+                        <fieldset style="padding-bottom:10px;">
+                          <legend>Cron Schedule</legend>
+                          <div class="input-group mb-3" style="height:40px;width:105px;">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" style="height:25px;">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                            <div class="quantity">
+                              <input type="number" class="Control" id="Crontab" placeholder="1" style="width:55px;font-size:14px;" min="1" max="5" step="1" value="" readonly="" maxlength="1">
+                              <div class="quantity-nav">
+                                <input type="button" class="quantity-button quantity-up Control" value="&#xf106;" id="CrontabRangeUP">
+                                <input type="button" class="quantity-button quantity-down Control" value="&#xf107" id="CrontabRangeDown">
                               </div>
                             </div>
                           </div>
@@ -377,15 +397,18 @@
                               </span>
                             </div>
                             <div class="quantity">
-                              <input type="number" id="BlockRange" placeholder="1" style="width:55px;font-size:14px;" min="45" max="60" step="5" value="" readonly="" maxlength="2">
+                              <input type="number" class="Control" id="BlockRange" placeholder="1" style="width:55px;font-size:14px;" min="45" max="60" step="5" value="" readonly="" maxlength="2">
                               <div class="quantity-nav">
-                                <input type="button" class="quantity-button quantity-up" value="&#xf106;" id="BlockRangeUP">
-                                <input type="button" class="quantity-button quantity-down" value="&#xf107" id="BlockRangeDown">
+                                <input type="button" class="quantity-button quantity-up Control" value="&#xf106;" id="BlockRangeUP">
+                                <input type="button" class="quantity-button quantity-down Control" value="&#xf107" id="BlockRangeDown">
                               </div>
                             </div>
                           </div>
                         </fieldset>
                       </div>
+
+
+
                       </div>
 
 
@@ -785,6 +808,7 @@
                           </div>
                         </div>
                         <div style="width:100%;height:45px;">
+                        <div class="Protects" style="width:650px;height:50px;position:absolute;margin-left:5px;z-index:999999999999999999999999999999999999999999999999999999999999999;cursor: no-drop;"></div>
                           <div class="col-20">
                             <div style="width:100%;padding:0px;margin-top:-10px;">
                               <fieldset>
@@ -937,7 +961,7 @@
                                     <option value="3">&nbsp; 3</option>
                                   </select>
                                 </div>
-                                <button type="button" class="btn btn-primary" id="Scheduler" style="height:40px;width:40px;border-radius:0px 5px 5px 0px;padding:0px;margin-top:0px;color:#FFF;">
+                                <button type="button" class="btn btn-primary Control" id="Scheduler" style="height:40px;width:40px;border-radius:0px 5px 5px 0px;padding:0px;margin-top:0px;color:#FFF;">
                                   <i class="fa fa-calendar-check-o" aria-hidden="true" style="margin-right:5px;"></i>
                                 </button>
                               </div>
@@ -1175,7 +1199,7 @@
               <div style="display: inline-block;">
                 <div style="width:60px;margin-top:25px;margin-left:10px;">
                   <label class="switch">
-                    <input type="checkbox" class="switch-input isMoths" id="OnSpeed" disabled>
+                    <input type="checkbox" class="switch-input isMoths" id="OnSpeed" >
                     <b style="margin-top:-20px;position:absolute;margin-left:-30px;width:35px;color:#47a8d8;" class="isMoths">
                       <i class="fa fa-battery-quarter" aria-hidden="true"></i>
                     </b>
@@ -1189,7 +1213,7 @@
               <div style="display: inline-block;">
                 <div style="width:60px;margin-top:25px;margin-left:10px;">
                   <label class="switch">
-                    <input type="checkbox" class="switch-input isMoths" id="OnBlock" disabled>
+                    <input type="checkbox" class="switch-input isMoths Disabled" id="OnBlock" >
                     <b style="margin-top:-20px;position:absolute;margin-left:-30px;width:35px;color:#47a8d8;" class="isMoths">
                       <i class="fa fa-user-times" aria-hidden="true"></i>
                     </b>
@@ -1203,7 +1227,7 @@
               <div style="display: inline-block;">
                 <div style="width:60px;margin-top:25px;margin-left:10px;">
                   <label class="switch">
-                    <input type="checkbox" class="switch-input isMoths" id="OnSupport" disabled>
+                    <input type="checkbox" class="switch-input isMoths Disabled" id="OnSupport" >
                     <b style="margin-top:-20px;position:absolute;margin-left:-30px;width:35px;color:#47a8d8;" class="isMoths">
                       <i class="fa fa-envelope" aria-hidden="true"></i>
                     </b>
@@ -1342,7 +1366,7 @@
             <div style="display: inline-block;">
               <div style="width:60px;margin-top:-36px;">
                 <label class="switch switch-green">
-                  <input type="checkbox" class="switch-input isMoths Disabled" id="OnLock">
+                  <input type="checkbox" class="switch-input isMoths" id="OnLock">
                   <b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;" class="isMoths">
                     <i class="fa fa-lock" aria-hidden="true"></i>
                   </b>
@@ -1354,7 +1378,7 @@
             <div style="display: inline-block;">
               <div style="width:60px;margin-top:-36px;">
                 <label class="switch switch-green">
-                  <input type="checkbox" class="switch-input isMoths Disabled" id="OnUnlock">
+                  <input type="checkbox" class="switch-input isMoths" id="OnUnlock">
                   <b style="margin-top:-20px;position:absolute;margin-left:-30px;width:30px;color:#47a8d8;" class="isMoths">
                     <i class="fa fa-unlock" aria-hidden="true"></i>
                   </b>

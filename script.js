@@ -766,6 +766,32 @@ function ReloadRange(OPTION, SET) {
 
 
 
+	$("#CrontabRangeUP").on('click', function() {
+		inGET = parseFloat($("#Crontab").val());
+		Min = parseFloat($("#Crontab").attr('min'));
+		Max = parseFloat($("#Crontab").attr('max'));
+		if (inGET < Max) {
+			inGET = inGET + 1;
+			$("#Crontab").val(inGET);
+                        ReloadRange("cron", inGET);
+		}
+	});
+
+
+	$("#CrontabRangeDown").on('click', function() {
+		inGET = parseFloat($("#Crontab").val());
+		Min = parseFloat($("#Crontab").attr('min'));
+		Max = parseFloat($("#Crontab").attr('max'));
+		if (inGET > Min) {
+			inGET = inGET - 1;
+			$("#Crontab").val(inGET);
+                        ReloadRange("cron", inGET);
+		}
+	});
+
+
+
+
 	$("#SendwaitUP").on('click', function() {
 		inGET = parseFloat($("#sendwait").val());
 		Min = parseFloat($("#sendwait").attr('min'));
@@ -2519,6 +2545,10 @@ $(document).ready(function() {
 		$("#LowSpeedRange").val(data);
 	});
 
+	socket.on('Crontab', function(data) {
+		$("#Crontab").val(data);
+	});
+
 	socket.on('Block', function(data) {
 		$("#BlockRange").val(data);
 	});
@@ -2867,21 +2897,25 @@ $(document).ready(function() {
 		switch (data) {
 			case 'true':
 				$("#AutoBot").prop("checked", true);
-				$(".MSG_Box").prop("disabled", true);
+				$(".MSG_Box, .Control").prop("disabled", true);
 				$("#Zero, #InSave").prop('disabled', true).attr('disabled');
 				$('#Manager').text("Mwsm");
+                                $('.Protects').show();
 				break;
 			case 'false':
+                                $('.Protects').hide();
 				$('#Manager').text("MkAuth");
 				$("#AutoBot").prop("checked", false);
-				$(".MSG_Box").prop("disabled", false);
+				$(".MSG_Box, .Control").prop("disabled", false);
 				$("#Zero, #InSave").prop('disabled', false).removeAttr('disabled');
 				break;
 		}
 		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
-			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift").prop("disabled", true);
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .Control").prop("disabled", true);
+                        $('.Protects').show();
 		} else {
-			$("#backup, #Spam, #Shift").prop("disabled", false);
+                        $('.Protects').hide();
+			$("#backup, #Spam, #Shift, .Control").prop("disabled", false);
 			if ($("#Spam").is(":checked")) {
 				$("#SpamOut").prop('disabled', false);
 			} else {
@@ -3808,14 +3842,16 @@ $(document).ready(function() {
 
 	$("#AutoBot").on('change', function() {
 		if ($("#module").is(":checked") && $("#AutoBot").is(":checked")) {
-			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .MSG_Box").prop("disabled", true);
+			$("#backup, #Spam, #SpamOut, #MinTime, #MaxTime, #Shift, .MSG_Box, .Control").prop("disabled", true);
 			$("#Zero, #InSave").prop('disabled', true).attr('disabled');
 			$('#Manager').text("Mwsm");
+                        $('.Protects').show();
 			Aimbot = true;
 		} else {
+                        $('.Protects').hide();
 			$('#Manager').text("MkAuth");
 			$("#Zero, #InSave").prop('disabled', false).removeAttr('disabled');
-			$("#backup, #Spam, #Shift, .MSG_Box").prop("disabled", false);
+			$("#backup, #Spam, #Shift, .MSG_Box, .Control").prop("disabled", false);
 			if ($("#Spam").is(":checked")) {
 				$("#SpamOut").prop('disabled', false);
 			} else {

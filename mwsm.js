@@ -109,11 +109,9 @@ function DebugMsg(Selector) {
 				case 1:
 					Return = 2;
 					break;
-
 				case 2:
 					Return = 3;
 					break;
-
 				case 3:
 					Return = 1;
 					break;
@@ -164,9 +162,7 @@ function DebugMsg(Selector) {
 		case "support":
 			Message = Debug('MESSAGE', '*', 'ID', '' + Return + '').support;
 			break;
-
 	}
-
 	Dataset('MKAUTH', 'COUNT', Return, 'UPDATE');
 	return Message;
 }
@@ -305,7 +301,7 @@ const GetUpdate = async (GET, SET, FORCE = false) => {
 				await global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
 				console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').isfound);
 				await global.io.emit('upgrade', false);
-				if (SET && (Debug('RELEASE').isupdate == 1 || Debug('RELEASE').isupdate == "true" || FORCE)) {
+				if (SET && (JSON.parse(Debug('RELEASE').isupdate) || FORCE)) {
 					const Register = await Dataset('RELEASE', 'MWSM', (isUpdate['version'][0].patch), 'UPDATE');
 					if (Register) {
 						await global.io.emit('Patched', Release(Debug('RELEASE').mwsm));
@@ -356,7 +352,7 @@ const GetUpdate = async (GET, SET, FORCE = false) => {
 
 //Set Debugger
 function Terminal(Value) {
-	if ((Debug('OPTIONS').debugger == 1 || Debug('OPTIONS').debugger == "true")) {
+	if (JSON.parse(Debug('OPTIONS').debugger)) {
 		console.error(Value);
 	}
 }
@@ -367,10 +363,13 @@ function Release(Value) {
 }
 
 const SetSchedule = async () => {
-	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
-		var hasDays = [],
-			Option;
-		if ((Debug('SCHEDULER').bfive == 1 || Debug('SCHEDULER').bfive == "true")) {
+	if (JSON.parse(Debug('MKAUTH').module) && JSON.parse(Debug('MKAUTH').aimbot)) {
+		var Register, Insert, hasDays = [],
+			Option, Index = 0,
+			hasReady = [];
+		const Month = ((DateTime()).split(" ")[0]).split("-")[1];
+		const Windows = await MkAuth(Month, "all", 'list');
+		if (JSON.parse(Debug('SCHEDULER').bfive)) {
 			Option = undefined;
 			GetDays = {
 				"Mode": "Later",
@@ -379,7 +378,7 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').inday == 1 || Debug('SCHEDULER').inday == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').inday)) {
 			Option = undefined;
 			GetDays = {
 				"Mode": "Now",
@@ -388,9 +387,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lfive == 1 || Debug('SCHEDULER').lfive == "true") || (Debug('SCHEDULER').speed == 5)) {
+		if (JSON.parse(Debug('SCHEDULER').lfive) || (Debug('SCHEDULER').speed == 5)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 5)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 5)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -400,9 +399,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lten == 1 || Debug('SCHEDULER').lten == "true") || (Debug('SCHEDULER').speed == 10)) {
+		if (JSON.parse(Debug('SCHEDULER').lten) || (Debug('SCHEDULER').speed == 10)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 10)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 10)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -412,9 +411,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lfifteen == 1 || Debug('SCHEDULER').lfifteen == "true") || (Debug('SCHEDULER').speed == 15)) {
+		if (JSON.parse(Debug('SCHEDULER').lfifteen) || (Debug('SCHEDULER').speed == 15)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 15)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 15)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -424,9 +423,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').ltwenty == 1 || Debug('SCHEDULER').ltwenty == "true") || (Debug('SCHEDULER').speed == 20)) {
+		if (JSON.parse(Debug('SCHEDULER').ltwenty) || (Debug('SCHEDULER').speed == 20)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 20)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 20)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -436,9 +435,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').ltwentyfive == 1 || Debug('SCHEDULER').ltwentyfive == "true") || (Debug('SCHEDULER').speed == 25)) {
+		if (JSON.parse(Debug('SCHEDULER').ltwentyfive) || (Debug('SCHEDULER').speed == 25)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 25)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 25)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -449,9 +448,9 @@ const SetSchedule = async () => {
 			hasDays.push(GetDays);
 
 		}
-		if ((Debug('SCHEDULER').lthirty == 1 || Debug('SCHEDULER').lthirty == "true") || (Debug('SCHEDULER').speed == 30)) {
+		if (JSON.parse(Debug('SCHEDULER').lthirty) || (Debug('SCHEDULER').speed == 30)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 30)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 30)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -461,9 +460,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lthirtyfive == 1 || Debug('SCHEDULER').lthirtyfive == "true") || (Debug('SCHEDULER').speed == 35)) {
+		if (JSON.parse(Debug('SCHEDULER').lthirtyfive) || (Debug('SCHEDULER').speed == 35)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 35)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 35)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -473,9 +472,9 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').lforty == 1 || Debug('SCHEDULER').lforty == "true") || (Debug('SCHEDULER').speed == 40)) {
+		if (JSON.parse(Debug('SCHEDULER').lforty) || (Debug('SCHEDULER').speed == 40)) {
 			Option = undefined;
-			if ((Debug('SCHEDULER').onspeed == 1 || Debug('SCHEDULER').onspeed == "true") && (Debug('SCHEDULER').speed == 40)) {
+			if (JSON.parse(Debug('SCHEDULER').onspeed) && (Debug('SCHEDULER').speed == 40)) {
 				Option = "speed";
 			}
 			GetDays = {
@@ -485,7 +484,7 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		if ((Debug('SCHEDULER').onblock == 1 || Debug('SCHEDULER').onblock == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').onblock)) {
 			GetDays = {
 				"Mode": "Before",
 				"Set": Debug('SCHEDULER').block,
@@ -493,56 +492,56 @@ const SetSchedule = async () => {
 			};
 			hasDays.push(GetDays);
 		}
-		var Index = 0,
-			hasReady = [];
+
 		(hasDays).someAsync(async (Days) => {
-			Index = Index + 1;
 			const Master = await Scheduller(Days.Set, Days.Mode);
+
 			if (await Master) {
 				(await Master).someAsync(async (Send) => {
-					const Range = await Days.Mode;
-					const Control = await Days.Set;
-					const Option = await Days.Option;
-					const Title = await Send.titulo;
-					const User = await Send.login;
-					const Client = await Send.nome;
-					var Contact = await Send.celular;
-					var Status = await Send.status;
-					const Reward = await Send.datavenc;
 					MsgSET = false;
-					const Resolve = await MkResolve(User);
-					if (Contact != undefined) {
-						Contact = (Contact).replace(/[^0-9\\.]+/g, '');
+					const Resolve = await MkResolve(Send.login);
+					if (Send.celular != undefined) {
+						Send.celular = (Send.celular).replace(/[^0-9\\.]+/g, '');
 					} else {
 						if (await Resolve) {
-							if ((Resolve).celular != undefined) {
-								Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
+							if ((Resolve).Contact != undefined) {
+								Send.celular = (Resolve).Contact;
 							} else {
-								Contact = "00000000000";
+								Send.celular = "00000000000";
 							}
 						}
 					}
-					switch (Status) {
+					switch (Send.status) {
 						case 'aberto':
-							Status = 'open';
+							Send.status = 'open';
 							break;
 						case 'pago':
-							Status = 'paid';
+							Send.status = 'paid';
 							break;
 						case 'vencido':
-							Status = 'due';
+							Send.status = 'due';
 							break;
 						case 'cancelado':
-							Status = 'cancel';
+							Send.status = 'cancel';
 							break;
 					}
-					if (((Reward).split(" ")[0]) == (DateTime()).split(" ")[0] && (Status) != 'paid' && (Status) != 'cancel') {
+					switch (Send.cli_ativado) {
+						case 's':
+							Send.cli_ativado = 1;
+							break;
+						case 'n':
+							Send.cli_ativado = 0;
+							break;
+					}
+					if (((Send.datavenc).split(" ")[0]) == (DateTime()).split(" ")[0] && (Send.status) != 'paid' && (Send.status) != 'cancel') {
 						Send.status = 'open';
 					}
-					if (Send.cli_ativado == "s" && Status != 'paid' && Status != 'cancel' && (Resolve).zap == 'sim') {
-						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Title);
+
+					if (Send.cli_ativado && Send.status != 'paid' && Send.status != 'cancel' && (Resolve).Ready) {
+						Index = Index + 1;
+						const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.titulo);
 						if (Replies == undefined) {
-							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status, range, control, option) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)").run(Title, User, Client, Contact, Reward, Status, Range, Control, Option);
+							const ShedInsert = await link.prepare("INSERT INTO scheduling(title, user, client, contact, reward, status, range, control, option, unlock) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(Send.titulo, Send.login, Send.nome, Send.celular, Send.datavenc, Send.status, Days.Mode, Days.Set, Days.Option, Send.cli_ativado);
 							if (ShedInsert) {
 								MsgSET = true;
 								Hwid = {
@@ -551,9 +550,9 @@ const SetSchedule = async () => {
 								hasReady.push(Hwid);
 							}
 						} else {
-							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Title, "wait");
+							const exUpdate = await link.prepare('SELECT * FROM scheduling WHERE title=? AND process=?').get(Send.titulo, "wait");
 							if (exUpdate == undefined || (Option != exUpdate.option)) {
-								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=?, contact=?, option=?, control=? WHERE title=?').run("wait", Contact, Option, Control, Title);
+								const ShedUpdate = await link.prepare('UPDATE scheduling SET process=?, contact=?, option=?, control=?, unlock=? WHERE title=?').run("wait", Send.celular, Days.Option, Days.Set, Send.cli_ativado, Send.titulo);
 								if (ShedUpdate) {
 									MsgSET = true;
 									Hwid = {
@@ -562,155 +561,227 @@ const SetSchedule = async () => {
 									hasReady.push(Hwid);
 								}
 							}
-
 						}
 
 					} else {
 						//Client Disable
 					}
-					if ((hasDays.length == Index) && MsgSET) {
+					if ((hasReady.length == Index) && MsgSET) {
 						global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
 						console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
 						MsgSET = false;
 					}
+
 				});
-			} else {
-				if ((Debug('MKAUTH').backup == 1 || Debug('MKAUTH').backup == "true")) {
-					const Month = ((DateTime()).split(" ")[0]).split("-")[1];
-					const Master = await MkAuth(Month, "all", 'listagem');
-					if (await Master) {
-						var Register = (Master).filter(function(Send) {
-							return Send.Payment != 'paid';
-						}).length;
-						(await Master).someAsync(async (Send) => {
-							if (Send.Payment != "paid") {
-								const Resolve = await MkResolve(Send.Connect);
-								if (Send.Contact != undefined) {
-									Send.Contact = (Send.Contact).replace(/[^0-9\\.]+/g, '');
-								} else {
-									if (await Resolve) {
-										if ((Resolve).celular != undefined) {
-											Send.Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
-										} else {
-											Send.Contact = "00000000000";
-										}
-
-									}
-								}
-								const Replies = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Send.Identifier);
-								if (Replies) {
-									Index = Index + 1;
-									if (Index <= Register) {
-										console.log("002 " + Index + " - " + Register);
-										if (Replies == undefined) {
-											await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Send.Identifier, Send.Connect, Send.Client, Send.Contact, Send.Reward, Send.Payment, 'load', Send.Cash, Send.Gateway);
-										} else {
-											await link.prepare('UPDATE scheduling SET cash=?, gateway=? WHERE title=?').run(Send.Cash, Send.Gateway, Send.Identifier);
-										}
-									} else if (Index == Register) {
-										global.io.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
-										console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').schedule);
-									}
-								}
-							} else {
-								(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Shoot) => {
-									if (Shoot.process == "success" && Shoot.status == "paid") {
-										await link.prepare('DELETE FROM scheduling WHERE title=?').get(Send.Identifier);
-									}
-								});
-							}
-						});
-
-					}
-				}
 			}
 		});
-	}
+		if (await Windows) {
+			Register = (await Windows).filter(function(Send) {
+				return Send.Payment != 'paid';
+			}).length;
+			if (JSON.parse(Debug('MKAUTH').backup) && Register >= 1) {
+				(Windows).someAsync(async (Bank) => {
+					if (Bank.Payment != "paid") {
+						if (Bank.Contact == undefined) {
+							const Resolve = await MkResolve(Bank.Contact);
+							if (Resolve) {
+								if ((Resolve).Contact != undefined) {
+									Bank.Contact = (Resolve).Contact;
+								} else {
+									Bank.Contact = "00000000000";
+								}
+							}
+						}
+						switch (Bank.unLock) {
+							case true:
+								Bank.unLock = 1;
+								break;
+							case false:
+								Bank.unLock = 0;
+								break;
+						}
+						if (Debug('SCHEDULING', 'TITLE', 'MULTIPLE').some(Row => (Bank.Identifier).includes(Row))) {
+							await link.prepare('UPDATE scheduling SET cash=?, gateway=?, unlock=?  WHERE title=?').run(Bank.Cash, Bank.Gateway, Bank.unLock, Bank.Identifier);
+						} else {
+							await link.prepare('INSERT INTO scheduling(title,user,client,contact,reward,status,process,cash,gateway,unlock) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(Bank.Identifier, Bank.Connect, Bank.Client, Bank.Contact, Bank.Reward, Bank.Payment, 'load', Bank.Cash, Bank.Gateway, Bank.unLock);
+						}
+					} else {
+						(Debug('SCHEDULING', '*', 'ALL')).someAsync(async (Del) => {
+							if (Del.process == "success" && Del.status == "paid") {
+								await link.prepare('DELETE FROM scheduling WHERE title=?').run(Del.title);
+							}
+						});
+					}
+				});
 
+			}
+		}
+	}
 }
 
 const GetSchedule = async () => {
-	if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true") && (Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
-		(Debug('SCHEDULING', 'TITLE', 'MULTIPLE')).someAsync(async (isTarget) => {
-			var Payment = await MkList(isTarget, "pago");
-			if (await Payment) {
-				if ((Payment).length >= 1) {
-					Payment = Payment[0];
-				}
-				switch (Payment.status) {
-					case 'aberto':
-						Payment.status = 'open';
-						break;
-					case 'pago':
-						Payment.status = 'paid';
-						break;
-					case 'vencido':
-						Payment.status = 'due';
-						break;
-					case 'cancelado':
-						Payment.status = 'cancel';
-						break;
-				}
-				const isResolve = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(isTarget);
-				if (isResolve != undefined) {
-					if (isResolve.status != Payment.status && isResolve.process != "success") {
-						await link.prepare('UPDATE scheduling SET status=?, cash=?, gateway=? WHERE title=?').run(Payment.status, Payment.valorpag, Payment.formapag, isTarget);
+	if (JSON.parse(Debug('MKAUTH').module) && JSON.parse(Debug('MKAUTH').aimbot)) {
+		const DataBase = await Debug('SCHEDULING', 'TITLE', 'MULTIPLE');
+		if (await DataBase.length >= 1) {
+			const Month = ((DateTime()).split(" ")[0]).split("-")[1];
+			const Master = await MkAuth(Month, "all", 'listagem');
+			(await DataBase).someAsync(async (Target) => {
+				var Check = 0,
+					IsPaid = 0;
+				const Local = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Target);
+				const Rebase = await MkAuth('all', Target, 'list');
+				if (await Rebase) {
+					const Bank = await Object.assign({}, Rebase)[0];
+					Check = (Rebase).filter(function(Send) {
+						return Send.unLock != Local.unlock;
+					}).length;
+
+					IsPaid = (Rebase).filter(function(Send) {
+						return Send.Payment != Local.status;
+					}).length;
+					switch (Bank.unLock) {
+						case true:
+							Bank.unLock = 1;
+							break;
+						case false:
+							Bank.unLock = 0;
+							break;
 					}
-				}
-			}
-
-		});
-
-		const Target = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
-		if (Target != undefined && (Debug('SCHEDULER').onpay == 1 || Debug('SCHEDULER').onpay == "true")) {
-			const isSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Target.title);
-			if (isSend != undefined) {
-				if (isSend.status == "paid") {
-					data = {
-						client: isSend.client,
-						user: isSend.user,
-						code: isSend.title,
-						status: "pending",
-						contact: isSend.contact,
-						reward: isSend.reward,
-						push: '00/00/0000 00:00:00',
-						option: isSend.option,
-						token: Debug('OPTIONS').token,
-						cash: isSend.cash,
-
-						gateway: isSend.gateway,
-						payment: isSend.status
-					};
-					const SendPay = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
-					if (SendPay) {
-						await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('success', Target.title);
-					}
-				}
-			}
-		} else {
-			if ((isWeek(DateTime(0))) && (isShift((DateTime(0).split(" ")[1]).split(":")[0]))) {
-				const Shoot = await link.prepare('SELECT * FROM scheduling WHERE NOT status=? AND process=?').get('paid', 'wait');
-				if (Shoot != undefined) {
-					const hasSend = await link.prepare('SELECT * FROM scheduling WHERE title=?').get(Shoot.title);
-					if (hasSend != undefined) {
-						if (hasSend.status != "paid") {
-							data = {
-								client: hasSend.client,
-								user: hasSend.user,
-								code: hasSend.title,
-								status: "pending",
-								contact: hasSend.contact,
-								reward: hasSend.reward,
-								push: '00/00/0000 00:00:00',
-								token: Debug('OPTIONS').token,
-								option: hasSend.option,
-								payment: hasSend.status
-							};
-							const Charge = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", data);
-							if (Charge) {
-								await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('load', Shoot.title);
-							}
+					if (IsPaid >= 1 && Local.process != "success" && Bank.Payment == "paid") {
+						await link.prepare('UPDATE scheduling SET status=?, cash=?, gateway=?, unlock=? WHERE title=?').run(Bank.Payment, Bank.Cash, Bank.Gateway, Bank.unLock, Target);
+					} else if (Check >= 1 && Local.process != "wait" && Local.process != "success") {
+						switch (await Bank.unLock) {
+							case false:
+							case 0:
+								await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run("lock", Target);
+								break;
+							case true:
+							case 1:
+								await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run("unlock", Target);
+								break;
 						}
+					}
+				}
+			});
+			const Search = await link.prepare('SELECT * FROM scheduling').all();
+			if (await Search) {
+				isPaid = (Search).filter(function(Send) {
+					if (Send.process != "success" && Send.status == "paid") {
+						return true;
+					}
+				}).length;
+
+				isLock = (Search).filter(function(Send) {
+					if (Send.process == "lock" && Send.unlock == 1) {
+						return true;
+					}
+				}).length;
+
+				isUnLock = (Search).filter(function(Send) {
+					if (Send.process == "unlock" && Send.unlock == 0) {
+						return true;
+					}
+				}).length;
+
+				isDue = (Search).filter(function(Send) {
+					if (Send.process == "wait" && Send.status != "paid") {
+						return true;
+					}
+				}).length;
+			}
+			if (JSON.parse(Debug('SCHEDULER').onpay) && isPaid >= 1) {
+				const Paid = await link.prepare('SELECT * FROM scheduling WHERE status=? AND NOT process=?').get('paid', 'success');
+				if (Paid != undefined) {
+					if (Paid.status == "paid") {
+						Data = {
+							client: Paid.client,
+							user: Paid.user,
+							code: Paid.title,
+							status: "pending",
+							contact: Paid.contact,
+							reward: Paid.reward,
+							push: '00/00/0000 00:00:00',
+							option: Paid.option,
+							unlock: Paid.unlock,
+							token: Debug('OPTIONS').token,
+							cash: Paid.cash,
+							gateway: Paid.gateway,
+							payment: Paid.status
+						};
+						const Ready = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", Data);
+						if (Ready) {
+							const Update = await link.prepare('UPDATE scheduling SET process=?, unlock=? WHERE title=?').run('success', 1, Paid.title);
+						}
+					}
+				}
+			} else if (JSON.parse(Debug('SCHEDULER').onlock) && isLock >= 1) {
+				const Lock = await link.prepare('SELECT * FROM scheduling WHERE process=? AND unlock=?').get('lock', 1);
+				if (Lock != undefined) {
+					if (Lock.status != "paid") {
+						Data = {
+							client: Lock.client,
+							user: Lock.user,
+							code: Lock.title,
+							status: "pending",
+							contact: Lock.contact,
+							reward: Lock.reward,
+							push: '00/00/0000 00:00:00',
+							option: Lock.option,
+							unlock: Lock.unlock,
+							token: Debug('OPTIONS').token,
+							payment: Lock.status
+						};
+						const Ready = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", Data);
+						if (Ready) {
+							const Update = await link.prepare('UPDATE scheduling SET process=?, unlock=? WHERE title=?').run('unlock', 0, Lock.title);
+						}
+					}
+				}
+			} else if (JSON.parse(Debug('SCHEDULER').onunlock) && isUnLock >= 1) {
+				const unLock = await link.prepare('SELECT * FROM scheduling WHERE process=? AND unlock=?').get('unlock', 0);
+				if (UnLock != undefined) {
+					if (UnLock.status != "paid") {
+						Data = {
+							client: UnLock.client,
+							user: UnLock.user,
+							code: UnLock.title,
+							status: "pending",
+							contact: UnLock.contact,
+							reward: UnLock.reward,
+							push: '00/00/0000 00:00:00',
+							option: UnLock.option,
+							unlock: UnLock.unlock,
+							token: Debug('OPTIONS').token,
+							payment: UnLock.status
+						};
+						const Ready = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", Data);
+						if (Ready) {
+							const Update = await link.prepare('UPDATE scheduling SET process=?, unlock=? WHERE title=?').run('load', 1, UnLock.title);
+						}
+					}
+				}
+			} else if ((isWeek(DateTime(0))) && (isShift((DateTime(0).split(" ")[1]).split(":")[0]))) {
+				const Due = await link.prepare('SELECT * FROM scheduling WHERE NOT status=? AND process=?').get('paid', 'wait');
+				if (Due != undefined && isDue >= 1) {
+					if (Due.process != "load") {
+						Data = {
+							client: Due.client,
+							user: Due.user,
+							code: Due.title,
+							status: "pending",
+							contact: Due.contact,
+							reward: Due.reward,
+							push: '00/00/0000 00:00:00',
+							option: Due.option,
+							unlock: Due.unlock,
+							token: Debug('OPTIONS').token,
+							payment: Due.status
+						};
+						const Ready = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-mkauth", Data);
+						if (await Ready) {
+							const Update = await link.prepare('UPDATE scheduling SET process=? WHERE title=?').run('load', Due.title);
+						}
+
 					}
 				}
 			}
@@ -718,9 +789,8 @@ const GetSchedule = async () => {
 		}
 	}
 }
-
 //Scheduller
-cron.schedule('*/2 1-3 * * *', async () => {
+cron.schedule('*/2 1-2 * * *', async () => {
 	await GetUpdate(WServer, true);
 }, {
 	scheduled: true,
@@ -734,8 +804,8 @@ cron.schedule('0 0 * * *', async () => {
 	timezone: "America/Sao_Paulo"
 });
 
-cron.schedule('*/1 3-23 * * *', async () => {
-	if ((Debug('RELEASE').reload == 0 || Debug('RELEASE').reload == "false")) {
+cron.schedule('*/' + Debug('SCHEDULER').cron + ' 3-23 * * *', async () => {
+	if (!JSON.parse(Debug('RELEASE').reload)) {
 		await GetSchedule();
 	}
 }, {
@@ -858,7 +928,7 @@ function isWeek(Sysdate) {
 			inDay = Debug('SCHEDULER').saturday;
 			break;
 	}
-	if ((inDay == 1 || inDay == "true")) {
+	if (JSON.parse(inDay)) {
 		return true;
 	} else {
 		return false;
@@ -868,7 +938,8 @@ function isWeek(Sysdate) {
 
 const MkResolve = async (FIND) => {
 	var Server = Debug('MKAUTH').client_link;
-
+	var PUSH = [],
+		Json = undefined;
 	if (Server == "tunel") {
 		Server = Debug('MKAUTH').tunel;
 	} else if (Server == "domain") {
@@ -900,7 +971,63 @@ const MkResolve = async (FIND) => {
 			return false;
 		});
 		if (await MkSync.mensagem == undefined && await MkSync.error == undefined) {
-			return await MkSync;
+			const Send = MkSync;
+			switch (Send.status) {
+				case 'aberto':
+					Send.status = 'open';
+					break;
+				case 'pago':
+					Send.status = 'paid';
+					break;
+				case 'vencido':
+					Send.status = 'due';
+					break;
+				case 'cancelado':
+					Send.status = 'cancel';
+					break;
+			}
+			switch (Send.bloqueado) {
+				case 'sim':
+					Send.bloqueado = false;
+					break;
+				case 'nao':
+					Send.bloqueado = true;
+					break;
+			}
+
+			switch (Send.cli_ativado) {
+				case 's':
+					Send.cli_ativado = true;
+					break;
+				case 'n':
+					Send.cli_ativado = false;
+					break;
+			}
+
+			switch (Send.zap) {
+				case 'sim':
+					Send.zap = true;
+					break;
+				case 'nao':
+					Send.zap = false;
+					break;
+			}
+			if (Send.formapag != "dinheiro" && Send.formapag != undefined) {
+				Send.formapag = "banco"
+			}
+			if (Send.celular != undefined) {
+				Send.celular = (Send.celular).replace(/[^0-9\\.]+/g, '');
+			}
+			Json = {
+				"Client": Send.nome,
+				"Connect": Send.login,
+				"Contact": Send.celular,
+				"Working": Send.cli_ativado,
+				"unLock": Send.bloqueado,
+				"LowSpeed": Send.dias_corte,
+				"Ready": Send.zap
+			};
+			return await Json;
 		} else {
 			return false;
 		}
@@ -932,15 +1059,15 @@ function inRange(x, min, max) {
 function isShift(Turno) {
 	var Return = false;
 	if (inRange(Turno, AddZero(Debug('SCHEDULER').min), 11)) {
-		if ((Debug('SCHEDULER').morning == 1 || Debug('SCHEDULER').morning == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').morning)) {
 			Return = true;
 		}
 	} else if (inRange(Turno, 12, 17)) {
-		if ((Debug('SCHEDULER').afternoon == 1 || Debug('SCHEDULER').afternoon == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').afternoon)) {
 			Return = true;
 		}
 	} else if (inRange(Turno, 18, Debug('SCHEDULER').max)) {
-		if ((Debug('SCHEDULER').night == 1 || Debug('SCHEDULER').night == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').night)) {
 			Return = true;
 		}
 	} else {
@@ -954,16 +1081,16 @@ function isShift(Turno) {
 
 //Test
 delay(0).then(async function() {
-	//await SetSchedule();
-});
 
+});
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Search MkAUth API
 const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) => {
 	var SEARCH, LIST, STATUS, PUSH = [],
 		JSON = [],
 		Json = undefined,
-		JDebug = undefined
+		JDebug = undefined,
+		Jump;
 	var Server = Debug('MKAUTH').client_link;
 
 	if (Server == "tunel") {
@@ -971,7 +1098,23 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 	} else if (Server == "domain") {
 		Server = Debug('MKAUTH').domain;
 	}
-
+	switch (FIND) {
+		case 'open':
+			FIND = 'aberto';
+			break;
+		case 'paid':
+			FIND = 'pago';
+			break;
+		case 'due':
+			FIND = 'vencido';
+			break;
+		case 'cancel':
+			FIND = 'cancelado';
+			break;
+	}
+	if (EXT == "list") {
+		EXT = "listagem";
+	}
 	const Authentication = await axios.get('https://' + Server + '/api/', {
 		auth: {
 			username: Debug('MKAUTH').client_id,
@@ -996,7 +1139,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 		}).catch(err => {
 			return false;
 		});
-
 		if (MkSync.mensagem == undefined) {
 			if (MODE) {
 				SEARCH = MkSync.titulos;
@@ -1043,23 +1185,23 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							Json_Link = "true";
 						}
 						var SEND = [];
-						if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+						if ((Debug('MKAUTH').bar)) {
 							SEND.push(Send.linhadig);
 						}
 
-						if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+						if ((Debug('MKAUTH').pix)) {
 							SEND.push(Send.pix);
 						}
 
-						if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+						if ((Debug('MKAUTH').qrpix)) {
 							SEND.push(Send.pix_qr);
 						}
 
-						if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+						if ((Debug('MKAUTH').qrlink)) {
 							SEND.push(Send.pix_link);
 						}
 
-						if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+						if ((Debug('MKAUTH').pdf)) {
 							SEND.push(Send.uuid);
 						}
 
@@ -1111,10 +1253,16 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 					if (FIND == 'all') {
 						LIST = [Send.status];
 					}
-					if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
-						UID = "0" + UID;
+
+					if (UID == "all") {
+						Jump = true;
+					} else {
+						if (parseInt(UID) <= 9 && parseInt(UID.length) == 1) {
+							UID = "0" + UID;
+						}
+						Jump = (Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-");
 					}
-					if ((Send.datavenc).includes(new Date().getFullYear() + "-" + UID + "-") && LIST.some(Row => (Send.status.includes(Row) || Send.login.includes(Row) || Send.titulo.includes(Row))) && Send.cli_ativado == 's' && Send.status != 'cancelado') {
+					if (Jump && LIST.some(Row => (Send.status.includes(Row) || Send.login.includes(Row) || Send.titulo.includes(Row))) && Send.cli_ativado == 's' && Send.status != 'cancelado') {
 						switch (Send.status) {
 							case 'aberto':
 								Send.status = 'open';
@@ -1125,7 +1273,28 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							case 'vencido':
 								Send.status = 'due';
 								break;
+							case 'cancelado':
+								Send.status = 'cancel';
+								break;
 						}
+						switch (Send.bloqueado) {
+							case 'sim':
+								Send.bloqueado = false;
+								break;
+							case 'nao':
+								Send.bloqueado = true;
+								break;
+						}
+
+						switch (Send.cli_ativado) {
+							case 's':
+								Send.cli_ativado = true;
+								break;
+							case 'n':
+								Send.cli_ativado = false;
+								break;
+						}
+
 						if (Send.formapag != "dinheiro" && Send.formapag != undefined) {
 							Send.formapag = "banco"
 						}
@@ -1143,6 +1312,8 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Payment": Send.status,
 							"Connect": Send.login,
 							"Contact": Send.celular,
+							"Working": Send.cli_ativado,
+							"unLock": Send.bloqueado,
 							"Cash": Send.valorpag,
 							"Gateway": Send.formapag
 
@@ -1222,6 +1393,8 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 							"Payment": Send.Payment,
 							"Connect": Send.Connect,
 							"Contact": Send.Contact,
+							"unLock": Send.unLock,
+							"Working": Send.Working,
 							"Cash": Send.Cash,
 							"Gateway": Send.Gateway
 						};
@@ -1252,7 +1425,6 @@ const MkAuth = async (UID, FIND, EXT = 'titulos', TYPE = 'titulo', MODE = true) 
 		return false;
 	}
 };
-
 //Check is Json
 function testJSON(text) {
 	text = text.toString().replace(/"/g, "").replace(/'/g, "");
@@ -1294,7 +1466,7 @@ io.on('connection', function(socket) {
 	socket.emit('Manager', Debug('MKAUTH').aimbot);
 	socket.emit('Patched', Release(Debug('RELEASE').mwsm));
 	socket.emit('Reset', true);
-	if (Session || (Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+	if (Session || JSON.parse(Debug('OPTIONS').auth)) {
 		console.log('> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').authenticated);
 		socket.emit('qr', Debug('RESOURCES').authenticated);
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
@@ -1330,7 +1502,7 @@ io.on('connection', function(socket) {
 	});
 
 	client.on('ready', async () => {
-		if ((Debug('OPTIONS').auth == 0 || Debug('OPTIONS').auth == "false")) {
+		if (!JSON.parse(Debug('OPTIONS').auth)) {
 			await link.prepare('UPDATE options SET auth=?').run(1);
 		}
 		socket.emit('message', '> ' + Debug('OPTIONS').appname + ' : ' + Debug('CONSOLE').ready);
@@ -1489,7 +1661,7 @@ app.post('/shutdown', async (req, res) => {
 
 // Authenticated
 app.post('/authenticated', (req, res) => {
-	if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+	if (JSON.parse(Debug('OPTIONS').auth)) {
 		res.json({
 			Status: "Success"
 		});
@@ -1532,6 +1704,7 @@ app.post('/send-mkauth', async (req, res) => {
 	const Token = req.body.token;
 	const Cash = req.body.cash;
 	const Gateway = req.body.gateway;
+	const UnLock = req.body.unlock;
 	const Option = req.body.option;
 	const Speed = Debug('SCHEDULER').speed;
 	const Block = Debug('SCHEDULER').block;
@@ -1543,9 +1716,21 @@ app.post('/send-mkauth', async (req, res) => {
 	} else if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0] && Payment != "paid") {
 		Payment = "open";
 	}
-	switch (Payment) {
+
+	switch (await Payment) {
 		case 'paid':
-			Message = DebugMsg("PAY");
+			switch (UnLock) {
+				case true:
+				case 1:
+					Message = DebugMsg("PAY");
+					break;
+				case false:
+				case 0:
+					Message = DebugMsg("PAY") + "##" + (DebugMsg("UNLOCK")).split(", ")[1];
+					break;
+				default:
+					Message = DebugMsg("PAY");
+			}
 			if (Status.toLowerCase() != "finished") {
 				Process = "Finished";
 			}
@@ -1555,7 +1740,6 @@ app.post('/send-mkauth', async (req, res) => {
 			if ((Reward.split(" ")[0]) == (DateTime()).split(" ")[0]) {
 				Message = DebugMsg("DAY");
 			} else if (Option != undefined) {
-
 				switch (Option) {
 					case "speed":
 						Message = DebugMsg("SPEED");
@@ -1564,7 +1748,17 @@ app.post('/send-mkauth', async (req, res) => {
 						Message = DebugMsg("BLOCK");
 						break;
 				}
-
+			} else if (UnLock != undefined) {
+				switch (UnLock) {
+					case true:
+					case 1:
+						Message = DebugMsg("UNLOCK");
+						break;
+					case false:
+					case 0:
+						Message = DebugMsg("LOCK");
+						break;
+				}
 			} else {
 				Message = DebugMsg("LATER");
 			}
@@ -1597,7 +1791,6 @@ app.post('/send-mkauth', async (req, res) => {
 			user: Client,
 			auth: Debug('MKAUTH').aimbot
 		};
-
 		const PostMessage = await axios.post("http://" + ip.address() + ":" + Debug('OPTIONS').access + "/send-message", data);
 		if (PostMessage) {
 			if (Debug("STORANGE", "*", "DIRECT", Code).title == undefined) {
@@ -1743,7 +1936,7 @@ app.post('/shift', async (req, res) => {
 	const Max = req.body.max;
 	const hasShift = await Dataset('SCHEDULER', 'shift', Shift, 'UPDATE');
 	if (await hasShift) {
-		if ((Debug('SCHEDULER').shift == 1 || Debug('SCHEDULER').shift == "true")) {
+		if (JSON.parse(Debug('SCHEDULER').shift)) {
 			const hasMin = await Dataset('SCHEDULER', 'min', Min, 'UPDATE');
 			const hasMax = await Dataset('SCHEDULER', 'max', Max, 'UPDATE');
 			if (await hasMin && await hasMax) {
@@ -1782,7 +1975,7 @@ app.post('/aimbot', async (req, res) => {
 	const Aimbot = req.body.aimbot;
 	const Base = await Dataset('MKAUTH', 'AIMBOT', Aimbot, 'UPDATE');
 	if (await Base) {
-		if ((Debug('MKAUTH').aimbot == 1 || Debug('MKAUTH').aimbot == "true")) {
+		if (JSON.parse(Debug('MKAUTH').aimbot)) {
 			res.json({
 				Status: "Success",
 				Return: true
@@ -1881,6 +2074,8 @@ app.post('/token', async (req, res) => {
 		global.io.emit('OnSupport', Debug('SCHEDULER').onsupport);
 		global.io.emit('Speed', Debug('SCHEDULER').speed);
 		global.io.emit('Block', Debug('SCHEDULER').block);
+		global.io.emit('Crontab', Debug('SCHEDULER').cron);
+
 
 		global.io.emit('A001', Debug('MESSAGE', '*', 'ID', '1').before);
 		global.io.emit('A002', Debug('MESSAGE', '*', 'ID', '1').day);
@@ -1943,7 +2138,7 @@ app.post('/token', async (req, res) => {
 					};
 					isTARGET.push(GetLog);
 					if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-						if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+						if (JSON.parse(Debug('OPTIONS').auth)) {
 							global.io.emit('getlog', true);
 							global.io.emit('setlog', isTARGET);
 
@@ -2014,7 +2209,7 @@ app.post('/clients_mkauth', async (req, res) => {
 	const Month = req.body.month;
 	const Payment = req.body.payment;
 
-	const Master = await MkAuth(Month, Payment, 'listagem');
+	const Master = await MkAuth(Month, Payment, 'list');
 	var hasTARGET = [];
 	var PUSH, STATUS;
 	if (await Master.Status == "Error") {
@@ -2024,17 +2219,15 @@ app.post('/clients_mkauth', async (req, res) => {
 		});
 	} else {
 		(await Master).someAsync(async (TARGET) => {
-			var isPay = await MkList(TARGET.Identifier, "show");
 			const Resolve = await MkResolve(TARGET.Connect);
 			if (TARGET.Contact != undefined) {
 				TARGET.Contact = (TARGET.Contact).replace(/[^0-9\\.]+/g, '');
 			} else {
 				if (await Resolve) {
-					if ((Resolve).celular != undefined) {
-						TARGET.Contact = ((Resolve).celular).replace(/[^0-9\\.]+/g, '');
+					if ((Resolve).Contact != undefined) {
+						TARGET.Contact = (Resolve).Contact;
 					} else {
 						TARGET.Contact = "00000000000";
-
 					}
 				}
 			}
@@ -2064,7 +2257,7 @@ app.post('/clients_mkauth', async (req, res) => {
 			};
 			hasTARGET.push(GetClients);
 			if (Master.length == hasTARGET.length) {
-				if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+				if (JSON.parse(Debug('OPTIONS').auth)) {
 					global.io.emit('getclients', hasTARGET);
 					return res.json({
 						Status: "Success",
@@ -2207,7 +2400,7 @@ app.get('/mikrotik/:pass/:to/:msg', async (req, res) => {
 	} = req.params;
 
 	var isHid;
-	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+	if (JSON.parse(Debug('OPTIONS').protect)) {
 		isHid = (pass);
 	} else {
 		if ((Debug('OPTIONS').token == "" || Debug('OPTIONS').protect == undefined)) {
@@ -2273,7 +2466,7 @@ app.post('/force-message', [
 	}
 
 	var isHid;
-	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+	if (JSON.parse(Debug('OPTIONS').protect)) {
 		if (req.body.pass != undefined) {
 			isHid = req.body.pass;
 		} else if (req.body.p != undefined) {
@@ -2491,9 +2684,9 @@ app.post('/send-image', [
 	const hasMimetype = req.body.mimetype;
 	var isHid;
 
-	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+	if (!JSON.parse(Debug('MKAUTH').aimbot)) {
 
-		if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (JSON.parse(Debug('OPTIONS').protect)) {
 			if (req.body.pass != undefined) {
 				isHid = req.body.pass;
 			} else if (req.body.p != undefined) {
@@ -2576,9 +2769,9 @@ app.post('/send-document', [
 	const hasFileName = req.body.filename;
 	var isHid;
 
-	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+	if (!JSON.parse(Debug('MKAUTH').aimbot)) {
 
-		if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+		if (JSON.parse(Debug('OPTIONS').protect)) {
 			if (req.body.pass != undefined) {
 				isHid = req.body.pass;
 			} else if (req.body.p != undefined) {
@@ -2658,7 +2851,7 @@ app.post('/send-message', [
 		});
 	}
 	var isHid;
-	if ((Debug('OPTIONS').protect == 1 || Debug('OPTIONS').protect == "true")) {
+	if (JSON.parse(Debug('OPTIONS').protect)) {
 		if (req.body.pass != undefined) {
 			isHid = req.body.pass;
 		} else if (req.body.p != undefined) {
@@ -2686,11 +2879,11 @@ app.post('/send-message', [
 	} else if ((isDDI == '55') && (parseInt(isDDD) > 30)) {
 		WhatsApp = isWid.substr(0, 4) + isCall + '@c.us';
 	}
-	if ((Debug('MKAUTH').aimbot == 0 || Debug('MKAUTH').aimbot == "false")) {
+	if (!JSON.parse(Debug('MKAUTH').aimbot)) {
 		isAuth = true;
 	}
 
-	if (isAuth || (isAuth == 1 || isAuth == "true")) {
+	if (isAuth || JSON.parse(isAuth)) {
 		const Mensagem = (req.body.msg).replaceAll("\\n", "\r\n").split("##");
 		if (Debug('OPTIONS').schedule <= Debug('OPTIONS').limiter) {
 			var FUNCTION = [Debug('MKAUTH').bar, Debug('MKAUTH').pix, Debug('MKAUTH').qrpix, Debug('MKAUTH').qrlink, Debug('MKAUTH').pdf];
@@ -2713,7 +2906,7 @@ app.post('/send-message', [
 					Radeon['Title'] = isSend;
 				}
 
-				if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && (Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+				if (Mensagem.some(Row => testJSON(Row)) && (FUNCTION.includes('true') || FUNCTION.includes('1')) && JSON.parse(Debug('MKAUTH').module)) {
 
 					Mensagem.some(function(Send, index) {
 						if (testJSON(Send) && (FUNCTION.includes('true') || FUNCTION.includes('1'))) {
@@ -2732,23 +2925,23 @@ app.post('/send-message', [
 							};
 							Terminal(JSON.stringify(Json));
 							MkAuth(Json.uid, Json.find).then(Synchronization => {
-								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+								if (JSON.parse(Debug('MKAUTH').bar)) {
 									RETURNS.push('Bar');
 								}
 
-								if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+								if (JSON.parse(Debug('MKAUTH').pix)) {
 									RETURNS.push('Pix');
 								}
 
-								if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+								if (JSON.parse(Debug('MKAUTH').qrpix)) {
 									RETURNS.push('QRCode');
 								}
 
-								if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+								if (JSON.parse(Debug('MKAUTH').qrlink)) {
 									RETURNS.push('Link');
 								}
 
-								if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+								if (JSON.parse(Debug('MKAUTH').pdf)) {
 									RETURNS.push('Boleto');
 								}
 								if (Synchronization.ID != undefined) {
@@ -2840,7 +3033,7 @@ app.post('/send-message', [
 							}
 						});
 
-						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						if (JSON.parse(Debug('MKAUTH').module)) {
 							if ((FUNCTION.includes('true') || FUNCTION.includes('1'))) {
 								Radeon['Message'] = undefined;
 							} else {
@@ -3011,23 +3204,23 @@ app.post('/send-message', [
 
 							if (Retorno[0].Message == false) {
 								var SELECTOR = false;
-								if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+								if (JSON.parse(Debug('MKAUTH').bar)) {
 									SELECTOR = true;
 								}
 
-								if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+								if (JSON.parse(Debug('MKAUTH').pix)) {
 									SELECTOR = true;
 								}
 
-								if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+								if (JSON.parse(Debug('MKAUTH').qrpix)) {
 									SELECTOR = true;
 								}
 
-								if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+								if (JSON.parse(Debug('MKAUTH').qrlink)) {
 									SELECTOR = true;
 								}
 
-								if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+								if (JSON.parse(Debug('MKAUTH').pdf)) {
 									SELECTOR = true;
 								}
 								Retorno[0].Message = "Fail";
@@ -3081,7 +3274,7 @@ app.post('/send-message', [
 														};
 														isTARGET.push(GetLog);
 														if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-															if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+															if (JSON.parse(Debug('OPTIONS').auth)) {
 																global.io.emit('setlog', isTARGET);
 															}
 														}
@@ -3199,7 +3392,7 @@ app.post('/send-message', [
 																			};
 																			isTARGET.push(GetLog);
 																			if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																				if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																				if (JSON.parse(Debug('OPTIONS').auth)) {
 																					global.io.emit('setlog', isTARGET);
 																				}
 																			}
@@ -3223,7 +3416,7 @@ app.post('/send-message', [
 							}, Math.floor(Delay + Math.random() * 1000));
 						}
 					} else {
-						if ((Debug('MKAUTH').module == 1 || Debug('MKAUTH').module == "true")) {
+						if (JSON.parse(Debug('MKAUTH').module)) {
 
 							if (Retorno[0].Message == "Fail" || Retorno[0].Message == false || (Retorno[0].Message == "Error") || (Retorno[0].Message == "Null") || (Retorno[0].Message == "Fatal") || (Retorno[0].Message == "False")) {
 								if (Retorno[0].Message == "Fail") {
@@ -3263,23 +3456,23 @@ app.post('/send-message', [
 
 								if (Retorno[0].Message == false) {
 									var SELECTOR = false;
-									if ((Debug('MKAUTH').bar == 1 || Debug('MKAUTH').bar == "true")) {
+									if (JSON.parse(Debug('MKAUTH').bar)) {
 										SELECTOR = true;
 									}
 
-									if ((Debug('MKAUTH').pix == 1 || Debug('MKAUTH').pix == "true")) {
+									if (JSON.parse(Debug('MKAUTH').pix)) {
 										SELECTOR = true;
 									}
 
-									if ((Debug('MKAUTH').qrpix == 1 || Debug('MKAUTH').qrpix == "true")) {
+									if (JSON.parse(Debug('MKAUTH').qrpix)) {
 										SELECTOR = true;
 									}
 
-									if ((Debug('MKAUTH').qrlink == 1 || Debug('MKAUTH').qrlink == "true")) {
+									if (JSON.parse(Debug('MKAUTH').qrlink)) {
 										SELECTOR = true;
 									}
 
-									if ((Debug('MKAUTH').pdf == 1 || Debug('MKAUTH').pdf == "true")) {
+									if (JSON.parse(Debug('MKAUTH').pdf)) {
 										SELECTOR = true;
 									}
 									Retorno[0].Message = "Fail";
@@ -3337,7 +3530,7 @@ app.post('/send-message', [
 															};
 															isTARGET.push(GetLog);
 															if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																if (JSON.parse(Debug('OPTIONS').auth)) {
 																	global.io.emit('setlog', isTARGET);
 																}
 															}
@@ -3392,7 +3585,7 @@ app.post('/send-message', [
 																};
 																isTARGET.push(GetLog);
 																if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																	if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																	if (JSON.parse(Debug('OPTIONS').auth)) {
 																		global.io.emit('setlog', isTARGET);
 																	}
 																}
@@ -3417,7 +3610,7 @@ app.post('/send-message', [
 							}
 						} else {
 
-							if ((Debug('MKAUTH').module == 0 || Debug('MKAUTH').module == "false")) {
+							if (!JSON.parse(Debug('MKAUTH').module)) {
 								Retorno[0].Message = "Fail";
 								res.json({
 									Status: "Fail",
@@ -3474,7 +3667,7 @@ app.post('/send-message', [
 															};
 															isTARGET.push(GetLog);
 															if (Debug('TARGET', '*', 'ALL').length <= (index + 1)) {
-																if ((Debug('OPTIONS').auth == 1 || Debug('OPTIONS').auth == "true")) {
+																if (JSON.parse(Debug('OPTIONS').auth)) {
 																	global.io.emit('setlog', isTARGET);
 																}
 															}
@@ -3646,8 +3839,8 @@ client.on('message', async msg => {
 					console.log('> ' + Debug('OPTIONS').appname + ' : ' + err)
 				}
 				if (REPLIES != undefined) {
-					if (MsgBox && (Debug('OPTIONS').onbot == 1 || Debug('OPTIONS').onbot == "true") && (msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia)) {
-						if ((Debug('OPTIONS').replyes == 1 || Debug('OPTIONS').replyes == "true")) {
+					if (MsgBox && JSON.parse(Debug('OPTIONS').onbot) && (msg.body != null || msg.body == "0" || msg.type == 'ptt' || msg.hasMedia)) {
+						if (JSON.parse(Debug('OPTIONS').replyes)) {
 							msg.reply(Debug('OPTIONS').response);
 						} else {
 							const Mensagem = (Debug('OPTIONS').response).replaceAll("\\n", "\r\n").split("##");
@@ -3690,11 +3883,10 @@ client.on('call', async (call) => {
 	}
 	const Mensagem = (Debug('OPTIONS').call).replaceAll("\\n", "\r\n").split("##");
 
-	if ((Debug('OPTIONS').reject == 1 || Debug('OPTIONS').reject == "true")) {
+	if (JSON.parse(Debug('OPTIONS').reject)) {
 		setTimeout(function() {
 			call.reject().then(() => {
-				if ((Debug('OPTIONS').alert == 1 || Debug('OPTIONS').alert == "true")) {
-
+				if (JSON.parse(Debug('OPTIONS').alert)) {
 					Mensagem.some(function(Send, index) {
 						setTimeout(function() {
 							client.sendMessage(WhatsApp, Send).then().catch(err => {
