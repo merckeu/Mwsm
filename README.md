@@ -420,6 +420,27 @@ Token:SENHA
 | --------------  |   --------------------------------------------------------------|
 | `7:00 > 10:00`| Hora Base para inicio da lista de Agendamento  |
 | `20:00 > 22:00`| Hora Base para fim da lista de Agendamento        |
+
+
+* Defina as configurações da lista de agendamento.
+
+`Settings > Extras`
+
+> Defina de acordo como configurado no MkAUth.
+   
+[![MkAuth](https://raw.githubusercontent.com/MKCodec/Mwsm/main/img/timers.png)](#)
+<br>
+| Nome            |  Função                                                         |
+| --------------  |   --------------------------------------------------------------|
+| `Low Speed`   | Dias para Notificação de redução de velocidade  |
+| `Blocked User`| Dias para notificação de desativação do cliente     |
+| `Cron Schedule`| Delay do sistema de agendamento     |
+
+OBS: Por padrão o agendamento estara configurado para ( Cada 2 Minutos ), caso ocorra notificações duplicadas eleve o valor.
+
+
+
+
 </details>
 
 
