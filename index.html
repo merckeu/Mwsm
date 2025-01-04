@@ -941,17 +941,17 @@
                               <div class="input-group-append">
                                 <div class="form-group">
                                   <select class="form-control" style="height:40px;width:150px;border-radius:0px;" id="Turno">
-                                    <option value="before">&#xf053; &nbsp; Days Before</option>
-                                    <option value="day">&#xf00c; &nbsp; In Day</option>
-                                    <option value="later">&#xf054; &nbsp; Days Later</option>
-                                    <option value="Pay">&#xf155; &nbsp; Payment Received</option>
-                                    <option value="Lock">&#xf023; &nbsp; Locked User</option>
-                                    <option value="Unlock">&#xf09c; &nbsp; Unlocked User</option>
-                                    <option value="Maintenance">&#xf085; &nbsp; Maintenance</option>
-                                    <option value="Unistall">&#xf05e; &nbsp; Unistall Device</option>
-                                    <option value="Speed">&#xf243; &nbsp; Low Speed</option>
-                                    <option value="Block">&#xf235; &nbsp; Blocked User</option>
-                                    <option value="Support">&#xf0e0; &nbsp; Support Opening</option>
+                                    <option value="before">&#xf053; &nbsp; Antes do Venc</option>
+                                    <option value="day">&#xf00c; &nbsp; Dia do Venc</option>
+                                    <option value="later">&#xf054; &nbsp; Depois do Venc</option>
+                                    <option value="Pay">&#xf155; &nbsp; Pagamento Recebido</option>
+                                    <option value="Lock">&#xf023; &nbsp; Bloqueio</option>
+                                    <option value="Unlock">&#xf09c; &nbsp; Desbloqueio</option>
+                                    <option value="Maintenance">&#xf085; &nbsp; Manutencao</option>
+                                    <option value="Unistall">&#xf05e; &nbsp; Retira de Equipamento</option>
+                                    <option value="Speed">&#xf243; &nbsp; Velocidade Reduzida</option>
+                                    <option value="Block">&#xf235; &nbsp; Suspensao Ass</option>
+                                    <option value="Support">&#xf0e0; &nbsp; Chamados Aberto</option>
                                   </select>
                                 </div>
                                 <div class="form-group">
@@ -989,11 +989,11 @@
                     <table class="table">
                       <thead>
                         <tr>
-                          <th class="tbajust">TITLE</th>
-                          <th>USER</th>
-                          <th class="tbreward">REWARD</th>
-                          <th class="">PUSH</th>
-                          <th class="tbajust">PAYMENT</th>
+                          <th class="tbajust">N Titulo</th>
+                          <th>Login</th>
+                          <th class="tbreward">Venc</th>
+                          <th class="">Envio</th>
+                          <th class="tbajust">Pagamento</th>
                           <th class="tbajust">STATUS</th>
                         </tr>
                       </thead>
@@ -1032,26 +1032,26 @@
                 <div id="isControls">
                   <li class="Transparent">
                     <select class="form-control Transparent" id="isMonth" style="width:45px;">
-                      <option value="01">01</option>
-                      <option value="02">02</option>
-                      <option value="03">03</option>
-                      <option value="04">04</option>
-                      <option value="05">05</option>
-                      <option value="06">06</option>
-                      <option value="07">07</option>
-                      <option value="08">08</option>
-                      <option value="09">09</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
+                      <option value="01">jan</option>
+                      <option value="02">fev</option>
+                      <option value="03">mar</option>
+                      <option value="04">abi</option>
+                      <option value="05">mai</option>
+                      <option value="06">jun</option>
+                      <option value="07">jul</option>
+                      <option value="08">ago</option>
+                      <option value="09">set</option>
+                      <option value="10">out</option>
+                      <option value="11">nov</option>
+                      <option value="12">dez</option>
                     </select>
                   </li>
                   <li class="Transparent" style="margin-right:10px;">
                     <select class="form-control Transparent" id="isSearch">
-                      <option value="all">ALL</option>
-                      <option value="pago">PAID</option>
-                      <option value="vencido">DUE</option>
-                      <option value="aberto">OPEN</option>
+                      <option value="all">TODOS</option>
+                      <option value="pago">PAGO</option>
+                      <option value="vencido">VENCIDO</option>
+                      <option value="aberto">ABERTO</option>
                     </select>
                   </li>
                   <li>
